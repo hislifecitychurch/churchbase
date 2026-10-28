@@ -12,7 +12,7 @@ These instructions apply across the repository. More specific `AGENTS.md` files 
 
 - `apps/` — product applications.
 - `packages/ui/` — shared React UI components.
-- `packages/eslint-config/` — shared ESLint configuration.
+- `packages/eslint/` — shared ESLint configuration.
 - `packages/typescript-config/` — shared TypeScript configuration.
 - `turbo.json` — Turborepo task graph and caching configuration.
 
