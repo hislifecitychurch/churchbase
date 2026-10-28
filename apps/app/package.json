@@ -27,9 +27,9 @@
 	},
 	"type": "module",
 	"scripts": {
-		"dev": "bun run cf-typegen && vinext dev --port 34002",
+		"dev": "bun run cf-typegen && vinext dev --port 36002",
 		"build": "bun run cf-typegen && vinext build",
-		"start": "vite preview",
+		"start": "vite preview --port 36002",
 		"deploy": "vinext-cloudflare deploy",
 		"preview": "bun run build && bun run start",
 		"cf-typegen": "cf workers types"
