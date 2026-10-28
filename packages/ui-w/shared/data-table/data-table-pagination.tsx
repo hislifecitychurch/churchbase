@@ -1,4 +1,5 @@
-import { type Table } from "@tanstack/react-table"
+import { type RowData } from "@tanstack/react-table"
+import { type LegacyReactTable as Table } from "@tanstack/react-table/legacy"
 
 import { Pagination } from "@packages/ui-w/shared/pagination/pagination"
 import { PaginationContent } from "@packages/ui-w/shared/pagination/pagination-content"
@@ -13,7 +14,7 @@ import { SelectItem } from "@packages/ui-w/shared/select/select-item"
 import { SelectPopup } from "@packages/ui-w/shared/select/select-popup"
 import { SelectValue } from "@packages/ui-w/shared/select/select-value"
 
-interface DataTablePaginationProps<TData> {
+interface DataTablePaginationProps<TData extends RowData> {
   table?: Table<TData>
   pagination?: {
     page: number
@@ -38,7 +39,7 @@ function getPageRange(current: number, total: number): (number | "ellipsis")[] {
   return [1, "ellipsis", current - 1, current, current + 1, "ellipsis", total]
 }
 
-export function DataTablePagination<TData>({
+export function DataTablePagination<TData extends RowData>({
   table,
   pagination,
   onPageChange,

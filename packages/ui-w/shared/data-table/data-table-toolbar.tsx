@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { type Table } from "@tanstack/react-table"
+import { type RowData } from "@tanstack/react-table"
+import { type LegacyReactTable as Table } from "@tanstack/react-table/legacy"
 import { IconRefresh, IconSearch } from "@tabler/icons-react"
 
 import { cn } from "@packages/ui-w/lib/utils"
@@ -21,7 +22,7 @@ import { Tooltip } from "@packages/ui-w/shared/tooltip/tooltip"
 import { TooltipPopup } from "@packages/ui-w/shared/tooltip/tooltip-popup"
 import { TooltipTrigger } from "@packages/ui-w/shared/tooltip/tooltip-trigger"
 
-export type DataTableToolbarFilter<TData> = {
+export type DataTableToolbarFilter<TData extends RowData> = {
   columnId: string
 } & Pick<
   DataTableFacetedFilterGroup<TData>,
@@ -43,7 +44,7 @@ export type DataTableToolbarSelectOption = {
   value: string
 }
 
-interface DataTableToolbarProps<TData> {
+interface DataTableToolbarProps<TData extends RowData> {
   table: Table<TData>
   searchColumnId?: string
   searchPlaceholder?: string
@@ -73,7 +74,7 @@ interface DataTableToolbarProps<TData> {
   isRefreshing?: boolean
 }
 
-export function DataTableToolbar<TData>({
+export function DataTableToolbar<TData extends RowData>({
   table,
   searchColumnId,
   searchPlaceholder = "Filter...",

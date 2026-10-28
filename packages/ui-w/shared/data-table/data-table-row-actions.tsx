@@ -1,6 +1,7 @@
 "use client"
 
-import { type Row } from "@tanstack/react-table"
+import { type RowData } from "@tanstack/react-table"
+import { type LegacyRow as Row } from "@tanstack/react-table/legacy"
 import { IconDotsVertical } from "@tabler/icons-react"
 
 import { Button } from "@packages/ui-w/shared/button/button"
@@ -18,9 +19,9 @@ import { MenuSubTrigger } from "@packages/ui-w/shared/menu/menu-sub-trigger"
 import { MenuTrigger } from "@packages/ui-w/shared/menu/menu-trigger"
 
 type IconComponent = React.ComponentType<{ className?: string }>
-export type DataTableRowActionRow<TData> = Pick<Row<TData>, "id" | "original">
+export type DataTableRowActionRow<TData extends RowData> = Pick<Row<TData>, "id" | "original">
 
-export type DataTableRowActionItem<TData> =
+export type DataTableRowActionItem<TData extends RowData> =
   | {
       type?: "item"
       label: React.ReactNode
@@ -58,13 +59,13 @@ export type DataTableRowActionItem<TData> =
       onValueChange?: (value: string, row: DataTableRowActionRow<TData>) => void
     }
 
-interface DataTableRowActionsProps<TData> {
+interface DataTableRowActionsProps<TData extends RowData> {
   row: DataTableRowActionRow<TData>
   items: DataTableRowActionItem<TData>[]
   triggerLabel?: string
 }
 
-function renderActionItem<TData>(
+function renderActionItem<TData extends RowData>(
   item: DataTableRowActionItem<TData>,
   row: DataTableRowActionRow<TData>,
   key: React.Key,
@@ -151,7 +152,7 @@ function renderActionItem<TData>(
   )
 }
 
-export function DataTableRowActions<TData>({
+export function DataTableRowActions<TData extends RowData>({
   row,
   items,
   triggerLabel = "Open row actions",

@@ -1,5 +1,6 @@
 import * as React from "react"
-import { type Column } from "@tanstack/react-table"
+import { type RowData } from "@tanstack/react-table"
+import { type LegacyColumn as Column } from "@tanstack/react-table/legacy"
 import { IconSearch } from "@tabler/icons-react"
 
 import { Badge } from "@packages/ui-w/shared/badge/badge"
@@ -21,7 +22,7 @@ export interface DataTableFacetedFilterOption {
   count?: number
 }
 
-export interface DataTableFacetedFilterGroup<TData, TValue = unknown> {
+export interface DataTableFacetedFilterGroup<TData extends RowData, TValue = unknown> {
   id?: string
   column?: Column<TData, TValue>
   title?: string
@@ -30,7 +31,7 @@ export interface DataTableFacetedFilterGroup<TData, TValue = unknown> {
   searchPlaceholder?: string
 }
 
-export interface DataTableFacetedFilterProps<TData> {
+export interface DataTableFacetedFilterProps<TData extends RowData> {
   filters: DataTableFacetedFilterGroup<TData>[]
   values?: Record<string, string[]>
   onValueChange?: (columnId: string, values: string[]) => void
@@ -40,7 +41,7 @@ export interface DataTableFacetedFilterProps<TData> {
   disabled?: boolean
 }
 
-export function DataTableFacetedFilter<TData>({
+export function DataTableFacetedFilter<TData extends RowData>({
   filters,
   values,
   onValueChange,
