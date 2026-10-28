@@ -1,0 +1,11 @@
+{
+  "extends": "@repo/typescript/library.json",
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "paths": {
+      "@repo/metadata/*": ["./*"],
+    },
+  },
+  "include": ["config"],
+  "exclude": ["node_modules", "dist"],
+}

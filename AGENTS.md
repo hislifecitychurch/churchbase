@@ -13,7 +13,8 @@ These instructions apply across the repository. More specific `AGENTS.md` files 
 - `apps/` — product applications.
 - `packages/ui/` — shared React UI components.
 - `packages/eslint/` — shared ESLint configuration.
-- `packages/typescript-config/` — shared TypeScript configuration.
+- `packages/metadata/` — shared Next.js metadata defaults and helpers.
+- `packages/typescript/` — shared TypeScript configuration.
 - `turbo.json` — Turborepo task graph and caching configuration.
 
 This is a Bun workspace; use the version and scripts declared in the root configuration.

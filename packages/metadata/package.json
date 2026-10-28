@@ -1,0 +1,19 @@
+{
+  "name": "@repo/metadata",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./config/metadata.ts"
+  },
+  "devDependencies": {
+    "@repo/eslint": "*",
+    "@repo/typescript": "*",
+    "@types/node": "^26.1.1",
+    "eslint": "^9.39.5",
+    "next": "16.3.0",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "next": "^16.1.6"
+  }
+}
