@@ -1,0 +1,33 @@
+@layer components {
+  @keyframes product-bom-edge-flow {
+    to {
+      stroke-dashoffset: -16;
+    }
+  }
+
+  .product-node-parent {
+    border-color: var(--color-primary);
+    background-color: color-mix(in srgb, var(--color-primary) 8%, var(--color-card));
+  }
+
+  .product-node-parent .react-flow__handle {
+    border: 0;
+    background-color: var(--color-white);
+  }
+
+  .product-node-child {
+    border-color: var(--color-success);
+    background-color: color-mix(in srgb, var(--color-success) 8%, var(--color-card));
+  }
+
+  .product-node-child .react-flow__handle {
+    border: 0;
+    background-color: var(--color-white);
+  }
+
+  .react-flow__edge.product-bom-edge .react-flow__edge-path {
+    stroke: var(--color-muted-foreground);
+    stroke-dasharray: 8 8;
+    animation: product-bom-edge-flow 0.8s linear infinite;
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "styles/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "tabler",
+  "rtl": false,
+  "menuColor": "default",
+  "menuAccent": "subtle",
+  "aliases": {
+    "components": "@repo/ui-w/shared",
+    "utils": "@repo/ui-w/lib/utils",
+    "ui": "@repo/ui-w/shared",
+    "lib": "@repo/ui-w/lib",
+    "hooks": "@repo/ui-w/hooks"
+  },
+  "registries": {
+    "@coss": "https://coss.com/ui/r/{name}.json",
+    "@magicui": "https://magicui.design/r/{name}",
+    "@mapcn": "https://mapcn.dev/r/{name}.json",
+    "@shadcnblocks": "https://shadcnblocks.com/r/{name}.json",
+    "@react-bits": "https://reactbits.dev/r/{name}.json",
+    "@kibo-ui": "https://www.kibo-ui.com/r/{name}.json"
+  }
+}

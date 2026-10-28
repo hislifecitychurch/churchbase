@@ -11,7 +11,7 @@ These instructions apply across the repository. More specific `AGENTS.md` files 
 ## Repository map
 
 - `apps/` — product applications.
-- `packages/ui/` — shared React UI components.
+- `packages/ui-w/` — shared React UI components.
 - `packages/eslint/` — shared ESLint configuration.
 - `packages/metadata/` — shared Next.js metadata defaults and helpers.
 - `packages/typescript/` — shared TypeScript configuration.
