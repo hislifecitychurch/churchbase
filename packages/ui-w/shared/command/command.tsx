@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { Autocomplete } from "@repo/ui-w/shared/autocomplete/autocomplete"
+import { Autocomplete } from "@packages/ui-w/shared/autocomplete/autocomplete"
 
 export function Command({
   autoHighlight = "always",

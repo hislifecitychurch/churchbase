@@ -3,13 +3,13 @@
 import * as React from "react"
 import { Toast } from "@base-ui/react/toast"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { getSwipeDirection } from "@repo/ui-w/helpers/toast/get-swipe-direction"
-import { upsertReplayClassName } from "@repo/ui-w/helpers/toast/upsert-replay-class-name"
-import { ToastPosition } from "@repo/ui-w/providers/toast-provider"
+import { cn } from "@packages/ui-w/lib/utils"
+import { getSwipeDirection } from "@packages/ui-w/helpers/toast/get-swipe-direction"
+import { upsertReplayClassName } from "@packages/ui-w/helpers/toast/upsert-replay-class-name"
+import { ToastPosition } from "@packages/ui-w/providers/toast-provider"
 
-import { buttonVariants } from "@repo/ui-w/shared/variants"
-import { ToastIcon } from "@repo/ui-w/shared/toast/toast-icon"
+import { buttonVariants } from "@packages/ui-w/shared/variants"
+import { ToastIcon } from "@packages/ui-w/shared/toast/toast-icon"
 
 export function Toasts({
   position,

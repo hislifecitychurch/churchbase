@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react"
 import type { ComponentProps } from "react"
 import type * as React from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export interface BackgroundFlickeringGridProps extends ComponentProps<"div"> {
   color?: string

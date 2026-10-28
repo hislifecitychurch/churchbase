@@ -3,9 +3,9 @@
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 import { IconChevronRight } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { DrawerTrigger } from "@repo/ui-w/shared/drawer/drawer-trigger"
+import { DrawerTrigger } from "@packages/ui-w/shared/drawer/drawer-trigger"
 
 export function DrawerMenuTrigger({
   className,

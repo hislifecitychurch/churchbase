@@ -1,5 +1,5 @@
 {
-  "name": "@repo/ui-w",
+  "name": "@packages/ui-w",
   "version": "0.0.0",
   "private": true,
   "exports": {
@@ -19,8 +19,8 @@
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@repo/eslint": "*",
-    "@repo/typescript": "*",
+    "@packages/eslint": "*",
+    "@packages/typescript": "*",
     "@types/geojson": "^7946.0.16",
     "@types/matter-js": "^0.20.2",
     "@types/node": "^26.1.1",

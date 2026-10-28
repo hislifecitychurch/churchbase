@@ -6,8 +6,8 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import { type VariantProps } from "class-variance-authority"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { badgeVariants } from "@repo/ui-w/shared/variants"
+import { cn } from "@packages/ui-w/lib/utils"
+import { badgeVariants } from "@packages/ui-w/shared/variants"
 
 export interface BadgeProps extends useRender.ComponentProps<"span"> {
   variant?: VariantProps<typeof badgeVariants>["variant"]

@@ -1,4 +1,4 @@
-import { ToastPosition } from "@repo/ui-w/providers/toast-provider"
+import { ToastPosition } from "@packages/ui-w/providers/toast-provider"
 
 export type SwipeDirection = "up" | "down" | "left" | "right"
 

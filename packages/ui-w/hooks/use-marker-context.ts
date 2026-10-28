@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { MarkerContext } from "@repo/ui-w/contexts/marker-context"
+import { MarkerContext } from "@packages/ui-w/contexts/marker-context"
 
 export function useMarkerContext() {
   const context = React.useContext(MarkerContext)

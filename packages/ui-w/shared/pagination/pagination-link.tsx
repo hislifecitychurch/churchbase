@@ -4,10 +4,10 @@ import * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { buttonVariants } from "@repo/ui-w/shared/variants"
+import { cn } from "@packages/ui-w/lib/utils"
+import { buttonVariants } from "@packages/ui-w/shared/variants"
 
-import { Button } from "@repo/ui-w/shared/button/button"
+import { Button } from "@packages/ui-w/shared/button/button"
 
 export type PaginationLinkProps = {
   isActive?: boolean

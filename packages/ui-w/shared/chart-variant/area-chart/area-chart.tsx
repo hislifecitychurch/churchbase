@@ -11,12 +11,12 @@ import {
 } from "recharts"
 import type { CurveType } from "recharts/types/shape/Curve"
 
-import type { ChartConfig } from "@repo/ui-w/shared/chart/chart"
-import { ChartContainer } from "@repo/ui-w/shared/chart/chart"
-import { ChartLegend } from "@repo/ui-w/shared/chart/chart-legend"
-import { ChartLegendContent } from "@repo/ui-w/shared/chart/chart-legend-content"
-import { ChartTooltip } from "@repo/ui-w/shared/chart/chart-tooltip"
-import { ChartTooltipContent } from "@repo/ui-w/shared/chart/chart-tooltip-content"
+import type { ChartConfig } from "@packages/ui-w/shared/chart/chart"
+import { ChartContainer } from "@packages/ui-w/shared/chart/chart"
+import { ChartLegend } from "@packages/ui-w/shared/chart/chart-legend"
+import { ChartLegendContent } from "@packages/ui-w/shared/chart/chart-legend-content"
+import { ChartTooltip } from "@packages/ui-w/shared/chart/chart-tooltip"
+import { ChartTooltipContent } from "@packages/ui-w/shared/chart/chart-tooltip-content"
 
 export type ChartRow = Record<string, string | number | null | undefined>
 

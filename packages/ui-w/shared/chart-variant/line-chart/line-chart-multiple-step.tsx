@@ -8,7 +8,7 @@ import {
   type LineChartProps,
   type LineChartReferenceLine,
   type LineChartSeries,
-} from "@repo/ui-w/shared/chart-variant/line-chart/line-chart"
+} from "@packages/ui-w/shared/chart-variant/line-chart/line-chart"
 
 export type LineChartMultipleStepSeries = LineChartSeries
 export type LineChartMultipleStepReferenceLine = LineChartReferenceLine

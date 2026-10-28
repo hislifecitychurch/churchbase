@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export type Shape = "wave" | "noise" | "ripple" | "swirl" | "plasma" | "scan"
 export type Matrix = "random" | "bayer2" | "bayer4" | "bayer8"

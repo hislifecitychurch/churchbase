@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import type { ChartConfig } from "@repo/ui-w/shared/chart/chart"
+import type { ChartConfig } from "@packages/ui-w/shared/chart/chart"
 
 export type ChartContextProps = {
   config: ChartConfig

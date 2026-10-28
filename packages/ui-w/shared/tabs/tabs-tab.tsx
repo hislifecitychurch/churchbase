@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function TabsTab({ className, ...props }: TabsPrimitive.Tab.Props): React.ReactElement {
   return (

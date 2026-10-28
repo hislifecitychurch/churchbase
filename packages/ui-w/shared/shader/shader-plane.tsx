@@ -6,7 +6,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { useEffect, useMemo, useRef } from "react"
 import * as THREE from "three"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 interface ShaderPlaneMeshProps {
   vertexShader: string

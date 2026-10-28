@@ -18,19 +18,19 @@ import {
   type PaginationState,
 } from "@tanstack/react-table"
 
-import { Table } from "@repo/ui-w/shared/table/table"
-import { TableBody } from "@repo/ui-w/shared/table/table-body"
-import { TableCell } from "@repo/ui-w/shared/table/table-cell"
-import { TableHead } from "@repo/ui-w/shared/table/table-head"
-import { TableHeader } from "@repo/ui-w/shared/table/table-header"
-import { TableRow } from "@repo/ui-w/shared/table/table-row"
-import { DataTablePagination } from "@repo/ui-w/shared/data-table/data-table-pagination"
+import { Table } from "@packages/ui-w/shared/table/table"
+import { TableBody } from "@packages/ui-w/shared/table/table-body"
+import { TableCell } from "@packages/ui-w/shared/table/table-cell"
+import { TableHead } from "@packages/ui-w/shared/table/table-head"
+import { TableHeader } from "@packages/ui-w/shared/table/table-header"
+import { TableRow } from "@packages/ui-w/shared/table/table-row"
+import { DataTablePagination } from "@packages/ui-w/shared/data-table/data-table-pagination"
 import {
   DataTableToolbar,
   type DataTableToolbarButton,
   type DataTableToolbarFilter,
   type DataTableToolbarSelectOption,
-} from "@repo/ui-w/shared/data-table/data-table-toolbar"
+} from "@packages/ui-w/shared/data-table/data-table-toolbar"
 
 export type { ColumnDef, FilterFn } from "@tanstack/react-table"
 

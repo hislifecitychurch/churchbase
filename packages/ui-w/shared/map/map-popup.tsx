@@ -4,11 +4,11 @@ import * as React from "react"
 import { createPortal } from "react-dom"
 import MapLibreGL from "maplibre-gl"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { useMap } from "@repo/ui-w/hooks/use-map"
-import type { MapPopupProps } from "@repo/ui-w/types/map"
+import { cn } from "@packages/ui-w/lib/utils"
+import { useMap } from "@packages/ui-w/hooks/use-map"
+import type { MapPopupProps } from "@packages/ui-w/types/map"
 
-import { MapPopupCloseButton } from "@repo/ui-w/shared/map/map-popup-close-button"
+import { MapPopupCloseButton } from "@packages/ui-w/shared/map/map-popup-close-button"
 
 export function MapPopup({
   longitude,

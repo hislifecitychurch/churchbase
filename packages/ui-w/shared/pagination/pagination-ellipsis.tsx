@@ -5,7 +5,7 @@ import { IconDots } from "@tabler/icons-react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function PaginationEllipsis({
   className,

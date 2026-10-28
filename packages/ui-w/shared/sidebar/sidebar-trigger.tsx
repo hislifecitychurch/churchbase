@@ -3,10 +3,10 @@
 import * as React from "react"
 import { IconArrowBarToLeft, IconArrowBarToRight } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { useSidebar } from "@repo/ui-w/hooks/use-sidebar"
+import { cn } from "@packages/ui-w/lib/utils"
+import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
 
-import { SidebarMenuButton } from "@repo/ui-w/shared/sidebar/sidebar-menu-button"
+import { SidebarMenuButton } from "@packages/ui-w/shared/sidebar/sidebar-menu-button"
 
 type SidebarTriggerProps = Omit<
   React.ComponentProps<typeof SidebarMenuButton>,

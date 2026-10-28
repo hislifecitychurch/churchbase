@@ -3,7 +3,7 @@
 import * as React from "react"
 import { OTPField as FieldOTPPrimitive } from "@base-ui/react/otp-field"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function FieldOTPInput({
   className,

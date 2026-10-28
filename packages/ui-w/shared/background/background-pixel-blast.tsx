@@ -4,7 +4,7 @@ import { Effect, EffectComposer, EffectPass, RenderPass } from "postprocessing"
 import { useEffect, useRef, type CSSProperties } from "react"
 import * as THREE from "three"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 type TouchPoint = {
   x: number

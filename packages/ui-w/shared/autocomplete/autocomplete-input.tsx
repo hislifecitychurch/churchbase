@@ -4,11 +4,11 @@ import * as React from "react"
 import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomplete"
 import { IconArrowsUpDown, IconX } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { Input } from "@repo/ui-w/shared/input/input"
-import { AutocompleteTrigger } from "@repo/ui-w/shared/autocomplete/autocomplete-trigger"
-import { AutocompleteClear } from "@repo/ui-w/shared/autocomplete/autocomplete-clear"
+import { Input } from "@packages/ui-w/shared/input/input"
+import { AutocompleteTrigger } from "@packages/ui-w/shared/autocomplete/autocomplete-trigger"
+import { AutocompleteClear } from "@packages/ui-w/shared/autocomplete/autocomplete-clear"
 
 export function AutocompleteInput({
   className,

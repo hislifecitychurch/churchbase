@@ -4,8 +4,8 @@ import * as React from "react"
 import { ChevronDownIcon } from "lucide-react"
 import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { navigationMenuTriggerStyle } from "@repo/ui-w/shared/styles"
+import { cn } from "@packages/ui-w/lib/utils"
+import { navigationMenuTriggerStyle } from "@packages/ui-w/shared/styles"
 
 export function NavigationMenuTrigger({
   className,

@@ -3,10 +3,10 @@
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 
-import { useChart } from "@repo/ui-w/hooks/use-chart"
-import { cn } from "@repo/ui-w/lib/utils"
+import { useChart } from "@packages/ui-w/hooks/use-chart"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { getPayloadConfigFromPayload } from "@repo/ui-w/helpers/chart/get-payload-config-from-payload"
+import { getPayloadConfigFromPayload } from "@packages/ui-w/helpers/chart/get-payload-config-from-payload"
 
 export function ChartLegendContent({
   className,

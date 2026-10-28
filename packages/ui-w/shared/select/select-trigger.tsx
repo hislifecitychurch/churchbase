@@ -5,8 +5,8 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { type VariantProps } from "class-variance-authority"
 import { IconSelector } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { selectTriggerVariants } from "@repo/ui-w/shared/variants"
+import { cn } from "@packages/ui-w/lib/utils"
+import { selectTriggerVariants } from "@packages/ui-w/shared/variants"
 
 export const selectTriggerIconClassName = "-me-1 size-4.5 opacity-80 sm:size-4"
 

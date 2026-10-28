@@ -17,12 +17,14 @@ coverage
 
 # Turbo
 .turbo
+.cloudflare/
 
 # Vercel
 .vercel
 
 # Build Outputs
 .next/
+.vinext/
 out/
 build
 dist

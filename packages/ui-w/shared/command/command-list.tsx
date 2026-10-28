@@ -2,9 +2,9 @@
 
 import * as React from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { AutocompleteList } from "@repo/ui-w/shared/autocomplete/autocomplete-list"
+import { AutocompleteList } from "@packages/ui-w/shared/autocomplete/autocomplete-list"
 
 export function CommandList({
   className,

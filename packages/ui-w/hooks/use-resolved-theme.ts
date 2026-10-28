@@ -1,7 +1,7 @@
 import * as React from "react"
 
-import { getDocumentTheme } from "@repo/ui-w/helpers/map/get-document-theme"
-import { getSystemTheme, type Theme } from "@repo/ui-w/helpers/map/get-system-theme"
+import { getDocumentTheme } from "@packages/ui-w/helpers/map/get-document-theme"
+import { getSystemTheme, type Theme } from "@packages/ui-w/helpers/map/get-system-theme"
 
 export function useResolvedTheme(themeProp?: "light" | "dark"): Theme {
   const [detectedTheme, setDetectedTheme] = React.useState<Theme>(

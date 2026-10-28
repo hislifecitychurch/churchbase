@@ -4,11 +4,11 @@ import * as React from "react"
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox"
 import { IconSelector, IconX } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { Input } from "@repo/ui-w/shared/input/input"
-import { ComboboxTrigger } from "@repo/ui-w/shared/combobox/combobox-trigger"
-import { ComboboxClear } from "@repo/ui-w/shared/combobox/combobox-clear"
+import { Input } from "@packages/ui-w/shared/input/input"
+import { ComboboxTrigger } from "@packages/ui-w/shared/combobox/combobox-trigger"
+import { ComboboxClear } from "@packages/ui-w/shared/combobox/combobox-clear"
 
 export function ComboboxInput({
   className,

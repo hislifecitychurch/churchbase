@@ -3,9 +3,9 @@
 import * as React from "react"
 import MapLibreGL from "maplibre-gl"
 
-import { useMap } from "@repo/ui-w/hooks/use-map"
-import { MarkerContext } from "@repo/ui-w/contexts/marker-context"
-import type { MapMarkerProps } from "@repo/ui-w/types/map"
+import { useMap } from "@packages/ui-w/hooks/use-map"
+import { MarkerContext } from "@packages/ui-w/contexts/marker-context"
+import type { MapMarkerProps } from "@packages/ui-w/types/map"
 
 export function MapMarker({
   longitude,

@@ -5,7 +5,7 @@ import type { ComponentPropsWithoutRef } from "react"
 import type * as React from "react"
 import { motion } from "motion/react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export interface BackgroundAnimatedGridPatternProps extends Omit<
   ComponentPropsWithoutRef<"svg">,

@@ -1,13 +1,13 @@
 {
-  "name": "@repo/metadata",
+  "name": "@packages/metadata",
   "version": "0.0.0",
   "private": true,
   "exports": {
     ".": "./config/metadata.ts"
   },
   "devDependencies": {
-    "@repo/eslint": "*",
-    "@repo/typescript": "*",
+    "@packages/eslint": "*",
+    "@packages/typescript": "*",
     "@types/node": "^26.1.1",
     "eslint": "^9.39.5",
     "next": "16.3.0",

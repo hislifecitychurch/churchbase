@@ -3,9 +3,9 @@
 import * as React from "react"
 import { IconInfoCircle } from "@tabler/icons-react"
 
-import { Tooltip } from "@repo/ui-w/shared/tooltip/tooltip"
-import { TooltipPopup } from "@repo/ui-w/shared/tooltip/tooltip-popup"
-import { TooltipTrigger } from "@repo/ui-w/shared/tooltip/tooltip-trigger"
+import { Tooltip } from "@packages/ui-w/shared/tooltip/tooltip"
+import { TooltipPopup } from "@packages/ui-w/shared/tooltip/tooltip-popup"
+import { TooltipTrigger } from "@packages/ui-w/shared/tooltip/tooltip-trigger"
 
 export function FieldInfoTooltip({ children }: { children: React.ReactNode }): React.ReactElement {
   return (

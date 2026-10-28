@@ -2,11 +2,11 @@
 
 import { createPortal } from "react-dom"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { useMarkerContext } from "@repo/ui-w/hooks/use-marker-context"
-import type { MapMarkerContentProps } from "@repo/ui-w/types/map"
+import { cn } from "@packages/ui-w/lib/utils"
+import { useMarkerContext } from "@packages/ui-w/hooks/use-marker-context"
+import type { MapMarkerContentProps } from "@packages/ui-w/types/map"
 
-import { MapMarkerIcon } from "@repo/ui-w/shared/map/map-marker-icon"
+import { MapMarkerIcon } from "@packages/ui-w/shared/map/map-marker-icon"
 
 export function MapMarkerContent({
   children,

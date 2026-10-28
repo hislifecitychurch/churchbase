@@ -3,8 +3,8 @@
 import * as React from "react"
 import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { NavigationMenuViewport } from "@repo/ui-w/shared/navigation-menu/navigation-menu-viewport"
+import { cn } from "@packages/ui-w/lib/utils"
+import { NavigationMenuViewport } from "@packages/ui-w/shared/navigation-menu/navigation-menu-viewport"
 
 export function NavigationMenu({
   className,

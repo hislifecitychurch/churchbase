@@ -1,9 +1,9 @@
 import * as React from "react"
 import { cva } from "class-variance-authority"
 
-import { THEMES } from "@repo/ui-w/lib/constants"
+import { THEMES } from "@packages/ui-w/lib/constants"
 
-import type { ChartConfig } from "@repo/ui-w/shared/chart/chart"
+import type { ChartConfig } from "@packages/ui-w/shared/chart/chart"
 
 /**
  * Navigation Menu Trigger style

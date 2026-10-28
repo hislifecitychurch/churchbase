@@ -1,6 +1,6 @@
 import { Toast } from "@base-ui/react/toast"
 
-import { ToastsAnchored } from "@repo/ui-w/shared/toast/toast-anchored"
+import { ToastsAnchored } from "@packages/ui-w/shared/toast/toast-anchored"
 
 export const toastAnchoredManager: ReturnType<typeof Toast.createToastManager> =
   Toast.createToastManager()

@@ -1,6 +1,6 @@
 import type MapLibreGL from "maplibre-gl"
 
-import type { MapViewport } from "@repo/ui-w/types/map"
+import type { MapViewport } from "@packages/ui-w/types/map"
 
 export function getMapViewport(map: MapLibreGL.Map): MapViewport {
   const center = map.getCenter()

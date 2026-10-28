@@ -2,15 +2,15 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 
-import { Combobox } from "@repo/ui-w/shared/combobox/combobox"
-import { ComboboxChip } from "@repo/ui-w/shared/combobox/combobox-chip"
-import { ComboboxChips } from "@repo/ui-w/shared/combobox/combobox-chips"
-import { ComboboxChipsInput } from "@repo/ui-w/shared/combobox/combobox-chips-input"
-import { ComboboxEmpty } from "@repo/ui-w/shared/combobox/combobox-empty"
-import { ComboboxItem } from "@repo/ui-w/shared/combobox/combobox-item"
-import { ComboboxList } from "@repo/ui-w/shared/combobox/combobox-list"
-import { ComboboxPopup } from "@repo/ui-w/shared/combobox/combobox-popup"
-import { ComboboxValue } from "@repo/ui-w/shared/combobox/combobox-value"
+import { Combobox } from "@packages/ui-w/shared/combobox/combobox"
+import { ComboboxChip } from "@packages/ui-w/shared/combobox/combobox-chip"
+import { ComboboxChips } from "@packages/ui-w/shared/combobox/combobox-chips"
+import { ComboboxChipsInput } from "@packages/ui-w/shared/combobox/combobox-chips-input"
+import { ComboboxEmpty } from "@packages/ui-w/shared/combobox/combobox-empty"
+import { ComboboxItem } from "@packages/ui-w/shared/combobox/combobox-item"
+import { ComboboxList } from "@packages/ui-w/shared/combobox/combobox-list"
+import { ComboboxPopup } from "@packages/ui-w/shared/combobox/combobox-popup"
+import { ComboboxValue } from "@packages/ui-w/shared/combobox/combobox-value"
 
 export type ComboboxMultipleSelectionItem = {
   value: string

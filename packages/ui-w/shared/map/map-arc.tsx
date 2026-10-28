@@ -4,7 +4,7 @@ import * as React from "react"
 import type MapLibreGL from "maplibre-gl"
 import type { FeatureCollection, LineString } from "geojson"
 
-import { useMap } from "@repo/ui-w/hooks/use-map"
+import { useMap } from "@packages/ui-w/hooks/use-map"
 import {
   ARC_HIT_MIN_WIDTH,
   ARC_HIT_PADDING,
@@ -14,13 +14,13 @@ import {
   DEFAULT_ARC_PAINT,
   DEFAULT_ARC_SAMPLES,
   mergeArcPaint,
-} from "@repo/ui-w/helpers/map/map-arc"
+} from "@packages/ui-w/helpers/map/map-arc"
 import type {
   MapArcDatum,
   MapArcLineLayout,
   MapArcLinePaint,
   MapArcProps,
-} from "@repo/ui-w/types/map"
+} from "@packages/ui-w/types/map"
 
 export function MapArc<T extends MapArcDatum = MapArcDatum>({
   data,

@@ -2,15 +2,15 @@
 
 import * as React from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { SIDEBAR_WIDTH_MOBILE } from "@repo/ui-w/lib/constants"
-import { useSidebar } from "@repo/ui-w/hooks/use-sidebar"
+import { cn } from "@packages/ui-w/lib/utils"
+import { SIDEBAR_WIDTH_MOBILE } from "@packages/ui-w/lib/constants"
+import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
 
-import { Sheet } from "@repo/ui-w/shared/sheet/sheet"
-import { SheetDescription } from "@repo/ui-w/shared/sheet/sheet-description"
-import { SheetHeader } from "@repo/ui-w/shared/sheet/sheet-header"
-import { SheetPopup } from "@repo/ui-w/shared/sheet/sheet-popup"
-import { SheetTitle } from "@repo/ui-w/shared/sheet/sheet-title"
+import { Sheet } from "@packages/ui-w/shared/sheet/sheet"
+import { SheetDescription } from "@packages/ui-w/shared/sheet/sheet-description"
+import { SheetHeader } from "@packages/ui-w/shared/sheet/sheet-header"
+import { SheetPopup } from "@packages/ui-w/shared/sheet/sheet-popup"
+import { SheetTitle } from "@packages/ui-w/shared/sheet/sheet-title"
 
 export function Sidebar({
   side = "left",

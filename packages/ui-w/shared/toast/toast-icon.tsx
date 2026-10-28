@@ -1,7 +1,7 @@
 "use client"
 
-import { TOAST_ICONS } from "@repo/ui-w/lib/constants"
-import { SpinnerFlicker01 } from "@repo/ui-w/shared/spinner-variant/spinner-flicker-01"
+import { TOAST_ICONS } from "@packages/ui-w/lib/constants"
+import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-01"
 
 export function ToastIcon({ type }: { type?: string | null }): React.ReactElement | null {
   if (type === "loading") return <SpinnerFlicker01 />

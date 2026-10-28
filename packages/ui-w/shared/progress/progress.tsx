@@ -3,10 +3,10 @@
 import * as React from "react"
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { ProgressIndicator } from "@repo/ui-w/shared/progress/progress-indicator"
-import { ProgressTrack } from "@repo/ui-w/shared/progress/progress-track"
+import { ProgressIndicator } from "@packages/ui-w/shared/progress/progress-indicator"
+import { ProgressTrack } from "@packages/ui-w/shared/progress/progress-track"
 
 export function Progress({
   className,

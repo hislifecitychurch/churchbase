@@ -3,9 +3,9 @@
 import * as React from "react"
 import { IconSearch } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { AutocompleteInput } from "@repo/ui-w/shared/autocomplete/autocomplete-input"
+import { AutocompleteInput } from "@packages/ui-w/shared/autocomplete/autocomplete-input"
 
 export function CommandInput({
   className,

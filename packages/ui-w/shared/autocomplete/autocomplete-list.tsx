@@ -3,9 +3,9 @@
 import * as React from "react"
 import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomplete"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { ScrollArea } from "@repo/ui-w/shared/scroll-area/scroll-area"
+import { ScrollArea } from "@packages/ui-w/shared/scroll-area/scroll-area"
 
 export function AutocompleteList({
   className,

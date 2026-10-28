@@ -5,13 +5,13 @@ import Image from "next/image"
 
 import { IconCloudUpload, IconFile, IconFileTypeCsv, IconTrash } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { getDefaultAcceptedFileTypesLabel } from "@repo/ui-w/helpers/dropzone-file/get-default-accepted-file-types-label"
-import { getDefaultFileSizeLabel } from "@repo/ui-w/helpers/dropzone-file/get-default-file-size-label"
-import { getDefaultMaxSizeLabel } from "@repo/ui-w/helpers/dropzone-file/get-default-max-size-label"
-import { isAcceptedFile } from "@repo/ui-w/helpers/dropzone-file/is-accepted-file"
-import { isCSVFile } from "@repo/ui-w/helpers/dropzone-file/is-csv-file"
+import { getDefaultAcceptedFileTypesLabel } from "@packages/ui-w/helpers/dropzone-file/get-default-accepted-file-types-label"
+import { getDefaultFileSizeLabel } from "@packages/ui-w/helpers/dropzone-file/get-default-file-size-label"
+import { getDefaultMaxSizeLabel } from "@packages/ui-w/helpers/dropzone-file/get-default-max-size-label"
+import { isAcceptedFile } from "@packages/ui-w/helpers/dropzone-file/is-accepted-file"
+import { isCSVFile } from "@packages/ui-w/helpers/dropzone-file/is-csv-file"
 
 export interface DroppedFile {
   id: string

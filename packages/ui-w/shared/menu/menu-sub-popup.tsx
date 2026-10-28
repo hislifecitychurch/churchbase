@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 
-import { MenuPopup } from "@repo/ui-w/shared/menu/menu-popup"
+import { MenuPopup } from "@packages/ui-w/shared/menu/menu-popup"
 
 export function MenuSubPopup({
   className,

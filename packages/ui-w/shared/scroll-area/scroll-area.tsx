@@ -3,9 +3,9 @@
 import * as React from "react"
 import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { ScrollAreaBar } from "@repo/ui-w/shared/scroll-area/scroll-area-bar"
+import { ScrollAreaBar } from "@packages/ui-w/shared/scroll-area/scroll-area-bar"
 
 export function ScrollArea({
   className,

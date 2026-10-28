@@ -1,4 +1,4 @@
-import type { MapArcLineLayout, MapArcLinePaint } from "@repo/ui-w/types/map"
+import type { MapArcLineLayout, MapArcLinePaint } from "@packages/ui-w/types/map"
 
 export const DEFAULT_ARC_CURVATURE = 0.2
 export const DEFAULT_ARC_SAMPLES = 64

@@ -2,7 +2,7 @@
 
 import { Toast } from "@base-ui/react/toast"
 
-import { Toasts } from "@repo/ui-w/shared/toast/toast"
+import { Toasts } from "@packages/ui-w/shared/toast/toast"
 
 export const toastManager: ReturnType<typeof Toast.createToastManager> = Toast.createToastManager()
 

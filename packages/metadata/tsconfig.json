@@ -1,9 +1,9 @@
 {
-  "extends": "@repo/typescript/library.json",
+  "extends": "@packages/typescript/library.json",
   "compilerOptions": {
     "strictNullChecks": true,
     "paths": {
-      "@repo/metadata/*": ["./*"],
+      "@packages/metadata/*": ["./*"],
     },
   },
   "include": ["config"],

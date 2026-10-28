@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Slot } from "radix-ui"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function SidebarGroupAction({
   className,

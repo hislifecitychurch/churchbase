@@ -3,11 +3,11 @@
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 
-import { ChartContext } from "@repo/ui-w/contexts/chart-context"
-import { cn } from "@repo/ui-w/lib/utils"
-import { INITIAL_DIMENSION, THEMES } from "@repo/ui-w/lib/constants"
+import { ChartContext } from "@packages/ui-w/contexts/chart-context"
+import { cn } from "@packages/ui-w/lib/utils"
+import { INITIAL_DIMENSION, THEMES } from "@packages/ui-w/lib/constants"
 
-import { ChartStyle } from "@repo/ui-w/shared/styles"
+import { ChartStyle } from "@packages/ui-w/shared/styles"
 
 export type ChartConfig = Record<
   string,

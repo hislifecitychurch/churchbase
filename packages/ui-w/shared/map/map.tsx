@@ -5,14 +5,14 @@ import "maplibre-gl/dist/maplibre-gl.css"
 import * as React from "react"
 import MapLibreGL from "maplibre-gl"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { defaultMapStyles } from "@repo/ui-w/helpers/map/default-map-styles"
-import { getMapViewport } from "@repo/ui-w/helpers/map/get-map-viewport"
-import { useResolvedTheme } from "@repo/ui-w/hooks/use-resolved-theme"
-import { MapContext } from "@repo/ui-w/contexts/map-context"
-import type { MapProps, MapStyleOption } from "@repo/ui-w/types/map"
+import { cn } from "@packages/ui-w/lib/utils"
+import { defaultMapStyles } from "@packages/ui-w/helpers/map/default-map-styles"
+import { getMapViewport } from "@packages/ui-w/helpers/map/get-map-viewport"
+import { useResolvedTheme } from "@packages/ui-w/hooks/use-resolved-theme"
+import { MapContext } from "@packages/ui-w/contexts/map-context"
+import type { MapProps, MapStyleOption } from "@packages/ui-w/types/map"
 
-import { MapLoader } from "@repo/ui-w/shared/map/map-loader"
+import { MapLoader } from "@packages/ui-w/shared/map/map-loader"
 
 export function Map({
   children,

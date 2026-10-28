@@ -7,8 +7,8 @@ import type { CSSProperties } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import * as THREE from "three"
 
-import { useResolvedTheme } from "@repo/ui-w/hooks/use-resolved-theme"
-import { cn } from "@repo/ui-w/lib/utils"
+import { useResolvedTheme } from "@packages/ui-w/hooks/use-resolved-theme"
+import { cn } from "@packages/ui-w/lib/utils"
 
 const waveVertexShader = `
 precision highp float;

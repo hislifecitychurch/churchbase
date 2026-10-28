@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { AutocompleteCollection } from "@repo/ui-w/shared/autocomplete/autocomplete-collection"
+import { AutocompleteCollection } from "@packages/ui-w/shared/autocomplete/autocomplete-collection"
 
 export function CommandCollection({
   ...props

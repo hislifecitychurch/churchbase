@@ -7,7 +7,7 @@ import {
   type ChartRow,
   type LineChartProps,
   type LineChartSeries,
-} from "@repo/ui-w/shared/chart-variant/line-chart/line-chart"
+} from "@packages/ui-w/shared/chart-variant/line-chart/line-chart"
 
 export type LineChartMultipleSeries = LineChartSeries
 export type LineChartMultipleProps<TData extends ChartRow> = Omit<

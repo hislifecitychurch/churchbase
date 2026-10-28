@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 type RGBA = readonly [number, number, number, number]
 export type ShaderLiquidWavePattern = "bayer4" | "bayer8"

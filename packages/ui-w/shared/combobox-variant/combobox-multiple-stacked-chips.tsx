@@ -3,15 +3,15 @@
 import { useState } from "react"
 import { IconSearch, IconX } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { Button } from "@repo/ui-w/shared/button/button"
-import { Combobox } from "@repo/ui-w/shared/combobox/combobox"
-import { ComboboxEmpty } from "@repo/ui-w/shared/combobox/combobox-empty"
-import { ComboboxInput } from "@repo/ui-w/shared/combobox/combobox-input"
-import { ComboboxItem } from "@repo/ui-w/shared/combobox/combobox-item"
-import { ComboboxList } from "@repo/ui-w/shared/combobox/combobox-list"
-import { ComboboxPopup } from "@repo/ui-w/shared/combobox/combobox-popup"
+import { Button } from "@packages/ui-w/shared/button/button"
+import { Combobox } from "@packages/ui-w/shared/combobox/combobox"
+import { ComboboxEmpty } from "@packages/ui-w/shared/combobox/combobox-empty"
+import { ComboboxInput } from "@packages/ui-w/shared/combobox/combobox-input"
+import { ComboboxItem } from "@packages/ui-w/shared/combobox/combobox-item"
+import { ComboboxList } from "@packages/ui-w/shared/combobox/combobox-list"
+import { ComboboxPopup } from "@packages/ui-w/shared/combobox/combobox-popup"
 
 export type ComboboxMultipleStackedChipsItem = {
   description?: string

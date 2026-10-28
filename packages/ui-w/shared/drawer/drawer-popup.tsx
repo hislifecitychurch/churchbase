@@ -4,14 +4,14 @@ import { useContext } from "react"
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 import { IconX } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { Button } from "@repo/ui-w/shared/button/button"
-import { DrawerBackdrop } from "@repo/ui-w/shared/drawer/drawer-backdrop"
-import { DrawerBar } from "@repo/ui-w/shared/drawer/drawer-bar"
-import { DrawerContext, type DrawerPosition } from "@repo/ui-w/contexts/drawer-context"
-import { DrawerPortal } from "@repo/ui-w/shared/drawer/drawer-portal"
-import { DrawerViewport } from "@repo/ui-w/shared/drawer/drawer-viewport"
+import { Button } from "@packages/ui-w/shared/button/button"
+import { DrawerBackdrop } from "@packages/ui-w/shared/drawer/drawer-backdrop"
+import { DrawerBar } from "@packages/ui-w/shared/drawer/drawer-bar"
+import { DrawerContext, type DrawerPosition } from "@packages/ui-w/contexts/drawer-context"
+import { DrawerPortal } from "@packages/ui-w/shared/drawer/drawer-portal"
+import { DrawerViewport } from "@packages/ui-w/shared/drawer/drawer-viewport"
 
 export function DrawerPopup({
   className,

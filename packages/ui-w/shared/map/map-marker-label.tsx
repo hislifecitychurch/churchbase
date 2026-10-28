@@ -4,8 +4,8 @@ import type * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import type { MapMarkerLabelProps } from "@repo/ui-w/types/map"
+import { cn } from "@packages/ui-w/lib/utils"
+import type { MapMarkerLabelProps } from "@packages/ui-w/types/map"
 
 export function MapMarkerLabel({
   children,
