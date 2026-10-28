@@ -4,8 +4,8 @@ import * as React from "react"
 import type MapLibreGL from "maplibre-gl"
 import type { Feature, GeoJsonProperties, Point } from "geojson"
 
-import { useMap } from "@repo/ui-w/hooks/use-map"
-import type { MapClusterLayerProps } from "@repo/ui-w/types/map"
+import { useMap } from "@packages/ui-w/hooks/use-map"
+import type { MapClusterLayerProps } from "@packages/ui-w/types/map"
 
 export function MapClusterLayer<P extends GeoJsonProperties = GeoJsonProperties>({
   data,

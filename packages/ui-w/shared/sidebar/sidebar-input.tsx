@@ -2,9 +2,9 @@
 
 import * as React from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { Input } from "@repo/ui-w/shared/input/input"
+import { Input } from "@packages/ui-w/shared/input/input"
 
 export function SidebarInput({
   className,

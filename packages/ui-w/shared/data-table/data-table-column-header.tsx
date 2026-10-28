@@ -1,17 +1,18 @@
 import * as React from "react"
-import { type Column } from "@tanstack/react-table"
+import { type RowData } from "@tanstack/react-table"
+import { type LegacyColumn as Column } from "@tanstack/react-table/legacy"
 import { IconArrowsUpDown, IconChevronDown, IconChevronUp } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { Button } from "@repo/ui-w/shared/button/button"
+import { Button } from "@packages/ui-w/shared/button/button"
 
-interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
+interface DataTableColumnHeaderProps<TData extends RowData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>
   title: string
 }
 
-export function DataTableColumnHeader<TData, TValue>({
+export function DataTableColumnHeader<TData extends RowData, TValue>({
   column,
   title,
   className,

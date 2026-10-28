@@ -3,8 +3,8 @@
 import * as React from "react"
 import type MapLibreGL from "maplibre-gl"
 
-import { useMap } from "@repo/ui-w/hooks/use-map"
-import type { MapRouteProps } from "@repo/ui-w/types/map"
+import { useMap } from "@packages/ui-w/hooks/use-map"
+import type { MapRouteProps } from "@packages/ui-w/types/map"
 
 export function MapRoute({
   id: propId,

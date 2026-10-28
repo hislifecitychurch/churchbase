@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox"
 
-import { ComboboxChipRemove } from "@repo/ui-w/shared/combobox/combobox-chip-remove"
+import { ComboboxChipRemove } from "@packages/ui-w/shared/combobox/combobox-chip-remove"
 
 export function ComboboxChip({
   children,

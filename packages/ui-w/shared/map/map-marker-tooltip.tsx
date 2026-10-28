@@ -4,9 +4,9 @@ import { useEffect, useMemo, useRef } from "react"
 import { createPortal } from "react-dom"
 import MapLibreGL from "maplibre-gl"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { useMarkerContext } from "@repo/ui-w/hooks/use-marker-context"
-import type { MapMarkerTooltipProps } from "@repo/ui-w/types/map"
+import { cn } from "@packages/ui-w/lib/utils"
+import { useMarkerContext } from "@packages/ui-w/hooks/use-marker-context"
+import type { MapMarkerTooltipProps } from "@packages/ui-w/types/map"
 
 export function MapMarkerTooltip({
   children,

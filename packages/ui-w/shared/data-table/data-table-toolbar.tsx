@@ -1,27 +1,28 @@
 "use client"
 
 import * as React from "react"
-import { type Table } from "@tanstack/react-table"
+import { type RowData } from "@tanstack/react-table"
+import { type LegacyReactTable as Table } from "@tanstack/react-table/legacy"
 import { IconRefresh, IconSearch } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { Button, type ButtonProps } from "@repo/ui-w/shared/button/button"
-import { Input } from "@repo/ui-w/shared/input/input"
+import { Button, type ButtonProps } from "@packages/ui-w/shared/button/button"
+import { Input } from "@packages/ui-w/shared/input/input"
 import {
   DataTableFacetedFilter,
   type DataTableFacetedFilterGroup,
-} from "@repo/ui-w/shared/data-table/data-table-faceted-filter"
-import { Select } from "@repo/ui-w/shared/select/select"
-import { SelectItem } from "@repo/ui-w/shared/select/select-item"
-import { SelectPopup } from "@repo/ui-w/shared/select/select-popup"
-import { SelectTrigger } from "@repo/ui-w/shared/select/select-trigger"
-import { SelectValue } from "@repo/ui-w/shared/select/select-value"
-import { Tooltip } from "@repo/ui-w/shared/tooltip/tooltip"
-import { TooltipPopup } from "@repo/ui-w/shared/tooltip/tooltip-popup"
-import { TooltipTrigger } from "@repo/ui-w/shared/tooltip/tooltip-trigger"
+} from "@packages/ui-w/shared/data-table/data-table-faceted-filter"
+import { Select } from "@packages/ui-w/shared/select/select"
+import { SelectItem } from "@packages/ui-w/shared/select/select-item"
+import { SelectPopup } from "@packages/ui-w/shared/select/select-popup"
+import { SelectTrigger } from "@packages/ui-w/shared/select/select-trigger"
+import { SelectValue } from "@packages/ui-w/shared/select/select-value"
+import { Tooltip } from "@packages/ui-w/shared/tooltip/tooltip"
+import { TooltipPopup } from "@packages/ui-w/shared/tooltip/tooltip-popup"
+import { TooltipTrigger } from "@packages/ui-w/shared/tooltip/tooltip-trigger"
 
-export type DataTableToolbarFilter<TData> = {
+export type DataTableToolbarFilter<TData extends RowData> = {
   columnId: string
 } & Pick<
   DataTableFacetedFilterGroup<TData>,
@@ -43,7 +44,7 @@ export type DataTableToolbarSelectOption = {
   value: string
 }
 
-interface DataTableToolbarProps<TData> {
+interface DataTableToolbarProps<TData extends RowData> {
   table: Table<TData>
   searchColumnId?: string
   searchPlaceholder?: string
@@ -73,7 +74,7 @@ interface DataTableToolbarProps<TData> {
   isRefreshing?: boolean
 }
 
-export function DataTableToolbar<TData>({
+export function DataTableToolbar<TData extends RowData>({
   table,
   searchColumnId,
   searchPlaceholder = "Filter...",

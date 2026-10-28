@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { SidebarContextProps, SidebarContext } from "@repo/ui-w/contexts/sidebar-context"
+import { SidebarContextProps, SidebarContext } from "@packages/ui-w/contexts/sidebar-context"
 
 export function useSidebar(): SidebarContextProps {
   const context = React.useContext(SidebarContext)

@@ -3,9 +3,9 @@
 import * as React from "react"
 import { Separator as OTPFieldSeparatorPrimitive } from "@base-ui/react/separator"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { Separator } from "@repo/ui-w/shared/separator/separator"
+import { Separator } from "@packages/ui-w/shared/separator/separator"
 
 export function FieldOTPSeparator({
   className,

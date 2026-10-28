@@ -1,7 +1,7 @@
 import { useId } from "react"
 import type { SVGProps } from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export interface BackgroundStripedPatternProps extends SVGProps<SVGSVGElement> {
   direction?: "left" | "right"

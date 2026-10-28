@@ -2,9 +2,9 @@
 
 import * as React from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { AutocompleteSeparator } from "@repo/ui-w/shared/autocomplete/autocomplete-separator"
+import { AutocompleteSeparator } from "@packages/ui-w/shared/autocomplete/autocomplete-separator"
 
 export function CommandSeparator({
   className,

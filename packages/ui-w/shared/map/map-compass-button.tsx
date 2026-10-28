@@ -2,8 +2,8 @@
 
 import * as React from "react"
 
-import { useMap } from "@repo/ui-w/hooks/use-map"
-import { MapControlButton } from "@repo/ui-w/shared/map/map-control-button"
+import { useMap } from "@packages/ui-w/hooks/use-map"
+import { MapControlButton } from "@packages/ui-w/shared/map/map-control-button"
 
 export function MapCompassButton({ onClick }: { onClick: () => void }): React.ReactElement {
   const { map } = useMap()

@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { IconLoader2 } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function Spinner({
   className,

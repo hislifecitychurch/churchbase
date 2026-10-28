@@ -7,7 +7,7 @@ import {
   type AreaChartProps,
   type AreaChartSeries,
   type ChartRow,
-} from "@repo/ui-w/shared/chart-variant/area-chart/area-chart"
+} from "@packages/ui-w/shared/chart-variant/area-chart/area-chart"
 
 export type AreaChartStepSeries = AreaChartSeries
 export type AreaChartStepProps<TData extends ChartRow> = Omit<AreaChartProps<TData>, "curveType">

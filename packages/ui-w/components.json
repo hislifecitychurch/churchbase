@@ -15,11 +15,11 @@
   "menuColor": "default",
   "menuAccent": "subtle",
   "aliases": {
-    "components": "@repo/ui-w/shared",
-    "utils": "@repo/ui-w/lib/utils",
-    "ui": "@repo/ui-w/shared",
-    "lib": "@repo/ui-w/lib",
-    "hooks": "@repo/ui-w/hooks"
+    "components": "@packages/ui-w/shared",
+    "utils": "@packages/ui-w/lib/utils",
+    "ui": "@packages/ui-w/shared",
+    "lib": "@packages/ui-w/lib",
+    "hooks": "@packages/ui-w/hooks"
   },
   "registries": {
     "@coss": "https://coss.com/ui/r/{name}.json",

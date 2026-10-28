@@ -5,7 +5,7 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function SelectPopup({
   className,

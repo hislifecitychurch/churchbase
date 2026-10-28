@@ -3,9 +3,9 @@
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { DrawerContent } from "@repo/ui-w/shared/drawer/drawer-content"
+import { DrawerContent } from "@packages/ui-w/shared/drawer/drawer-content"
 
 export function DrawerFooter({
   className,

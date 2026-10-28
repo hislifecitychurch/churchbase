@@ -1,26 +1,27 @@
 "use client"
 
-import { type Row } from "@tanstack/react-table"
+import { type RowData } from "@tanstack/react-table"
+import { type LegacyRow as Row } from "@tanstack/react-table/legacy"
 import { IconDotsVertical } from "@tabler/icons-react"
 
-import { Button } from "@repo/ui-w/shared/button/button"
-import { Menu, MenuSub } from "@repo/ui-w/shared/menu/menu"
-import { MenuGroup } from "@repo/ui-w/shared/menu/menu-group"
-import { MenuGroupLabel } from "@repo/ui-w/shared/menu/menu-group-label"
-import { MenuItem } from "@repo/ui-w/shared/menu/menu-item"
-import { MenuPopup } from "@repo/ui-w/shared/menu/menu-popup"
-import { MenuRadioGroup } from "@repo/ui-w/shared/menu/menu-radio-group"
-import { MenuRadioItem } from "@repo/ui-w/shared/menu/menu-radio-item"
-import { MenuSeparator } from "@repo/ui-w/shared/menu/menu-separator"
-import { MenuShortcut } from "@repo/ui-w/shared/menu/menu-shortcut"
-import { MenuSubPopup } from "@repo/ui-w/shared/menu/menu-sub-popup"
-import { MenuSubTrigger } from "@repo/ui-w/shared/menu/menu-sub-trigger"
-import { MenuTrigger } from "@repo/ui-w/shared/menu/menu-trigger"
+import { Button } from "@packages/ui-w/shared/button/button"
+import { Menu, MenuSub } from "@packages/ui-w/shared/menu/menu"
+import { MenuGroup } from "@packages/ui-w/shared/menu/menu-group"
+import { MenuGroupLabel } from "@packages/ui-w/shared/menu/menu-group-label"
+import { MenuItem } from "@packages/ui-w/shared/menu/menu-item"
+import { MenuPopup } from "@packages/ui-w/shared/menu/menu-popup"
+import { MenuRadioGroup } from "@packages/ui-w/shared/menu/menu-radio-group"
+import { MenuRadioItem } from "@packages/ui-w/shared/menu/menu-radio-item"
+import { MenuSeparator } from "@packages/ui-w/shared/menu/menu-separator"
+import { MenuShortcut } from "@packages/ui-w/shared/menu/menu-shortcut"
+import { MenuSubPopup } from "@packages/ui-w/shared/menu/menu-sub-popup"
+import { MenuSubTrigger } from "@packages/ui-w/shared/menu/menu-sub-trigger"
+import { MenuTrigger } from "@packages/ui-w/shared/menu/menu-trigger"
 
 type IconComponent = React.ComponentType<{ className?: string }>
-export type DataTableRowActionRow<TData> = Pick<Row<TData>, "id" | "original">
+export type DataTableRowActionRow<TData extends RowData> = Pick<Row<TData>, "id" | "original">
 
-export type DataTableRowActionItem<TData> =
+export type DataTableRowActionItem<TData extends RowData> =
   | {
       type?: "item"
       label: React.ReactNode
@@ -58,13 +59,13 @@ export type DataTableRowActionItem<TData> =
       onValueChange?: (value: string, row: DataTableRowActionRow<TData>) => void
     }
 
-interface DataTableRowActionsProps<TData> {
+interface DataTableRowActionsProps<TData extends RowData> {
   row: DataTableRowActionRow<TData>
   items: DataTableRowActionItem<TData>[]
   triggerLabel?: string
 }
 
-function renderActionItem<TData>(
+function renderActionItem<TData extends RowData>(
   item: DataTableRowActionItem<TData>,
   row: DataTableRowActionRow<TData>,
   key: React.Key,
@@ -151,7 +152,7 @@ function renderActionItem<TData>(
   )
 }
 
-export function DataTableRowActions<TData>({
+export function DataTableRowActions<TData extends RowData>({
   row,
   items,
   triggerLabel = "Open row actions",

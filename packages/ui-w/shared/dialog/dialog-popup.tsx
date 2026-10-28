@@ -4,12 +4,12 @@ import * as React from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { IconX } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { Button } from "@repo/ui-w/shared/button/button"
-import { DialogPortal } from "@repo/ui-w/shared/dialog/dialog-portal"
-import { DialogBackdrop } from "@repo/ui-w/shared/dialog/dialog-backdrop"
-import { DialogViewport } from "@repo/ui-w/shared/dialog/dialog-viewport"
+import { Button } from "@packages/ui-w/shared/button/button"
+import { DialogPortal } from "@packages/ui-w/shared/dialog/dialog-portal"
+import { DialogBackdrop } from "@packages/ui-w/shared/dialog/dialog-backdrop"
+import { DialogViewport } from "@packages/ui-w/shared/dialog/dialog-viewport"
 
 export function DialogPopup({
   className,

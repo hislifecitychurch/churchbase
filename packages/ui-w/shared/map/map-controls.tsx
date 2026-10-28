@@ -9,13 +9,13 @@ import {
   IconPlus,
 } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { useMap } from "@repo/ui-w/hooks/use-map"
-import type { MapControlsProps } from "@repo/ui-w/types/map"
+import { cn } from "@packages/ui-w/lib/utils"
+import { useMap } from "@packages/ui-w/hooks/use-map"
+import type { MapControlsProps } from "@packages/ui-w/types/map"
 
-import { MapCompassButton } from "@repo/ui-w/shared/map/map-compass-button"
-import { MapControlButton } from "@repo/ui-w/shared/map/map-control-button"
-import { MapControlGroup } from "@repo/ui-w/shared/map/map-control-group"
+import { MapCompassButton } from "@packages/ui-w/shared/map/map-compass-button"
+import { MapControlButton } from "@packages/ui-w/shared/map/map-control-button"
+import { MapControlGroup } from "@packages/ui-w/shared/map/map-control-group"
 
 const positionClasses = {
   "top-left": "top-2 left-2",

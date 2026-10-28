@@ -1,40 +1,47 @@
 "use client"
 
 import * as React from "react"
+// shortcut: keep the v8 table API through TanStack v9's legacy adapter until feature-based migration.
 import {
   flexRender,
+  type ColumnFiltersState,
+  type FilterFn as TanStackFilterFn,
+  type PaginationState,
+  type RowData,
+  type SortingState,
+} from "@tanstack/react-table"
+import {
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
-  type ColumnDef,
-  type ColumnFiltersState,
-  type Table as ReactTable,
-  type Row,
-  type SortingState,
-  type PaginationState,
-} from "@tanstack/react-table"
+  useLegacyTable as useReactTable,
+  type LegacyColumnDef as ColumnDef,
+  type LegacyReactTable as ReactTable,
+  type LegacyFeatures,
+  type LegacyRow as Row,
+} from "@tanstack/react-table/legacy"
 
-import { Table } from "@repo/ui-w/shared/table/table"
-import { TableBody } from "@repo/ui-w/shared/table/table-body"
-import { TableCell } from "@repo/ui-w/shared/table/table-cell"
-import { TableHead } from "@repo/ui-w/shared/table/table-head"
-import { TableHeader } from "@repo/ui-w/shared/table/table-header"
-import { TableRow } from "@repo/ui-w/shared/table/table-row"
-import { DataTablePagination } from "@repo/ui-w/shared/data-table/data-table-pagination"
+import { Table } from "@packages/ui-w/shared/table/table"
+import { TableBody } from "@packages/ui-w/shared/table/table-body"
+import { TableCell } from "@packages/ui-w/shared/table/table-cell"
+import { TableHead } from "@packages/ui-w/shared/table/table-head"
+import { TableHeader } from "@packages/ui-w/shared/table/table-header"
+import { TableRow } from "@packages/ui-w/shared/table/table-row"
+import { DataTablePagination } from "@packages/ui-w/shared/data-table/data-table-pagination"
 import {
   DataTableToolbar,
   type DataTableToolbarButton,
   type DataTableToolbarFilter,
   type DataTableToolbarSelectOption,
-} from "@repo/ui-w/shared/data-table/data-table-toolbar"
+} from "@packages/ui-w/shared/data-table/data-table-toolbar"
 
-export type { ColumnDef, FilterFn } from "@tanstack/react-table"
+export type { LegacyColumnDef as ColumnDef } from "@tanstack/react-table/legacy"
+export type FilterFn<TData extends RowData> = TanStackFilterFn<LegacyFeatures, TData>
 
-export interface DataTableProps<TData, TValue> {
+export interface DataTableProps<TData extends RowData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   emptyMessage?: React.ReactNode
@@ -85,7 +92,7 @@ export interface DataTableProps<TData, TValue> {
   }
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends RowData, TValue>({
   columns,
   data,
   emptyMessage = "No results.",
@@ -159,9 +166,10 @@ export function DataTable<TData, TValue>({
     [onPageIndexChange, pagination],
   )
 
-  const table = useReactTable({
+  const table = useReactTable<TData>({
     data,
-    columns,
+    // The legacy hook defaults every column value to unknown.
+    columns: columns as unknown as ColumnDef<TData, unknown>[],
     state: {
       sorting,
       rowSelection,
@@ -172,6 +180,7 @@ export function DataTable<TData, TValue>({
     pageCount: externalPagination?.pages,
     initialState: {
       pagination: {
+        pageIndex: pageIndex ?? 0,
         pageSize: initialPageSize,
       },
     },

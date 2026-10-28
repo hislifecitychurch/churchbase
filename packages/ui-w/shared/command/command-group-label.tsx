@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { AutocompleteGroupLabel } from "@repo/ui-w/shared/autocomplete/autocomplete-group-label"
+import { AutocompleteGroupLabel } from "@packages/ui-w/shared/autocomplete/autocomplete-group-label"
 
 export function CommandGroupLabel({
   className,

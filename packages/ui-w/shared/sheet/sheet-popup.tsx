@@ -4,12 +4,12 @@ import * as React from "react"
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog"
 import { IconX } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { Button } from "@repo/ui-w/shared/button/button"
-import { SheetBackdrop } from "@repo/ui-w/shared/sheet/sheet-backdrop"
-import { SheetPortal } from "@repo/ui-w/shared/sheet/sheet-portal"
-import { SheetViewport } from "@repo/ui-w/shared/sheet/sheet-viewport"
+import { Button } from "@packages/ui-w/shared/button/button"
+import { SheetBackdrop } from "@packages/ui-w/shared/sheet/sheet-backdrop"
+import { SheetPortal } from "@packages/ui-w/shared/sheet/sheet-portal"
+import { SheetViewport } from "@packages/ui-w/shared/sheet/sheet-viewport"
 
 export function SheetPopup({
   className,

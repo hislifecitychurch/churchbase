@@ -5,7 +5,7 @@ import * as React from "react"
 import { IconArrowsUpDown, IconChevronLeft, IconChevronRight } from "@tabler/icons-react"
 
 import { DayPicker } from "react-day-picker"
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 const buttonClassNames =
   "relative flex size-(--cell-size) cursor-pointer text-base sm:text-sm items-center justify-center rounded-xl text-foreground not-in-data-selected:hover:bg-accent disabled:pointer-events-none disabled:opacity-64 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0"

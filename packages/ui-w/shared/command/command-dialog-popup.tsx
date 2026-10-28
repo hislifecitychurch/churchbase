@@ -3,11 +3,11 @@
 import * as React from "react"
 import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { CommandDialogPortal } from "@repo/ui-w/shared/command/command-dialog-portal"
-import { CommandDialogBackdrop } from "@repo/ui-w/shared/command/command-dialog-backdrop"
-import { CommandDialogViewport } from "@repo/ui-w/shared/command/command-dialog-viewport"
+import { CommandDialogPortal } from "@packages/ui-w/shared/command/command-dialog-portal"
+import { CommandDialogBackdrop } from "@packages/ui-w/shared/command/command-dialog-backdrop"
+import { CommandDialogViewport } from "@packages/ui-w/shared/command/command-dialog-viewport"
 
 export function CommandDialogPopup({
   className,

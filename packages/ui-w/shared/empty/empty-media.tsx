@@ -2,8 +2,8 @@ import * as React from "react"
 
 import { type VariantProps } from "class-variance-authority"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { emptyMediaVariants } from "@repo/ui-w/shared/variants"
+import { cn } from "@packages/ui-w/lib/utils"
+import { emptyMediaVariants } from "@packages/ui-w/shared/variants"
 
 export function EmptyMedia({
   className,

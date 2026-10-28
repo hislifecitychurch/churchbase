@@ -2,9 +2,9 @@
 
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import type { DrawerPosition } from "@repo/ui-w/contexts/drawer-context"
+import type { DrawerPosition } from "@packages/ui-w/contexts/drawer-context"
 
 export function DrawerViewport({
   className,

@@ -6,8 +6,8 @@ import { useRender } from "@base-ui/react/use-render"
 
 import { type VariantProps } from "class-variance-authority"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { alertVariants } from "@repo/ui-w/shared/variants"
+import { cn } from "@packages/ui-w/lib/utils"
+import { alertVariants } from "@packages/ui-w/shared/variants"
 
 export function Alert({
   className,

@@ -3,9 +3,9 @@
 import * as React from "react"
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { MenuPortal } from "@repo/ui-w/shared/menu/menu-portal"
+import { MenuPortal } from "@packages/ui-w/shared/menu/menu-portal"
 
 export function MenuPopup({
   children,

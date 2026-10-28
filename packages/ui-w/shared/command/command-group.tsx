@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { AutocompleteGroup } from "@repo/ui-w/shared/autocomplete/autocomplete-group"
+import { AutocompleteGroup } from "@packages/ui-w/shared/autocomplete/autocomplete-group"
 
 export function CommandGroup({
   className,

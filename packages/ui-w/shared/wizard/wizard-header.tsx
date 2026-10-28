@@ -2,8 +2,8 @@
 
 import * as React from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { useWizardContext } from "@repo/ui-w/shared/wizard/wizard"
+import { cn } from "@packages/ui-w/lib/utils"
+import { useWizardContext } from "@packages/ui-w/shared/wizard/wizard"
 
 export function WizardHeader({
   className,

@@ -1,4 +1,4 @@
-import type { ChartConfig } from "@repo/ui-w/shared/chart/chart"
+import type { ChartConfig } from "@packages/ui-w/shared/chart/chart"
 
 export function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string) {
   if (typeof payload !== "object" || payload === null) {

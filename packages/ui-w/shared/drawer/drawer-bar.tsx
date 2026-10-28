@@ -4,9 +4,9 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useContext } from "react"
 import { useRender } from "@base-ui/react/use-render"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { DrawerContext, type DrawerPosition } from "@repo/ui-w/contexts/drawer-context"
+import { DrawerContext, type DrawerPosition } from "@packages/ui-w/contexts/drawer-context"
 
 export function DrawerBar({
   className,

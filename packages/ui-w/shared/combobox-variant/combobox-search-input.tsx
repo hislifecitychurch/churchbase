@@ -2,15 +2,15 @@
 
 import { IconSearch } from "@tabler/icons-react"
 
-import { Combobox } from "@repo/ui-w/shared/combobox/combobox"
-import { ComboboxEmpty } from "@repo/ui-w/shared/combobox/combobox-empty"
-import { ComboboxInput } from "@repo/ui-w/shared/combobox/combobox-input"
-import { ComboboxItem } from "@repo/ui-w/shared/combobox/combobox-item"
-import { ComboboxList } from "@repo/ui-w/shared/combobox/combobox-list"
-import { ComboboxPopup } from "@repo/ui-w/shared/combobox/combobox-popup"
-import { ComboboxTrigger } from "@repo/ui-w/shared/combobox/combobox-trigger"
-import { ComboboxValue } from "@repo/ui-w/shared/combobox/combobox-value"
-import { SelectButton } from "@repo/ui-w/shared/select/select-button"
+import { Combobox } from "@packages/ui-w/shared/combobox/combobox"
+import { ComboboxEmpty } from "@packages/ui-w/shared/combobox/combobox-empty"
+import { ComboboxInput } from "@packages/ui-w/shared/combobox/combobox-input"
+import { ComboboxItem } from "@packages/ui-w/shared/combobox/combobox-item"
+import { ComboboxList } from "@packages/ui-w/shared/combobox/combobox-list"
+import { ComboboxPopup } from "@packages/ui-w/shared/combobox/combobox-popup"
+import { ComboboxTrigger } from "@packages/ui-w/shared/combobox/combobox-trigger"
+import { ComboboxValue } from "@packages/ui-w/shared/combobox/combobox-value"
+import { SelectButton } from "@packages/ui-w/shared/select/select-button"
 
 export type ComboboxSearchInputItem = { label: string; value: string }
 

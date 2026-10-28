@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomplete"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function AutocompleteEmpty({
   className,

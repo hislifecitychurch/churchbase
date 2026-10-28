@@ -4,7 +4,7 @@ import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "re
 import type { CSSProperties } from "react"
 import { gsap } from "gsap"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export type TextLoopShape = "wave" | "circle" | "infinity" | "arch" | "line"
 export type TextLoopDirection = "forward" | "reverse"

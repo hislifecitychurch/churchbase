@@ -3,9 +3,9 @@
 import * as React from "react"
 import { IconChevronRight } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { PaginationLink } from "@repo/ui-w/shared/pagination/pagination-link"
+import { PaginationLink } from "@packages/ui-w/shared/pagination/pagination-link"
 
 export function PaginationNext({
   className,

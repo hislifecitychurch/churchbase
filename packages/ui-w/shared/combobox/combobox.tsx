@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox"
 
-import { ComboboxContext } from "@repo/ui-w/contexts/combobox-context"
+import { ComboboxContext } from "@packages/ui-w/contexts/combobox-context"
 
 export function Combobox<Value, Multiple extends boolean | undefined = false>(
   props: ComboboxPrimitive.Root.Props<Value, Multiple>,

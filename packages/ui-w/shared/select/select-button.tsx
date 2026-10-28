@@ -6,8 +6,8 @@ import { useRender } from "@base-ui/react/use-render"
 import { type VariantProps } from "class-variance-authority"
 import { IconChevronDown } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { selectTriggerVariants } from "@repo/ui-w/shared/variants"
+import { cn } from "@packages/ui-w/lib/utils"
+import { selectTriggerVariants } from "@packages/ui-w/shared/variants"
 
 export interface SelectButtonProps
   extends useRender.ComponentProps<"button">, VariantProps<typeof selectTriggerVariants> {}

@@ -4,11 +4,11 @@ import * as React from "react"
 
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { AlertDialogBackdrop } from "@repo/ui-w/shared/alert-dialog/alert-dialog-backdrop"
-import { AlertDialogPortal } from "@repo/ui-w/shared/alert-dialog/alert-dialog-portal"
-import { AlertDialogViewport } from "@repo/ui-w/shared/alert-dialog/alert-dialog-viewport"
+import { AlertDialogBackdrop } from "@packages/ui-w/shared/alert-dialog/alert-dialog-backdrop"
+import { AlertDialogPortal } from "@packages/ui-w/shared/alert-dialog/alert-dialog-portal"
+import { AlertDialogViewport } from "@packages/ui-w/shared/alert-dialog/alert-dialog-viewport"
 
 export function AlertDialogPopup({
   className,

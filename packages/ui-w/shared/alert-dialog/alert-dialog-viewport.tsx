@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function AlertDialogViewport({
   className,

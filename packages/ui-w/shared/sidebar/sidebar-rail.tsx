@@ -2,9 +2,9 @@
 
 import * as React from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { useSidebar } from "@repo/ui-w/hooks/use-sidebar"
+import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
 
 export function SidebarRail({
   className,

@@ -3,7 +3,7 @@
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog"
 import * as React from "react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function AlertDialogTitle({
   className,

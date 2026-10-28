@@ -3,7 +3,7 @@ import type { MarkerOptions, PopupOptions } from "maplibre-gl"
 import type { Feature, FeatureCollection, GeoJsonProperties, Point } from "geojson"
 import type { ReactNode, Ref } from "react"
 
-import type { Theme } from "@repo/ui-w/helpers/map/get-system-theme"
+import type { Theme } from "@packages/ui-w/helpers/map/get-system-theme"
 
 export type MapViewport = {
   center: [number, number]

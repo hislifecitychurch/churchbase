@@ -1,11 +1,11 @@
 {
-  "extends": "@repo/typescript/library.json",
+  "extends": "@packages/typescript/library.json",
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "dist",
     "strictNullChecks": true,
     "paths": {
-      "@repo/ui-w/*": ["./*"]
+      "@packages/ui-w/*": ["./*"]
     }
   },
   "include": [

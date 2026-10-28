@@ -5,7 +5,7 @@ import * as React from "react"
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import { IconChevronDown } from "@tabler/icons-react"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function AccordionTrigger({
   className,

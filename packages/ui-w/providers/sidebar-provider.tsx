@@ -3,17 +3,17 @@
 import * as React from "react"
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 
-import { useIsMobile } from "@repo/ui-w/hooks/use-is-mobile"
-import { cn } from "@repo/ui-w/lib/utils"
+import { useIsMobile } from "@packages/ui-w/hooks/use-is-mobile"
+import { cn } from "@packages/ui-w/lib/utils"
 import {
   SIDEBAR_COOKIE_MAX_AGE,
   SIDEBAR_COOKIE_NAME,
   SIDEBAR_KEYBOARD_SHORTCUT,
   SIDEBAR_WIDTH,
   SIDEBAR_WIDTH_ICON,
-} from "@repo/ui-w/lib/constants"
+} from "@packages/ui-w/lib/constants"
 
-import { SidebarContext, type SidebarContextProps } from "@repo/ui-w/contexts/sidebar-context"
+import { SidebarContext, type SidebarContextProps } from "@packages/ui-w/contexts/sidebar-context"
 
 export function SidebarProvider({
   defaultOpen = true,

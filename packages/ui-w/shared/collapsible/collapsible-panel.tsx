@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function CollapsiblePanel({
   className,

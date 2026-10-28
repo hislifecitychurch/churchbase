@@ -1,19 +1,20 @@
-import { type Table } from "@tanstack/react-table"
+import { type RowData } from "@tanstack/react-table"
+import { type LegacyReactTable as Table } from "@tanstack/react-table/legacy"
 
-import { Pagination } from "@repo/ui-w/shared/pagination/pagination"
-import { PaginationContent } from "@repo/ui-w/shared/pagination/pagination-content"
-import { PaginationEllipsis } from "@repo/ui-w/shared/pagination/pagination-ellipsis"
-import { PaginationItem } from "@repo/ui-w/shared/pagination/pagination-item"
-import { PaginationLink } from "@repo/ui-w/shared/pagination/pagination-link"
-import { PaginationNext } from "@repo/ui-w/shared/pagination/pagination-next"
-import { PaginationPrevious } from "@repo/ui-w/shared/pagination/pagination-previous"
-import { Select } from "@repo/ui-w/shared/select/select"
-import { SelectButton } from "@repo/ui-w/shared/select/select-button"
-import { SelectItem } from "@repo/ui-w/shared/select/select-item"
-import { SelectPopup } from "@repo/ui-w/shared/select/select-popup"
-import { SelectValue } from "@repo/ui-w/shared/select/select-value"
+import { Pagination } from "@packages/ui-w/shared/pagination/pagination"
+import { PaginationContent } from "@packages/ui-w/shared/pagination/pagination-content"
+import { PaginationEllipsis } from "@packages/ui-w/shared/pagination/pagination-ellipsis"
+import { PaginationItem } from "@packages/ui-w/shared/pagination/pagination-item"
+import { PaginationLink } from "@packages/ui-w/shared/pagination/pagination-link"
+import { PaginationNext } from "@packages/ui-w/shared/pagination/pagination-next"
+import { PaginationPrevious } from "@packages/ui-w/shared/pagination/pagination-previous"
+import { Select } from "@packages/ui-w/shared/select/select"
+import { SelectButton } from "@packages/ui-w/shared/select/select-button"
+import { SelectItem } from "@packages/ui-w/shared/select/select-item"
+import { SelectPopup } from "@packages/ui-w/shared/select/select-popup"
+import { SelectValue } from "@packages/ui-w/shared/select/select-value"
 
-interface DataTablePaginationProps<TData> {
+interface DataTablePaginationProps<TData extends RowData> {
   table?: Table<TData>
   pagination?: {
     page: number
@@ -38,7 +39,7 @@ function getPageRange(current: number, total: number): (number | "ellipsis")[] {
   return [1, "ellipsis", current - 1, current, current + 1, "ellipsis", total]
 }
 
-export function DataTablePagination<TData>({
+export function DataTablePagination<TData extends RowData>({
   table,
   pagination,
   onPageChange,

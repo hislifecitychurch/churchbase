@@ -2,7 +2,7 @@
 
 import { Radio as RadioPrimitive } from "@base-ui/react/radio"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
 export function DrawerMenuRadioItem({
   className,

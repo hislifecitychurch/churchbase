@@ -4,13 +4,13 @@ import * as React from "react"
 import { type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { useSidebar } from "@repo/ui-w/hooks/use-sidebar"
-import { sidebarMenuButtonVariants } from "@repo/ui-w/shared/variants"
+import { cn } from "@packages/ui-w/lib/utils"
+import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
+import { sidebarMenuButtonVariants } from "@packages/ui-w/shared/variants"
 
-import { Tooltip } from "@repo/ui-w/shared/tooltip/tooltip"
-import { TooltipPopup } from "@repo/ui-w/shared/tooltip/tooltip-popup"
-import { TooltipTrigger } from "@repo/ui-w/shared/tooltip/tooltip-trigger"
+import { Tooltip } from "@packages/ui-w/shared/tooltip/tooltip"
+import { TooltipPopup } from "@packages/ui-w/shared/tooltip/tooltip-popup"
+import { TooltipTrigger } from "@packages/ui-w/shared/tooltip/tooltip-trigger"
 
 export function SidebarMenuButton({
   asChild = false,

@@ -4,9 +4,9 @@ import * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 
-import { cn } from "@repo/ui-w/lib/utils"
+import { cn } from "@packages/ui-w/lib/utils"
 
-import { ScrollArea } from "@repo/ui-w/shared/scroll-area/scroll-area"
+import { ScrollArea } from "@packages/ui-w/shared/scroll-area/scroll-area"
 
 export function DialogPanel({
   className,

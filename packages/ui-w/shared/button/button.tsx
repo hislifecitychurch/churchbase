@@ -6,10 +6,10 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender, type UseRenderComponentProps } from "@base-ui/react/use-render"
 import { type VariantProps } from "class-variance-authority"
 
-import { cn } from "@repo/ui-w/lib/utils"
-import { buttonVariants } from "@repo/ui-w/shared/variants"
+import { cn } from "@packages/ui-w/lib/utils"
+import { buttonVariants } from "@packages/ui-w/shared/variants"
 
-import { SpinnerFlicker01 } from "@repo/ui-w/shared/spinner-variant/spinner-flicker-01"
+import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-01"
 
 export interface ButtonProps extends UseRenderComponentProps<"button"> {
   variant?: VariantProps<typeof buttonVariants>["variant"]
