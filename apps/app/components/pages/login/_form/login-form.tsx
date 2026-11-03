@@ -34,12 +34,6 @@ export function LoginForm(): React.ReactElement {
       >
         Forgot your password?
       </Button>
-      <p className="text-muted-foreground mt-8 text-sm">
-        Don&apos;t have an account?{" "}
-        <Button className="h-auto p-0" size="sm" type="button" variant="link">
-          Sign up
-        </Button>
-      </p>
     </div>
   )
 }
