@@ -28,7 +28,7 @@ export function createMetadata(config: MetadataConfig): Metadata {
   return {
     title: {
       default: name,
-      template: `%s | ${name}`,
+      template: `%s · ${name}`,
     },
     description,
     keywords,
