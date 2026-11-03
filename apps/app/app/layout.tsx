@@ -23,7 +23,12 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       suppressHydrationWarning
     >
       <body className="overflow-x-hidden font-sans tracking-tight antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
           <ToastProvider position="bottom-left">
             <TooltipProvider delay={0}>
               <QueryProvider>
