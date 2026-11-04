@@ -25,13 +25,13 @@ export function FooterMenu(): React.ReactElement {
           tooltip="Settings"
         >
           <Link href="/settings" prefetch={false}>
-            <IconSettings aria-hidden className="size-5! shrink-0" />
+            <IconSettings aria-hidden />
             <span className="group-data-[collapsible=icon]:hidden">Settings</span>
           </Link>
         </SidebarMenuButton>
       </SidebarMenuItem>
       <SidebarMenuItem>
-        <SidebarTrigger className="w-full justify-start p-2! text-sm! font-normal! group-data-[collapsible=icon]:justify-center" />
+        <SidebarTrigger className="w-full justify-start p-2! text-sm! font-normal!" />
       </SidebarMenuItem>
     </SidebarMenu>
   )

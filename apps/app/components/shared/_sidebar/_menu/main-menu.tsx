@@ -36,7 +36,7 @@ export function MainMenu({ items }: MainMenuProps): React.ReactElement {
                   tooltip={item.title}
                 >
                   <Link href={item.path} prefetch={false}>
-                    <Icon aria-hidden className="size-5! shrink-0" />
+                    <Icon aria-hidden />
                     <span className="group-data-[collapsible=icon]:hidden">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>

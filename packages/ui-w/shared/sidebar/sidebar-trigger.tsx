@@ -36,7 +36,7 @@ export function SidebarTrigger({
       }}
       {...props}
     >
-      <Icon aria-hidden className="size-5! shrink-0" />
+      <Icon aria-hidden />
       <span className={cn("normal-case", isCollapsed && "sr-only")}>{label}</span>
     </SidebarMenuButton>
   )
