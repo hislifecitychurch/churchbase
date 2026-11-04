@@ -9,7 +9,6 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/utilities"
 )
 
-// Church is the tenant boundary for Churchbase-owned records.
 type Church struct {
 	ent.Schema
 }
