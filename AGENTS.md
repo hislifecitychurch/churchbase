@@ -8,14 +8,16 @@ These instructions apply across the repository. More specific `AGENTS.md` files 
 - Follow [`.agents/ui/AGENTS.md`](.agents/ui/AGENTS.md) for spacing and typography rules shared by every application.
 - Follow [`.agents/app/AGENTS.md`](.agents/app/AGENTS.md) for `apps/app/` architecture and feature guidance.
 - Follow [`.agents/api/AGENTS.md`](.agents/api/AGENTS.md) for `apps/api/` architecture and feature guidance.
+- Follow [`.agents/auth/AGENTS.md`](.agents/auth/AGENTS.md) for `apps/auth/` architecture and identity guidance.
 - `.agents/` contains agent instructions and workflow guidance; read relevant files explicitly.
 - The root `package.json` declares the package manager and shared scripts; inspect package-level scripts before running checks.
 
 ## Repository map
 
-- `.agents/` — agent instructions, shared UI rules, and API/App architecture guidance.
+- `.agents/` — agent instructions, shared UI rules, and API/App/Auth architecture guidance.
 - `apps/` — product applications.
 - `apps/api/` — Go/Fiber business API.
+- `apps/auth/` — Bun/Hono authentication service using BetterAuth.
 - `packages/ui-w/` — shared React UI components.
 - `packages/eslint/` — shared ESLint configuration.
 - `packages/metadata/` — shared Next.js metadata defaults and helpers.
