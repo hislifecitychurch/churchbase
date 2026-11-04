@@ -5,11 +5,14 @@
 These instructions apply across the repository. More specific `AGENTS.md` files take precedence within their directories. Add narrower instructions only when a part of the codebase needs distinct rules.
 
 - Follow [`.agents/workflow.md`](.agents/workflow.md) for branch, commit, delivery, and promotion rules.
+- Follow [`.agents/ui/AGENTS.md`](.agents/ui/AGENTS.md) for spacing and typography rules shared by every application.
+- Follow [`.agents/app/AGENTS.md`](.agents/app/AGENTS.md) for `apps/app/` architecture and feature guidance.
 - `.agents/` contains agent instructions and workflow guidance; read relevant files explicitly.
 - The root `package.json` declares the package manager and shared scripts; inspect package-level scripts before running checks.
 
 ## Repository map
 
+- `.agents/` — agent instructions, shared UI rules, and workflow guidance.
 - `apps/` — product applications.
 - `packages/ui-w/` — shared React UI components.
 - `packages/eslint/` — shared ESLint configuration.
