@@ -2,7 +2,7 @@
 
 ## Scope
 
-`apps/api/` is the Go/Fiber business API. BetterAuth in `apps/auth/` owns identity and sessions. The API owns Churchbase data and authorization: churches, ministries, memberships, roles, and ministry features. PostgreSQL is the source of truth; Ent is the API persistence model; Atlas owns versioned API migrations. Redis is connected for readiness and reserved for concrete ephemeral needs such as shared rate limits or caching, not business records.
+`apps/api/` is the Go/Fiber business API. BetterAuth in `apps/auth/` owns identity and sessions. The API owns Churchbase data and authorization: churches, ministries, memberships, roles, and ministry features. PostgreSQL is the source of truth; Ent is the API persistence model; Atlas owns versioned API migrations. Redis is connected for readiness and can support a concrete ephemeral need, not business records.
 
 Do not duplicate BetterAuth users, credentials, or sessions in the API. Do not read or migrate BetterAuth's schema from the API, and do not run schema changes during API startup.
 
@@ -11,6 +11,7 @@ Do not duplicate BetterAuth users, credentials, or sessions in the API. Do not r
 - Read the relevant [architecture reference](architecture/_index.md) before changing API boundaries, routes, authentication, persistence, errors, configuration, or tests.
 - Read a [feature guide](guides/) when one exists for the business rules being changed.
 - Keep feature guides factual; do not describe planned behavior as implemented.
+- Rate limiting is deferred pending algorithm research; do not add rate-limit configuration or middleware yet.
 
 ## Recommended structure
 
@@ -27,7 +28,7 @@ apps/api/
 │   ├── handler/<feature>/           HTTP input/output mapping
 │   ├── application/                 thin handler-facing composition
 │   ├── domain/<feature>/            business rules and repository ports
-│   ├── middleware/                  auth, request ID, rate limiting
+│   ├── middleware/                  auth, request ID, CORS
 │   └── shared/                      small cross-feature contracts
 └── test/
     ├── unit/

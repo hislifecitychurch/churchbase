@@ -4,9 +4,11 @@ Bun/Hono service for BetterAuth identity and sessions. BetterAuth owns its Postg
 
 ## Local development
 
+The example intentionally leaves values blank. Before running the migration or service, set `PORT`, `ENVIRONMENT`, `RL_DB_URL`, `AUTH_ALLOW_EMAIL_SIGN_UP`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, and `CORS_ALLOWED_ORIGINS`. The local database container is optional when `RL_DB_URL` points to a managed PostgreSQL service.
+
 ```sh
 cp apps/auth/.env.example apps/auth/.env
-docker compose -f apps/api/compose.yaml up -d --wait postgres
+docker compose -f apps/api/compose.yaml up -d --wait postgres # optional local database
 bun run --cwd apps/auth db:migrate
 bun run --cwd apps/auth dev
 ```
