@@ -1,13 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { IconCheck, IconPlus, IconSelector } from "@tabler/icons-react"
+import { IconCheck, IconSelector } from "@tabler/icons-react"
 
 import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
 import { Menu } from "@packages/ui-w/shared/menu/menu"
 import { MenuItem } from "@packages/ui-w/shared/menu/menu-item"
 import { MenuPopup } from "@packages/ui-w/shared/menu/menu-popup"
-import { MenuSeparator } from "@packages/ui-w/shared/menu/menu-separator"
 import { MenuTrigger } from "@packages/ui-w/shared/menu/menu-trigger"
 import { SidebarMenu } from "@packages/ui-w/shared/sidebar/sidebar-menu"
 import { SidebarMenuButton } from "@packages/ui-w/shared/sidebar/sidebar-menu-button"
@@ -66,7 +65,7 @@ export function MinistrySwitcher(): React.ReactElement {
                   className="gap-2 p-2"
                   onClick={() => setActiveSlug(ministry.slug)}
                 >
-                  <div className="flex size-6 items-center justify-center rounded-md border">
+                  <div className="border-border flex size-6 items-center justify-center rounded-md border">
                     <MinistryIcon aria-hidden className="size-3.5 shrink-0" />
                   </div>
                   <span className="min-w-0 flex-1 truncate">{ministry.name}</span>
@@ -77,13 +76,6 @@ export function MinistrySwitcher(): React.ReactElement {
                 </MenuItem>
               )
             })}
-            <MenuSeparator />
-            <MenuItem className="gap-2 p-2" disabled>
-              <div className="flex size-6 items-center justify-center rounded-md border">
-                <IconPlus aria-hidden className="size-4" />
-              </div>
-              <span className="text-muted-foreground font-medium">Add ministry</span>
-            </MenuItem>
           </MenuPopup>
         </Menu>
       </SidebarMenuItem>
