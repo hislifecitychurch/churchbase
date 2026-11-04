@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth"
 import { username } from "better-auth/plugins"
 
 import type { config } from "../../config/_index"
-import type { createPostgresDatabase } from "../database/postgres"
+import type { createPostgresDatabase } from "../db/postgres/client"
 import { userModel } from "../models/user"
 
 type AuthConfig = typeof config

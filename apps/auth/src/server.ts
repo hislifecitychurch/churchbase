@@ -1,6 +1,6 @@
 import { config } from "../config/_index"
 import { createAuth } from "./auth/better-auth"
-import { createPostgresDatabase } from "./database/postgres"
+import { createPostgresDatabase } from "./db/postgres/client"
 import { createApp } from "./app"
 
 export function startServer() {

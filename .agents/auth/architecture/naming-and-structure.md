@@ -7,15 +7,17 @@ Keep the Auth service thin around BetterAuth. Separate process lifecycle, HTTP t
 ```text
 apps/auth/
 ├── config/                          validated environment configuration
-├── db/migrate.ts                   explicit BetterAuth migration command
-├── lib/                            shared config loading
+├── db/
+│   └── migrate.ts                   explicit BetterAuth migration command
+├── lib/                             shared config loading
 └── src/
     ├── server.ts                   Bun entrypoint, composition, and shutdown
     ├── app.ts                      Hono application composition
     ├── auth/
     │   └── better-auth.ts          BetterAuth instance and auth policy
-    ├── database/
-    │   └── postgres.ts              PostgreSQL pool and Kysely adapter
+    ├── db/
+    │   └── postgres/
+    │       └── client.ts            PostgreSQL pool and Kysely adapter
     ├── http/
     │   ├── middleware/
     │   │   ├── access-log.ts        safe request metadata logging
@@ -32,7 +34,7 @@ Each directory has a distinct owner:
 - **`server.ts` owns process lifecycle and composition.** It creates the database resource, BetterAuth instance, and Hono app, starts `Bun.serve`, handles shutdown signals, and closes resources. It does not define routes or auth policy.
 - **`app.ts` owns HTTP composition.** It registers middleware and route modules and receives dependencies such as the BetterAuth handler and allowed origins. It does not create database clients or read `process.env`.
 - **`auth/better-auth.ts` owns BetterAuth setup.** It configures BetterAuth, plugins, sessions, cookies, and credential rules using validated configuration, the database adapter, and the user model. It does not register Hono routes or start the server.
-- **`database/postgres.ts` owns database resources.** It creates the PostgreSQL pool and Kysely adapter. The server owns closing the pool.
+- **`src/db/postgres/client.ts` owns PostgreSQL resources.** It creates the PostgreSQL pool and Kysely adapter. The server owns closing the pool.
 - **`http/middleware/` owns one transport concern per module.** Keep CORS and access logging independent. Logs may include method, path, status, and duration; never log bodies, cookies, credentials, tokens, or secrets.
 - **`http/routes/` owns transport mapping.** The health route returns liveness. The BetterAuth route forwards requests to BetterAuth; do not reimplement its endpoints in Hono.
 - **`models/user.ts` owns the BetterAuth user schema configuration.** Keep BetterAuth field mappings and approved identity/profile fields here; do not duplicate BetterAuth's user model in another ORM or a hand-maintained SQL schema.

@@ -17,7 +17,7 @@ Follow [naming and structure](architecture/naming-and-structure.md) for file pla
 - `src/server.ts` owns Bun startup, dependency composition, and shutdown.
 - `src/app.ts` assembles the Hono application from transport middleware and routes.
 - `src/auth/better-auth.ts` configures BetterAuth and its auth policy.
-- `src/database/postgres.ts` owns the PostgreSQL pool and Kysely adapter.
+- `src/db/postgres/client.ts` owns the PostgreSQL pool and Kysely adapter.
 - `src/http/middleware/` owns independent HTTP middleware; `src/http/routes/` owns health and BetterAuth delegation.
 - `src/models/user.ts` owns BetterAuth user field mappings and approved user-schema extensions.
 - `config/` validates environment values.
