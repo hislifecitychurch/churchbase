@@ -73,7 +73,7 @@ Import shared UI from its module path, such as `@packages/ui-w/shared/button/but
 
 ## Current auth state
 
-The login screen is presentation only. It has no auth provider, session handling, middleware, or submit behavior; `LoginForm` prevents the default submit. The `(protected)` route group is a layout shell, not an authorization boundary: it renders the sidebar for any visitor. Adding authentication is a product decision, not part of a visual change.
+The login screen is presentation only. Its identifier field accepts an email address or username, but it has no auth provider, session handling, middleware, or submit behavior; `LoginForm` prevents the default submit. The `(protected)` route group is a layout shell, not an authorization boundary: it renders the sidebar for any visitor. Adding authentication is a product decision, not part of a visual change.
 
 ## Verification
 

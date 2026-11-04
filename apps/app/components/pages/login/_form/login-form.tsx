@@ -5,11 +5,11 @@ import { useState } from "react"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 
-import { EmailField } from "@/components/pages/login/_field/email-field"
+import { IdentifierField } from "@/components/pages/login/_field/identifier-field"
 import { PasswordField } from "@/components/pages/login/_field/password-field"
 
 export function LoginForm(): React.ReactElement {
-  const [email, setEmail] = useState<string>("")
+  const [identifier, setIdentifier] = useState<string>("")
   const [password, setPassword] = useState<string>("")
 
   // Presentation only: authentication is not wired up yet.
@@ -20,7 +20,10 @@ export function LoginForm(): React.ReactElement {
   return (
     <div className="mt-8 flex w-full flex-col items-center">
       <form className="flex w-full flex-col gap-5" onSubmit={handleSubmit}>
-        <EmailField onChange={(event) => setEmail(event.target.value)} value={email} />
+        <IdentifierField
+          onChange={(event) => setIdentifier(event.target.value)}
+          value={identifier}
+        />
         <PasswordField onChange={(event) => setPassword(event.target.value)} value={password} />
         <Button className="mt-1 w-full" size="lg" type="submit">
           Continue

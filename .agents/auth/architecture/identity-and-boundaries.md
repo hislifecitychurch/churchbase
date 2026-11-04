@@ -2,6 +2,8 @@
 
 BetterAuth is the canonical identity owner. It stores users, credential hashes, accounts, sessions, verification records, and opaque identity IDs. The Go API consumes a validated BetterAuth user ID and owns business data and authorization.
 
+Email/password sign-in remains available, and BetterAuth's username plugin adds a separate username/password sign-in endpoint. Usernames are identity data; church and ministry roles remain API-owned business data.
+
 ```text
 Hono HTTP/CORS boundary → BetterAuth → Kysely/pg → PostgreSQL auth schema
 ```

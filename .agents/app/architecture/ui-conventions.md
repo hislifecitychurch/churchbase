@@ -24,6 +24,7 @@ Use `size="lg"` for the primary action on a standalone auth or form screen. `But
 - Use `size="lg"` for fields in a standalone form. Use `nativeInput` when the implementation needs a plain `<input>` element.
 - Mark required fields with `required`; do not rely on color or an asterisk alone.
 - Give each field an `autoComplete` value (`email`, `current-password`, `new-password`, and similar).
+- A login field accepting either an email address or username uses `type="text"` and `autoComplete="username"`.
 
 ## Tokens and theme
 

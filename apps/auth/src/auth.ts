@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth"
+import { username } from "better-auth/plugins"
 import { Kysely, PostgresDialect } from "kysely"
 import { Pool } from "pg"
 
@@ -80,6 +81,8 @@ export const auth = betterAuth({
     minPasswordLength: 12,
     maxPasswordLength: 128,
   },
+  disabledPaths: ["/is-username-available"],
+  plugins: [username({ displayUsername: false })],
   rateLimit: {
     enabled: config.application.environment !== "development",
     storage: "database",
