@@ -69,7 +69,8 @@ export function MinistrySwitcher(): React.ReactElement {
                   <div className="flex size-6 items-center justify-center rounded-md border">
                     <MinistryIcon aria-hidden className="size-3.5 shrink-0" />
                   </div>
-                  <span className="truncate">{ministry.name}</span>
+                  <span className="min-w-0 flex-1 truncate">{ministry.name}</span>
+                  <span className="text-muted-foreground shrink-0 text-xs">{ministry.detail}</span>
                   {ministry.slug === activeSlug ? (
                     <IconCheck aria-hidden className="ms-auto size-4" />
                   ) : null}
