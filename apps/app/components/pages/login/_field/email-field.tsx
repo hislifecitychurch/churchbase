@@ -15,7 +15,9 @@ type EmailFieldProps = {
 export function EmailField({ disabled, onChange, value }: EmailFieldProps): React.ReactElement {
   return (
     <Field className="w-full">
-      <FieldLabel htmlFor="email">Email</FieldLabel>
+      <FieldLabel className="sr-only" htmlFor="email">
+        Email
+      </FieldLabel>
       <Input
         autoComplete="email"
         disabled={disabled}

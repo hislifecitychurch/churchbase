@@ -19,7 +19,9 @@ export function PasswordField({
 }: PasswordFieldProps): React.ReactElement {
   return (
     <Field className="w-full">
-      <FieldLabel htmlFor="password">Password</FieldLabel>
+      <FieldLabel className="sr-only" htmlFor="password">
+        Password
+      </FieldLabel>
       <Input
         autoComplete="current-password"
         disabled={disabled}
