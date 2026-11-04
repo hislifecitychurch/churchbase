@@ -12,6 +12,8 @@ BetterAuth owns Churchbase identities, credential hashes, sessions, verification
 Browser → Bun server → Hono/CORS → BetterAuth → Kysely/pg → PostgreSQL auth schema
 ```
 
+Follow [naming and structure](architecture/naming-and-structure.md) for file placement and separation rules. It documents both the current layout and the target structure; do not create empty folders just to match the target.
+
 - `src/server.ts` owns Bun startup and shutdown.
 - `src/http.ts` owns health, CORS, access logging, and delegation to BetterAuth.
 - `src/auth.ts` composes BetterAuth and PostgreSQL.
