@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 import type { JSX, ReactNode } from "react"
 
 import { createMetadata } from "@packages/metadata"
-import { geistMono, geistSans } from "@packages/ui-w/lib/fonts"
+import { geistMono, geistSans, geistSerif } from "@packages/ui-w/lib/fonts"
 import { ThemeProvider } from "@packages/ui-w/providers/theme-provider"
 import { ToastProvider } from "@packages/ui-w/providers/toast-provider"
 import { TooltipProvider } from "@packages/ui-w/providers/tooltip-provider"
@@ -18,7 +18,7 @@ export const metadata: Metadata = createMetadata({
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>): JSX.Element {
   return (
     <html
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${geistSerif.variable}`}
       lang="en"
       suppressHydrationWarning
     >
