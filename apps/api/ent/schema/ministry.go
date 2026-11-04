@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"time"
-
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -10,11 +8,20 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
+	commonmixin "github.com/hislifecitychurch/churchbase/apps/api/ent/schema/mixin"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/utilities"
 )
 
 type Ministry struct {
 	ent.Schema
+}
+
+func (Ministry) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		commonmixin.Timestamps{},
+		commonmixin.Audit{},
+		commonmixin.SoftDelete{},
+	}
 }
 
 func (Ministry) Annotations() []schema.Annotation {
@@ -32,8 +39,6 @@ func (Ministry) Fields() []ent.Field {
 		field.UUID("church_id", uuid.UUID{}).Immutable(),
 		field.String("name").NotEmpty(),
 		field.String("slug").NotEmpty(),
-		field.Time("created_at").Default(time.Now).Immutable(),
-		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}
 }
 

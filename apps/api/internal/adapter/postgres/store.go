@@ -27,6 +27,7 @@ func New(databaseURL string) (*Store, error) {
 	db.SetConnMaxIdleTime(time.Minute)
 
 	client := entclient.NewClient(entclient.Driver(dialectsql.OpenDB(dialect.Postgres, db)))
+	ConfigureClient(client)
 	return &Store{db: db, client: client}, nil
 }
 

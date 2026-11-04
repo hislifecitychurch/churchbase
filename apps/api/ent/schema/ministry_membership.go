@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"time"
-
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -11,11 +9,20 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/enum"
+	commonmixin "github.com/hislifecitychurch/churchbase/apps/api/ent/schema/mixin"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/utilities"
 )
 
 type MinistryMembership struct {
 	ent.Schema
+}
+
+func (MinistryMembership) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		commonmixin.Timestamps{},
+		commonmixin.Audit{},
+		commonmixin.SoftDelete{},
+	}
 }
 
 func (MinistryMembership) Annotations() []schema.Annotation {
@@ -38,8 +45,6 @@ func (MinistryMembership) Fields() []ent.Field {
 		field.Enum("status").
 			Values(enum.MembershipStatusActive, enum.MembershipStatusSuspended).
 			Default(enum.MembershipStatusActive),
-		field.Time("created_at").Default(time.Now).Immutable(),
-		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}
 }
 
