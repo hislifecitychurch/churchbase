@@ -2,7 +2,6 @@ import {
   IconBuildingChurch,
   IconHeartHandshake,
   IconLayoutDashboard,
-  IconSettings,
   IconUsers,
   type TablerIcon,
 } from "@tabler/icons-react"
@@ -33,10 +32,5 @@ export const mainMenuItems: MainMenuItem[] = [
     title: "Care",
     path: "/care",
     icon: IconHeartHandshake,
-  },
-  {
-    title: "Settings",
-    path: "/settings",
-    icon: IconSettings,
   },
 ]
