@@ -32,7 +32,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           <ToastProvider position="bottom-left">
             <TooltipProvider delay={0}>
               <QueryProvider>
-                <main className="relative min-h-svh w-full overflow-x-hidden">{children}</main>
+                <div className="relative min-h-svh w-full overflow-x-hidden">{children}</div>
               </QueryProvider>
             </TooltipProvider>
           </ToastProvider>

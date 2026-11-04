@@ -7,7 +7,7 @@ Before changing `apps/app/`, read:
 - [`.agents/app/AGENTS.md`](../../.agents/app/AGENTS.md) — App architecture index and feature guides.
 - [`.agents/ui/AGENTS.md`](../../.agents/ui/AGENTS.md) — spacing and typography rules shared by every application.
 
-Read the specific reference for the work: [component organization](../../.agents/app/architecture/component-organization.md) for structure and imports, [UI conventions](../../.agents/app/architecture/ui-conventions.md) for buttons, forms, tokens, and verification.
+Read the specific reference for the work: [component organization](../../.agents/app/architecture/component-organization.md) for structure and imports, [app shell](../../.agents/app/architecture/app-shell.md) for the sidebar and navigation, [UI conventions](../../.agents/app/architecture/ui-conventions.md) for buttons, forms, tokens, and verification.
 
 ## Stack and commands
 
@@ -35,14 +35,19 @@ bun run --cwd apps/app preview
 ```text
 app/
   layout.tsx          root shell: styles, fonts, providers
-  (auth)/             unauthenticated screens
-  (protected)/        authenticated screens
-components/pages/     page-local composition
+  (auth)/             unauthenticated screens, with its own <main>
+  (protected)/        authenticated screens, wrapped by the sidebar shell
+components/
+  pages/              page-local composition
+  shared/             app shell and other shared App pieces
+data/menu/            navigation destinations
+lib/                  small App helpers
 providers/            app-wide client providers
 ```
 
 - Keep route files in `app/`. A route's `page.tsx` owns its composition.
 - Keep page-local pieces under `components/pages/<page>/`, using private folders such as `_form/` and `_field/`.
+- Keep the shell under `components/shared/`. The protected sidebar, mobile trigger, and navigation data are documented in [app shell](../../.agents/app/architecture/app-shell.md).
 - Keep reusable primitives in `packages/ui-w/`, not in the App. See [component organization](../../.agents/app/architecture/component-organization.md).
 - Mount app-wide providers in `app/layout.tsx`. Keep `"use client"` on the provider, not on the layout.
 
@@ -68,7 +73,7 @@ Import shared UI from its module path, such as `@packages/ui-w/shared/button/but
 
 ## Current auth state
 
-The login screen is presentation only. It has no auth provider, session handling, middleware, or submit behavior; `LoginForm` prevents the default submit. Adding authentication is a product decision, not part of a visual change.
+The login screen is presentation only. It has no auth provider, session handling, middleware, or submit behavior; `LoginForm` prevents the default submit. The `(protected)` route group is a layout shell, not an authorization boundary: it renders the sidebar for any visitor. Adding authentication is a product decision, not part of a visual change.
 
 ## Verification
 

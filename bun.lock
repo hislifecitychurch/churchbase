@@ -17,6 +17,7 @@
       "dependencies": {
         "@packages/metadata": "workspace:*",
         "@packages/ui-w": "*",
+        "@tabler/icons-react": "^3.46.0",
         "@tanstack/react-query": "^5.105.3",
         "@vinext/cloudflare": "latest",
         "geist": "^1.9.0",
