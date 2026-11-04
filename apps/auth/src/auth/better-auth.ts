@@ -78,6 +78,7 @@ export function createAuth(authDatabase: AuthDatabase, config: AuthConfig) {
     rateLimit: {
       enabled: config.application.environment !== "development",
       storage: "database",
+      modelName: "rate_limit",
     },
   })
 }
