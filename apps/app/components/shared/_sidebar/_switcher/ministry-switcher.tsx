@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { IconCheck, IconSelector } from "@tabler/icons-react"
 
 import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
@@ -14,9 +13,16 @@ import { SidebarMenuItem } from "@packages/ui-w/shared/sidebar/sidebar-menu-item
 
 import { ministries } from "@/data/ministries"
 
-export function MinistrySwitcher(): React.ReactElement {
+type MinistrySwitcherProps = {
+  activeSlug: string
+  onMinistryChange: (slug: string) => void
+}
+
+export function MinistrySwitcher({
+  activeSlug,
+  onMinistryChange,
+}: MinistrySwitcherProps): React.ReactElement {
   const { isMobile } = useSidebar()
-  const [activeSlug, setActiveSlug] = useState(ministries[0].slug)
 
   const activeMinistry =
     ministries.find((ministry) => ministry.slug === activeSlug) ?? ministries[0]
@@ -63,7 +69,7 @@ export function MinistrySwitcher(): React.ReactElement {
                 <MenuItem
                   key={ministry.slug}
                   className="gap-2 p-2"
-                  onClick={() => setActiveSlug(ministry.slug)}
+                  onClick={() => onMinistryChange(ministry.slug)}
                 >
                   <div className="border-border flex size-6 items-center justify-center rounded-md border">
                     <MinistryIcon aria-hidden className="size-3.5 shrink-0" />
