@@ -32,7 +32,6 @@ export function MainMenu({ items }: MainMenuProps): React.ReactElement {
                 <SidebarMenuButton
                   asChild
                   aria-current={isActive ? "page" : undefined}
-                  className="group-data-[collapsible=icon]:justify-center"
                   isActive={isActive}
                   tooltip={item.title}
                 >

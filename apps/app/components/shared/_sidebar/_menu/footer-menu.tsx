@@ -21,7 +21,6 @@ export function FooterMenu(): React.ReactElement {
         <SidebarMenuButton
           asChild
           aria-current={isSettingsActive ? "page" : undefined}
-          className="group-data-[collapsible=icon]:justify-center"
           isActive={isSettingsActive}
           tooltip="Settings"
         >

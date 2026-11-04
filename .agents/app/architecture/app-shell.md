@@ -21,6 +21,7 @@ The root layout must not render `<main>`. `(auth)/layout.tsx` provides `<main>` 
 - Keep Settings in the footer menu, above the collapse trigger, rather than in the main menu data. It is a fixed destination, not a primary section.
 - Derive the active item from `usePathname` and `lib/menu/is-path-active.ts`. The root path matches only `/`; every other path also matches its descendants.
 - Use Tabler icons at `size-5!` so the collapsed rail stays aligned.
+- Do not add `group-data-[collapsible=icon]:justify-center` to `SidebarMenuButton`. The button transitions its own width, so centering applies instantly and throws the icon to the right before the width catches up. Left alignment keeps the icon fixed through the collapse.
 - Keep the mobile trigger outside `Sidebar`. The sidebar itself renders as a sheet below `md`, so a trigger inside it would be unreachable.
 - Every menu destination needs a real or placeholder route; do not ship a nav item that 404s.
 
