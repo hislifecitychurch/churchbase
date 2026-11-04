@@ -69,7 +69,7 @@ Import shared UI from its module path, such as `@packages/ui-w/shared/button/but
 - Use `packages/ui-w` components before writing markup from scratch. Do not hand-roll a primitive that the shared library already provides.
 - Follow `.agents/ui/architecture/spacing.md` and `.agents/ui/architecture/typography.md`. In particular, headings never exceed `font-medium`.
 - Use semantic color utilities (`text-foreground`, `text-muted-foreground`, `border-border`), never raw hex values.
-- Light is the default theme; check dark mode when adding a color.
+- Dark is the default theme; check light mode when adding a color.
 
 ## Current auth state
 

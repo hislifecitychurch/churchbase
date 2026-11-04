@@ -28,7 +28,7 @@ Use `size="lg"` for the primary action on a standalone auth or form screen. `But
 ## Tokens and theme
 
 - Use semantic utilities: `text-foreground`, `text-muted-foreground`, `bg-background`, `bg-card`, `border-border`, `text-destructive`. Do not use raw hex values or `text-black`/`text-white`.
-- Light is the default theme; dark mode is a class on `<html>`. Check both themes when adding a color that is not already tokenized.
+- Dark is the default theme; light mode is available through the theme provider. Both are driven by a class on `<html>`, so check both when adding a color that is not already tokenized.
 - Keep contrast readable at `text-muted-foreground`; do not use it for essential instructions.
 - Use the shared radius scale (`rounded-xl` and similar) rather than a new value.
 
