@@ -21,7 +21,16 @@ Authentication middleware attaches a small principal to request context; it does
 
 ## Handler and service
 
-The handler reads path/query/body and principal values, parses transport types, calls one service operation, maps stable errors, and converts results to transport DTOs. The service owns business decisions, church/ministry authorization, and transaction intent.
+The handler reads path/query/body and principal values, parses transport types, calls one service operation, maps stable errors, and converts results to transport DTOs. Keep request and response DTOs in `internal/handler/<feature>/`, beside the handler that owns their HTTP contract.
+
+### Validation ownership
+
+- Validate HTTP shape and syntax in the feature handler package: required request fields, UUID or timestamp parsing, string limits, and query parameter ranges. For a one-off rule, use a private helper or a `valid`/`Validate` method beside that request DTO; add a feature-local `validation.go` only when the validation logic warrants its own file.
+- Validate business invariants in `internal/domain/<feature>/` so they apply regardless of whether a request came from HTTP, a CLI, or another service.
+- Enforce database invariants in Ent fields, indexes, and annotations, with the corresponding versioned Atlas migration.
+- Do not pass HTTP DTOs into domain services or make domain code depend on handlers. Do not create a shared `validator/` package for a rule used by one feature; extract one only when multiple features share the same rule and semantics.
+
+The service owns business decisions, church/ministry authorization, and transaction intent.
 
 ## Adapter and shutdown
 
