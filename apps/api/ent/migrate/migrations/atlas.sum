@@ -1,3 +1,4 @@
-h1:i36u74347E0tSLsPpTcGHPt1SFznmb/q3EoE5SW4JUU=
+h1:mR6JbZ2J41iZSlbRLGawDnBsqlDmyVNqR97F/JwQ5a0=
 20261104120000_create_churches.sql h1:4UZKfz4Jd2T0m5t8BzaBxzEuFqlqy1RgksC8Vkn53kw=
 20261104130000_use_uuidv7_for_church_ids.sql h1:i0+eFlP30SZCGsn0WiNG28iUPSqXp/lBS2AA/KoOVyw=
+20261104153939_create_church_memberships_and_ministries.sql h1:XK7YDPBxFII6tQHr3SyNjceYxVBXRouMzN9mQb6lxu0=

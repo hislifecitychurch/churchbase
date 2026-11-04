@@ -18,7 +18,7 @@ domain service → repository port → repository adapter → Ent → PostgreSQL
 
 Atlas owns versioned migrations for API-owned business tables. Keep them separate from BetterAuth migrations. Do not manage BetterAuth's schema from the API, enable Ent automatic schema creation against shared databases, or run migrations during app startup.
 
-The initial Churchbase API schema contains the church tenant table only, with a matching first Atlas migration. This is a new local baseline; do not copy Mnemora's migration history or apply it to a shared database without review. Do not run migrations during application startup.
+The first Churchbase API migration creates the church tenant table. Follow-up migrations add church memberships, ministries, and ministry memberships. This is a new local baseline; do not copy Mnemora's migration history or apply it to a shared database without review. Do not run migrations during application startup.
 
 ## Repository behavior
 
