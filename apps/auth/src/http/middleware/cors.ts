@@ -1,11 +1,14 @@
 import { cors } from "hono/cors"
 
-export function createCorsMiddleware(allowedOrigins: string[]) {
+import type { CorsConfig } from "../../../config/_types"
+
+export function createCorsMiddleware(config: CorsConfig) {
   return cors({
-    allowHeaders: ["Authorization", "Content-Type"],
-    allowMethods: ["GET", "POST", "OPTIONS"],
-    credentials: true,
+    allowHeaders: config.allowedHeaders,
+    allowMethods: config.allowedMethods,
+    credentials: config.allowCredentials,
+    exposeHeaders: config.exposedHeaders,
     maxAge: 600,
-    origin: (origin) => (allowedOrigins.includes(origin) ? origin : null),
+    origin: (origin) => (config.allowedOrigins.includes(origin) ? origin : null),
   })
 }

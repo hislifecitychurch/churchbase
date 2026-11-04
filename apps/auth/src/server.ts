@@ -7,7 +7,7 @@ export function startServer() {
   const { authDatabase, postgresPool } = createPostgresDatabase(config.database.url)
   const auth = createAuth(authDatabase, config)
   const app = createApp({
-    allowedOrigins: config.cors.allowedOrigins,
+    cors: config.cors,
     authHandler: (request) => auth.handler(request),
   })
   const server = Bun.serve({

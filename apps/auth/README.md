@@ -4,7 +4,7 @@ Bun/Hono service for BetterAuth identity and sessions. BetterAuth owns its Postg
 
 ## Local development
 
-The example intentionally leaves values blank. Before running the migration or service, set `PORT`, `ENVIRONMENT`, `RL_DB_URL`, `AUTH_ALLOW_EMAIL_SIGN_UP`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, and `CORS_ALLOWED_ORIGINS`. The local database container is optional when `RL_DB_URL` points to a managed PostgreSQL service.
+The example intentionally leaves values blank. Before running the migration or service, set `PORT`, `ENVIRONMENT`, `RL_DB_URL`, `AUTH_ALLOW_EMAIL_SIGN_UP`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `CORS_ALLOWED_ORIGINS`, `CORS_ALLOWED_METHODS`, `CORS_ALLOWED_HEADERS`, and `CORS_ALLOW_CREDENTIALS`. `CORS_EXPOSE_HEADERS` may be empty. CORS list values are comma-separated. The local database container is optional when `RL_DB_URL` points to a managed PostgreSQL service.
 
 ```sh
 cp apps/auth/.env.example apps/auth/.env

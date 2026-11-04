@@ -9,8 +9,8 @@ GET /health                         → liveness response
 /api/v1/auth and /api/v1/auth/*     → BetterAuth handler
 ```
 
-- Hono registers CORS before the BetterAuth routes.
-- Credentialed CORS uses an exact origin allowlist; the same origins are trusted by BetterAuth.
+- Hono registers CORS before the BetterAuth routes. `config/cors.ts` parses the comma-separated origins, methods, allowed headers, exposed headers, and credential flag from the environment.
+- Credentialed CORS uses an exact origin allowlist; the same origins are trusted by BetterAuth. Do not use wildcard origins with credentials.
 - Log only method, path, status, and duration. Do not log request or response contents, cookies, tokens, IP addresses, or secrets.
 - Health is a liveness check and does not expose database state.
 - Bun owns process startup and closes the PostgreSQL pool on shutdown.

@@ -13,7 +13,11 @@ export type BetterAuthConfig = {
 }
 
 export type CorsConfig = {
+  allowedHeaders: string[]
+  allowedMethods: string[]
   allowedOrigins: string[]
+  allowCredentials: boolean
+  exposedHeaders: string[]
 }
 
 export type DatabaseConfig = {
