@@ -10,14 +10,16 @@ Load configuration at the application boundary and pass it into concrete clients
 - Bound network timeouts for PostgreSQL, Redis, and BetterAuth calls.
 - Fail closed when authentication or another security-critical dependency is unavailable.
 - Keep CORS origins explicit and allow credentials only for the intended app origins.
-- Do not add Redis as a source of truth. Introduce it when a shared ephemeral use case requires it.
+- Do not add Redis as a source of truth. It is connected for readiness and reserved for a concrete shared ephemeral use case.
 
 ## Composition root
 
-`internal/app/` constructs configuration, database and optional Redis clients, external clients, repository adapters, services, middleware, and routes. Feature packages must not create global clients.
+`internal/app/` constructs configuration, PostgreSQL/Ent and Redis clients, external clients, repository adapters, services, middleware, and routes. Feature packages must not create global clients.
 
 ## Process and hosting
 
-The app frontend is configured as a Cloudflare Worker. The Go/Fiber API is a separate service and should be called over HTTPS; its deployment platform and production port remain undecided. Mnemora's local API port is `34080`, which is a reasonable local default when the Churchbase runtime is scaffolded.
+The app frontend is configured as a Cloudflare Worker. The Go/Fiber API is a separate service and should be called over HTTPS; its deployment platform and production port remain undecided. The local API port is `34080`.
 
-Keep liveness cheap and unauthenticated. Readiness may check required infrastructure when its contract is defined. The API process owns graceful shutdown and closes all clients it opens. Schema migrations are a separate release/development command, never an application startup side effect.
+Keep liveness cheap and unauthenticated. The initial readiness endpoint checks PostgreSQL and Redis with a bounded timeout. The API process owns graceful shutdown and closes all clients it opens. Schema migrations are a separate release/development command, never an application startup side effect.
+
+Local API defaults are port `34080` and frontend origin `http://localhost:36002`. PostgreSQL and Redis can be started with `make infra` from `apps/api/`; their ports bind to loopback only.

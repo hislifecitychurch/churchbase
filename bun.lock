@@ -11,6 +11,10 @@
         "typescript": "7.0.2",
       },
     },
+    "apps/api": {
+      "name": "api",
+      "version": "0.1.0",
+    },
     "apps/app": {
       "name": "app",
       "version": "0.1.0",

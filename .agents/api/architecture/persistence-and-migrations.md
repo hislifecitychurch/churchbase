@@ -15,9 +15,9 @@ domain service → repository port → repository adapter → Ent → PostgreSQL
 
 ## Migration ownership
 
-Atlas is the planned migration tool for API-owned business tables. Keep versioned API migrations separate from BetterAuth migrations. Do not manage BetterAuth's schema from the API, enable Ent automatic schema creation against shared databases, or run migrations during app startup.
+Atlas owns versioned migrations for API-owned business tables. Keep them separate from BetterAuth migrations. Do not manage BetterAuth's schema from the API, enable Ent automatic schema creation against shared databases, or run migrations during app startup.
 
-Churchbase has no imported API migration baseline yet. When the first schema is designed, decide and document the initial Atlas baseline before applying it to a shared database. Do not copy Mnemora's existing migration history or database-specific migration state.
+The initial Churchbase API schema contains the church tenant table only, with a matching first Atlas migration. This is a new local baseline; do not copy Mnemora's migration history or apply it to a shared database without review. Do not run migrations during application startup.
 
 ## Repository behavior
 
