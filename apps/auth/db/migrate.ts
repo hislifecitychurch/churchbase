@@ -1,14 +1,19 @@
 import { getMigrations } from "better-auth/db/migration"
 
-import { auth, database } from "../src/auth"
+import { config } from "../config/_index"
+import { createAuth } from "../src/auth/better-auth"
+import { createPostgresDatabase } from "../src/database/postgres"
 
 async function migrate(): Promise<void> {
+  const { authDatabase, postgresPool } = createPostgresDatabase(config.database.url)
+  const auth = createAuth(authDatabase, config)
+
   try {
-    await database.query("create schema if not exists auth")
+    await postgresPool.query("create schema if not exists auth")
     const migration = await getMigrations(auth.options, { throwOnUnsafe: true })
     await migration.runMigrations()
   } finally {
-    await database.end()
+    await postgresPool.end()
   }
 }
 

@@ -12,11 +12,14 @@ BetterAuth owns Churchbase identities, credential hashes, sessions, verification
 Browser → Bun server → Hono/CORS → BetterAuth → Kysely/pg → PostgreSQL auth schema
 ```
 
-Follow [naming and structure](architecture/naming-and-structure.md) for file placement and separation rules. It documents both the current layout and the target structure; do not create empty folders just to match the target.
+Follow [naming and structure](architecture/naming-and-structure.md) for file placement and separation rules. Do not create empty folders just to match the documented tree.
 
-- `src/server.ts` owns Bun startup and shutdown.
-- `src/http.ts` owns health, CORS, access logging, and delegation to BetterAuth.
-- `src/auth.ts` composes BetterAuth and PostgreSQL.
+- `src/server.ts` owns Bun startup, dependency composition, and shutdown.
+- `src/app.ts` assembles the Hono application from transport middleware and routes.
+- `src/auth/better-auth.ts` configures BetterAuth and its auth policy.
+- `src/database/postgres.ts` owns the PostgreSQL pool and Kysely adapter.
+- `src/http/middleware/` owns independent HTTP middleware; `src/http/routes/` owns health and BetterAuth delegation.
+- `src/models/user.ts` owns BetterAuth user field mappings and approved user-schema extensions.
 - `config/` validates environment values.
 - `db/` owns the explicit BetterAuth migration command.
 

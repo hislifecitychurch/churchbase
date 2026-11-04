@@ -1,9 +1,15 @@
 import { config } from "../config/_index"
-import { auth, database } from "./auth"
-import { createApp } from "./http"
+import { createAuth } from "./auth/better-auth"
+import { createPostgresDatabase } from "./database/postgres"
+import { createApp } from "./app"
 
 export function startServer() {
-  const app = createApp((request) => auth.handler(request))
+  const { authDatabase, postgresPool } = createPostgresDatabase(config.database.url)
+  const auth = createAuth(authDatabase, config)
+  const app = createApp({
+    allowedOrigins: config.cors.allowedOrigins,
+    authHandler: (request) => auth.handler(request),
+  })
   const server = Bun.serve({
     port: config.application.port,
     fetch: (request) => app.fetch(request),
@@ -11,7 +17,7 @@ export function startServer() {
 
   const shutdown = async () => {
     server.stop(true)
-    await database.end()
+    await postgresPool.end()
   }
   process.once("SIGINT", () => void shutdown())
   process.once("SIGTERM", () => void shutdown())
