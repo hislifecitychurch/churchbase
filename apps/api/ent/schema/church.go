@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/utilities"
 )
 
 // Church is the tenant boundary for Churchbase-owned records.
@@ -15,7 +16,7 @@ type Church struct {
 
 func (Church) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("id", uuid.UUID{}).Default(uuid.New).Immutable(),
+		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
 		field.String("name"),
 		field.String("slug").Unique(),
 		field.Time("created_at").Default(time.Now).Immutable(),

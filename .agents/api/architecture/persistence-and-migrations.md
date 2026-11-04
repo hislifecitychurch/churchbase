@@ -10,6 +10,7 @@ domain service → repository port → repository adapter → Ent → PostgreSQL
 
 - Keep Ent schemas under `apps/api/ent/schema/`.
 - Generate Ent code from those schemas; never hand-edit generated output or commit it.
+- Generate API-owned UUID identifiers as UUIDv7 in Go; migrations store them as PostgreSQL `uuid` values without a database-side UUIDv4 default.
 - Keep Ent types inside repository adapters. Map records to feature models at the repository boundary.
 - Run Ent generation before building or testing code that imports generated packages.
 
