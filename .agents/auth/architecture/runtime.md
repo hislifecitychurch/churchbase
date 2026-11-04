@@ -2,6 +2,8 @@
 
 Environment parsing belongs under `apps/auth/config/`; only that boundary reads `process.env`. Keep `.env` local and commit only safe placeholders in `.env.example`.
 
+The auth service reads its PostgreSQL connection string from `RL_DB_URL`.
+
 ```text
 GET /health                         → liveness response
 /api/v1/auth and /api/v1/auth/*     → BetterAuth handler

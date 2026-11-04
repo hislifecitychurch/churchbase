@@ -10,4 +10,4 @@ Run BetterAuth's explicit migration command before the service uses a new databa
 bun run --cwd apps/auth db:migrate
 ```
 
-Do not run schema changes during startup, hand-edit generated BetterAuth schema, or add auth tables to API Atlas migrations. The migration command requires a reachable PostgreSQL database and the configured `AUTH_DATABASE_URL`.
+Do not run schema changes during startup, hand-edit generated BetterAuth schema, or add auth tables to API Atlas migrations. The migration command requires a reachable PostgreSQL database and the configured `RL_DB_URL`.

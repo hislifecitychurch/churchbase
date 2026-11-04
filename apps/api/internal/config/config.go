@@ -25,11 +25,11 @@ func Load() (Config, error) {
 		port = parsed
 	}
 
-	databaseURL, err := endpoint("DATABASE_URL", "postgres", "postgresql")
+	databaseURL, err := endpoint("RL_DB_URL", "postgres", "postgresql")
 	if err != nil {
 		return Config{}, err
 	}
-	redisURL, err := endpoint("REDIS_URL", "redis", "rediss")
+	redisURL, err := endpoint("KV_DB_URL", "redis", "rediss")
 	if err != nil {
 		return Config{}, err
 	}

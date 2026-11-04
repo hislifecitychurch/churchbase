@@ -14,7 +14,7 @@ type Client struct {
 func New(redisURL string) (*Client, error) {
 	options, err := goredis.ParseURL(redisURL)
 	if err != nil {
-		return nil, fmt.Errorf("REDIS_URL is invalid")
+		return nil, fmt.Errorf("KV_DB_URL is invalid")
 	}
 	return &Client{client: goredis.NewClient(options)}, nil
 }

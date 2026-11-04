@@ -23,3 +23,5 @@ The app frontend is configured as a Cloudflare Worker. The Go/Fiber API is a sep
 Keep liveness cheap and unauthenticated. The initial readiness endpoint checks PostgreSQL and Redis with a bounded timeout. The API process owns graceful shutdown and closes all clients it opens. Schema migrations are a separate release/development command, never an application startup side effect.
 
 Local API defaults are port `36080` and frontend origin `http://localhost:36002`. PostgreSQL and Redis can be started with `make infra` from `apps/api/`; their ports bind to loopback only.
+
+The API reads PostgreSQL and Redis connection strings from `RL_DB_URL` and `KV_DB_URL`. Atlas migrations use `RL_DB_URL` as well.

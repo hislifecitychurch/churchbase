@@ -14,7 +14,7 @@ help:
 		"make atlas/validate Validate Atlas migration checksums and SQL" \
 		"make atlas/hash     Recompute Atlas migration checksums" \
 		"make atlas/new name=... Create an empty Atlas migration" \
-		"make atlas/apply    Apply Atlas migrations using DATABASE_URL" \
+		"make atlas/apply    Apply Atlas migrations using RL_DB_URL" \
 		"make build          Generate Ent code and compile the API" \
 		"make test           Run Go tests" \
 		"make lint           Run gofmt and go vet" \
@@ -46,7 +46,7 @@ atlas/new:
 	$(ATLAS) migrate new --dir $(ATLAS_DIR) "$(name)"
 
 atlas/apply:
-	@set -a; [ ! -f .env ] || . ./.env; set +a; test -n "$$DATABASE_URL" || (echo "DATABASE_URL is required"; exit 1); $(ATLAS) migrate apply --dir $(ATLAS_DIR) --url "$$DATABASE_URL"
+	@set -a; [ ! -f .env ] || . ./.env; set +a; test -n "$$RL_DB_URL" || (echo "RL_DB_URL is required"; exit 1); $(ATLAS) migrate apply --dir $(ATLAS_DIR) --url "$$RL_DB_URL"
 
 build: generate
 	mkdir -p bin
