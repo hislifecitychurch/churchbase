@@ -6,7 +6,7 @@ import { environment } from "./env"
 
 const applicationSchema = z
   .object({
-    PORT: z.coerce.number().int().min(1).max(65535).default(34081),
+    PORT: z.coerce.number().int().min(1).max(65535).default(36081),
     ENVIRONMENT: z.enum(["development", "staging", "production"]),
     AUTH_ALLOW_EMAIL_SIGN_UP: z
       .enum(["true", "false"])

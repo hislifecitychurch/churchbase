@@ -9,7 +9,7 @@ help:
 	@printf "%s\n" \
 		"make infra          Start local PostgreSQL and Redis" \
 		"make infra-down     Stop local PostgreSQL and Redis" \
-		"make dev            Start the API on port 34080" \
+		"make dev            Start the API on port 36080" \
 		"make generate       Generate the Ent client" \
 		"make atlas/validate Validate Atlas migration checksums and SQL" \
 		"make atlas/hash     Recompute Atlas migration checksums" \

@@ -11,7 +11,7 @@ bun run --cwd apps/auth db:migrate
 bun run --cwd apps/auth dev
 ```
 
-The service listens on `http://localhost:34081`. Liveness is `GET /health`; BetterAuth endpoints are mounted at `/api/v1/auth`. Sign in with `POST /api/v1/auth/sign-in/email` or `POST /api/v1/auth/sign-in/username`. To create a disposable local account through BetterAuth, set `AUTH_ALLOW_EMAIL_SIGN_UP=true` in `apps/auth/.env` and call `POST /api/v1/auth/sign-up/email` with `name`, `email`, `password`, and optionally `username`. Sign-up is rejected in staging and production.
+The service listens on `http://localhost:36081`. Liveness is `GET /health`; BetterAuth endpoints are mounted at `/api/v1/auth`. Sign in with `POST /api/v1/auth/sign-in/email` or `POST /api/v1/auth/sign-in/username`. To create a disposable local account through BetterAuth, set `AUTH_ALLOW_EMAIL_SIGN_UP=true` in `apps/auth/.env` and call `POST /api/v1/auth/sign-up/email` with `name`, `email`, `password`, and optionally `username`. Sign-up is rejected in staging and production.
 
 Run `bun run --cwd apps/auth check-types` for the package type check. `db:migrate` requires PostgreSQL and must be run explicitly; service startup never changes the schema.
 

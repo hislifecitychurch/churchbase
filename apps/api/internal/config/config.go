@@ -16,7 +16,7 @@ type Config struct {
 }
 
 func Load() (Config, error) {
-	port := 34080
+	port := 36080
 	if value := strings.TrimSpace(os.Getenv("PORT")); value != "" {
 		parsed, err := strconv.Atoi(value)
 		if err != nil || parsed < 1 || parsed > 65535 {
