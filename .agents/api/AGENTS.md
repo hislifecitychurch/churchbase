@@ -4,7 +4,7 @@
 
 `apps/api/` is the Go/Fiber business API. BetterAuth in `apps/auth/` owns identity and sessions. The API owns Churchbase data and authorization: churches, ministries, memberships, roles, and ministry features. PostgreSQL is the source of truth; Ent is the API persistence model; Atlas owns versioned API migrations. Redis is connected for readiness and can support a concrete ephemeral need, not business records.
 
-BetterAuth owns login identities, credentials, and sessions. The API's `User` is a Churchbase business/directory record with optional `first_name` and `last_name` fields and an opaque `auth_user_id` link; it must not copy credentials, sessions, or BetterAuth-owned identity fields. Do not read or migrate BetterAuth's schema from the API, and do not run schema changes during API startup.
+BetterAuth owns login identities, credentials, and sessions. The API's `User` is its user/principal record, linked by opaque `auth_user_id` and carrying API-owned platform authorization; personal directory data such as `first_name` and `last_name` belongs to `UserProfile`. The API must not copy credentials, sessions, or BetterAuth-owned identity fields. Do not read or migrate BetterAuth's schema from the API, and do not run schema changes during API startup.
 
 ## Required references
 

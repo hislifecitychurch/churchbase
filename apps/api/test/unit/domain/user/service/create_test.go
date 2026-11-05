@@ -11,33 +11,30 @@ import (
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 )
 
-func TestServiceCreate(t *testing.T) {
+func TestServiceCreateCreatesProfileAfterUser(t *testing.T) {
 	firstName := "Directory"
-	expected := userdomain.User{ID: uuid.New(), FirstName: &firstName}
+	expected := userdomain.User{ID: uuid.New()}
 	calls := []string{}
 	repository := &fakeRepository{result: expected, calls: &calls}
 	profiles := &fakeProfileCreator{calls: &calls}
 	transactions := &fakeTransactionRunner{}
 	service := userservice.NewService(repository, profiles, transactions)
 
-	created, err := service.Create(context.Background(), userdomain.CreateInput{FirstName: &firstName})
+	created, err := service.Create(context.Background(), userdomain.CreateInput{}, userprofile.Details{FirstName: &firstName})
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !repository.called {
 		t.Fatal("repository Create was not called")
 	}
-	if !profiles.called || profiles.input.UserID != expected.ID {
-		t.Fatalf("profile Create input = %+v, want user ID %s", profiles.input, expected.ID)
+	if !profiles.called || profiles.input.UserID != expected.ID || profiles.input.FirstName == nil || *profiles.input.FirstName != firstName {
+		t.Fatalf("profile Create input = %+v, want user ID %s and first name %q", profiles.input, expected.ID, firstName)
 	}
 	if !transactions.called || !transactions.committed {
 		t.Fatalf("transaction state = (%t, %t), want called and committed", transactions.called, transactions.committed)
 	}
 	if len(calls) != 2 || calls[0] != "user" || calls[1] != "profile" {
 		t.Fatalf("creation order = %v, want [user profile]", calls)
-	}
-	if repository.input.FirstName == nil || *repository.input.FirstName != firstName {
-		t.Fatalf("repository first name = %v, want %q", repository.input.FirstName, firstName)
 	}
 	if repository.input.AuthUserID != nil {
 		t.Fatalf("repository AuthUserID = %v, want nil", repository.input.AuthUserID)
@@ -47,30 +44,17 @@ func TestServiceCreate(t *testing.T) {
 	}
 }
 
-func TestServiceRejectsBlankProvidedFields(t *testing.T) {
+func TestServiceRejectsBlankAuthUserID(t *testing.T) {
 	blank := "  \t "
-	tests := []struct {
-		name  string
-		input userdomain.CreateInput
-	}{
-		{name: "auth user ID", input: userdomain.CreateInput{AuthUserID: &blank}},
-		{name: "first name", input: userdomain.CreateInput{FirstName: &blank}},
-		{name: "last name", input: userdomain.CreateInput{LastName: &blank}},
+	repository := &fakeRepository{}
+	transactions := &fakeTransactionRunner{}
+	service := userservice.NewService(repository, &fakeProfileCreator{}, transactions)
+
+	if _, err := service.Create(context.Background(), userdomain.CreateInput{AuthUserID: &blank}, userprofile.Details{}); !errors.Is(err, userdomain.ErrInvalidUser) {
+		t.Fatalf("Create error = %v, want ErrInvalidUser", err)
 	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			repository := &fakeRepository{}
-			transactions := &fakeTransactionRunner{}
-			service := userservice.NewService(repository, &fakeProfileCreator{}, transactions)
-
-			if _, err := service.Create(context.Background(), test.input); !errors.Is(err, userdomain.ErrInvalidUser) {
-				t.Fatalf("Create error = %v, want ErrInvalidUser", err)
-			}
-			if repository.called || transactions.called {
-				t.Fatal("creation started for invalid input")
-			}
-		})
+	if repository.called || transactions.called {
+		t.Fatal("creation started for invalid Auth user ID")
 	}
 }
 
@@ -81,7 +65,7 @@ func TestServiceCreateDoesNotCommitWhenProfileCreationFails(t *testing.T) {
 	transactions := &fakeTransactionRunner{}
 	service := userservice.NewService(repository, profiles, transactions)
 
-	if _, err := service.Create(context.Background(), userdomain.CreateInput{}); !errors.Is(err, profileErr) {
+	if _, err := service.Create(context.Background(), userdomain.CreateInput{}, userprofile.Details{}); !errors.Is(err, profileErr) {
 		t.Fatalf("Create error = %v, want profile error", err)
 	}
 	if !repository.called || !profiles.called || transactions.committed {
@@ -128,7 +112,11 @@ func (r *fakeProfileCreator) Create(_ context.Context, input userprofile.CreateI
 	if r.calls != nil {
 		*r.calls = append(*r.calls, "profile")
 	}
-	return userprofile.Profile{UserID: input.UserID}, r.err
+	return userprofile.Profile{
+		UserID:    input.UserID,
+		FirstName: input.FirstName,
+		LastName:  input.LastName,
+	}, r.err
 }
 
 type fakeTransactionRunner struct {

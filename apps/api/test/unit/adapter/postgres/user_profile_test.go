@@ -27,7 +27,12 @@ func TestUserCreationCreatesProfile(t *testing.T) {
 
 	service := newUserService(client, userprofileservice.NewService(userprofilerepository.NewUserProfileRepository(client)))
 	authUserID := "auth-user-1"
-	created, err := service.CreatePlatformAdmin(context.Background(), user.CreateInput{AuthUserID: &authUserID})
+	firstName, lastName := "Ada", "Lovelace"
+	created, err := service.CreatePlatformAdmin(
+		context.Background(),
+		user.CreateInput{AuthUserID: &authUserID},
+		userprofiledomain.Details{FirstName: &firstName, LastName: &lastName},
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,8 +41,8 @@ func TestUserCreationCreatesProfile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("query created profile: %v", err)
 	}
-	if profile.UserID != created.ID {
-		t.Fatalf("profile UserID = %s, want %s", profile.UserID, created.ID)
+	if profile.UserID != created.ID || profile.FirstName == nil || *profile.FirstName != firstName || profile.LastName == nil || *profile.LastName != lastName {
+		t.Fatalf("profile = %+v, want names %q %q for user %s", profile, firstName, lastName, created.ID)
 	}
 }
 
@@ -53,7 +58,7 @@ func TestUserCreationRollsBackWhenProfileCreationFails(t *testing.T) {
 	}
 	service := newUserService(client, profiles)
 	authUserID := "auth-user-rollback"
-	if _, err := service.CreatePlatformAdmin(context.Background(), user.CreateInput{AuthUserID: &authUserID}); !errors.Is(err, profileErr) {
+	if _, err := service.CreatePlatformAdmin(context.Background(), user.CreateInput{AuthUserID: &authUserID}, userprofiledomain.Details{}); !errors.Is(err, profileErr) {
 		t.Fatalf("CreatePlatformAdmin error = %v, want profile error", err)
 	}
 

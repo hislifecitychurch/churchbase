@@ -12,13 +12,9 @@ const (
 type User struct {
 	ID           uuid.UUID
 	AuthUserID   *string
-	FirstName    *string
-	LastName     *string
 	PlatformRole *PlatformRole
 }
 
 type CreateInput struct {
 	AuthUserID *string
-	FirstName  *string
-	LastName   *string
 }

@@ -3,6 +3,8 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
@@ -22,11 +24,22 @@ func (UserProfile) Mixin() []ent.Mixin {
 	}
 }
 
+func (UserProfile) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Checks(map[string]string{
+			"user_profiles_first_name_check": "first_name IS NULL OR length(trim(first_name)) > 0",
+			"user_profiles_last_name_check":  "last_name IS NULL OR length(trim(last_name)) > 0",
+		}),
+	}
+}
+
 func (UserProfile) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
 		field.UUID("user_id", uuid.UUID{}).Immutable(),
 
+		field.String("first_name").Optional().Nillable().NotEmpty(),
+		field.String("last_name").Optional().Nillable().NotEmpty(),
 		field.String("bio").Optional().Nillable(),
 		field.String("phone_number").Optional().Nillable(),
 		field.Time("date_of_birth").

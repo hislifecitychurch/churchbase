@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	userservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user/service"
+	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 )
 
 func TestServiceCreatePlatformAdmin(t *testing.T) {
@@ -18,13 +19,18 @@ func TestServiceCreatePlatformAdmin(t *testing.T) {
 		AuthUserID:   &authUserID,
 		PlatformRole: &platformRole,
 	}
+	firstName, lastName := "Ada", "Lovelace"
 	calls := []string{}
 	repository := &fakeRepository{result: expected, calls: &calls}
 	profiles := &fakeProfileCreator{calls: &calls}
 	transactions := &fakeTransactionRunner{}
 	service := userservice.NewService(repository, profiles, transactions)
 
-	created, err := service.CreatePlatformAdmin(context.Background(), userdomain.CreateInput{AuthUserID: &authUserID})
+	created, err := service.CreatePlatformAdmin(
+		context.Background(),
+		userdomain.CreateInput{AuthUserID: &authUserID},
+		userprofile.Details{FirstName: &firstName, LastName: &lastName},
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -37,7 +43,7 @@ func TestServiceCreatePlatformAdmin(t *testing.T) {
 	if created.ID != expected.ID || created.PlatformRole == nil || *created.PlatformRole != userdomain.PlatformRoleAdmin {
 		t.Fatalf("created user = %+v, want platform admin with ID %s", created, expected.ID)
 	}
-	if !profiles.called || profiles.input.UserID != expected.ID || !transactions.committed {
+	if !profiles.called || profiles.input.UserID != expected.ID || profiles.input.FirstName == nil || *profiles.input.FirstName != firstName || profiles.input.LastName == nil || *profiles.input.LastName != lastName || !transactions.committed {
 		t.Fatalf("profile/transaction state = (%+v, committed %t), want profile for user and committed transaction", profiles.input, transactions.committed)
 	}
 	if len(calls) != 2 || calls[0] != "platform admin" || calls[1] != "profile" {
@@ -61,7 +67,7 @@ func TestServiceCreatePlatformAdminRequiresAuthUserID(t *testing.T) {
 			transactions := &fakeTransactionRunner{}
 			service := userservice.NewService(repository, &fakeProfileCreator{}, transactions)
 
-			_, err := service.CreatePlatformAdmin(context.Background(), userdomain.CreateInput{AuthUserID: test.authID})
+			_, err := service.CreatePlatformAdmin(context.Background(), userdomain.CreateInput{AuthUserID: test.authID}, userprofile.Details{})
 			if !errors.Is(err, userdomain.ErrInvalidUser) {
 				t.Fatalf("CreatePlatformAdmin error = %v, want ErrInvalidUser", err)
 			}

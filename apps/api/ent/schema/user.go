@@ -28,8 +28,6 @@ func (User) Mixin() []ent.Mixin {
 func (User) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Checks(map[string]string{
-			"users_first_name_check":                 "first_name IS NULL OR length(trim(first_name)) > 0",
-			"users_last_name_check":                  "last_name IS NULL OR length(trim(last_name)) > 0",
 			"users_auth_user_id_check":               "auth_user_id IS NULL OR length(trim(auth_user_id)) > 0",
 			"users_platform_role_check":              "platform_role IS NULL OR platform_role IN ('admin', 'staff')",
 			"users_platform_role_auth_user_id_check": "platform_role IS NULL OR auth_user_id IS NOT NULL",
@@ -42,8 +40,6 @@ func (User) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
 		field.String("auth_user_id").Optional().Nillable().NotEmpty(),
 
-		field.String("first_name").Optional().Nillable().NotEmpty(),
-		field.String("last_name").Optional().Nillable().NotEmpty(),
 		field.Enum("platform_role").
 			Values(enum.PlatformRoleAdmin, enum.PlatformRoleStaff).
 			Optional().

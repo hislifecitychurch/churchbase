@@ -6,20 +6,14 @@ import (
 	"strings"
 
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
+	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 )
 
-func (s *Service) Create(ctx context.Context, input userdomain.CreateInput) (userdomain.User, error) {
+func (s *Service) Create(ctx context.Context, input userdomain.CreateInput, profileDetails userprofile.Details) (userdomain.User, error) {
 	if blank(input.AuthUserID) {
 		return userdomain.User{}, fmt.Errorf("%w: auth user ID cannot be blank", userdomain.ErrInvalidUser)
 	}
-	if blank(input.FirstName) {
-		return userdomain.User{}, fmt.Errorf("%w: first name cannot be blank", userdomain.ErrInvalidUser)
-	}
-	if blank(input.LastName) {
-		return userdomain.User{}, fmt.Errorf("%w: last name cannot be blank", userdomain.ErrInvalidUser)
-	}
-
-	return s.createWithProfile(ctx, input, s.repository.Create)
+	return s.createWithProfile(ctx, input, profileDetails, s.repository.Create)
 }
 
 func blank(value *string) bool {

@@ -12,8 +12,6 @@ import (
 func (r *UserRepository) CreatePlatformAdmin(ctx context.Context, input userdomain.CreateInput) (userdomain.User, error) {
 	created, err := transaction.Client(ctx, r.client).User.Create().
 		SetNillableAuthUserID(input.AuthUserID).
-		SetNillableFirstName(input.FirstName).
-		SetNillableLastName(input.LastName).
 		SetPlatformRole(entuser.PlatformRoleAdmin).
 		Save(ctx)
 	if err != nil {
@@ -24,8 +22,6 @@ func (r *UserRepository) CreatePlatformAdmin(ctx context.Context, input userdoma
 	return userdomain.User{
 		ID:           created.ID,
 		AuthUserID:   created.AuthUserID,
-		FirstName:    created.FirstName,
-		LastName:     created.LastName,
 		PlatformRole: &role,
 	}, nil
 }

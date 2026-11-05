@@ -29,6 +29,7 @@ func NewService(repository userdomain.Repository, profiles ProfileCreator, trans
 func (s *Service) createWithProfile(
 	ctx context.Context,
 	input userdomain.CreateInput,
+	profileDetails userprofile.Details,
 	createUser func(context.Context, userdomain.CreateInput) (userdomain.User, error),
 ) (userdomain.User, error) {
 	var created userdomain.User
@@ -38,7 +39,10 @@ func (s *Service) createWithProfile(
 		if err != nil {
 			return err
 		}
-		if _, err := s.profiles.Create(txCtx, userprofile.CreateInput{UserID: created.ID}); err != nil {
+		if _, err := s.profiles.Create(txCtx, userprofile.CreateInput{
+			UserID:  created.ID,
+			Details: profileDetails,
+		}); err != nil {
 			return fmt.Errorf("create profile for API user: %w", err)
 		}
 		return nil

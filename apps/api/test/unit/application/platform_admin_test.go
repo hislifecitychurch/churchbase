@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
+	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 )
 
 type fakeIdentityProvisioner struct {
@@ -28,15 +29,17 @@ func (p *fakeIdentityProvisioner) CreateUser(_ context.Context, email, name, pas
 }
 
 type fakePlatformAdminUserCreator struct {
-	calls  int
-	input  userdomain.CreateInput
-	result userdomain.User
-	err    error
+	calls   int
+	input   userdomain.CreateInput
+	profile userprofile.Details
+	result  userdomain.User
+	err     error
 }
 
-func (c *fakePlatformAdminUserCreator) CreatePlatformAdmin(_ context.Context, input userdomain.CreateInput) (userdomain.User, error) {
+func (c *fakePlatformAdminUserCreator) CreatePlatformAdmin(_ context.Context, input userdomain.CreateInput, profile userprofile.Details) (userdomain.User, error) {
 	c.calls++
 	c.input = input
+	c.profile = profile
 	return c.result, c.err
 }
 
@@ -67,6 +70,9 @@ func TestPlatformAdminCreatorCreatesIdentityAndAPIUser(t *testing.T) {
 	}
 	if users.calls != 1 || users.input.AuthUserID == nil || *users.input.AuthUserID != authUserID {
 		t.Fatalf("API user creation calls/input = %d/%+v", users.calls, users.input)
+	}
+	if users.profile.FirstName == nil || *users.profile.FirstName != "Ada" || users.profile.LastName == nil || *users.profile.LastName != "Lovelace" {
+		t.Fatalf("profile details = %+v, want Ada Lovelace", users.profile)
 	}
 	if created.PlatformRole == nil || *created.PlatformRole != userdomain.PlatformRoleAdmin {
 		t.Fatalf("created platform role = %v, want admin", created.PlatformRole)

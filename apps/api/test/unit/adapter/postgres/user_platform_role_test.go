@@ -38,7 +38,7 @@ func TestUserPlatformRoleIsOptionalAndRestricted(t *testing.T) {
 	postgres.ConfigureClient(client)
 
 	ctx := context.Background()
-	regularUser, err := client.User.Create().SetFirstName("Regular").Save(ctx)
+	regularUser, err := client.User.Create().Save(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}

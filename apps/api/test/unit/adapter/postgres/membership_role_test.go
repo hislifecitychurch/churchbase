@@ -21,7 +21,7 @@ func TestChurchStaffAndMinistryLeadRoles(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	user, err := client.User.Create().SetFirstName("Test").SetLastName("User").Save(ctx)
+	user, err := client.User.Create().Save(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}

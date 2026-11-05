@@ -66,12 +66,9 @@ func TestUserMembershipAndProfileSoftDeletes(t *testing.T) {
 	postgres.ConfigureClient(client)
 
 	ctx := context.Background()
-	createdUser, err := client.User.Create().SetFirstName("Test").SetLastName("User").Save(ctx)
+	createdUser, err := client.User.Create().Save(ctx)
 	if err != nil {
 		t.Fatal(err)
-	}
-	if createdUser.FirstName == nil || *createdUser.FirstName != "Test" || createdUser.LastName == nil || *createdUser.LastName != "User" {
-		t.Fatalf("name = (%v, %v), want (Test, User)", createdUser.FirstName, createdUser.LastName)
 	}
 	if createdUser.AuthUserID != nil {
 		t.Fatalf("AuthUserID = %v, want nil for a directory user without an account", createdUser.AuthUserID)
@@ -95,9 +92,17 @@ func TestUserMembershipAndProfileSoftDeletes(t *testing.T) {
 		t.Fatalf("membership status = %q, want inactive", membership.Status)
 	}
 
-	createdProfile, err := client.UserProfile.Create().SetUserID(createdUser.ID).SetBio("Test bio").Save(ctx)
+	createdProfile, err := client.UserProfile.Create().
+		SetUserID(createdUser.ID).
+		SetFirstName("Test").
+		SetLastName("User").
+		SetBio("Test bio").
+		Save(ctx)
 	if err != nil {
 		t.Fatal(err)
+	}
+	if createdProfile.FirstName == nil || *createdProfile.FirstName != "Test" || createdProfile.LastName == nil || *createdProfile.LastName != "User" {
+		t.Fatalf("profile name = (%v, %v), want (Test, User)", createdProfile.FirstName, createdProfile.LastName)
 	}
 
 	if err := client.UserProfile.DeleteOneID(createdProfile.ID).Exec(ctx); err != nil {
