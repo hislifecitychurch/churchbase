@@ -9,10 +9,16 @@ export function startServer() {
   const app = createApp({
     cors: config.cors,
     authHandler: (request) => auth.handler(request),
+    serviceToken: config.betterAuth.serviceToken,
+    provisionUser: async ({ email, name, password }) => {
+      const { user } = await auth.api.createUser({ body: { email, name, password } })
+      return user.id
+    },
   })
   const server = Bun.serve({
     port: config.application.port,
-    fetch: (request) => app.fetch(request),
+    fetch: (request, server) =>
+      app.fetch(request, { remoteAddress: server.requestIP(request)?.address }),
   })
 
   const shutdown = async () => {
@@ -22,7 +28,7 @@ export function startServer() {
   process.once("SIGINT", () => void shutdown())
   process.once("SIGTERM", () => void shutdown())
 
-  console.log(JSON.stringify({ event: "auth.server.started", port: config.application.port }))
+  console.log(`[AUTH SERVER] PORT ${config.application.port}`)
   return server
 }
 

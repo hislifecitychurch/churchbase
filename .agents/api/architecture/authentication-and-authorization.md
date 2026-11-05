@@ -11,6 +11,8 @@ BetterAuth in `apps/auth/` owns identity and sessions. The Go API owns business 
 
 When authentication middleware is added, put the validated BetterAuth user ID into the request context with `internal/shared/actor.WithID`. Ent audit fields read that context; they must never use an actor ID supplied by the browser. Requests without an authenticated actor (such as trusted system work) leave the `*_by` fields null.
 
+The platform-user CLI may provision an Auth identity through the service-token-protected Auth operation, then create the API user and grant its platform role. The API must never access Auth storage directly or assign Churchbase roles in BetterAuth.
+
 The API must not read BetterAuth's database directly, copy its credential/session data, or trust user IDs supplied by the browser. Its `User` record is a separate Churchbase business/directory entity, may exist without an Auth account, and stores Churchbase-owned profile data plus an optional opaque Auth ID link—not a duplicate authentication identity. Keep provider payloads and HTTP details inside the adapter. Keep Fiber context out of domain services.
 
 ## Authorization ownership

@@ -8,6 +8,14 @@ const betterAuthSchema = z
   .object({
     ENVIRONMENT: z.enum(["development", "staging", "production"]),
     BETTER_AUTH_SECRET: z.string().trim().min(32),
+    AUTH_SERVICE_TOKEN: z
+      .string()
+      .trim()
+      .optional()
+      .transform((value) => value || undefined)
+      .refine((value) => value === undefined || value.length >= 32, {
+        message: "AUTH_SERVICE_TOKEN must be at least 32 characters when set",
+      }),
     BETTER_AUTH_URL: z.string().url(),
     BETTER_AUTH_COOKIE_DOMAIN: z
       .string()
@@ -52,6 +60,7 @@ export function loadBetterAuthConfig(env: Environment = environment): BetterAuth
   return {
     cookieDomain: values.BETTER_AUTH_COOKIE_DOMAIN,
     secret: values.BETTER_AUTH_SECRET,
+    serviceToken: values.AUTH_SERVICE_TOKEN,
     url: values.BETTER_AUTH_URL.replace(/\/$/, ""),
   }
 }

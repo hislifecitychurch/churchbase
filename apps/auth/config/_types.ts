@@ -9,6 +9,7 @@ export type ApplicationConfig = {
 export type BetterAuthConfig = {
   cookieDomain: string | undefined
   secret: string
+  serviceToken: string | undefined
   url: string
 }
 

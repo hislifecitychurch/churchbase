@@ -7,6 +7,7 @@
     "build": "make build",
     "test": "make test",
     "lint": "make lint",
-    "format": "make format"
+    "format": "make format",
+    "cli:admin:platform": "make cli/user/platform"
   }
 }

@@ -61,13 +61,20 @@ func TestServiceRejectsBlankProvidedFields(t *testing.T) {
 }
 
 type fakeRepository struct {
-	called bool
-	input  userdomain.CreateInput
-	result userdomain.User
+	called              bool
+	platformAdminCalled bool
+	input               userdomain.CreateInput
+	result              userdomain.User
 }
 
 func (r *fakeRepository) Create(_ context.Context, input userdomain.CreateInput) (userdomain.User, error) {
 	r.called = true
+	r.input = input
+	return r.result, nil
+}
+
+func (r *fakeRepository) CreatePlatformAdmin(_ context.Context, input userdomain.CreateInput) (userdomain.User, error) {
+	r.platformAdminCalled = true
 	r.input = input
 	return r.result, nil
 }

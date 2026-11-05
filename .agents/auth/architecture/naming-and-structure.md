@@ -24,7 +24,8 @@ apps/auth/
     │   │   └── cors.ts              trusted-origin CORS policy
     │   └── routes/
     │       ├── health.ts            liveness endpoint
-    │       └── better-auth.ts       delegate auth requests to BetterAuth
+    │       ├── better-auth.ts       delegate auth requests to BetterAuth
+    │       └── provision-user.ts    service-token-protected identity creation
     └── models/
         └── user.ts                  BetterAuth user field mapping and extensions
 ```
@@ -36,7 +37,7 @@ Each directory has a distinct owner:
 - **`auth/better-auth.ts` owns BetterAuth setup.** It configures BetterAuth, plugins, sessions, cookies, and credential rules using validated configuration, the database adapter, and the user model. It does not register Hono routes or start the server.
 - **`src/db/postgres/client.ts` owns PostgreSQL resources.** It creates the PostgreSQL pool and Kysely adapter. The server owns closing the pool.
 - **`http/middleware/` owns one transport concern per module.** Keep CORS and access logging independent. Logs may include method, path, status, and duration; never log bodies, cookies, credentials, tokens, or secrets.
-- **`http/routes/` owns transport mapping.** The health route returns liveness. The BetterAuth route forwards requests to BetterAuth; do not reimplement its endpoints in Hono.
+- **`http/routes/` owns transport mapping.** The health route returns liveness. The BetterAuth route forwards requests to BetterAuth; the internal provisioning route authenticates the shared service token and delegates identity creation to BetterAuth's server API.
 - **`models/user.ts` owns the BetterAuth user schema configuration.** Keep BetterAuth field mappings and approved identity/profile fields here; do not duplicate BetterAuth's user model in another ORM or a hand-maintained SQL schema.
 - **`config/` owns environment parsing and validation.** No other module reads `process.env` directly.
 - **`db/migrate.ts` owns explicit schema migration execution.** Never run migrations during server startup.
@@ -53,7 +54,7 @@ Pass dependencies at composition boundaries instead of importing the server, HTT
 
 ## User schema changes
 
-BetterAuth supports extending its user schema through `user.additionalFields`. Put approved BetterAuth user field configuration in `src/models/user.ts` and pass it to the `user` option in `src/auth/better-auth.ts`. The current `userModel` only maps BetterAuth fields to the existing database column names; it adds no custom fields.
+BetterAuth supports extending its user schema through `user.additionalFields`. Put approved BetterAuth user field configuration in `src/models/user.ts` and pass it to the `user` option in `src/auth/better-auth.ts`. `userModel` maps BetterAuth fields, including the admin plugin's internal fields, to the existing database column naming convention; it adds no Churchbase authorization fields.
 
 Before adding a field, establish that it belongs to authentication identity/profile data. Church, ministry, membership, and role data belong to the Go API and must not be copied into BetterAuth's user table. Mark server-managed additional fields with `input: false` so clients cannot set them. After changing the BetterAuth schema, run `bun run --cwd apps/auth db:migrate` explicitly and review the schema changes; never migrate on service startup. See [Better Auth user and account fields](https://better-auth.com/docs/concepts/users-accounts) and [additional field typing](https://better-auth.com/docs/concepts/typescript).
 

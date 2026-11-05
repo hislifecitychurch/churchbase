@@ -7,8 +7,30 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
 	entuser "github.com/hislifecitychurch/churchbase/apps/api/ent/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres"
+	userrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user"
+	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	_ "github.com/mattn/go-sqlite3"
 )
+
+func TestUserRepositoryCreatePlatformAdmin(t *testing.T) {
+	client := enttest.Open(t, "sqlite3", "file:create-platform-admin?mode=memory&cache=shared&_fk=1")
+	defer client.Close()
+	postgres.ConfigureClient(client)
+
+	authUserID := "auth-user-1"
+	created, err := userrepository.NewUserRepository(client).CreatePlatformAdmin(context.Background(), userdomain.CreateInput{
+		AuthUserID: &authUserID,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if created.AuthUserID == nil || *created.AuthUserID != authUserID {
+		t.Fatalf("created Auth user ID = %v, want %q", created.AuthUserID, authUserID)
+	}
+	if created.PlatformRole == nil || *created.PlatformRole != userdomain.PlatformRoleAdmin {
+		t.Fatalf("created platform role = %v, want admin", created.PlatformRole)
+	}
+}
 
 func TestUserPlatformRoleIsOptionalAndRestricted(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:user-platform-role?mode=memory&cache=shared&_fk=1")

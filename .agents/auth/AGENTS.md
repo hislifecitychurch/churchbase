@@ -29,7 +29,7 @@ Do not add API business layers or custom identity workflows until Churchbase own
 
 - Keep local values in `apps/auth/.env` and safe placeholders in `.env.example`.
 - Require a 32-character BetterAuth secret and explicit trusted browser origins.
-- Keep email/password sign-up disabled outside development until account provisioning is defined.
+- Keep public email/password sign-up disabled outside development. The approved platform-admin CLI may create identities only through the service-token-protected provisioning route; do not expose that capability to browser clients or assign Churchbase roles in BetterAuth.
 - Production sibling-host session cookies require `BETTER_AUTH_COOKIE_DOMAIN`; that domain is a trust boundary shared by every subdomain that can set cookies.
 - Never log request bodies, cookies, authorization headers, credentials, tokens, database URLs, or secrets.
 

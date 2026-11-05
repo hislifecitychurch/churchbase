@@ -19,7 +19,9 @@ BetterAuth owns login identities, credentials, and sessions. The API's `User` is
 apps/api/
 ├── cmd/
 │   ├── api/                         process entrypoint
-│   └── <operator-command>/          CLI entrypoint when needed
+│   └── cli/
+│       └── user/
+│           └── platform/main.go     platform-user CLI entrypoint
 ├── ent/schema/                      Ent source schemas
 ├── internal/
 │   ├── app/                         startup, wiring, graceful shutdown
@@ -52,12 +54,13 @@ cmd/CLI ──────────────────┴→ application
 adapter/postgres/repository implements the repository port → Ent/PostgreSQL
 ```
 
+- `cmd/cli/user/platform/main.go` is the platform-user CLI entrypoint; parse flags or run masked prompts, wire dependencies, and call the cross-feature workflow in `internal/application/`. Create identities only through the protected Auth operation, never by accessing Auth storage; automation must pass matching passwords via stdin, never flags or logs.
 - `internal/app/` is the composition root and owns concrete wiring and process lifecycle.
 - `internal/config/` parses and validates configuration; feature code does not read process environment directly.
 - `internal/delivery/http/` owns Fiber route registration, versioning, and middleware composition.
 - `internal/handler/` translates HTTP requests and responses; it does not query Ent or own business workflows.
 - `internal/application/` composes multiple domain services for a cross-feature use case; handlers and CLI entrypoints may call it. Keep business rules in their owning domain feature.
-- `internal/domain/<feature>/` owns business models and repository ports. Put the service type/constructor in `service/service.go` and each domain operation in its own `service/<operation>.go` file. Services may coordinate their feature's repository ports; they must not import Fiber, Ent, or provider clients.
+- `internal/domain/<feature>/` owns business models and repository ports. Put the service type/constructor in `service/service.go` and each domain operation in its own `service/<operation>.go` file. Services may coordinate their feature's repository ports; they must not import Fiber, Ent, or provider clients. Keep privileged role grants as explicit operations, separate from ordinary user creation input.
 - `internal/adapter/postgres/repository/<schema>/repository.go` owns the concrete repository type and constructor. Put each Ent-backed operation in its own file in that schema's repository package. Keep adapters limited to persistence, mapping, and database error handling—no business rules.
 - Other `internal/adapter/` packages own Redis, BetterAuth HTTP calls, and provider-specific error mapping.
 - Keep Ent-generated types inside adapters and map them to domain models at the repository boundary.

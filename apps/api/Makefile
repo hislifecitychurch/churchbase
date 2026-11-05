@@ -3,13 +3,14 @@ SHELL := /bin/sh
 ATLAS ?= atlas
 ATLAS_DIR := file://ent/migrate/migrations
 
-.PHONY: help infra infra-down dev format generate atlas/validate atlas/hash atlas/new atlas/apply build test lint tidy clean
+.PHONY: help infra infra-down dev cli/user/platform format generate atlas/validate atlas/hash atlas/new atlas/apply build test lint tidy clean
 
 help:
 	@printf "%s\n" \
 		"make infra          Start local PostgreSQL and Redis" \
 		"make infra-down     Stop local PostgreSQL and Redis" \
 		"make dev            Start the API on port 36080" \
+		"make cli/user/platform ARGS=... Prompt or create/link a platform admin" \
 		"make generate       Generate the Ent client" \
 		"make atlas/validate Validate Atlas migration checksums and SQL" \
 		"make atlas/hash     Recompute Atlas migration checksums" \
@@ -28,6 +29,9 @@ infra-down:
 
 dev:
 	@set -a; [ ! -f .env ] || . ./.env; set +a; go run ./cmd/api
+
+cli/user/platform:
+	@set -a; [ ! -f .env ] || . ./.env; set +a; go run ./cmd/cli/user/platform $(ARGS)
 
 format:
 	gofmt -w $$(find . -type f -name '*.go')

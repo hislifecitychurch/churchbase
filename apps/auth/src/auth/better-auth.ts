@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth"
-import { username } from "better-auth/plugins"
+import { admin, username } from "better-auth/plugins"
 
 import type { config } from "../../config/_index"
 import type { createPostgresDatabase } from "../db/postgres/client"
@@ -40,6 +40,7 @@ export function createAuth(authDatabase: AuthDatabase, config: AuthConfig) {
         createdAt: "created_at",
         expiresAt: "expires_at",
         ipAddress: "ip_address",
+        impersonatedBy: "impersonated_by",
         updatedAt: "updated_at",
         userAgent: "user_agent",
         userId: "user_id",
@@ -74,7 +75,7 @@ export function createAuth(authDatabase: AuthDatabase, config: AuthConfig) {
       maxPasswordLength: 128,
     },
     disabledPaths: ["/is-username-available"],
-    plugins: [username({ displayUsername: false })],
+    plugins: [admin({ defaultRole: "user" }), username({ displayUsername: false })],
     rateLimit: {
       enabled: config.application.environment !== "development",
       storage: "database",
