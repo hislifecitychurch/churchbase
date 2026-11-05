@@ -26,7 +26,7 @@ The handler reads path/query/body and principal values, parses transport types, 
 ### Validation ownership
 
 - Validate HTTP shape and syntax in the feature handler package: required request fields, UUID or timestamp parsing, string limits, and query parameter ranges. For a one-off rule, use a private helper or a `valid`/`Validate` method beside that request DTO; add a feature-local `validation.go` only when the validation logic warrants its own file.
-- Validate business invariants in `internal/domain/<feature>/` so they apply regardless of whether a request came from HTTP, a CLI, or another service.
+- Validate business invariants in the owning schema domain under `internal/domain/<schema>/` so they apply regardless of whether a request came from HTTP, a CLI, or another service. Put invariants spanning related schemas in the coordinating domain service.
 - Enforce database invariants in Ent fields, indexes, and annotations, with the corresponding versioned Atlas migration.
 - Do not pass HTTP DTOs into domain services or make domain code depend on handlers. Do not create a shared `validator/` package for a rule used by one feature; extract one only when multiple features share the same rule and semantics.
 
