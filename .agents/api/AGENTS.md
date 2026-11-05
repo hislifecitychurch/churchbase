@@ -25,14 +25,15 @@ apps/api/
 │   ├── app/                         startup, wiring, graceful shutdown
 │   ├── config/                      environment parsing and validation
 │   ├── adapter/
-│   │   ├── postgres/repository/     Ent-backed repository implementations
-│   │   ├── betterauth/              BetterAuth HTTP clients
-│   │   └── redis/                   Redis client
+│   │   ├── postgres/repository/<schema>/  Ent-backed repository, one file per operation
+│   │   ├── betterauth/                    BetterAuth HTTP clients
+│   │   └── redis/                         Redis client
 │   ├── delivery/http/               Fiber routes and versioning
 │   │   └── v1/<feature>/
 │   ├── handler/<feature>/           HTTP input/output mapping
 │   ├── application/                 entrypoint-agnostic cross-feature use cases
-│   ├── domain/<feature>/            business rules and repository ports
+│   ├── domain/<feature>/            models and repository ports
+│   │   └── service/                 one file per domain operation
 │   ├── middleware/                  auth, request ID, CORS
 │   └── shared/                      small cross-feature contracts
 └── test/
@@ -56,8 +57,8 @@ adapter/postgres/repository implements the repository port → Ent/PostgreSQL
 - `internal/delivery/http/` owns Fiber route registration, versioning, and middleware composition.
 - `internal/handler/` translates HTTP requests and responses; it does not query Ent or own business workflows.
 - `internal/application/` composes multiple domain services for a cross-feature use case; handlers and CLI entrypoints may call it. Keep business rules in their owning domain feature.
-- `internal/domain/<feature>/` owns business models, rules, services, and repository ports. A feature service may coordinate its own repository ports; it must not import Fiber, Ent, or provider clients.
-- `internal/adapter/postgres/repository/` implements domain repository ports with Ent. Keep it limited to persistence, mapping, and database error handling—no business rules.
+- `internal/domain/<feature>/` owns business models and repository ports. Put the service type/constructor in `service/service.go` and each domain operation in its own `service/<operation>.go` file. Services may coordinate their feature's repository ports; they must not import Fiber, Ent, or provider clients.
+- `internal/adapter/postgres/repository/<schema>/repository.go` owns the concrete repository type and constructor. Put each Ent-backed operation in its own file in that schema's repository package. Keep adapters limited to persistence, mapping, and database error handling—no business rules.
 - Other `internal/adapter/` packages own Redis, BetterAuth HTTP calls, and provider-specific error mapping.
 - Keep Ent-generated types inside adapters and map them to domain models at the repository boundary.
 

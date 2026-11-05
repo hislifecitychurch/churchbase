@@ -1,4 +1,4 @@
-package user_test
+package service_test
 
 import (
 	"context"
@@ -7,13 +7,14 @@ import (
 
 	"github.com/google/uuid"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
+	userservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user/service"
 )
 
 func TestServiceCreate(t *testing.T) {
 	firstName := "Directory"
 	expected := userdomain.User{ID: uuid.New(), FirstName: &firstName}
 	repository := &fakeRepository{result: expected}
-	service := userdomain.NewService(repository)
+	service := userservice.NewService(repository)
 
 	created, err := service.Create(context.Background(), userdomain.CreateInput{FirstName: &firstName})
 	if err != nil {
@@ -47,7 +48,7 @@ func TestServiceRejectsBlankProvidedFields(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			repository := &fakeRepository{}
-			service := userdomain.NewService(repository)
+			service := userservice.NewService(repository)
 
 			if _, err := service.Create(context.Background(), test.input); !errors.Is(err, userdomain.ErrInvalidUser) {
 				t.Fatalf("Create error = %v, want ErrInvalidUser", err)

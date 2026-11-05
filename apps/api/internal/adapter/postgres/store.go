@@ -9,7 +9,7 @@ import (
 	dialectsql "entgo.io/ent/dialect/sql"
 	entclient "github.com/hislifecitychurch/churchbase/apps/api/ent"
 	_ "github.com/hislifecitychurch/churchbase/apps/api/ent/runtime"
-	postgresrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository"
+	userrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
@@ -20,7 +20,7 @@ type Store struct {
 }
 
 func (s *Store) UserRepository() userdomain.Repository {
-	return postgresrepository.NewUserRepository(s.client)
+	return userrepository.NewUserRepository(s.client)
 }
 
 func New(databaseURL string) (*Store, error) {

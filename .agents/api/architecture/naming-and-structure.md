@@ -14,13 +14,14 @@ apps/api/
 │   ├── app/                    bootstrap and dependency composition
 │   ├── config/                 environment parsing and validation
 │   ├── adapter/
-│   │   ├── postgres/repository/ Ent-backed repository implementations
-│   │   ├── betterauth/         BetterAuth integrations
-│   │   └── redis/              Redis integration
+│   │   ├── postgres/repository/<schema>/  Ent-backed repository per schema
+│   │   ├── betterauth/                    BetterAuth integrations
+│   │   └── redis/                         Redis integration
 │   ├── delivery/http/v1/       versioned route registration
 │   ├── handler/<feature>/      HTTP handlers and transport mapping
 │   ├── application/            cross-feature use-case composition
-│   ├── domain/<feature>/       feature rules and repository ports
+│   ├── domain/<feature>/       models and repository ports
+│   │   └── service/            one file per domain operation
 │   ├── middleware/             cross-cutting request behavior
 │   └── shared/                 small cross-feature contracts
 └── test/                       unit, integration, and end-to-end tests
@@ -30,18 +31,18 @@ This is a placement guide. Do not add empty directories or placeholder files jus
 
 ## Where feature code belongs
 
-| Concern                    | Location                                                       | Responsibility                                                                                                                                                                  |
-| -------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| API entrypoint             | `cmd/api/main.go`                                              | Load configuration, handle process signals, and call `app.New` / `Run`.                                                                                                         |
-| Operator CLI entrypoint    | `cmd/<command>/main.go`                                        | Parse CLI input, wire dependencies, and call an application use case; keep business rules out of the CLI.                                                                       |
-| Composition root           | `internal/app/app.go`                                          | Construct concrete dependencies, connect handlers and routes, and own shutdown. Wire dependencies directly here; add a generator only if the graph becomes hard to maintain.    |
-| Domain model and service   | `internal/domain/<feature>/`                                   | Own feature models and business rules. A service may coordinate its feature's repository ports without importing Fiber, Ent, or provider clients.                               |
-| Repository port            | `internal/domain/<feature>/repository.go`                      | Declare only the operations the feature service needs; keep the interface beside the domain that owns it.                                                                       |
-| Repository implementation  | `internal/adapter/postgres/repository/<feature>_repository.go` | Implement the domain port with Ent, map records, and translate persistence errors. The service/use case coordinates transaction scope; keep business rules out of this adapter. |
-| Ent persistence schema     | `ent/schema/`                                                  | Define database entities, fields, edges, indexes, and reusable schema mixins. Atlas migrations live under `ent/migrate/migrations/`.                                            |
-| Handler and transport DTOs | `internal/handler/<feature>/`                                  | Parse HTTP input, define request/response types, call application or domain services, and map results and errors to HTTP.                                                       |
-| Feature routes             | `internal/delivery/http/v1/<feature>/`                         | Register the feature's versioned paths, methods, middleware, and handlers.                                                                                                      |
-| Cross-feature use case     | `internal/application/`                                        | Compose multiple domain services or external operations; keep it entrypoint-agnostic so HTTP handlers and CLI commands can reuse it.                                            |
+| Concern                    | Location                                         | Responsibility                                                                                                                                                                                                                           |
+| -------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| API entrypoint             | `cmd/api/main.go`                                | Load configuration, handle process signals, and call `app.New` / `Run`.                                                                                                                                                                  |
+| Operator CLI entrypoint    | `cmd/<command>/main.go`                          | Parse CLI input, wire dependencies, and call an application use case; keep business rules out of the CLI.                                                                                                                                |
+| Composition root           | `internal/app/app.go`                            | Construct concrete dependencies, connect handlers and routes, and own shutdown. Wire dependencies directly here; add a generator only if the graph becomes hard to maintain.                                                             |
+| Domain model and service   | `internal/domain/<feature>/`                     | Keep models and repository ports in the feature package. Put the service type/constructor in `service/service.go` and each operation in `service/<operation>.go`; services own feature rules and coordinate its repository ports.        |
+| Repository port            | `internal/domain/<feature>/repository.go`        | Declare only the operations the feature service needs; keep the interface beside the domain that owns it.                                                                                                                                |
+| Repository implementation  | `internal/adapter/postgres/repository/<schema>/` | Put the concrete repository type and constructor in `repository.go`; put each Ent-backed operation in its own file. Map records/errors here, keep business rules out, and coordinate transaction scope at the service/use-case boundary. |
+| Ent persistence schema     | `ent/schema/`                                    | Define database entities, fields, edges, indexes, and reusable schema mixins. Atlas migrations live under `ent/migrate/migrations/`.                                                                                                     |
+| Handler and transport DTOs | `internal/handler/<feature>/`                    | Parse HTTP input, define request/response types, call application or domain services, and map results and errors to HTTP.                                                                                                                |
+| Feature routes             | `internal/delivery/http/v1/<feature>/`           | Register the feature's versioned paths, methods, middleware, and handlers.                                                                                                                                                               |
+| Cross-feature use case     | `internal/application/`                          | Compose multiple domain services or external operations; keep it entrypoint-agnostic so HTTP handlers and CLI commands can reuse it.                                                                                                     |
 
 ## Dependency direction
 
@@ -60,9 +61,23 @@ Keep one-off request validation beside its request DTO in `internal/handler/<fea
 ```text
 internal/domain/<feature>/
 ├── model.go
-├── service.go
-├── repository.go
-└── errors.go                    only when the feature needs its own errors
+├── repository.go                repository port
+├── errors.go                    only when the feature needs its own errors
+└── service/
+    ├── service.go               service type and constructor
+    ├── create.go
+    ├── get_all.go
+    ├── get_by_id.go
+    ├── update_by_id.go
+    └── delete_by_id.go
+
+internal/adapter/postgres/repository/<schema>/
+├── repository.go                concrete repository type and constructor
+├── create.go
+├── get_all.go
+├── get_by_id.go
+├── update_by_id.go
+└── delete_by_id.go
 
 internal/handler/<feature>/
 ├── handler.go
@@ -72,4 +87,4 @@ internal/handler/<feature>/
 internal/delivery/http/v1/<feature>/
 ```
 
-Start with files in the feature package; split into subpackages only when a real boundary or size makes that clearer. A domain service may coordinate repositories within its feature; use `internal/application/` to compose multiple domain services or external operations. Keep domain models separate from Ent records and transport DTOs. Keep provider payloads beside their adapter. Do not create empty files or a global validator/utilities package for one-off code.
+Use the per-operation service and repository layout shown above, but create files only for operations being implemented—never add empty placeholders. A domain service may coordinate repositories within its feature; use `internal/application/` to compose multiple domain services or external operations. Keep domain models separate from Ent records and transport DTOs. Keep provider payloads beside their adapter. Do not create a global validator/utilities package for one-off code.

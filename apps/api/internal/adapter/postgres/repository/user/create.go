@@ -1,20 +1,11 @@
-package repository
+package user
 
 import (
 	"context"
 	"fmt"
 
-	entclient "github.com/hislifecitychurch/churchbase/apps/api/ent"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 )
-
-type UserRepository struct {
-	client *entclient.Client
-}
-
-func NewUserRepository(client *entclient.Client) *UserRepository {
-	return &UserRepository{client: client}
-}
 
 func (r *UserRepository) Create(ctx context.Context, input userdomain.CreateInput) (userdomain.User, error) {
 	created, err := r.client.User.Create().
