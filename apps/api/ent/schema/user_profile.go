@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
@@ -28,6 +29,19 @@ func (UserProfile) Fields() []ent.Field {
 
 		field.String("bio").Optional().Nillable(),
 		field.String("phone_number").Optional().Nillable(),
+		field.Time("date_of_birth").
+			Optional().
+			Nillable().
+			SchemaType(map[string]string{dialect.Postgres: "date"}),
+		field.String("address_line_1").Optional().Nillable(),
+		field.String("address_line_2").Optional().Nillable(),
+		field.String("city").Optional().Nillable(),
+		field.String("state_province").Optional().Nillable(),
+		field.String("postal_code").Optional().Nillable(),
+		field.String("country_code").MaxLen(2).Optional().Nillable(),
+		field.String("emergency_contact_name").Optional().Nillable(),
+		field.String("emergency_contact_relationship").Optional().Nillable(),
+		field.String("emergency_contact_phone_number").Optional().Nillable(),
 	}
 }
 
