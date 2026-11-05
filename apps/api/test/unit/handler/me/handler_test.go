@@ -17,7 +17,7 @@ import (
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/me"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
-	apiresponse "github.com/hislifecitychurch/churchbase/apps/api/pkg/response"
+	apiresponse "github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
 
 func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {

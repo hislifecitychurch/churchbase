@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/hislifecitychurch/churchbase/apps/api/pkg/response"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
 
 func TestSuccessWritesEnvelopeWithRequestAndUserMetadata(t *testing.T) {

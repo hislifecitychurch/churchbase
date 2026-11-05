@@ -15,7 +15,7 @@ import (
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/health"
 	mehandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/me"
-	"github.com/hislifecitychurch/churchbase/apps/api/pkg/response"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
 
 func TestMeRouteRequiresValidatedSession(t *testing.T) {

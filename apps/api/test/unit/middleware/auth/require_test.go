@@ -12,7 +12,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	authmiddleware "github.com/hislifecitychurch/churchbase/apps/api/internal/middleware/auth"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
-	apiresponse "github.com/hislifecitychurch/churchbase/apps/api/pkg/response"
+	apiresponse "github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
 
 type sessionValidator struct {

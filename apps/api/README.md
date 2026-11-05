@@ -18,7 +18,7 @@ The API listens on `:36080`. Liveness is `GET /api/v1/health/live`; readiness is
 
 ## API response format
 
-JSON responses use the shared `apps/api/pkg/response` envelope. `data` contains the endpoint payload; errors include stable codes, and metadata carries the request ID and UTC timestamp. `log.user_id`, when present, is the Churchbase user ID—not the BetterAuth ID.
+JSON responses use the API-local `internal/shared/response` envelope. `data` contains the endpoint payload; errors include stable codes, and metadata carries the request ID and UTC timestamp. `log.user_id`, when present, is the Churchbase user ID—not the BetterAuth ID.
 
 ```json
 {

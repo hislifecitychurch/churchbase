@@ -10,7 +10,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
-	"github.com/hislifecitychurch/churchbase/apps/api/pkg/response"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
 
 type CurrentUserService interface {
