@@ -39,6 +39,7 @@ func (MinistryMembership) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
 		field.UUID("ministry_id", uuid.UUID{}).Immutable(),
 		field.UUID("church_membership_id", uuid.UUID{}).Immutable(),
+
 		field.Enum("role").
 			Values(enum.MinistryMembershipRoleLeader, enum.MinistryMembershipRoleMember).
 			Default(enum.MinistryMembershipRoleMember),

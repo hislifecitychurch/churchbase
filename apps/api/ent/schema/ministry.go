@@ -37,6 +37,7 @@ func (Ministry) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
 		field.UUID("church_id", uuid.UUID{}).Immutable(),
+
 		field.String("name").NotEmpty(),
 		field.String("slug").NotEmpty(),
 	}

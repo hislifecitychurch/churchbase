@@ -38,6 +38,7 @@ func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
 		field.String("auth_user_id").Optional().Nillable().NotEmpty(),
+
 		field.String("first_name").Optional().Nillable().NotEmpty(),
 		field.String("last_name").Optional().Nillable().NotEmpty(),
 	}

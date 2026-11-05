@@ -24,6 +24,7 @@ func (Church) Mixin() []ent.Mixin {
 func (Church) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
+
 		field.String("name"),
 		field.String("slug").Unique(),
 	}

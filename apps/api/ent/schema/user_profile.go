@@ -25,6 +25,7 @@ func (UserProfile) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
 		field.UUID("user_id", uuid.UUID{}).Immutable(),
+
 		field.String("bio").Optional().Nillable(),
 		field.String("phone_number").Optional().Nillable(),
 	}
