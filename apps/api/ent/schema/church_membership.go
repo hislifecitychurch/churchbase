@@ -29,7 +29,7 @@ func (ChurchMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Checks(map[string]string{
 			"church_memberships_role_check":   "role IN ('admin', 'member')",
-			"church_memberships_status_check": "status IN ('active', 'suspended')",
+			"church_memberships_status_check": "status IN ('active', 'inactive')",
 		}),
 	}
 }
@@ -43,7 +43,7 @@ func (ChurchMembership) Fields() []ent.Field {
 			Values(enum.ChurchMembershipRoleAdmin, enum.ChurchMembershipRoleMember).
 			Default(enum.ChurchMembershipRoleMember),
 		field.Enum("status").
-			Values(enum.MembershipStatusActive, enum.MembershipStatusSuspended).
+			Values(enum.MembershipStatusActive, enum.MembershipStatusInactive).
 			Default(enum.MembershipStatusActive),
 	}
 }

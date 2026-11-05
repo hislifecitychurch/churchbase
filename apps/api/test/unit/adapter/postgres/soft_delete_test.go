@@ -6,6 +6,7 @@ import (
 
 	entclient "github.com/hislifecitychurch/churchbase/apps/api/ent"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/church"
+	"github.com/hislifecitychurch/churchbase/apps/api/ent/churchmembership"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/mixin"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/user"
@@ -59,7 +60,7 @@ func TestDeleteSoftDeletesAndHidesByDefault(t *testing.T) {
 	}
 }
 
-func TestUserAndProfileDeletesAreFiltered(t *testing.T) {
+func TestUserMembershipAndProfileSoftDeletes(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:user-soft-delete?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
 	postgres.ConfigureClient(client)
@@ -79,12 +80,19 @@ func TestUserAndProfileDeletesAreFiltered(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	membership, err := client.ChurchMembership.Create().SetChurch(createdChurch).SetUser(createdUser).Save(ctx)
+	membership, err := client.ChurchMembership.Create().
+		SetChurch(createdChurch).
+		SetUser(createdUser).
+		SetStatus(churchmembership.StatusInactive).
+		Save(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if membership.UserID != createdUser.ID {
 		t.Fatalf("membership UserID = %s, want %s", membership.UserID, createdUser.ID)
+	}
+	if membership.Status != churchmembership.StatusInactive {
+		t.Fatalf("membership status = %q, want inactive", membership.Status)
 	}
 
 	createdProfile, err := client.UserProfile.Create().SetUserID(createdUser.ID).SetBio("Test bio").Save(ctx)

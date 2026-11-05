@@ -7,6 +7,6 @@ const (
 	MinistryMembershipRoleLeader = "leader"
 	MinistryMembershipRoleMember = "member"
 
-	MembershipStatusActive    = "active"
-	MembershipStatusSuspended = "suspended"
+	MembershipStatusActive   = "active"
+	MembershipStatusInactive = "inactive"
 )
