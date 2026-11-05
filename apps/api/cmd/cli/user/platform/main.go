@@ -103,7 +103,8 @@ func run() error {
 	if created.AuthUserID == nil || strings.TrimSpace(*created.AuthUserID) == "" {
 		return fmt.Errorf("API user was created without an Auth user ID")
 	}
-	fmt.Printf("created platform admin API user %s for Auth user %s\n", created.ID, *created.AuthUserID)
+	fullName := strings.TrimSpace(strings.Join([]string{*input.FirstName, *input.LastName}, " "))
+	fmt.Println(cli.FormatPlatformAdminSuccess(fullName, input.Email))
 	return nil
 }
 
