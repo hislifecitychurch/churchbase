@@ -13,6 +13,8 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/ministry"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/ministrymembership"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/mixin"
+	"github.com/hislifecitychurch/churchbase/apps/api/ent/user"
+	"github.com/hislifecitychurch/churchbase/apps/api/ent/userprofile"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
 )
 
@@ -35,6 +37,10 @@ func softDeleteInterceptor(next entclient.Querier) entclient.Querier {
 			query.Where(ministry.DeletedAtIsNil())
 		case *entclient.MinistryMembershipQuery:
 			query.Where(ministrymembership.DeletedAtIsNil())
+		case *entclient.UserQuery:
+			query.Where(user.DeletedAtIsNil())
+		case *entclient.UserProfileQuery:
+			query.Where(userprofile.DeletedAtIsNil())
 		default:
 			return nil, fmt.Errorf("soft delete: query %T has no deletion filter", query)
 		}

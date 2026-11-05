@@ -14,7 +14,7 @@ domain service → repository port → repository adapter → Ent → PostgreSQL
 - Keep Ent types inside repository adapters. Map records to feature models at the repository boundary.
 - Run Ent generation before building or testing code that imports generated packages.
 
-The church, church-membership, ministry, and ministry-membership schemas compose `Timestamps`, `Audit`, and `SoftDelete` from `ent/schema/mixin/`. `created_by`, `updated_by`, and `deleted_by` store optional opaque BetterAuth user IDs with no cross-schema foreign keys. Set the actor from the validated request principal through `internal/shared/actor`; never accept it from request input.
+The church, church-membership, ministry, ministry-membership, user, and user-profile schemas compose `Timestamps`, `Audit`, and `SoftDelete` from `ent/schema/mixin/`. API `User` is a Churchbase directory/business record that may exist without an Auth account; `auth_user_id` is an optional opaque reference, not a copied identity. `created_by`, `updated_by`, and `deleted_by` store optional opaque BetterAuth user IDs with no cross-schema foreign keys. Set the actor from the validated request principal through `internal/shared/actor`; never accept it from request input.
 
 The Postgres Ent client converts delete mutations into updates that set `deleted_at` and, when an actor is present, `deleted_by`. Soft-deleted rows are excluded from normal Ent queries. `mixin.IncludeDeleted(ctx)` is for trusted internal audit or recovery queries; it only includes deleted rows and never enables permanent deletion. Do not add a hard-delete bypass to normal API behavior. A soft delete retains the row; backups and retention policy remain separate concerns.
 
@@ -22,7 +22,7 @@ The Postgres Ent client converts delete mutations into updates that set `deleted
 
 Atlas owns versioned migrations for API-owned business tables. Keep them separate from BetterAuth migrations. Do not manage BetterAuth's schema from the API, enable Ent automatic schema creation against shared databases, or run migrations during app startup.
 
-The first Churchbase API migration creates the church tenant table. Follow-up migrations add church memberships, ministries, and ministry memberships. This is a new local baseline; do not copy Mnemora's migration history or apply it to a shared database without review. Do not run migrations during application startup.
+The first Churchbase API migration creates the church tenant table. Follow-up migrations add memberships, ministries, users, and user profiles. The user migration backfills API users from existing church-membership Auth IDs before switching memberships to reference API user IDs. This is a new local baseline; do not copy Mnemora's migration history or apply it to a shared database without review. Do not run migrations during application startup.
 
 ## Repository behavior
 

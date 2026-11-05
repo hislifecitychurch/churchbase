@@ -4,7 +4,7 @@ This is the active architecture guidance for `apps/auth/`. Runtime instructions 
 
 ## Identity ownership
 
-BetterAuth owns Churchbase identities, credential hashes, sessions, verification records, and opaque user IDs. The Go API owns churches, ministries, memberships, roles, and authorization. The API must not duplicate auth users or credentials, and auth must not own ministry business rules.
+BetterAuth owns Churchbase login identities, credential hashes, sessions, verification records, and opaque user IDs. The Go API owns Churchbase users/directory records, churches, ministries, memberships, roles, and authorization. API `User` records may link to an Auth user by opaque ID, but must not copy authentication identity fields or credentials; auth must not own church or ministry business rules.
 
 ## Request and persistence boundaries
 

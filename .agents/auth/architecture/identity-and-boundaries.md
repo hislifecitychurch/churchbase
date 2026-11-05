@@ -10,8 +10,8 @@ Hono HTTP/CORS boundary → BetterAuth → Kysely/pg → PostgreSQL auth schema
 
 - HTTP code handles transport and delegates authentication behavior to BetterAuth.
 - BetterAuth configuration does not contain church or ministry workflows.
-- The API must not query the auth schema or copy credentials, users, or sessions.
-- Ministry membership and ministry roles remain API-owned business data.
+- The API must not query the auth schema or copy credentials, authentication sessions, or auth-owned identity fields. Its `User` is a separate Churchbase business/directory record and may reference an Auth user through an opaque ID.
+- Church and ministry membership roles remain API-owned, scope-specific business data. BetterAuth roles are reserved for a separately defined platform-wide authorization need.
 - The UI and ministry switcher do not authorize access; the API checks every protected operation.
 - Keep BetterAuth IDs opaque strings; do not assume a UUID format.
 - Do not copy Mnemora's platform-access or invitation management routes. Churchbase account provisioning needs its own explicit product and API contract.

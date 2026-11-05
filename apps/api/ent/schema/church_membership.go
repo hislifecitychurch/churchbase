@@ -28,9 +28,8 @@ func (ChurchMembership) Mixin() []ent.Mixin {
 func (ChurchMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Checks(map[string]string{
-			"church_memberships_auth_user_id_check": "length(trim(auth_user_id)) > 0",
-			"church_memberships_role_check":         "role IN ('admin', 'member')",
-			"church_memberships_status_check":       "status IN ('active', 'suspended')",
+			"church_memberships_role_check":   "role IN ('admin', 'member')",
+			"church_memberships_status_check": "status IN ('active', 'suspended')",
 		}),
 	}
 }
@@ -39,7 +38,7 @@ func (ChurchMembership) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
 		field.UUID("church_id", uuid.UUID{}).Immutable(),
-		field.String("auth_user_id").NotEmpty().Immutable(),
+		field.UUID("user_id", uuid.UUID{}).Immutable(),
 		field.Enum("role").
 			Values(enum.ChurchMembershipRoleAdmin, enum.ChurchMembershipRoleMember).
 			Default(enum.ChurchMembershipRoleMember),
@@ -57,15 +56,21 @@ func (ChurchMembership) Edges() []ent.Edge {
 			Immutable().
 			Unique().
 			Required(),
+		edge.From("user", User.Type).
+			Ref("church_memberships").
+			Field("user_id").
+			Immutable().
+			Unique().
+			Required(),
 		edge.To("ministry_memberships", MinistryMembership.Type),
 	}
 }
 
 func (ChurchMembership) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("church_id", "auth_user_id").
+		index.Fields("church_id", "user_id").
 			Unique().
 			StorageKey("church_memberships_church_user_key"),
-		index.Fields("auth_user_id"),
+		index.Fields("user_id"),
 	}
 }

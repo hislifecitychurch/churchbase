@@ -11,13 +11,13 @@ BetterAuth in `apps/auth/` owns identity and sessions. The Go API owns business 
 
 When authentication middleware is added, put the validated BetterAuth user ID into the request context with `internal/shared/actor.WithID`. Ent audit fields read that context; they must never use an actor ID supplied by the browser. Requests without an authenticated actor (such as trusted system work) leave the `*_by` fields null.
 
-The API must not read BetterAuth's database directly, copy its user/session tables, or trust user IDs supplied by the browser. Keep provider payloads and HTTP details inside the adapter. Keep Fiber context out of domain services.
+The API must not read BetterAuth's database directly, copy its credential/session data, or trust user IDs supplied by the browser. Its `User` record is a separate Churchbase business/directory entity, may exist without an Auth account, and stores Churchbase-owned profile data plus an optional opaque Auth ID link—not a duplicate authentication identity. Keep provider payloads and HTTP details inside the adapter. Keep Fiber context out of domain services.
 
 ## Authorization ownership
 
 - BetterAuth answers who the caller is and whether their session is valid.
 - Churchbase API data answers which churches and ministries the caller can access and what they may do there.
-- Church memberships use the church-scoped roles `admin` and `member`; ministry memberships use `leader` and `member`. Both membership types support `active` and `suspended` status.
+- Roles are scope-specific API business data, not a global Auth user role: church memberships use `admin` and `member`; ministry memberships use `leader` and `member`. Both membership types support `active` and `suspended` status. BetterAuth should hold a platform-wide role only if a separate platform-administration feature requires one.
 - A ministry membership must link a ministry and a church membership from the same church. Validate this relationship in the API when assigning membership.
 - Only a church admin may create ministries or manage church and ministry memberships. Ministry access requires both the church membership and ministry membership to be active.
 - Check access on every request, including direct API calls. UI navigation is presentation only.
