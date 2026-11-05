@@ -28,7 +28,7 @@ func (ChurchMembership) Mixin() []ent.Mixin {
 func (ChurchMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Checks(map[string]string{
-			"church_memberships_role_check":   "role IN ('admin', 'member')",
+			"church_memberships_role_check":   "role IN ('admin', 'staff', 'member')",
 			"church_memberships_status_check": "status IN ('active', 'inactive')",
 		}),
 	}
@@ -41,7 +41,7 @@ func (ChurchMembership) Fields() []ent.Field {
 		field.UUID("user_id", uuid.UUID{}).Immutable(),
 
 		field.Enum("role").
-			Values(enum.ChurchMembershipRoleAdmin, enum.ChurchMembershipRoleMember).
+			Values(enum.ChurchMembershipRoleAdmin, enum.ChurchMembershipRoleStaff, enum.ChurchMembershipRoleMember).
 			Default(enum.ChurchMembershipRoleMember),
 		field.Enum("status").
 			Values(enum.MembershipStatusActive, enum.MembershipStatusInactive).

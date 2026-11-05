@@ -23,7 +23,7 @@ The Postgres Ent client converts delete mutations into updates that set `deleted
 
 Atlas owns versioned migrations for API-owned business tables. Keep them separate from BetterAuth migrations. Do not manage BetterAuth's schema from the API, enable Ent automatic schema creation against shared databases, or run migrations during app startup.
 
-The first Churchbase API migration creates the church tenant table. Follow-up migrations add memberships, ministries, users, and user profiles. The user migration backfills API users from existing church-membership Auth IDs before switching memberships to reference API user IDs; a later migration adds the optional platform role. This is a new local baseline; do not copy Mnemora's migration history or apply it to a shared database without review. Do not run migrations during application startup.
+The first Churchbase API migration creates the church tenant table. Follow-up migrations add memberships, ministries, users, and user profiles. The user migration backfills API users from existing church-membership Auth IDs before switching memberships to reference API user IDs; later migrations add the optional platform role and normalize church/ministry membership role values. This is a new local baseline; do not copy Mnemora's migration history or apply it to a shared database without review. Do not run migrations during application startup.
 
 ## Repository behavior
 

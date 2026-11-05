@@ -17,12 +17,12 @@ The API must not read BetterAuth's database directly, copy its credential/sessio
 
 - BetterAuth answers who the caller is and whether their session is valid.
 - Churchbase API data answers which churches and ministries the caller can access and what they may do there.
-- API `User.platform_role` holds platform-operator roles `admin` or `staff`; null means the user has no platform-level grant. Only API users linked to a BetterAuth ID may hold one. These roles are separate from church membership roles (`admin`, `member`) and ministry membership roles (`leader`, `member`); both membership types support `active` and `inactive` status. BetterAuth authenticates the account but does not own these application roles. Platform-operator endpoints must authorize against this field on every request.
+- API `User.platform_role` holds platform-operator roles `admin` or `staff`; null means the user has no platform-level grant. Only API users linked to a BetterAuth ID may hold one. These roles are separate from church membership roles (`admin`, `staff`, `member`) and ministry membership roles (`lead`, `member`); both membership types support `active` and `inactive` status. A church `staff` role does not implicitly grant admin-only operations. BetterAuth authenticates the account but does not own these application roles. Platform-operator endpoints must authorize against this field on every request.
 - A ministry membership must link a ministry and a church membership from the same church. Validate this relationship in the API when assigning membership.
 - Only a church admin may create ministries or manage church and ministry memberships. Ministry access requires both the church membership and ministry membership to be active.
 - Check access on every request, including direct API calls. UI navigation is presentation only.
 - Treat BetterAuth IDs as opaque strings; do not assume they are UUIDs or create cross-schema foreign keys to auth-owned records.
-- A church admin may manage church memberships and ministry assignments according to the API's role rules. Ministry leadership does not imply access to pastoral care data.
+- A church admin may manage church memberships and ministry assignments according to the API's role rules. The ministry `lead` role does not imply access to pastoral care data.
 
 ## Failure semantics
 

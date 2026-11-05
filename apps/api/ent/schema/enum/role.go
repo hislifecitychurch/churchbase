@@ -5,8 +5,9 @@ const (
 	PlatformRoleStaff = "staff"
 
 	ChurchMembershipRoleAdmin  = "admin"
+	ChurchMembershipRoleStaff  = "staff"
 	ChurchMembershipRoleMember = "member"
 
-	MinistryMembershipRoleLeader = "leader"
+	MinistryMembershipRoleLead   = "lead"
 	MinistryMembershipRoleMember = "member"
 )
