@@ -27,7 +27,8 @@ func (User) Mixin() []ent.Mixin {
 func (User) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Checks(map[string]string{
-			"users_display_name_check": "display_name IS NULL OR length(trim(display_name)) > 0",
+			"users_first_name_check":   "first_name IS NULL OR length(trim(first_name)) > 0",
+			"users_last_name_check":    "last_name IS NULL OR length(trim(last_name)) > 0",
 			"users_auth_user_id_check": "auth_user_id IS NULL OR length(trim(auth_user_id)) > 0",
 		}),
 	}
@@ -36,7 +37,8 @@ func (User) Annotations() []schema.Annotation {
 func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
-		field.String("display_name").Optional().Nillable().NotEmpty(),
+		field.String("first_name").Optional().Nillable().NotEmpty(),
+		field.String("last_name").Optional().Nillable().NotEmpty(),
 		field.String("auth_user_id").Optional().Nillable().NotEmpty(),
 	}
 }

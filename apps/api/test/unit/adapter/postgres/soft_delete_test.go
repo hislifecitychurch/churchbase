@@ -65,9 +65,12 @@ func TestUserAndProfileDeletesAreFiltered(t *testing.T) {
 	postgres.ConfigureClient(client)
 
 	ctx := context.Background()
-	createdUser, err := client.User.Create().SetDisplayName("Test User").Save(ctx)
+	createdUser, err := client.User.Create().SetFirstName("Test").SetLastName("User").Save(ctx)
 	if err != nil {
 		t.Fatal(err)
+	}
+	if createdUser.FirstName == nil || *createdUser.FirstName != "Test" || createdUser.LastName == nil || *createdUser.LastName != "User" {
+		t.Fatalf("name = (%v, %v), want (Test, User)", createdUser.FirstName, createdUser.LastName)
 	}
 	if createdUser.AuthUserID != nil {
 		t.Fatalf("AuthUserID = %v, want nil for a directory user without an account", createdUser.AuthUserID)
