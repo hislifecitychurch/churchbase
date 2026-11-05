@@ -17,16 +17,21 @@ BetterAuth owns login identities, credentials, and sessions. The API's `User` is
 
 ```text
 apps/api/
-├── cmd/api/                         process entrypoint
+├── cmd/
+│   ├── api/                         process entrypoint
+│   └── <operator-command>/          CLI entrypoint when needed
 ├── ent/schema/                      Ent source schemas
 ├── internal/
 │   ├── app/                         startup, wiring, graceful shutdown
 │   ├── config/                      environment parsing and validation
-│   ├── adapter/                     PostgreSQL/Ent, Redis, BetterAuth clients
+│   ├── adapter/
+│   │   ├── postgres/repository/     Ent-backed repository implementations
+│   │   ├── betterauth/              BetterAuth HTTP clients
+│   │   └── redis/                   Redis client
 │   ├── delivery/http/               Fiber routes and versioning
 │   │   └── v1/<feature>/
 │   ├── handler/<feature>/           HTTP input/output mapping
-│   ├── application/                 thin handler-facing composition
+│   ├── application/                 entrypoint-agnostic cross-feature use cases
 │   ├── domain/<feature>/            business rules and repository ports
 │   ├── middleware/                  auth, request ID, CORS
 │   └── shared/                      small cross-feature contracts
@@ -41,16 +46,19 @@ This is a placement guide, not a checklist of folders to create. Add a directory
 ## Dependency direction
 
 ```text
-delivery/http → handler → application/domain service → repository port → adapter → Ent/PostgreSQL or external service
+delivery/http → handler ─┐
+cmd/CLI ──────────────────┴→ application (when composing features) → domain service → repository port
+adapter/postgres/repository implements the repository port → Ent/PostgreSQL
 ```
 
 - `internal/app/` is the composition root and owns concrete wiring and process lifecycle.
 - `internal/config/` parses and validates configuration; feature code does not read process environment directly.
 - `internal/delivery/http/` owns Fiber route registration, versioning, and middleware composition.
 - `internal/handler/` translates HTTP requests and responses; it does not query Ent or own business workflows.
-- `internal/application/` composes feature operations for handlers; keep business rules in their owning domain feature.
-- `internal/domain/<feature>/` owns business models, rules, services, and repository ports; it must not import Fiber, Ent, or provider clients.
-- `internal/adapter/` owns Ent queries, Redis, BetterAuth HTTP calls, and provider-specific error mapping.
+- `internal/application/` composes multiple domain services for a cross-feature use case; handlers and CLI entrypoints may call it. Keep business rules in their owning domain feature.
+- `internal/domain/<feature>/` owns business models, rules, services, and repository ports. A feature service may coordinate its own repository ports; it must not import Fiber, Ent, or provider clients.
+- `internal/adapter/postgres/repository/` implements domain repository ports with Ent. Keep it limited to persistence, mapping, and database error handling—no business rules.
+- Other `internal/adapter/` packages own Redis, BetterAuth HTTP calls, and provider-specific error mapping.
 - Keep Ent-generated types inside adapters and map them to domain models at the repository boundary.
 
 ## Church and ministry access
