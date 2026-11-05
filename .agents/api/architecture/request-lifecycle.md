@@ -17,7 +17,7 @@ HTTP request
 
 The route registers method, path, middleware, and handler. Middleware owns cross-cutting transport concerns such as request IDs, CORS, session validation, and access logging. Keep request logs useful without recording cookies, authorization headers, service tokens, or request bodies.
 
-Authentication middleware attaches a small principal to request context; it does not make ministry authorization decisions based on client state.
+Authentication middleware attaches the validated opaque BetterAuth user ID to request context; it does not make ministry authorization decisions based on client state.
 
 ## Handler and service
 

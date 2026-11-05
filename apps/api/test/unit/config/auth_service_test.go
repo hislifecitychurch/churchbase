@@ -6,6 +6,27 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/config"
 )
 
+func TestLoadAuthBaseURLDoesNotRequireServiceToken(t *testing.T) {
+	t.Setenv("AUTH_BASE_URL", "https://auth.example.org/")
+	t.Setenv("AUTH_SERVICE_TOKEN", "")
+
+	baseURL, err := config.LoadAuthBaseURL()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if baseURL != "https://auth.example.org" {
+		t.Fatalf("Auth base URL = %q, want https://auth.example.org", baseURL)
+	}
+}
+
+func TestLoadAuthBaseURLRejectsPath(t *testing.T) {
+	t.Setenv("AUTH_BASE_URL", "https://auth.example.org/auth")
+
+	if _, err := config.LoadAuthBaseURL(); err == nil {
+		t.Fatal("LoadAuthBaseURL succeeded with a path")
+	}
+}
+
 func TestLoadAuthServiceConfig(t *testing.T) {
 	t.Setenv("AUTH_BASE_URL", "https://auth.example.org/")
 	t.Setenv("AUTH_SERVICE_TOKEN", "01234567890123456789012345678901")

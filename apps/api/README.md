@@ -4,7 +4,7 @@ Go/Fiber business API. BetterAuth owns identity and sessions; this service owns 
 
 ## Local development
 
-The example intentionally leaves values blank. Set `RL_DB_URL` and `KV_DB_URL` to reachable services before running migrations or starting the API. `make infra` starts local dependencies when you are not using managed services.
+The example intentionally leaves values blank. Set `RL_DB_URL`, `KV_DB_URL`, and `AUTH_BASE_URL` before starting the API. For local Auth, use `ENVIRONMENT=development` and `AUTH_BASE_URL=http://localhost:36081`. `make infra` starts local PostgreSQL and Redis when you are not using managed services.
 
 ```sh
 cp .env.example .env
@@ -14,7 +14,7 @@ make atlas/apply
 make dev
 ```
 
-The API listens on `:36080`. Liveness is `GET /api/v1/health/live`; readiness is `GET /api/v1/health/ready` and returns `503` until PostgreSQL and Redis respond. `make infra-down` stops the local dependencies.
+The API listens on `:36080`. Liveness is `GET /api/v1/health/live`; readiness is `GET /api/v1/health/ready` and returns `503` until PostgreSQL and Redis respond. `GET /api/v1/me` requires a valid BetterAuth session and returns the Churchbase user ID, platform role, and profile names. It does not expose date of birth, address, or emergency-contact details. `make infra-down` stops the local dependencies.
 
 Run `make generate` after changing an Ent schema. Use `make build` and `make lint` before delivery. Atlas migrations are explicit commands and must be reviewed before applying them to a shared database.
 
@@ -34,4 +34,4 @@ make cli/user/platform ARGS='--auth-user-id=existing-auth-id --yes'
 make cli/user/platform ARGS='--email=admin@example.org --first-name=Ada --last-name=Lovelace --password-stdin --yes' < /path/to/secure-password-file
 ```
 
-If the API write fails after Auth creates the identity, the error includes its Auth user ID so you can retry with `--auth-user-id`. HTTP Auth URLs are accepted only when `ENVIRONMENT=development`; use HTTPS otherwise.
+If the API write fails after Auth creates the identity, the error includes its Auth user ID so you can retry with `--auth-user-id`. Session validation uses `AUTH_BASE_URL`; the API does not require the internal service token for this. The CLI provisioning operation requires `AUTH_SERVICE_TOKEN`. HTTP Auth URLs are accepted only when `ENVIRONMENT=development`; use HTTPS otherwise.

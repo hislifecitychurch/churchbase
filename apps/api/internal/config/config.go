@@ -12,6 +12,7 @@ type Config struct {
 	Port          int
 	DatabaseURL   string
 	RedisURL      string
+	AuthBaseURL   string
 	AllowedOrigin string
 }
 
@@ -38,6 +39,10 @@ func Load() (Config, error) {
 	if err != nil {
 		return Config{}, err
 	}
+	authBaseURL, err := LoadAuthBaseURL()
+	if err != nil {
+		return Config{}, err
+	}
 
 	origin := strings.TrimSpace(os.Getenv("CORS_ALLOWED_ORIGINS"))
 	if origin == "" {
@@ -53,24 +58,32 @@ func Load() (Config, error) {
 		origins[i] = parsed.Scheme + "://" + parsed.Host
 	}
 
-	return Config{Port: port, DatabaseURL: databaseURL, RedisURL: redisURL, AllowedOrigin: strings.Join(origins, ",")}, nil
+	return Config{Port: port, DatabaseURL: databaseURL, RedisURL: redisURL, AuthBaseURL: authBaseURL, AllowedOrigin: strings.Join(origins, ",")}, nil
 }
 
 func LoadDatabaseURL() (string, error) {
 	return endpoint("RL_DB_URL", "postgres", "postgresql")
 }
 
-func LoadAuthServiceConfig() (AuthServiceConfig, error) {
+func LoadAuthBaseURL() (string, error) {
 	baseURL, err := endpoint("AUTH_BASE_URL", "http", "https")
 	if err != nil {
-		return AuthServiceConfig{}, err
+		return "", err
 	}
 	parsed, _ := url.Parse(baseURL)
 	if parsed.User != nil || (parsed.Path != "" && parsed.Path != "/") || parsed.RawQuery != "" || parsed.Fragment != "" {
-		return AuthServiceConfig{}, fmt.Errorf("AUTH_BASE_URL must be an HTTP origin without path, query, or fragment")
+		return "", fmt.Errorf("AUTH_BASE_URL must be an HTTP origin without path, query, or fragment")
 	}
 	if parsed.Scheme == "http" && strings.TrimSpace(os.Getenv("ENVIRONMENT")) != "development" {
-		return AuthServiceConfig{}, fmt.Errorf("AUTH_BASE_URL must use HTTPS outside development")
+		return "", fmt.Errorf("AUTH_BASE_URL must use HTTPS outside development")
+	}
+	return strings.TrimSuffix(baseURL, "/"), nil
+}
+
+func LoadAuthServiceConfig() (AuthServiceConfig, error) {
+	baseURL, err := LoadAuthBaseURL()
+	if err != nil {
+		return AuthServiceConfig{}, err
 	}
 
 	serviceToken := strings.TrimSpace(os.Getenv("AUTH_SERVICE_TOKEN"))
@@ -78,7 +91,7 @@ func LoadAuthServiceConfig() (AuthServiceConfig, error) {
 		return AuthServiceConfig{}, fmt.Errorf("AUTH_SERVICE_TOKEN must be at least 32 characters and contain no line breaks")
 	}
 
-	return AuthServiceConfig{BaseURL: strings.TrimSuffix(baseURL, "/"), ServiceToken: serviceToken}, nil
+	return AuthServiceConfig{BaseURL: baseURL, ServiceToken: serviceToken}, nil
 }
 
 func endpoint(name string, schemes ...string) (string, error) {

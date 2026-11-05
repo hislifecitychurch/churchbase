@@ -71,3 +71,7 @@ func (r *fakeRepository) Create(_ context.Context, input userprofile.CreateInput
 	r.input = input
 	return r.result, nil
 }
+
+func (r *fakeRepository) GetByUserID(context.Context, uuid.UUID) (userprofile.Profile, error) {
+	return r.result, nil
+}

@@ -9,10 +9,15 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	betterauthadapter "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/betterauth"
 	postgresadapter "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres"
 	redisadapter "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/redis"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/config"
 	deliveryhttp "github.com/hislifecitychurch/churchbase/apps/api/internal/delivery/http"
+	userservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user/service"
+	userprofileservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile/service"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/me"
 )
 
 type Application struct {
@@ -33,8 +38,11 @@ func New(cfg config.Config) (*Application, error) {
 		return nil, err
 	}
 
+	profiles := userprofileservice.NewService(db.UserProfileRepository())
+	users := userservice.NewService(db.UserRepository(), profiles, db)
+	currentUsers := application.NewCurrentUserReader(users, profiles)
 	return &Application{
-		http:    deliveryhttp.New(cfg.AllowedOrigin, db, redis),
+		http:    deliveryhttp.New(cfg.AllowedOrigin, betterauthadapter.NewSessionClient(cfg.AuthBaseURL), me.NewHandler(currentUsers), db, redis),
 		address: net.JoinHostPort("", strconv.Itoa(cfg.Port)),
 		db:      db,
 		redis:   redis,

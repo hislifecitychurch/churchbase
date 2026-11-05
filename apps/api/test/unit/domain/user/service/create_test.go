@@ -99,6 +99,10 @@ func (r *fakeRepository) CreatePlatformAdmin(_ context.Context, input userdomain
 	return r.result, nil
 }
 
+func (r *fakeRepository) GetByAuthUserID(context.Context, string) (userdomain.User, error) {
+	return r.result, nil
+}
+
 type fakeProfileCreator struct {
 	called bool
 	input  userprofile.CreateInput
