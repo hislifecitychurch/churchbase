@@ -17,6 +17,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/cli"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/config"
 	userservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user/service"
+	userprofileservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile/service"
 	"github.com/manifoldco/promptui"
 )
 
@@ -92,7 +93,12 @@ func run() error {
 		identityProvisioner = betterauthadapter.NewClient(authConfig.BaseURL, authConfig.ServiceToken)
 	}
 
-	creator := application.NewPlatformAdminCreator(identityProvisioner, userservice.NewService(store.UserRepository()))
+	users := userservice.NewService(
+		store.UserRepository(),
+		userprofileservice.NewService(store.UserProfileRepository()),
+		store,
+	)
+	creator := application.NewPlatformAdminCreator(identityProvisioner, users)
 	created, err := creator.Create(ctx, input)
 	input.Password = ""
 	input.ConfirmPassword = ""

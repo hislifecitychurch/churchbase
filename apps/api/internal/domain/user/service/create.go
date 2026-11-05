@@ -19,7 +19,7 @@ func (s *Service) Create(ctx context.Context, input userdomain.CreateInput) (use
 		return userdomain.User{}, fmt.Errorf("%w: last name cannot be blank", userdomain.ErrInvalidUser)
 	}
 
-	return s.repository.Create(ctx, input)
+	return s.createWithProfile(ctx, input, s.repository.Create)
 }
 
 func blank(value *string) bool {

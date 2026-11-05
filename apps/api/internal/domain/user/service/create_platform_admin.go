@@ -18,5 +18,5 @@ func (s *Service) CreatePlatformAdmin(ctx context.Context, input userdomain.Crea
 		return userdomain.User{}, fmt.Errorf("%w: last name cannot be blank", userdomain.ErrInvalidUser)
 	}
 
-	return s.repository.CreatePlatformAdmin(ctx, input)
+	return s.createWithProfile(ctx, input, s.repository.CreatePlatformAdmin)
 }

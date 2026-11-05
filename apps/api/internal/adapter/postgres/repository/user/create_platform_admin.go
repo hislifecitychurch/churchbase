@@ -5,11 +5,12 @@ import (
 	"fmt"
 
 	entuser "github.com/hislifecitychurch/churchbase/apps/api/ent/user"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/transaction"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 )
 
 func (r *UserRepository) CreatePlatformAdmin(ctx context.Context, input userdomain.CreateInput) (userdomain.User, error) {
-	created, err := r.client.User.Create().
+	created, err := transaction.Client(ctx, r.client).User.Create().
 		SetNillableAuthUserID(input.AuthUserID).
 		SetNillableFirstName(input.FirstName).
 		SetNillableLastName(input.LastName).

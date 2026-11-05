@@ -22,7 +22,7 @@ Run `make generate` after changing an Ent schema. Use `make build` and `make lin
 
 ## Platform admin bootstrap
 
-The CLI creates an API user linked to a BetterAuth identity and grants `platform_role=admin`; it does not create a church membership. Use an existing Auth identity, or let the CLI create one through Auth's protected provisioning operation. For new identities, configure `AUTH_BASE_URL` and the same 32+ character `AUTH_SERVICE_TOKEN` in both services, then run `bun run --cwd apps/auth db:migrate` to add the BetterAuth admin-plugin fields.
+The CLI creates an API user linked to a BetterAuth identity, its empty user profile, and `platform_role=admin` atomically in the API database; it does not create a church membership. Use an existing Auth identity, or let the CLI create one through Auth's protected provisioning operation. For new identities, configure `AUTH_BASE_URL` and the same 32+ character `AUTH_SERVICE_TOKEN` in both services, then run `bun run --cwd apps/auth db:migrate` to add the BetterAuth admin-plugin fields.
 
 From the repository root, run `bun run --cwd apps/api cli:admin:platform` to launch the interactive prompts. From `apps/api/`, you can also run `make cli/user/platform`. Passwords are masked, the confirmation must match, and the final action defaults to no. For automation, flags require `--yes`; `--password-stdin` reads the password and confirmation from two lines of a protected input file, never from command arguments.
 

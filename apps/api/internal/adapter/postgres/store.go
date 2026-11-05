@@ -10,7 +10,10 @@ import (
 	entclient "github.com/hislifecitychurch/churchbase/apps/api/ent"
 	_ "github.com/hislifecitychurch/churchbase/apps/api/ent/runtime"
 	userrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user"
+	userprofilerepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user_profile"
+	postgresTransaction "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/transaction"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
+	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
@@ -21,6 +24,14 @@ type Store struct {
 
 func (s *Store) UserRepository() userdomain.Repository {
 	return userrepository.NewUserRepository(s.client)
+}
+
+func (s *Store) UserProfileRepository() userprofile.Repository {
+	return userprofilerepository.NewUserProfileRepository(s.client)
+}
+
+func (s *Store) WithinTransaction(ctx context.Context, run func(context.Context) error) error {
+	return postgresTransaction.Within(ctx, s.client, run)
 }
 
 func New(databaseURL string) (*Store, error) {
