@@ -20,4 +20,6 @@ Use explicit church and ministry resource identifiers in routes when an operatio
 
 ## Responses
 
-Define a consistent JSON envelope and status semantics with the first public endpoint, then preserve them. Public messages must be safe and stable. Never return SQL, stack traces, provider payloads, or credentials. Update the frontend client and API contract documentation alongside approved contract changes.
+Wrap JSON responses from API handlers, including health and middleware failures, with `pkg/response.Envelope` and its `Success`, `Failure`, `FailureWithError`, and `JSON` helpers. Keep feature-specific `data` DTOs beside their handlers. The envelope carries `success`, `message`, `data`, `filters`, `errors`, `pagination`, `metadata` (request ID and UTC timestamp), and `log` (event, optional API user ID, status).
+
+Preserve the HTTP status code independently of the envelope. Use stable error codes and safe public messages; never return SQL, stack traces, provider payloads, BetterAuth IDs, or credentials. Do not put sensitive member data in `log`. Update the frontend client and API contract documentation alongside contract changes.

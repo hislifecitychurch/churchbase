@@ -17,6 +17,7 @@ import (
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/me"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
+	apiresponse "github.com/hislifecitychurch/churchbase/apps/api/pkg/response"
 )
 
 func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
@@ -43,19 +44,22 @@ func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	var payload struct {
+	var payload apiresponse.Envelope[struct {
 		ID           string `json:"id"`
 		PlatformRole string `json:"platform_role"`
 		Profile      struct {
 			FirstName string `json:"first_name"`
 			LastName  string `json:"last_name"`
 		} `json:"profile"`
-	}
+	}]
 	if err := json.Unmarshal(body, &payload); err != nil {
 		t.Fatal(err)
 	}
-	if response.StatusCode != http.StatusOK || payload.ID != userID.String() || payload.PlatformRole != "admin" || payload.Profile.FirstName != firstName || payload.Profile.LastName != lastName {
+	if response.StatusCode != http.StatusOK || !payload.Success || payload.Data.ID != userID.String() || payload.Data.PlatformRole != "admin" || payload.Data.Profile.FirstName != firstName || payload.Data.Profile.LastName != lastName {
 		t.Fatalf("response = %d %s", response.StatusCode, body)
+	}
+	if payload.Log.UserID == nil || *payload.Log.UserID != userID.String() {
+		t.Fatalf("response log user ID = %v, want API user ID", payload.Log.UserID)
 	}
 	if service.authUserID != "auth-user-private" || strings.Contains(string(body), "auth-user-private") {
 		t.Fatalf("Auth user ID lookup/output = %q / %s", service.authUserID, body)
@@ -75,6 +79,13 @@ func TestHandlerGetRejectsMissingActor(t *testing.T) {
 	if response.StatusCode != http.StatusUnauthorized || service.called {
 		t.Fatalf("status = %d, service called = %v", response.StatusCode, service.called)
 	}
+	var body apiresponse.Envelope[any]
+	if err := json.NewDecoder(response.Body).Decode(&body); err != nil {
+		t.Fatal(err)
+	}
+	if body.Success || len(body.Errors) != 1 || body.Errors[0].Code != "unauthorized" {
+		t.Fatalf("unauthorized envelope = %+v", body)
+	}
 }
 
 func TestHandlerGetMapsMissingAPIUserToForbidden(t *testing.T) {
@@ -83,6 +94,13 @@ func TestHandlerGetMapsMissingAPIUserToForbidden(t *testing.T) {
 	defer response.Body.Close()
 	if response.StatusCode != http.StatusForbidden {
 		t.Fatalf("status = %d, want %d", response.StatusCode, http.StatusForbidden)
+	}
+	var body apiresponse.Envelope[any]
+	if err := json.NewDecoder(response.Body).Decode(&body); err != nil {
+		t.Fatal(err)
+	}
+	if body.Success || len(body.Errors) != 1 || body.Errors[0].Code != "user_not_provisioned" {
+		t.Fatalf("forbidden envelope = %+v", body)
 	}
 }
 

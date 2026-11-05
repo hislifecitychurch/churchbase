@@ -16,6 +16,23 @@ make dev
 
 The API listens on `:36080`. Liveness is `GET /api/v1/health/live`; readiness is `GET /api/v1/health/ready` and returns `503` until PostgreSQL and Redis respond. `GET /api/v1/me` requires a valid BetterAuth session and returns the Churchbase user ID, platform role, and profile names. It does not expose date of birth, address, or emergency-contact details. `make infra-down` stops the local dependencies.
 
+## API response format
+
+JSON responses use the shared `apps/api/pkg/response` envelope. `data` contains the endpoint payload; errors include stable codes, and metadata carries the request ID and UTC timestamp. `log.user_id`, when present, is the Churchbase user ID—not the BetterAuth ID.
+
+```json
+{
+  "success": true,
+  "message": "Current user retrieved",
+  "data": { "id": "...", "platform_role": "admin", "profile": {} },
+  "filters": null,
+  "errors": [],
+  "pagination": null,
+  "metadata": { "request_id": "...", "timestamp": "..." },
+  "log": { "event": "me.retrieved", "user_id": "...", "status": "info" }
+}
+```
+
 Run `make generate` after changing an Ent schema. Use `make build` and `make lint` before delivery. Atlas migrations are explicit commands and must be reviewed before applying them to a shared database.
 
 `make atlas/apply` reads the PostgreSQL connection string from `RL_DB_URL` in `.env`.

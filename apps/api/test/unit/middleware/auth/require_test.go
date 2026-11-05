@@ -2,6 +2,7 @@ package auth_test
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	authmiddleware "github.com/hislifecitychurch/churchbase/apps/api/internal/middleware/auth"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
+	apiresponse "github.com/hislifecitychurch/churchbase/apps/api/pkg/response"
 )
 
 type sessionValidator struct {
@@ -35,10 +37,11 @@ func TestRequireRejectsMissingAndInvalidSessions(t *testing.T) {
 		validator  *sessionValidator
 		wantStatus int
 		wantCalls  int
+		wantCode   string
 	}{
-		{name: "missing credentials", validator: &sessionValidator{valid: true, id: "auth-user-1"}, wantStatus: http.StatusUnauthorized},
-		{name: "invalid session", cookie: "session=invalid", validator: &sessionValidator{}, wantStatus: http.StatusUnauthorized, wantCalls: 1},
-		{name: "unavailable auth service", cookie: "session=present", validator: &sessionValidator{err: errors.New("upstream timeout")}, wantStatus: http.StatusServiceUnavailable, wantCalls: 1},
+		{name: "missing credentials", validator: &sessionValidator{valid: true, id: "auth-user-1"}, wantStatus: http.StatusUnauthorized, wantCode: "unauthorized"},
+		{name: "invalid session", cookie: "session=invalid", validator: &sessionValidator{}, wantStatus: http.StatusUnauthorized, wantCalls: 1, wantCode: "unauthorized"},
+		{name: "unavailable auth service", cookie: "session=present", validator: &sessionValidator{err: errors.New("upstream timeout")}, wantStatus: http.StatusServiceUnavailable, wantCalls: 1, wantCode: "auth_unavailable"},
 	}
 
 	for _, test := range tests {
@@ -60,6 +63,13 @@ func TestRequireRejectsMissingAndInvalidSessions(t *testing.T) {
 			}
 			if test.validator.calls != test.wantCalls {
 				t.Fatalf("validator calls = %d, want %d", test.validator.calls, test.wantCalls)
+			}
+			var body apiresponse.Envelope[any]
+			if err := json.NewDecoder(response.Body).Decode(&body); err != nil {
+				t.Fatal(err)
+			}
+			if body.Success || len(body.Errors) != 1 || body.Errors[0].Code != test.wantCode {
+				t.Fatalf("error envelope = %+v, want code %q", body, test.wantCode)
 			}
 		})
 	}

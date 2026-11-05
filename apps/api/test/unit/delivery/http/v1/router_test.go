@@ -2,6 +2,7 @@ package v1_test
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -14,6 +15,7 @@ import (
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/health"
 	mehandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/me"
+	"github.com/hislifecitychurch/churchbase/apps/api/pkg/response"
 )
 
 func TestMeRouteRequiresValidatedSession(t *testing.T) {
@@ -45,8 +47,14 @@ func TestMeRouteRequiresValidatedSession(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer authenticated.Body.Close()
-	if authenticated.StatusCode != http.StatusOK {
-		t.Fatalf("authenticated /me status = %d, want 200", authenticated.StatusCode)
+	var body response.Envelope[struct {
+		ID string `json:"id"`
+	}]
+	if err := json.NewDecoder(authenticated.Body).Decode(&body); err != nil {
+		t.Fatal(err)
+	}
+	if authenticated.StatusCode != http.StatusOK || !body.Success || body.Data.ID == "" {
+		t.Fatalf("authenticated /me response = %d %+v", authenticated.StatusCode, body)
 	}
 }
 

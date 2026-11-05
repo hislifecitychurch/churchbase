@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
+	"github.com/hislifecitychurch/churchbase/apps/api/pkg/response"
 )
 
 type Validator interface {
@@ -39,15 +40,13 @@ func Require(validator Validator) fiber.Handler {
 }
 
 func unauthorized(c *fiber.Ctx) error {
-	return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-		"error":   "unauthorized",
-		"message": "Authentication is required",
-	})
+	return response.JSON(c, fiber.StatusUnauthorized, response.FailureWithError[any](
+		"Unauthorized", "unauthorized", "Authentication is required", c, "auth.unauthorized", "", "warning",
+	))
 }
 
 func unavailable(c *fiber.Ctx) error {
-	return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
-		"error":   "auth_unavailable",
-		"message": "Authentication service temporarily unavailable",
-	})
+	return response.JSON(c, fiber.StatusServiceUnavailable, response.Failure[any](
+		"Authentication service temporarily unavailable", "auth_unavailable", c, "auth.service.unavailable", "", "error",
+	))
 }
