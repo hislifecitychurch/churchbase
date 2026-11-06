@@ -1,0 +1,3 @@
+$kind: collection
+name: /v1
+description: Churchbase version 1 API and Auth requests. The folders organize route families; each request contains its complete URL and examples.

@@ -1,0 +1,47 @@
+$kind: http-example
+name: Username sign-in succeeded
+request:
+  url: "{{host-auth}}/v1/auth/sign-in/username"
+  method: POST
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Content-Type
+      value: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "username": "{{username}}",
+        "password": "{{password}}",
+        "rememberMe": true
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+    Set-Cookie: "churchbase.session_token=<redacted>; Path=/; HttpOnly; SameSite=Lax"
+  body:
+    type: json
+    content: |-
+      {
+        "redirect": false,
+        "token": "<redacted-session-token>",
+        "url": null,
+        "user": {
+          "id": "auth-user-example-001",
+          "name": "Example User",
+          "email": "member@example.test",
+          "emailVerified": false,
+          "image": null,
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z",
+          "username": "example_user",
+          "role": "user",
+          "banned": false,
+          "banReason": null,
+          "banExpires": null
+        }
+      }
+order: 1000

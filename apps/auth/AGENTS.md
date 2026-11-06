@@ -1,6 +1,6 @@
 # Churchbase auth instructions
 
-Read [`.agents/auth/AGENTS.md`](../../.agents/auth/AGENTS.md) and the relevant reference under [`.agents/auth/architecture/`](../../.agents/auth/architecture/_index.md) before changing identity ownership, sessions, persistence, or runtime behavior.
+Read [`.agents/auth/AGENTS.md`](../../.agents/auth/AGENTS.md) and the relevant reference under [`.agents/auth/architecture/`](../../.agents/auth/architecture/_index.md) before changing identity ownership, sessions, persistence, or runtime behavior. For HTTP contract changes, follow the shared [Postman API documentation guide](../../.agents/postman-api-documentation.md); document Auth requests in the existing native resources under `postman/collections/-v1/`.
 
 ## Stack and boundaries
 

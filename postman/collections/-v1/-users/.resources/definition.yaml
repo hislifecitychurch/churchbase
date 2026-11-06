@@ -1,0 +1,4 @@
+$kind: collection
+name: /users
+description: Churchbase API user resources. The current-user operation requires a BetterAuth session.
+order: 2000

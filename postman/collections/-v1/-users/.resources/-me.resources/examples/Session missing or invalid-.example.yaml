@@ -1,0 +1,35 @@
+$kind: http-example
+name: Session missing or invalid
+request:
+  url: "{{host-api}}/v1/users/me"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 401
+  statusText: Unauthorized
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": false,
+        "message": "Unauthorized",
+        "data": null,
+        "filters": null,
+        "errors": [
+          { "code": "unauthorized", "message": "Authentication is required" }
+        ],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000005",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": { "event": "auth.unauthorized", "user_id": null, "status": "warning" }
+      }
+order: 2000

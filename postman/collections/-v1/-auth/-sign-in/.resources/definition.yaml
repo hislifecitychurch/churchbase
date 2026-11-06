@@ -1,0 +1,4 @@
+$kind: collection
+name: /sign-in
+description: Sign in with an existing email/password or username/password identity.
+order: 2000

@@ -1,0 +1,31 @@
+$kind: http-example
+name: Username failed validation
+request:
+  url: "{{host-auth}}/v1/auth/sign-in/username"
+  method: POST
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Content-Type
+      value: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "username": "ab",
+        "password": "{{password}}",
+        "rememberMe": true
+      }
+response:
+  statusCode: 422
+  statusText: Unprocessable Entity
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "message": "Username is too short",
+        "code": "USERNAME_TOO_SHORT"
+      }
+order: 3000

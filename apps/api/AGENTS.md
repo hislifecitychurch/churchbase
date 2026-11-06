@@ -2,7 +2,7 @@
 
 ## Scope
 
-This application hosts the Go/Fiber business API. BetterAuth identity and session behavior lives in `apps/auth/`; API-owned church and ministry data lives here. Read [`.agents/api/AGENTS.md`](../../.agents/api/AGENTS.md) and its relevant architecture reference before making API changes.
+This application hosts the Go/Fiber business API. BetterAuth identity and session behavior lives in `apps/auth/`; API-owned church and ministry data lives here. Read [`.agents/api/AGENTS.md`](../../.agents/api/AGENTS.md) and its relevant architecture reference before making API changes. For HTTP contract changes, follow the shared [Postman API documentation guide](../../.agents/postman-api-documentation.md); the native resources in `postman/collections/-v1/` are the versioned contract and examples.
 
 ## Stack and boundaries
 

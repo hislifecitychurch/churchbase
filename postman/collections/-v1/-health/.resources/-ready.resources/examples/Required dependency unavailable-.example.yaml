@@ -1,0 +1,35 @@
+$kind: http-example
+name: Required dependency unavailable
+request:
+  url: "{{host-api}}/v1/health/ready"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 503
+  statusText: Service Unavailable
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": false,
+        "message": "API is not ready",
+        "data": null,
+        "filters": null,
+        "errors": [
+          { "code": "not_ready", "message": "A required dependency is unavailable" }
+        ],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000003",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": { "event": "health.ready.failed", "user_id": null, "status": "warning" }
+      }
+order: 2000

@@ -1,9 +1,0 @@
-$kind: http-request
-description: Unauthenticated readiness probe for PostgreSQL and Redis.
-url: "{{baseUrl}}/api/v1/health/ready"
-method: GET
-headers:
-  Accept: application/json
-settings: {}
-examples: ./.resources/Check whether required dependencies are ready.resources/examples
-order: 2000

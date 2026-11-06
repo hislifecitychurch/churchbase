@@ -1,18 +1,38 @@
-# API documentation and local Postman workflow
+# Postman API documentation
 
-`specs/churchbase-api-v1.yaml` is the OpenAPI 3.1 contract for the Go API. The local `Churchbase API v1` collection is generated from that spec and adds BetterAuth sign-in requests for the local end-to-end flow. `.postman/workflows.yaml` links the spec and collection for Postman CLI sync.
+The native Postman resources in [`collections/-v1/`](collections/-v1/) document Churchbase's public, versioned API and Auth sign-in flow. The collection tree is organized by route segment; every request contains its full URL, authentication notes, body when applicable, and saved response examples. Keep this resource tree as the single source of truth rather than generating a separate collection.
 
-The API runs at `http://localhost:36080`; local BetterAuth runs at `http://localhost:36081`. Create a Postman environment named **Churchbase Local** with `baseUrl`, `authBaseUrl`, `email`, `username`, and `password`. Set the first two to those local URLs and keep credentials only in the local environment. Files under `postman/environments/*.environment.yaml` are Git-ignored because they may contain credentials.
+Read [the shared authoring guide](../.agents/postman-api-documentation.md) before adding or changing requests. The collection is automatically registered in Postman Local View by `.postman/resources.yaml`.
+
+## Local environment
+
+Use a disposable local database and local services only. Select or create a Git-ignored Postman environment with these values:
+
+| Variable | Local value / purpose |
+| --- | --- |
+| `host-api` | `http://localhost:36080/api` |
+| `host-auth` | `http://localhost:36081/api` |
+| `email` | Email for a disposable local Auth identity |
+| `username` | Username for that identity, if configured |
+| `password` | Password for that identity |
+
+Keep actual credentials and tokens in the local environment, never in collection resources or saved examples. Files under `postman/environments/*.environment.yaml` are Git-ignored.
 
 ## Try the current-user flow
 
-1. Use a disposable local database and provision a test API user with `make -C apps/api cli/user/platform`. Provisioning writes an Auth identity and a Churchbase platform admin; never run it against production or data you cannot safely modify.
-2. Set the test account's email or username and password in the local Postman environment. Do not put credentials or service tokens in the collection or commit them.
-3. Run either sign-in request in the collection's **Authentication** folder. Postman stores BetterAuth's `Set-Cookie` response in its cookie jar.
-4. Run `GET /api/v1/users/me` in **API v1**. Postman sends the local session cookie; the response contains the Churchbase user ID, platform role, and profile names only.
+1. Start the API and Auth against disposable local data. Do not use a shared or production database for this flow.
+2. Provision a local Churchbase user with the API's platform-admin CLI, or use an already-provisioned disposable local identity.
+3. Run **`/email`** or **`/username`** under `/auth/sign-in`. BetterAuth sets the session cookie; Postman stores it in the cookie jar.
+4. Run **`/me`** under `/users`. Postman sends the session cookie to the API. An Auth identity without a Churchbase API user returns `403`.
+5. Use `/health/live` and `/health/ready` under `/health` to check API liveness and dependency readiness; neither requires authentication.
 
-The API's liveness and readiness probes are unauthenticated. Readiness returns `503` when PostgreSQL or Redis is unavailable. The examples use synthetic profile data.
+Saved response examples use synthetic data and redacted session values. Do not replace them with real credentials, cookies, or member information.
 
-## Keeping the collection in sync
+## Validate local resources
 
-After changing the spec, run `postman spec sync collection postman/specs/churchbase-api-v1.yaml --force`. Postman CLI currently maps OpenAPI cookie security to an API-key header, which this API does not accept. Keep the current-user request's auth set to `none` so Postman's cookie jar sends the BetterAuth cookie; remove the unused `apiKey` variable from the collection definition after syncing.
+```sh
+postman collection lint postman/collections/-v1
+postman workspace lint
+```
+
+If collection execution is unavailable because the Postman CLI is not logged in, use Postman Local View. Do not publish or run these requests against a non-local target without explicit authorization.

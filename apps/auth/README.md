@@ -17,6 +17,10 @@ The service listens on `http://localhost:36081`. Liveness is `GET /health`; Bett
 
 Run `bun run --cwd apps/auth check-types` for the package type check. `db:migrate` requires PostgreSQL and must be run explicitly; service startup never changes the schema.
 
+## API documentation
+
+The native Postman collection in [`postman/collections/-v1/`](../../postman/collections/-v1/) documents the email and username sign-in request bodies, session-cookie flow, and response examples. Follow the shared [Postman authoring guide](../../.agents/postman-api-documentation.md) when changing Auth endpoints.
+
 ## Current scope
 
 Email-or-username/password sign-in and sessions are configured with BetterAuth's username and admin plugins. The API CLI may provision a new identity through the service-token-protected `POST /internal/provision-user` route; this creates only a BetterAuth identity with its default Auth role, while the Go API separately grants Churchbase `platform_role=admin`. The route is unavailable when `AUTH_SERVICE_TOKEN` is unset. After enabling the plugins on an existing database, run `bun run --cwd apps/auth db:migrate` to add their schema fields. Public email sign-up remains disabled in staging and production. Email verification, password reset delivery, account invitations, and the app login client are not implemented.

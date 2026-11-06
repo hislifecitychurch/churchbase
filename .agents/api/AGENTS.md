@@ -9,6 +9,7 @@ BetterAuth owns login identities, credentials, and sessions. The API's `User` is
 ## Required references
 
 - Read the relevant [architecture reference](architecture/_index.md) before changing API boundaries, routes, authentication, persistence, errors, configuration, or tests.
+- Follow the shared [Postman API documentation guide](../postman-api-documentation.md) when adding or changing HTTP endpoints; keep request bodies and response examples in the native collection.
 - Read a [feature guide](guides/) when one exists for the business rules being changed.
 - Keep feature guides factual; do not describe planned behavior as implemented.
 - Rate limiting is deferred pending algorithm research; do not add rate-limit configuration or middleware yet.

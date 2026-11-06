@@ -1,0 +1,4 @@
+$kind: collection
+name: /auth
+description: BetterAuth sign-in endpoints. Successful sign-in stores the session cookie in Postman's cookie jar.
+order: 1000

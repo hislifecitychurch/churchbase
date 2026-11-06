@@ -1,4 +1,0 @@
-workflows:
-  syncSpecToCollection:
-    - spec: ../postman/specs/churchbase-api-v1.yaml
-      collection: ../postman/collections/Churchbase API v1

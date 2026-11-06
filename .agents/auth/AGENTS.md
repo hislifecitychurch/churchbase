@@ -40,5 +40,6 @@ BetterAuth owns its tables in PostgreSQL's `auth` schema. Run `bun run --cwd app
 ## Reference routing
 
 - Read the relevant reference under `architecture/` before changing auth boundaries, persistence, or runtime behavior.
+- Follow the shared [Postman API documentation guide](../postman-api-documentation.md) when adding or changing HTTP endpoints; keep Auth requests, bodies, and response examples in the native collection.
 - Add guides only when Churchbase auth product rules are stable enough to preserve.
 - Do not copy Mnemora-specific invitations, platform access, OTP, or email delivery without a Churchbase product requirement.

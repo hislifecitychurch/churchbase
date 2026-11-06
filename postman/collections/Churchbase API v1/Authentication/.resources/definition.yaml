@@ -1,4 +1,0 @@
-$kind: collection
-id: 9a3bffb6b42a0cde484da4e6
-name: Authentication
-description: Sign in to local BetterAuth. The response sets a cookie that Postman sends with the API requests on localhost.
