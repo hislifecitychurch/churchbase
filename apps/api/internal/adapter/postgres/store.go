@@ -11,6 +11,7 @@ import (
 	_ "github.com/hislifecitychurch/churchbase/apps/api/ent/runtime"
 	userrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user"
 	userprofilerepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user_profile"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/softdelete"
 	postgresTransaction "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/transaction"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
@@ -45,7 +46,7 @@ func New(databaseURL string) (*Store, error) {
 	db.SetConnMaxIdleTime(time.Minute)
 
 	client := entclient.NewClient(entclient.Driver(dialectsql.OpenDB(dialect.Postgres, db)))
-	ConfigureClient(client)
+	softdelete.ConfigureClient(client)
 	return &Store{db: db, client: client}, nil
 }
 

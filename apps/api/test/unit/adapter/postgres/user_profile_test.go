@@ -9,9 +9,9 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
 	entuser "github.com/hislifecitychurch/churchbase/apps/api/ent/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/userprofile"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres"
 	userrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user"
 	userprofilerepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user_profile"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/softdelete"
 	postgresTransaction "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/transaction"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	userservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user/service"
@@ -23,7 +23,7 @@ import (
 func TestUserCreationCreatesProfile(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:user-profile-create?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
-	postgres.ConfigureClient(client)
+	softdelete.ConfigureClient(client)
 
 	service := newUserService(client, userprofileservice.NewService(userprofilerepository.NewUserProfileRepository(client)))
 	authUserID := "auth-user-1"
@@ -49,7 +49,7 @@ func TestUserCreationCreatesProfile(t *testing.T) {
 func TestUserCreationRollsBackWhenProfileCreationFails(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:user-profile-create-rollback?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
-	postgres.ConfigureClient(client)
+	softdelete.ConfigureClient(client)
 
 	profileErr := errors.New("profile creation failed after insert")
 	profiles := &failAfterCreateProfile{
