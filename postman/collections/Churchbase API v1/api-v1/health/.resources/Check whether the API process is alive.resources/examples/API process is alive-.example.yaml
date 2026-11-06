@@ -1,0 +1,38 @@
+$kind: http-example
+name: API process is alive.
+request:
+  url: "{{baseUrl}}/api/v1/health/live"
+  method: GET
+  headers:
+    Accept: application/json
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": true,
+        "message": "API is live",
+        "data": {
+          "status": "UP"
+        },
+        "filters": null,
+        "errors": [],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "health.live",
+          "user_id": null,
+          "status": "info"
+        }
+      }
+order: 1000

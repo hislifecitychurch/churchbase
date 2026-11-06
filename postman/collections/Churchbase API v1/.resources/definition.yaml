@@ -1,0 +1,4 @@
+$kind: collection
+description: Versioned Churchbase business API. BetterAuth owns identity and sessions; the API owns Churchbase users, profiles, and authorization. The local BetterAuth service listens at http://localhost:36081.
+variables:
+  baseUrl: http://localhost:36080

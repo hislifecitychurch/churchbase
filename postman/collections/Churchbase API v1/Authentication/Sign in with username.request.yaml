@@ -1,0 +1,11 @@
+$kind: http-request
+id: 11b641422bb3c04a1c473559
+method: POST
+url: '{{authBaseUrl}}/api/v1/auth/sign-in/username'
+description: Sign in to the local BetterAuth service. Provide local Postman variables username and password; the Set-Cookie response is stored by Postman for the API request to localhost:36080.
+body:
+  type: json
+  content: '{"username":"{{username}}","password":"{{password}}"}'
+headers:
+  - key: Content-Type
+    value: application/json

@@ -16,6 +16,10 @@ make dev
 
 The API listens on `:36080`. Liveness is `GET /api/v1/health/live`; readiness is `GET /api/v1/health/ready` and returns `503` until PostgreSQL and Redis respond. `GET /api/v1/users/me` requires a valid BetterAuth session and returns the Churchbase user ID, platform role, and profile names. It does not expose date of birth, address, or emergency-contact details. `make infra-down` stops the local dependencies.
 
+## API contract
+
+The OpenAPI 3.1 contract and local Postman workflow are documented in [`postman/`](../../postman/README.md). The specification is [`churchbase-api-v1.yaml`](../../postman/specs/churchbase-api-v1.yaml); its local collection includes BetterAuth sign-in requests and API examples.
+
 ## API response format
 
 JSON responses use the API-local `internal/shared/response` envelope. `data` contains the endpoint payload; errors include stable codes, and metadata carries the request ID and UTC timestamp. `log.user_id`, when present, is the Churchbase user ID—not the BetterAuth ID.

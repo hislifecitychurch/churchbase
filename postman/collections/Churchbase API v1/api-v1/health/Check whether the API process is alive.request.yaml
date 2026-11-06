@@ -1,0 +1,9 @@
+$kind: http-request
+description: Unauthenticated process liveness probe.
+url: "{{baseUrl}}/api/v1/health/live"
+method: GET
+headers:
+  Accept: application/json
+settings: {}
+examples: ./.resources/Check whether the API process is alive.resources/examples
+order: 1000

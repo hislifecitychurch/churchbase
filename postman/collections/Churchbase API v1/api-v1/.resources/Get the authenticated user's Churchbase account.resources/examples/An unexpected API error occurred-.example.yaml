@@ -1,0 +1,57 @@
+$kind: http-example
+name: An unexpected API error occurred.
+request:
+  url: "{{baseUrl}}/api/v1/users/me"
+  method: GET
+  headers:
+    - key: churchbase.session_token
+      value: <API Key>
+      description: "Added as a part of security scheme: apikey"
+    - key: Accept
+      value: application/json
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 500
+  statusText: Internal Server Error
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "data": null,
+        "errors": [
+          {
+            "code": "string",
+            "message": "string"
+          },
+          {
+            "code": "string",
+            "message": "string"
+          }
+        ],
+        "filters": {},
+        "log": {
+          "event": "string",
+          "user_id": "string",
+          "status": "info"
+        },
+        "message": "string",
+        "metadata": {
+          "request_id": "49061ea1-af24-1fa9-e06c-ba31237407ad",
+          "timestamp": "1999-09-22T12:40:39.160Z"
+        },
+        "pagination": {
+          "page": 1506,
+          "items": 107,
+          "total": 1416,
+          "pages": 7051,
+          "limit": 2619,
+          "has_next": false,
+          "has_prev": true
+        },
+        "success": false
+      }
+order: 4000
