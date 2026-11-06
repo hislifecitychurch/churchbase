@@ -58,7 +58,7 @@ adapter/postgres/repository implements the repository port → Ent/PostgreSQL
 
 Each persisted Ent schema has one matching domain package and Postgres repository package, named in snake_case (for example, `UserProfile` → `user_profile`). A repository adapter operates only on its own schema and never calls another repository adapter. Domain services coordinate related schema repository ports when a business invariant spans them; for example, the `user` service creates both the user and its `user_profile` atomically. Keep privileged role grants as explicit operations, separate from ordinary create inputs. Domain code must not import Ent or adapter packages. Use `internal/application/` for cross-feature workflows or external operations, not as a pass-through for every call.
 
-Keep one-off request validation beside its request DTO in `internal/handler/v1/<feature>/`. Put business validation in the owning schema-domain model or service; put invariants spanning related schemas in the coordinating domain service. Put database invariants in Ent schema constraints and Atlas migrations. Add a shared validation package only after multiple domains need the same rule.
+Keep one-off request validation beside its request DTO in the operation file under `internal/handler/v1/<feature>/`. Keep the handler type and constructor in `handler.go`; give each HTTP operation its own file. Put business validation in the owning schema-domain model or service; put invariants spanning related schemas in the coordinating domain service. Put database invariants in Ent schema constraints and Atlas migrations. Add a shared validation package only after multiple domains need the same rule.
 
 ## Feature layout
 
@@ -86,9 +86,8 @@ internal/adapter/postgres/repository/<schema>/
 └── delete_by_id.go
 
 internal/handler/v1/<feature>/
-├── handler.go
-├── request.go                   when request DTOs need a separate file
-└── response.go                  when response DTOs need a separate file
+├── handler.go                   handler type, service interface, and constructor
+└── <operation>.go               one HTTP operation and its transport DTOs
 
 internal/delivery/http/v1/<feature>/
 ```

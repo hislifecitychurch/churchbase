@@ -14,7 +14,7 @@ apps/api/test/
 └── e2e/           complete HTTP/application flows
 ```
 
-Keep tests under `test/` and mirror the handler version/feature or schema domain and operation they cover. Put service unit tests beside the corresponding operation path under `test/unit/`; put PostgreSQL repository tests under `test/integration/` and use only an explicit disposable database.
+Keep tests under `test/` and mirror handler operation files (for example, `handler/v1/user/me.go` → `unit/handler/v1/user/me_test.go`) or schema domains and operations. Put service unit tests beside the corresponding operation path under `test/unit/`; put PostgreSQL repository tests under `test/integration/` and use only an explicit disposable database.
 
 Add directories with their first test rather than creating empty test trees. Use external test packages where practical so tests cover public package behavior.
 
