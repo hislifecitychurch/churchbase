@@ -1,4 +1,4 @@
-package me
+package users
 
 import (
 	"github.com/gofiber/fiber/v2"
@@ -7,5 +7,5 @@ import (
 )
 
 func Register(router fiber.Router, validator authmiddleware.Validator, handler *userhandler.Handler) {
-	router.Get("/me", authmiddleware.Require(validator), handler.Get)
+	router.Get("/users/me", authmiddleware.Require(validator), handler.Get)
 }

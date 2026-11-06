@@ -18,7 +18,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
 
-func TestMeRouteRequiresValidatedSession(t *testing.T) {
+func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 	role := userdomain.PlatformRoleStaff
 	app := fiber.New()
 	httpv1.Register(
@@ -31,16 +31,16 @@ func TestMeRouteRequiresValidatedSession(t *testing.T) {
 		}}),
 	)
 
-	unauthenticated, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/me", nil))
+	unauthenticated, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil))
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer unauthenticated.Body.Close()
 	if unauthenticated.StatusCode != http.StatusUnauthorized {
-		t.Fatalf("unauthenticated /me status = %d, want 401", unauthenticated.StatusCode)
+		t.Fatalf("unauthenticated /users/me status = %d, want 401", unauthenticated.StatusCode)
 	}
 
-	authenticatedRequest := httptest.NewRequest(http.MethodGet, "/api/v1/me", nil)
+	authenticatedRequest := httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil)
 	authenticatedRequest.Header.Set("Cookie", "session=valid")
 	authenticated, err := app.Test(authenticatedRequest)
 	if err != nil {
@@ -54,7 +54,7 @@ func TestMeRouteRequiresValidatedSession(t *testing.T) {
 		t.Fatal(err)
 	}
 	if authenticated.StatusCode != http.StatusOK || !body.Success || body.Data.ID == "" {
-		t.Fatalf("authenticated /me response = %d %+v", authenticated.StatusCode, body)
+		t.Fatalf("authenticated /users/me response = %d %+v", authenticated.StatusCode, body)
 	}
 }
 
