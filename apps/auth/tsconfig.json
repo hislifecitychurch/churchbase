@@ -1,0 +1,12 @@
+{
+  "extends": "@packages/typescript/base.json",
+  "compilerOptions": {
+    "incremental": false,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "types": ["bun-types"]
+  },
+  "include": ["config/**/*.ts", "db/**/*.ts", "lib/**/*.ts", "src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

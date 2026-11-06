@@ -1,19 +1,38 @@
-import "@packages/ui-w/styles/globals.css";
-import type { Metadata } from "next";
-import type { JSX } from "react";
+import "@packages/ui-w/styles/globals.css"
 
-export const metadata: Metadata = {
-  title: "Churchbase",
-  description:
-    "Churchbase gives church teams a shared foundation to organize their work, care for their members, coordinate ministries, and serve their community.",
-};
+import type { Metadata } from "next"
+import type { JSX, ReactNode } from "react"
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>): JSX.Element {
+import { createMetadata } from "@packages/metadata"
+import { geistMono, geistSans, geistSerif } from "@packages/ui-w/lib/fonts"
+import { ThemeProvider } from "@packages/ui-w/providers/theme-provider"
+import { ToastProvider } from "@packages/ui-w/providers/toast-provider"
+import { TooltipProvider } from "@packages/ui-w/providers/tooltip-provider"
+
+import { QueryProvider } from "@/providers/query-provider"
+
+export const metadata: Metadata = createMetadata({
+  name: "Churchbase",
+})
+
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>): JSX.Element {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html
+      className={`${geistSans.variable} ${geistMono.variable} ${geistSerif.variable}`}
+      lang="en"
+      suppressHydrationWarning
+    >
+      <body className="overflow-x-hidden font-sans tracking-tight antialiased">
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <ToastProvider position="bottom-left">
+            <TooltipProvider delay={0}>
+              <QueryProvider>
+                <div className="relative min-h-svh w-full overflow-x-hidden">{children}</div>
+              </QueryProvider>
+            </TooltipProvider>
+          </ToastProvider>
+        </ThemeProvider>
+      </body>
     </html>
-  );
+  )
 }

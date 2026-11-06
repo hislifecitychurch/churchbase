@@ -29,6 +29,18 @@ out/
 build
 dist
 
+# Go API generated files and local binaries
+apps/api/bin/
+apps/api/ent/**
+!apps/api/ent/generate.go
+!apps/api/ent/schema/
+!apps/api/ent/schema/**
+!apps/api/ent/migrate/
+apps/api/ent/migrate/**
+!apps/api/ent/migrate/migrations/
+!apps/api/ent/migrate/migrations/*.sql
+!apps/api/ent/migrate/migrations/atlas.sum
+
 
 # Debug
 npm-debug.log*

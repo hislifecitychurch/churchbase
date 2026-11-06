@@ -1,7 +1,7 @@
-import { Space_Grotesk } from "next/font/google"
+import { GeistMono } from "geist/font/mono"
+import { GeistSans } from "geist/font/sans"
+import { GeistSerif } from "geist/font/serif/variable"
 
-export const spaceGrotesk: { variable: string } = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-space-grotesk",
-})
+export const geistSans: { variable: string } = GeistSans
+export const geistMono: { variable: string } = GeistMono
+export const geistSerif: { variable: string } = GeistSerif

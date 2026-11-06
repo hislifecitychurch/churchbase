@@ -8,7 +8,8 @@ const defaultDescription =
 
 export interface MetadataConfig extends Omit<Metadata, "description" | "keywords"> {
   name: string
-  url: string
+  /** Canonical site URL. Omit until the deployment domain is known so no placeholder URLs are emitted. */
+  url?: string
   ogImage?: string
   description?: string
   keywords?: string[]
@@ -18,7 +19,7 @@ export function createMetadata(config: MetadataConfig): Metadata {
   const {
     name,
     url,
-    ogImage = `${url}/og.png`,
+    ogImage = url ? `${url}/og.png` : "/og.png",
     description = defaultDescription,
     keywords = baseKeywords,
     ...rest
@@ -27,21 +28,21 @@ export function createMetadata(config: MetadataConfig): Metadata {
   return {
     title: {
       default: name,
-      template: `%s | ${name}`,
+      template: `%s · ${name}`,
     },
     description,
     keywords,
     authors: [
       {
         name: "Churchbase",
-        url,
+        ...(url ? { url } : {}),
       },
     ],
     creator: "Churchbase",
     openGraph: {
       type: "website",
       locale: "en_US",
-      url,
+      ...(url ? { url } : {}),
       title: name,
       description,
       siteName: name,

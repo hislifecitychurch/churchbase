@@ -1,0 +1,1 @@
+ALTER TABLE "churches" ALTER COLUMN "id" DROP DEFAULT;
