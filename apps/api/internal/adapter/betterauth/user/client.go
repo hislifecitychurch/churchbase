@@ -1,4 +1,4 @@
-package betterauth
+package user
 
 import (
 	"net/http"

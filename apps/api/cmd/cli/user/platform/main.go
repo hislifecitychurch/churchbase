@@ -11,7 +11,7 @@ import (
 	"strings"
 	"syscall"
 
-	betterauthadapter "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/betterauth"
+	betterauthuseradapter "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/betterauth/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/cli"
@@ -90,7 +90,7 @@ func run() error {
 		if err != nil {
 			return err
 		}
-		identityProvisioner = betterauthadapter.NewClient(authConfig.BaseURL, authConfig.ServiceToken)
+		identityProvisioner = betterauthuseradapter.NewClient(authConfig.BaseURL, authConfig.ServiceToken)
 	}
 
 	users := userservice.NewService(

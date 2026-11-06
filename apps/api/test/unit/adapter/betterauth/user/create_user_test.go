@@ -1,4 +1,4 @@
-package betterauth_test
+package user_test
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	betterauthadapter "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/betterauth"
+	betterauthuser "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/betterauth/user"
 )
 
 func TestClientCreateUser(t *testing.T) {
@@ -38,7 +38,7 @@ func TestClientCreateUser(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client := betterauthadapter.NewClient(server.URL, token)
+	client := betterauthuser.NewClient(server.URL, token)
 	id, err := client.CreateUser(context.Background(), "admin@example.org", "Ada Lovelace", "strong-password")
 	if err != nil {
 		t.Fatal(err)
@@ -67,7 +67,7 @@ func TestClientCreateUserUsesSafeFailureMessages(t *testing.T) {
 			}))
 			defer server.Close()
 
-			client := betterauthadapter.NewClient(server.URL, strings.Repeat("x", 32))
+			client := betterauthuser.NewClient(server.URL, strings.Repeat("x", 32))
 			_, err := client.CreateUser(context.Background(), "", "", "")
 			if err == nil || !strings.Contains(err.Error(), test.message) || strings.Contains(err.Error(), "sensitive service detail") {
 				t.Fatalf("CreateUser error = %v, want safe message containing %q", err, test.message)
