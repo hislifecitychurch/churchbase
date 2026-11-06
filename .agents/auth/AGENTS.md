@@ -19,7 +19,7 @@ Follow [naming and structure](architecture/naming-and-structure.md) for file pla
 - `src/auth/better-auth.ts` configures BetterAuth and its auth policy.
 - `src/db/postgres/client.ts` owns the PostgreSQL pool and Kysely adapter.
 - `src/http/middleware/` owns independent HTTP middleware; `src/http/routes/` owns health and BetterAuth delegation.
-- `src/models/user.ts` owns BetterAuth user field mappings and approved user-schema extensions.
+- `src/user.ts` owns BetterAuth user field mappings and approved user-schema extensions.
 - `config/` validates environment values.
 - `db/` owns the explicit BetterAuth migration command.
 
