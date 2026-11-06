@@ -8,7 +8,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
 	entuser "github.com/hislifecitychurch/churchbase/apps/api/ent/user"
 	userrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/softdelete"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/soft_delete"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -16,7 +16,7 @@ import (
 func TestUserRepositoryGetByAuthUserID(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:user-auth-lookup?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
-	softdelete.ConfigureClient(client)
+	soft_delete.ConfigureClient(client)
 
 	const authUserID = "auth-user-lookup"
 	created, err := client.User.Create().SetAuthUserID(authUserID).SetPlatformRole(entuser.PlatformRoleAdmin).Save(context.Background())
@@ -36,7 +36,7 @@ func TestUserRepositoryGetByAuthUserID(t *testing.T) {
 func TestUserRepositoryGetByAuthUserIDReturnsNotFound(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:user-auth-lookup-missing?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
-	softdelete.ConfigureClient(client)
+	soft_delete.ConfigureClient(client)
 
 	_, err := userrepository.NewUserRepository(client).GetByAuthUserID(context.Background(), "missing-auth-user")
 	if !errors.Is(err, userdomain.ErrUserNotFound) {

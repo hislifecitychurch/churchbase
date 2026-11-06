@@ -1,4 +1,4 @@
-package softdelete
+package soft_delete
 
 import entclient "github.com/hislifecitychurch/churchbase/apps/api/ent"
 

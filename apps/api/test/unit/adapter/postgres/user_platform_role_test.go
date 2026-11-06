@@ -7,7 +7,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
 	entuser "github.com/hislifecitychurch/churchbase/apps/api/ent/user"
 	userrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/softdelete"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/soft_delete"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -15,7 +15,7 @@ import (
 func TestUserRepositoryCreatePlatformAdmin(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:create-platform-admin?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
-	softdelete.ConfigureClient(client)
+	soft_delete.ConfigureClient(client)
 
 	authUserID := "auth-user-1"
 	created, err := userrepository.NewUserRepository(client).CreatePlatformAdmin(context.Background(), userdomain.CreateInput{
@@ -35,7 +35,7 @@ func TestUserRepositoryCreatePlatformAdmin(t *testing.T) {
 func TestUserPlatformRoleIsOptionalAndRestricted(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:user-platform-role?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
-	softdelete.ConfigureClient(client)
+	soft_delete.ConfigureClient(client)
 
 	ctx := context.Background()
 	regularUser, err := client.User.Create().Save(ctx)

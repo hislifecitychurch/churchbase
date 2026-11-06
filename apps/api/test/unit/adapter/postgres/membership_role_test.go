@@ -7,14 +7,14 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/churchmembership"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/ministrymembership"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/softdelete"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/soft_delete"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func TestChurchStaffAndMinistryLeadRoles(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:membership-roles?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
-	softdelete.ConfigureClient(client)
+	soft_delete.ConfigureClient(client)
 
 	ctx := context.Background()
 	church, err := client.Church.Create().SetName("Test Church").SetSlug("test-church").Save(ctx)

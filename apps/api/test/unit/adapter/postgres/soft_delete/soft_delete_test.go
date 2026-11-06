@@ -1,4 +1,4 @@
-package softdelete_test
+package soft_delete_test
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/mixin"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/userprofile"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/softdelete"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/soft_delete"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -19,7 +19,7 @@ import (
 func TestDeleteSoftDeletesAndHidesByDefault(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:soft-delete?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
-	softdelete.ConfigureClient(client)
+	soft_delete.ConfigureClient(client)
 
 	ctx := actor.WithID(context.Background(), "auth-user-1")
 	created, err := client.Church.Create().SetName("Test Church").SetSlug("test-church").Save(ctx)
@@ -63,7 +63,7 @@ func TestDeleteSoftDeletesAndHidesByDefault(t *testing.T) {
 func TestUserMembershipAndProfileSoftDeletes(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:user-soft-delete?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
-	softdelete.ConfigureClient(client)
+	soft_delete.ConfigureClient(client)
 
 	ctx := context.Background()
 	createdUser, err := client.User.Create().Save(ctx)
