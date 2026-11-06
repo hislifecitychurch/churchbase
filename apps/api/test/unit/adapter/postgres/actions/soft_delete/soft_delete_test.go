@@ -11,7 +11,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/mixin"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/userprofile"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/soft_delete"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/actions/soft_delete"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
 	_ "github.com/mattn/go-sqlite3"
 )

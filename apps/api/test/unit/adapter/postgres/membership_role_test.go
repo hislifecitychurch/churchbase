@@ -7,7 +7,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/churchmembership"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/ministrymembership"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/soft_delete"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/actions/soft_delete"
 	_ "github.com/mattn/go-sqlite3"
 )
 

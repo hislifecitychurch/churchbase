@@ -7,8 +7,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/actions/soft_delete"
 	userprofilerepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user_profile"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/soft_delete"
 	userprofiledomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 	_ "github.com/mattn/go-sqlite3"
 )

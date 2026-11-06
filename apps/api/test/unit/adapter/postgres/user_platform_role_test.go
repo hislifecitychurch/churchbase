@@ -6,8 +6,8 @@ import (
 
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
 	entuser "github.com/hislifecitychurch/churchbase/apps/api/ent/user"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/actions/soft_delete"
 	userrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/soft_delete"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	_ "github.com/mattn/go-sqlite3"
 )
