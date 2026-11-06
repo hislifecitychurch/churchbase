@@ -1,4 +1,4 @@
-package me_test
+package user_test
 
 import (
 	"context"
@@ -15,7 +15,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/me"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
 	apiresponse "github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
@@ -33,7 +33,7 @@ func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
 		c.SetUserContext(actor.WithID(c.UserContext(), "auth-user-private"))
 		return c.Next()
 	})
-	app.Get("/api/v1/me", me.NewHandler(service).Get)
+	app.Get("/api/v1/me", user.NewHandler(service).Get)
 
 	response, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/me", nil))
 	if err != nil {
@@ -69,7 +69,7 @@ func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
 func TestHandlerGetRejectsMissingActor(t *testing.T) {
 	service := &currentUserServiceFake{}
 	app := fiber.New()
-	app.Get("/api/v1/me", me.NewHandler(service).Get)
+	app.Get("/api/v1/me", user.NewHandler(service).Get)
 
 	response, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/me", nil))
 	if err != nil {
@@ -124,7 +124,7 @@ func getCurrentUser(t *testing.T, service *currentUserServiceFake) *http.Respons
 		c.SetUserContext(actor.WithID(c.UserContext(), "auth-user-1"))
 		return c.Next()
 	})
-	app.Get("/api/v1/me", me.NewHandler(service).Get)
+	app.Get("/api/v1/me", user.NewHandler(service).Get)
 	response, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/me", nil))
 	if err != nil {
 		t.Fatal(err)

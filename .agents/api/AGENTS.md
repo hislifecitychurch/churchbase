@@ -32,7 +32,7 @@ apps/api/
 │   │   └── redis/                         Redis client
 │   ├── delivery/http/               Fiber routes and versioning
 │   │   └── v1/<feature>/
-│   ├── handler/<feature>/           HTTP input/output mapping
+│   ├── handler/v1/<feature>/        versioned HTTP input/output mapping
 │   ├── application/                 entrypoint-agnostic cross-feature use cases
 │   ├── domain/<schema>/             models and repository ports; one per persisted Ent schema
 │   │   └── service/                 one file per domain operation
@@ -58,7 +58,7 @@ adapter/postgres/repository implements the repository port → Ent/PostgreSQL
 - `internal/app/` is the composition root and owns concrete wiring and process lifecycle.
 - `internal/config/` parses and validates configuration; feature code does not read process environment directly.
 - `internal/delivery/http/` owns Fiber route registration, versioning, and middleware composition.
-- `internal/handler/` translates HTTP requests and responses; it does not query Ent or own business workflows. Keep feature DTOs local to their handler; use `internal/shared/response/` for the API-wide JSON envelope.
+- `internal/handler/v1/` translates versioned HTTP requests and responses; it does not query Ent or own business workflows. Keep feature DTOs local to their handler; use `internal/shared/response/` for the API-wide JSON envelope.
 - `internal/application/` composes multiple domain services for a cross-feature use case; handlers and CLI entrypoints may call it. Keep business rules in their owning schema domain.
 - `internal/domain/<schema>/` owns the model and repository port for one persisted Ent schema (for example, `UserProfile` maps to `user_profile`). Put the service type/constructor in `service/service.go` and each domain operation in its own `service/<operation>.go` file; create no empty placeholders.
 - Domain services own workflow invariants and may coordinate repository ports from related schema domains, but repository adapters never call each other. Keep multi-repository writes atomic at the service/use-case boundary. The `user` service must create a `user_profile` for every user, including platform admins. Services must not import Fiber, Ent, or adapter packages. Keep privileged role grants as explicit operations, separate from ordinary user creation input.

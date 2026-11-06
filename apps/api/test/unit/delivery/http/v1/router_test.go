@@ -13,8 +13,8 @@ import (
 	httpv1 "github.com/hislifecitychurch/churchbase/apps/api/internal/delivery/http/v1"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/health"
-	mehandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/me"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/health"
+	userhandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
 
@@ -25,7 +25,7 @@ func TestMeRouteRequiresValidatedSession(t *testing.T) {
 		app.Group("/api/v1"),
 		health.New(),
 		sessionValidatorFake{},
-		mehandler.NewHandler(currentUserFake{current: application.CurrentUser{
+		userhandler.NewHandler(currentUserFake{current: application.CurrentUser{
 			User:    userdomain.User{ID: uuid.New(), PlatformRole: &role},
 			Profile: userprofile.Profile{},
 		}}),

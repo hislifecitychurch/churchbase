@@ -17,7 +17,7 @@ import (
 	deliveryhttp "github.com/hislifecitychurch/churchbase/apps/api/internal/delivery/http"
 	userservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user/service"
 	userprofileservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile/service"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/me"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/user"
 )
 
 type Application struct {
@@ -42,7 +42,7 @@ func New(cfg config.Config) (*Application, error) {
 	users := userservice.NewService(db.UserRepository(), profiles, db)
 	currentUsers := application.NewCurrentUserReader(users, profiles)
 	return &Application{
-		http:    deliveryhttp.New(cfg.AllowedOrigin, betterauthadapter.NewSessionClient(cfg.AuthBaseURL), me.NewHandler(currentUsers), db, redis),
+		http:    deliveryhttp.New(cfg.AllowedOrigin, betterauthadapter.NewSessionClient(cfg.AuthBaseURL), user.NewHandler(currentUsers), db, redis),
 		address: net.JoinHostPort("", strconv.Itoa(cfg.Port)),
 		db:      db,
 		redis:   redis,

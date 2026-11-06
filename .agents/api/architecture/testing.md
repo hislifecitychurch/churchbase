@@ -7,13 +7,14 @@ Use the smallest test that proves the behavior. Keep Go tests under `apps/api/te
 ```text
 apps/api/test/
 ├── unit/
+│   ├── handler/v1/<feature>/
 │   └── domain/<schema>/service/<operation>_test.go
 ├── integration/
 │   └── adapter/postgres/repository/<schema>/<operation>_test.go
 └── e2e/           complete HTTP/application flows
 ```
 
-Keep tests under `test/` and mirror the schema domain and operation they cover. Put service unit tests beside the corresponding operation path under `test/unit/`; put PostgreSQL repository tests under `test/integration/` and use only an explicit disposable database.
+Keep tests under `test/` and mirror the handler version/feature or schema domain and operation they cover. Put service unit tests beside the corresponding operation path under `test/unit/`; put PostgreSQL repository tests under `test/integration/` and use only an explicit disposable database.
 
 Add directories with their first test rather than creating empty test trees. Use external test packages where practical so tests cover public package behavior.
 

@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/health"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/health"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
 

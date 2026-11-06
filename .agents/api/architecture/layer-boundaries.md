@@ -11,7 +11,7 @@ delivery/http → handler → application/domain service → repository port →
 | Layer                      | Owns                                                                | Must not own                       |
 | -------------------------- | ------------------------------------------------------------------- | ---------------------------------- |
 | Delivery                   | Paths, methods, API versions, middleware composition                | Business rules or database queries |
-| Handler                    | Fiber input, transport DTOs, principal extraction, response mapping | Ent queries or business workflows  |
+| Handler                    | Version-scoped Fiber input, transport DTOs, principal extraction, response mapping | Ent queries or business workflows  |
 | Application/domain service | Use cases, church/ministry rules, orchestration, transaction intent | Fiber, HTTP payloads, SQL, Ent     |
 | Domain                     | Schema-domain models, pure rules, domain errors                     | Transport or infrastructure        |
 | Repository port            | Data operations required by a use case                              | HTTP or provider-specific behavior |

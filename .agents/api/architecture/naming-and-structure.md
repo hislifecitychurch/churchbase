@@ -20,7 +20,7 @@ apps/api/
 │   │   ├── betterauth/                    BetterAuth integrations
 │   │   └── redis/                         Redis integration
 │   ├── delivery/http/v1/       versioned route registration
-│   ├── handler/<feature>/      HTTP handlers and transport mapping
+│   ├── handler/v1/<feature>/   versioned HTTP handlers and transport mapping
 │   ├── application/            cross-feature use-case composition
 │   ├── domain/<schema>/        model and repository port per persisted Ent schema
 │   │   └── service/            one file per domain operation
@@ -43,7 +43,7 @@ This is a placement guide. Do not add empty directories or placeholder files jus
 | Repository port            | `internal/domain/<schema>/repository.go`         | Declare only the operations needed for that schema; keep the interface beside its domain model.                                                                                                                                                                     |
 | Repository implementation  | `internal/adapter/postgres/repository/<schema>/` | Put the concrete repository type and constructor in `repository.go`; put each Ent-backed operation in its own file. Map records/errors here, keep business rules out, and coordinate transaction scope at the service/use-case boundary.                            |
 | Ent persistence schema     | `ent/schema/`                                    | Define database entities, fields, edges, indexes, and reusable schema mixins. Atlas migrations live under `ent/migrate/migrations/`.                                                                                                                                |
-| Handler and transport DTOs | `internal/handler/<feature>/`                    | Parse HTTP input, define request/response types, call application or domain services, and map results and errors to HTTP.                                                                                                                                           |
+| Handler and transport DTOs | `internal/handler/v1/<feature>/`                 | Parse versioned HTTP input, define request/response types, call application or domain services, and map results and errors to HTTP.                                                                                                                                 |
 | Feature routes             | `internal/delivery/http/v1/<feature>/`           | Register the feature's versioned paths, methods, middleware, and handlers.                                                                                                                                                                                          |
 | Cross-feature use case     | `internal/application/`                          | Compose multiple domain services or external operations; keep it entrypoint-agnostic so HTTP handlers and CLI commands can reuse it.                                                                                                                                |
 
@@ -58,7 +58,7 @@ adapter/postgres/repository implements the repository port → Ent/PostgreSQL
 
 Each persisted Ent schema has one matching domain package and Postgres repository package, named in snake_case (for example, `UserProfile` → `user_profile`). A repository adapter operates only on its own schema and never calls another repository adapter. Domain services coordinate related schema repository ports when a business invariant spans them; for example, the `user` service creates both the user and its `user_profile` atomically. Keep privileged role grants as explicit operations, separate from ordinary create inputs. Domain code must not import Ent or adapter packages. Use `internal/application/` for cross-feature workflows or external operations, not as a pass-through for every call.
 
-Keep one-off request validation beside its request DTO in `internal/handler/<feature>/`. Put business validation in the owning schema-domain model or service; put invariants spanning related schemas in the coordinating domain service. Put database invariants in Ent schema constraints and Atlas migrations. Add a shared validation package only after multiple domains need the same rule.
+Keep one-off request validation beside its request DTO in `internal/handler/v1/<feature>/`. Put business validation in the owning schema-domain model or service; put invariants spanning related schemas in the coordinating domain service. Put database invariants in Ent schema constraints and Atlas migrations. Add a shared validation package only after multiple domains need the same rule.
 
 ## Feature layout
 
@@ -85,7 +85,7 @@ internal/adapter/postgres/repository/<schema>/
 ├── update_by_id.go
 └── delete_by_id.go
 
-internal/handler/<feature>/
+internal/handler/v1/<feature>/
 ├── handler.go
 ├── request.go                   when request DTOs need a separate file
 └── response.go                  when response DTOs need a separate file

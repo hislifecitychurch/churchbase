@@ -21,7 +21,7 @@ Authentication middleware attaches the validated opaque BetterAuth user ID to re
 
 ## Handler and service
 
-The handler reads path/query/body and principal values, parses transport types, calls one service operation, maps stable errors, and converts results to transport DTOs. Keep request and response DTOs in `internal/handler/<feature>/`, beside the handler that owns their HTTP contract.
+The handler reads path/query/body and principal values, parses transport types, calls one service operation, maps stable errors, and converts results to transport DTOs. Keep versioned request and response DTOs in `internal/handler/v1/<feature>/`, beside the handler that owns their HTTP contract.
 
 ### Validation ownership
 
