@@ -4,13 +4,37 @@
 @import "./variants/nodes.css";
 @import "./variants/spinner.css";
 
+@font-face {
+  font-display: swap;
+  font-family: Geist;
+  font-style: normal;
+  font-weight: 100 900;
+  src: url("../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  src: url("../node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Geist Serif";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../node_modules/geist/dist/fonts/geist-serif/GeistSerifVF.woff2") format("woff2");
+}
+
 @source "..";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans, "Geist", sans-serif);
-  --font-heading: var(--font-geist-sans, "Geist", sans-serif);
-  --font-serif: var(--font-geist-serif, "Geist Serif", serif);
-  --font-mono: var(--font-geist-mono, "Geist Mono", monospace);
+  --font-sans: "Geist", sans-serif;
+  --font-heading: "Geist", sans-serif;
+  --font-serif: "Geist Serif", serif;
+  --font-mono: "Geist Mono", monospace;
   --radius-xs: 0.125rem;
   --radius-sm: 0.25rem;
   --radius-md: 0.375rem;
