@@ -22,14 +22,44 @@ describe("getCurrentUser", () => {
       value: async (input: RequestInfo | URL, init?: RequestInit) => {
         expect(String(input)).toBe(`${apiBaseURL}/users/me`)
         expect(init?.credentials).toBe("include")
-        return new Response(JSON.stringify({ success: true, data: { platform_role: "staff" } }), {
-          status: 200,
-        })
+        return new Response(
+          JSON.stringify({
+            success: true,
+            data: {
+              platform_role: "staff",
+              last_workspace_access: { workspace: "app", occurred_at: "2026-01-02T03:04:05Z" },
+            },
+          }),
+          { status: 200 },
+        )
       },
       writable: true,
     })
 
-    await expect(getCurrentUser()).resolves.toEqual({ platform_role: "staff" })
+    await expect(getCurrentUser()).resolves.toEqual({
+      platform_role: "staff",
+      last_workspace_access: { workspace: "app", occurred_at: "2026-01-02T03:04:05Z" },
+    })
+  })
+
+  it("accepts users with no workspace history", async () => {
+    Object.defineProperty(globalThis, "fetch", {
+      configurable: true,
+      value: async () =>
+        new Response(
+          JSON.stringify({
+            success: true,
+            data: { platform_role: null, last_workspace_access: null },
+          }),
+          { status: 200 },
+        ),
+      writable: true,
+    })
+
+    await expect(getCurrentUser()).resolves.toEqual({
+      platform_role: null,
+      last_workspace_access: null,
+    })
   })
 
   it("preserves API error codes for callers", async () => {

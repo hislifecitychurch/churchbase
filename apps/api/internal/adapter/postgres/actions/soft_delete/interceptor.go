@@ -32,6 +32,8 @@ func softDeleteInterceptor(next entclient.Querier) entclient.Querier {
 			query.Where(user.DeletedAtIsNil())
 		case *entclient.UserProfileQuery:
 			query.Where(userprofile.DeletedAtIsNil())
+		case *entclient.WorkspaceAccessEventQuery:
+			// Access events are retained as immutable history, not soft-deleted.
 		default:
 			return nil, fmt.Errorf("soft delete: query %T has no deletion filter", query)
 		}

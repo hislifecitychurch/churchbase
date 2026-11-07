@@ -37,6 +37,7 @@
         "@types/node": "latest",
         "@types/react": "latest",
         "@types/react-dom": "latest",
+        "bun-types": "1.4.2",
         "@vitejs/plugin-react": "latest",
         "@vitejs/plugin-rsc": "latest",
         "cf": "1.0.0-beta.27",

@@ -15,6 +15,7 @@ import (
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/health"
 	userhandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/user"
+	workspaceaccesshandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/workspace_access_event"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
 
@@ -29,6 +30,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 			User:    userdomain.User{ID: uuid.New(), PlatformRole: &role},
 			Profile: userprofile.Profile{},
 		}}),
+		workspaceaccesshandler.NewHandler(nil),
 	)
 
 	unauthenticated, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil))
@@ -38,6 +40,23 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 	defer unauthenticated.Body.Close()
 	if unauthenticated.StatusCode != http.StatusUnauthorized {
 		t.Fatalf("unauthenticated /users/me status = %d, want 401", unauthenticated.StatusCode)
+	}
+	unauthenticated.Body.Close()
+	for _, endpoint := range []struct {
+		method string
+		path   string
+	}{
+		{method: http.MethodPost, path: "/api/v1/users/me/workspace-access-events"},
+		{method: http.MethodGet, path: "/api/v1/platform/workspace-access-events"},
+	} {
+		response, err := app.Test(httptest.NewRequest(endpoint.method, endpoint.path, nil))
+		if err != nil {
+			t.Fatal(err)
+		}
+		response.Body.Close()
+		if response.StatusCode != http.StatusUnauthorized {
+			t.Fatalf("unauthenticated %s %s status = %d, want 401", endpoint.method, endpoint.path, response.StatusCode)
+		}
 	}
 
 	authenticatedRequest := httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil)

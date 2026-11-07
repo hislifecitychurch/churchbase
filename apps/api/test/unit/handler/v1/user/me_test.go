@@ -9,12 +9,14 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
+	workspaceaccessevent "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/workspace_access_event"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
 	apiresponse "github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
@@ -27,6 +29,10 @@ func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
 	service := &currentUserServiceFake{result: application.CurrentUser{
 		User:    userdomain.User{ID: userID, PlatformRole: &role},
 		Profile: userprofile.Profile{UserID: userID, FirstName: &firstName, LastName: &lastName},
+		LastWorkspaceAccess: &workspaceaccessevent.Event{
+			UserID: userID, Workspace: workspaceaccessevent.WorkspaceApp,
+			OccurredAt: time.Date(2026, time.January, 2, 3, 4, 5, 0, time.UTC),
+		},
 	}}
 	app := fiber.New()
 	app.Use(func(c *fiber.Ctx) error {
@@ -51,11 +57,15 @@ func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
 			FirstName string `json:"first_name"`
 			LastName  string `json:"last_name"`
 		} `json:"profile"`
+		LastWorkspaceAccess struct {
+			Workspace  string    `json:"workspace"`
+			OccurredAt time.Time `json:"occurred_at"`
+		} `json:"last_workspace_access"`
 	}]
 	if err := json.Unmarshal(body, &payload); err != nil {
 		t.Fatal(err)
 	}
-	if response.StatusCode != http.StatusOK || !payload.Success || payload.Data.ID != userID.String() || payload.Data.PlatformRole != "admin" || payload.Data.Profile.FirstName != firstName || payload.Data.Profile.LastName != lastName {
+	if response.StatusCode != http.StatusOK || !payload.Success || payload.Data.ID != userID.String() || payload.Data.PlatformRole != "admin" || payload.Data.Profile.FirstName != firstName || payload.Data.Profile.LastName != lastName || payload.Data.LastWorkspaceAccess.Workspace != "app" {
 		t.Fatalf("response = %d %s", response.StatusCode, body)
 	}
 	if payload.Log.UserID == nil || *payload.Log.UserID != userID.String() {

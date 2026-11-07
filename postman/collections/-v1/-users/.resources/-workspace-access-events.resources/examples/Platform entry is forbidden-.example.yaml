@@ -1,0 +1,48 @@
+$kind: http-example
+name: Platform entry is forbidden
+request:
+  url: "{{host-api}}/v1/users/me/workspace-access-events"
+  method: POST
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Content-Type
+      value: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "workspace": "platform",
+        "entry_id": "018f47b8-8cb2-7d15-b28e-4a26843d81c1"
+      }
+response:
+  statusCode: 403
+  statusText: Forbidden
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": false,
+        "message": "You are not permitted to enter this workspace",
+        "data": null,
+        "filters": null,
+        "errors": [
+          {
+            "code": "workspace_forbidden",
+            "message": "You are not permitted to enter this workspace"
+          }
+        ],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000008",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "workspace_access_event.forbidden",
+          "user_id": null,
+          "status": "warning"
+        }
+      }
+order: 5000

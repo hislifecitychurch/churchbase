@@ -51,6 +51,7 @@ func (User) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("profile", UserProfile.Type).Unique(),
 		edge.To("church_memberships", ChurchMembership.Type),
+		edge.To("workspace_access_events", WorkspaceAccessEvent.Type),
 	}
 }
 

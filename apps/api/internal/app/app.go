@@ -17,7 +17,9 @@ import (
 	deliveryhttp "github.com/hislifecitychurch/churchbase/apps/api/internal/delivery/http"
 	userservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user/service"
 	userprofileservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile/service"
+	workspaceaccesseventservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/workspace_access_event/service"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/user"
+	workspaceaccesshandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/workspace_access_event"
 )
 
 type Application struct {
@@ -40,9 +42,18 @@ func New(cfg config.Config) (*Application, error) {
 
 	profiles := userprofileservice.NewService(db.UserProfileRepository())
 	users := userservice.NewService(db.UserRepository(), profiles, db)
-	currentUsers := application.NewCurrentUserReader(users, profiles)
+	workspaceAccessEvents := workspaceaccesseventservice.NewService(db.WorkspaceAccessEventRepository())
+	currentUsers := application.NewCurrentUserReader(users, profiles, workspaceAccessEvents)
+	workspaceAccess := application.NewWorkspaceAccessService(users, workspaceAccessEvents, profiles)
 	return &Application{
-		http:    deliveryhttp.New(cfg.AllowedOrigin, betterauthadapter.NewSessionClient(cfg.AuthBaseURL), user.NewHandler(currentUsers), db, redis),
+		http: deliveryhttp.New(
+			cfg.AllowedOrigin,
+			betterauthadapter.NewSessionClient(cfg.AuthBaseURL),
+			user.NewHandler(currentUsers),
+			workspaceaccesshandler.NewHandler(workspaceAccess),
+			db,
+			redis,
+		),
 		address: net.JoinHostPort("", strconv.Itoa(cfg.Port)),
 		db:      db,
 		redis:   redis,

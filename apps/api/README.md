@@ -13,7 +13,7 @@ make atlas/apply
 make dev
 ```
 
-The API listens on `:36080`. Liveness is `GET /api/v1/health/live`; readiness is `GET /api/v1/health/ready` and returns `503` until PostgreSQL and Redis respond. `GET /api/v1/users/me` requires a valid BetterAuth session and returns the Churchbase user ID, platform role, and profile names. It does not expose date of birth, address, or emergency-contact details.
+The API listens on `:36080`. Liveness is `GET /api/v1/health/live`; readiness is `GET /api/v1/health/ready` and returns `503` until PostgreSQL and Redis respond. `GET /api/v1/users/me` requires a valid BetterAuth session and returns the Churchbase user ID, platform role, profile names, and latest successful workspace entry. It does not expose date of birth, address, or emergency-contact details. Authenticated workspace entry events are recorded at `POST /api/v1/users/me/workspace-access-events`; the App reports an entry after its current-user check succeeds, and a history-write failure does not block workspace use. Platform admins can review the paginated history at `GET /api/v1/platform/workspace-access-events`. Apply the additive Atlas migration before deploying code that uses these routes. No automated history-retention policy is configured yet.
 
 ## API documentation
 
@@ -27,7 +27,12 @@ JSON responses use the API-local `internal/shared/response` envelope. `data` con
 {
   "success": true,
   "message": "Current user retrieved",
-  "data": { "id": "...", "platform_role": "admin", "profile": {} },
+  "data": {
+    "id": "...",
+    "platform_role": "admin",
+    "profile": {},
+    "last_workspace_access": { "workspace": "app", "occurred_at": "2026-01-01T00:00:00Z" }
+  },
   "filters": null,
   "errors": [],
   "pagination": null,

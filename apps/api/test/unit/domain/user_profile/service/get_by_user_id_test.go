@@ -37,11 +37,25 @@ func TestServiceGetByUserIDRejectsNilID(t *testing.T) {
 	}
 }
 
+func TestServiceGetByUserIDsReturnsEmptyWithoutRepositoryCall(t *testing.T) {
+	repository := &profileLookupRepository{}
+	service := profileservice.NewService(repository)
+
+	profiles, err := service.GetByUserIDs(context.Background(), nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if profiles == nil || repository.batchCalled {
+		t.Fatalf("profiles = %v, batch repository called = %t", profiles, repository.batchCalled)
+	}
+}
+
 type profileLookupRepository struct {
-	called bool
-	userID uuid.UUID
-	result userprofile.Profile
-	err    error
+	called      bool
+	batchCalled bool
+	userID      uuid.UUID
+	result      userprofile.Profile
+	err         error
 }
 
 func (r *profileLookupRepository) Create(context.Context, userprofile.CreateInput) (userprofile.Profile, error) {
@@ -51,4 +65,9 @@ func (r *profileLookupRepository) Create(context.Context, userprofile.CreateInpu
 func (r *profileLookupRepository) GetByUserID(_ context.Context, userID uuid.UUID) (userprofile.Profile, error) {
 	r.called, r.userID = true, userID
 	return r.result, r.err
+}
+
+func (r *profileLookupRepository) GetByUserIDs(_ context.Context, userIDs []uuid.UUID) ([]userprofile.Profile, error) {
+	r.batchCalled = true
+	return []userprofile.Profile{r.result}, r.err
 }

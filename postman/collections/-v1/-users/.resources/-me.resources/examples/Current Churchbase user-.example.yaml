@@ -26,6 +26,10 @@ response:
           "profile": {
             "first_name": "Sample",
             "last_name": "Member"
+          },
+          "last_workspace_access": {
+            "workspace": "app",
+            "occurred_at": "2026-01-01T00:00:00Z"
           }
         },
         "filters": null,

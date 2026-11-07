@@ -2,10 +2,12 @@ package application
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
+	workspaceaccessevent "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/workspace_access_event"
 )
 
 type UserByAuthUserID interface {
@@ -17,17 +19,23 @@ type ProfileByUserID interface {
 }
 
 type CurrentUser struct {
-	User    userdomain.User
-	Profile userprofile.Profile
+	User                userdomain.User
+	Profile             userprofile.Profile
+	LastWorkspaceAccess *workspaceaccessevent.Event
+}
+
+type LatestWorkspaceAccessReader interface {
+	GetLatestByUserID(context.Context, uuid.UUID) (workspaceaccessevent.Event, error)
 }
 
 type CurrentUserReader struct {
-	users    UserByAuthUserID
-	profiles ProfileByUserID
+	users           UserByAuthUserID
+	profiles        ProfileByUserID
+	workspaceAccess LatestWorkspaceAccessReader
 }
 
-func NewCurrentUserReader(users UserByAuthUserID, profiles ProfileByUserID) *CurrentUserReader {
-	return &CurrentUserReader{users: users, profiles: profiles}
+func NewCurrentUserReader(users UserByAuthUserID, profiles ProfileByUserID, workspaceAccess LatestWorkspaceAccessReader) *CurrentUserReader {
+	return &CurrentUserReader{users: users, profiles: profiles, workspaceAccess: workspaceAccess}
 }
 
 func (r *CurrentUserReader) GetByAuthUserID(ctx context.Context, authUserID string) (CurrentUser, error) {
@@ -39,5 +47,14 @@ func (r *CurrentUserReader) GetByAuthUserID(ctx context.Context, authUserID stri
 	if err != nil {
 		return CurrentUser{}, err
 	}
-	return CurrentUser{User: user, Profile: profile}, nil
+	current := CurrentUser{User: user, Profile: profile}
+	lastAccess, err := r.workspaceAccess.GetLatestByUserID(ctx, user.ID)
+	if errors.Is(err, workspaceaccessevent.ErrEventNotFound) {
+		return current, nil
+	}
+	if err != nil {
+		return CurrentUser{}, err
+	}
+	current.LastWorkspaceAccess = &lastAccess
+	return current, nil
 }

@@ -1,0 +1,25 @@
+$kind: http-request
+name: /workspace-access-events
+description: >-
+  Records one successful workspace entry for the authenticated, provisioned Churchbase user.
+  Call only after the destination workspace access check succeeds. The API derives the user
+  and occurrence timestamp from the validated request; workspace is app or platform. entry_id
+  is a client-generated UUID idempotency key. Reuse it on retries and generate a new UUID for
+  a new workspace visit. Platform entries require an admin or staff platform role. Requires
+  a valid BetterAuth session in Postman's cookie jar.
+url: "{{host-api}}/v1/users/me/workspace-access-events"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+auth:
+  type: noauth
+body:
+  type: json
+  content: |-
+    {
+      "workspace": "app",
+      "entry_id": "018f47b8-8cb2-7d15-b28e-4a26843d81c1"
+    }
+examples: ./.resources/-workspace-access-events.resources/examples
+order: 2000

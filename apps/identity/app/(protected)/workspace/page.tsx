@@ -29,6 +29,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
   const isUnauthenticated =
     currentUser.error instanceof ApiError && currentUser.error.status === 401
   const isRegularUser = currentUser.data?.platform_role === null
+  const lastUsedWorkspace = currentUser.data?.last_workspace_access?.workspace
 
   useEffect(() => {
     if (!isUnauthenticated) {
@@ -114,8 +115,8 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <PlatformWorkspaceCard />
-          <AppWorkspaceCard returnTo={returnTo} />
+          <PlatformWorkspaceCard isLastUsed={lastUsedWorkspace === "platform"} />
+          <AppWorkspaceCard isLastUsed={lastUsedWorkspace === "app"} returnTo={returnTo} />
         </div>
       </div>
     </main>

@@ -22,6 +22,7 @@
 		"@types/node": "latest",
 		"@types/react": "latest",
 		"@types/react-dom": "latest",
+		"bun-types": "1.4.2",
 		"@vitejs/plugin-react": "latest",
 		"@vitejs/plugin-rsc": "latest",
 		"cf": "1.0.0-beta.27",
@@ -34,6 +35,7 @@
 		"dev": "bun run cf-typegen && vinext dev --port 36002",
 		"build": "bun run cf-typegen && vinext build",
 		"start": "vite preview --port 36002",
+		"test": "bun test",
 		"deploy": "vinext-cloudflare deploy",
 		"preview": "bun run build && bun run start",
 		"cf-typegen": "cf workers types"

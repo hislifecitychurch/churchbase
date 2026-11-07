@@ -3,10 +3,12 @@ package user
 import (
 	"errors"
 	"log"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
+	workspaceaccessevent "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/workspace_access_event"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
 )
@@ -33,19 +35,30 @@ func (h *Handler) Get(c *fiber.Ctx) error {
 	}
 
 	return response.JSON(c, fiber.StatusOK, response.Success(currentUserResponse{
-		ID:           current.User.ID,
-		PlatformRole: current.User.PlatformRole,
-		Profile: profileResponse{
-			FirstName: current.Profile.FirstName,
-			LastName:  current.Profile.LastName,
-		},
+		ID:                  current.User.ID,
+		PlatformRole:        current.User.PlatformRole,
+		Profile:             profileResponse{FirstName: current.Profile.FirstName, LastName: current.Profile.LastName},
+		LastWorkspaceAccess: toLastWorkspaceAccess(current.LastWorkspaceAccess),
 	}, "Current user retrieved", c, "me.retrieved", current.User.ID.String(), "info"))
 }
 
 type currentUserResponse struct {
-	ID           uuid.UUID                `json:"id"`
-	PlatformRole *userdomain.PlatformRole `json:"platform_role"`
-	Profile      profileResponse          `json:"profile"`
+	ID                  uuid.UUID                    `json:"id"`
+	PlatformRole        *userdomain.PlatformRole     `json:"platform_role"`
+	Profile             profileResponse              `json:"profile"`
+	LastWorkspaceAccess *lastWorkspaceAccessResponse `json:"last_workspace_access"`
+}
+
+type lastWorkspaceAccessResponse struct {
+	Workspace  workspaceaccessevent.Workspace `json:"workspace"`
+	OccurredAt time.Time                      `json:"occurred_at"`
+}
+
+func toLastWorkspaceAccess(event *workspaceaccessevent.Event) *lastWorkspaceAccessResponse {
+	if event == nil {
+		return nil
+	}
+	return &lastWorkspaceAccessResponse{Workspace: event.Workspace, OccurredAt: event.OccurredAt}
 }
 
 type profileResponse struct {

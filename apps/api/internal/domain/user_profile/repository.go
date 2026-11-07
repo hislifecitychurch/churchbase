@@ -9,4 +9,5 @@ import (
 type Repository interface {
 	Create(ctx context.Context, input CreateInput) (Profile, error)
 	GetByUserID(ctx context.Context, userID uuid.UUID) (Profile, error)
+	GetByUserIDs(ctx context.Context, userIDs []uuid.UUID) ([]Profile, error)
 }

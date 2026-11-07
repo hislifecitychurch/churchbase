@@ -1,19 +1,38 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import type { ReactNode } from "react"
 import { usePathname, useRouter } from "next/navigation"
 
 import { useCurrentUser } from "@/hooks/api/users/use-current-user"
+import { useRecordWorkspaceAccessEvent } from "@/hooks/api/workspace-access-events/use-record-workspace-access-event"
 import { ApiError } from "@/api/client"
 
 import { Button } from "@packages/ui-w/shared/button/button"
+
+import { getWorkspaceEntryID } from "@/lib/workspace-entry-id"
 
 export function CurrentUserGate({ children }: Readonly<{ children: ReactNode }>): ReactNode {
   const pathname = usePathname()
   const router = useRouter()
   const query = useCurrentUser()
+  const workspaceEntry = useRecordWorkspaceAccessEvent()
+  const entry = useRef<{ userID: string; entryID: string } | null>(null)
   const isUnauthenticated = query.error instanceof ApiError && query.error.status === 401
+
+  useEffect(() => {
+    if (isUnauthenticated) {
+      entry.current = null
+      return
+    }
+    if (!query.isSuccess || !query.data || entry.current?.userID === query.data.id) {
+      return
+    }
+
+    const entryID = getWorkspaceEntryID(query.data.id, "app")
+    entry.current = { userID: query.data.id, entryID }
+    workspaceEntry.mutate({ workspace: "app", entryID })
+  }, [isUnauthenticated, query.data?.id, query.isSuccess, workspaceEntry.mutate])
 
   useEffect(() => {
     if (!isUnauthenticated || !pathname) {

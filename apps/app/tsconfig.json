@@ -2,7 +2,7 @@
   "extends": "@packages/typescript/nextjs.json",
   "compilerOptions": {
     "incremental": false,
-    "types": ["node", "vinext/types"],
+    "types": ["node", "vinext/types", "bun-types"],
     "paths": {
       "@/*": ["./*"],
       "@packages/ui-w/*": ["../../packages/ui-w/*"]
