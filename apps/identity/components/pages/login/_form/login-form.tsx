@@ -4,6 +4,7 @@ import type * as React from "react"
 import { useState } from "react"
 
 import { Button } from "@packages/ui-w/shared/button/button"
+import { SpinnerFlicker18 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-18"
 
 import {
   CurrentUserRequestError,
@@ -68,8 +69,26 @@ export function LoginForm({ returnTo }: LoginFormProps): React.ReactElement {
             {errorMessage}
           </p>
         )}
-        <Button className="mt-1 w-full" disabled={isPending} size="lg" type="submit">
-          {isPending ? "Signing in…" : "Continue"}
+        {isPending && (
+          <span className="sr-only" role="status">
+            Signing in
+          </span>
+        )}
+        <Button
+          aria-busy={isPending}
+          className="mt-1 w-full"
+          disabled={isPending}
+          size="lg"
+          type="submit"
+        >
+          {isPending ? (
+            <>
+              <SpinnerFlicker18 aria-hidden="true" />
+              <span className="sr-only">Signing in</span>
+            </>
+          ) : (
+            "Continue"
+          )}
         </Button>
       </form>
       <Button
