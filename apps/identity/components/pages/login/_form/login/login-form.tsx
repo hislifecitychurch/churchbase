@@ -13,8 +13,8 @@ import { getPostLoginDestination } from "@/lib/post-login-destination"
 import { Button } from "@packages/ui-w/shared/button/button"
 import { SpinnerFlicker18 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-18"
 
-import { IdentifierField } from "@/components/pages/login/_field/identifier-field"
-import { PasswordField } from "@/components/pages/login/_field/password-field"
+import { IdentifierField } from "@/components/pages/login/_form/login/_field/identifier-field"
+import { PasswordField } from "@/components/pages/login/_form/login/_field/password-field"
 
 type LoginFormProps = {
   returnTo: string

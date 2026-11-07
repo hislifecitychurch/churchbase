@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
 import type { JSX } from "react"
 
-import { LoginForm } from "@/components/pages/login/_form/login-form"
 import { getConfiguredReturnURL } from "@/lib/return-url"
+
+import { LoginForm } from "@/components/pages/login/_form/login/login-form"
 
 export const metadata: Metadata = {
   title: "Log in",
