@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import type { JSX } from "react"
 
 import { LoginForm } from "@/components/pages/login/_form/login-form"
-import { getSafeReturnURL } from "@/lib/return-url"
+import { getConfiguredReturnURL } from "@/lib/return-url"
 
 export const metadata: Metadata = {
   title: "Log in",
@@ -14,16 +14,8 @@ type LoginPageProps = {
 
 export default async function LoginPage({ searchParams }: LoginPageProps): Promise<JSX.Element> {
   const params = await searchParams
-  const configuredOrigins = process.env.NEXT_PUBLIC_IDENTITY_ALLOWED_RETURN_ORIGINS ?? ""
-  const returnTo = getSafeReturnURL(
+  const returnTo = getConfiguredReturnURL(
     typeof params.returnTo === "string" ? params.returnTo : undefined,
-    {
-      allowedOrigins: configuredOrigins
-        .split(",")
-        .map((origin) => origin.trim())
-        .filter(Boolean),
-      defaultReturnURL: process.env.NEXT_PUBLIC_IDENTITY_DEFAULT_RETURN_URL ?? "",
-    },
   )
 
   return (

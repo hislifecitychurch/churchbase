@@ -18,6 +18,18 @@ function parseOrigin(value: string): string {
   return url.origin
 }
 
+export function getConfiguredReturnURL(candidate: string | undefined): string {
+  const configuredOrigins = process.env.NEXT_PUBLIC_IDENTITY_ALLOWED_RETURN_ORIGINS ?? ""
+
+  return getSafeReturnURL(candidate, {
+    allowedOrigins: configuredOrigins
+      .split(",")
+      .map((origin) => origin.trim())
+      .filter(Boolean),
+    defaultReturnURL: process.env.NEXT_PUBLIC_IDENTITY_DEFAULT_RETURN_URL ?? "",
+  })
+}
+
 export function getSafeReturnURL(candidate: string | undefined, config: ReturnURLConfig): string {
   const allowedOrigins = new Set(config.allowedOrigins.map(parseOrigin))
   const defaultURL = new URL(config.defaultReturnURL)

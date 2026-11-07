@@ -73,7 +73,7 @@ Import shared UI from its module path, such as `@packages/ui-w/shared/button/but
 
 ## Current auth state
 
-`apps/identity` owns the shared email/username sign-in UI and BetterAuth client. The App's `/login` route is a compatibility redirect that forwards `returnTo`; Identity accepts only exact origins in its configured allowlist. The protected layout uses `CurrentUserGate` to load `GET /api/v1/users/me` with session cookies and redirect unauthenticated visitors to Identity. This is a UI gate, not an authorization boundary: every protected API operation must still validate the session and enforce access server-side. Keep Auth CORS origins exact for the browser apps and API CORS restricted to the App origin.
+`apps/identity` owns the shared email/username sign-in UI, BetterAuth client, and admin/staff workspace chooser. It reads Churchbase `platform_role` from `GET /api/v1/users/me`: platform admins/staff see the chooser, while regular users go to the App. The App's `/login` route forwards `returnTo`, which Identity restricts to exact configured origins. The protected layout also loads `/users/me` with session cookies. These are UI gates, not authorization boundaries: every protected API operation must still validate the session and enforce access server-side. Keep Auth CORS origins exact for browser apps and API CORS restricted to the App and Identity origins.
 
 ## Verification
 

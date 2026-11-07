@@ -5,6 +5,11 @@ import { useState } from "react"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 
+import {
+  CurrentUserRequestError,
+  getCurrentUser,
+  getPostLoginDestination,
+} from "@/lib/current-user"
 import { signIn } from "@/lib/auth-client"
 import { IdentifierField } from "@/components/pages/login/_field/identifier-field"
 import { PasswordField } from "@/components/pages/login/_field/password-field"
@@ -32,9 +37,14 @@ export function LoginForm({ returnTo }: LoginFormProps): React.ReactElement {
         return
       }
 
-      window.location.assign(returnTo)
-    } catch {
-      setErrorMessage("The sign-in service is unavailable. Please try again.")
+      const currentUser = await getCurrentUser()
+      window.location.assign(getPostLoginDestination(currentUser.platform_role, returnTo))
+    } catch (error) {
+      setErrorMessage(
+        error instanceof CurrentUserRequestError && error.code === "user_not_provisioned"
+          ? "Your sign-in isn't linked to a Churchbase account. Ask your administrator to provision access."
+          : "We couldn't verify your Churchbase account. Please try again.",
+      )
     } finally {
       setIsPending(false)
     }
