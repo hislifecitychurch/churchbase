@@ -10,7 +10,7 @@ Run from the repository root:
 bun run --cwd apps/identity dev
 ```
 
-The development server uses <http://localhost:36003>. Build and preview with:
+The development server uses <http://localhost:36000>. Build and preview with:
 
 ```sh
 bun run --cwd apps/identity build

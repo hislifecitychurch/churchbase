@@ -7,7 +7,7 @@ import { imagesOptimizer } from "@vinext/cloudflare/images/images-optimizer"
 export default defineConfig({
   clearScreen: false,
   server: {
-    port: 36003,
+    port: 36000,
     strictPort: true,
   },
   plugins: [
