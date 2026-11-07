@@ -4,11 +4,10 @@ Bun/Hono service for BetterAuth identity and sessions. BetterAuth owns its Postg
 
 ## Local development
 
-The example intentionally leaves values blank. Before running the migration or service, set `PORT`, `ENVIRONMENT`, `RL_DB_URL`, `AUTH_ALLOW_EMAIL_SIGN_UP`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `CORS_ALLOWED_ORIGINS`, `CORS_ALLOWED_METHODS`, `CORS_ALLOWED_HEADERS`, and `CORS_ALLOW_CREDENTIALS`. `CORS_EXPOSE_HEADERS` may be empty. CORS list values are comma-separated. To enable the protected provisioning route, also set `AUTH_SERVICE_TOKEN` to the same 32+ character value used by `apps/api/`. The local database container is optional when `RL_DB_URL` points to a managed PostgreSQL service.
+The example intentionally leaves values blank. Before running the migration or service, set `PORT`, `ENVIRONMENT`, `RL_DB_URL`, `AUTH_ALLOW_EMAIL_SIGN_UP`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `CORS_ALLOWED_ORIGINS`, `CORS_ALLOWED_METHODS`, `CORS_ALLOWED_HEADERS`, and `CORS_ALLOW_CREDENTIALS`. `CORS_EXPOSE_HEADERS` may be empty. CORS list values are comma-separated. To enable the protected provisioning route, also set `AUTH_SERVICE_TOKEN` to the same 32+ character value used by `apps/api/`. PostgreSQL must already be available at `RL_DB_URL`; this repository does not provide a Docker bootstrap.
 
 ```sh
 cp apps/auth/.env.example apps/auth/.env
-docker compose -f apps/api/compose.yaml up -d --wait postgres # optional local database
 bun run --cwd apps/auth db:migrate
 bun run --cwd apps/auth dev
 ```

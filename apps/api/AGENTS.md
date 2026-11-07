@@ -20,4 +20,4 @@ The API owns churches, ministries, membership, ministry roles, and ministry feat
 
 Keep `.env.example` as the safe configuration contract and never commit `.env`, generated Ent code, credentials, build output, or local database state. Keep unit tests independent of live services; mark PostgreSQL and external-service tests explicitly.
 
-Run `make format`, `make generate`, `make build`, and `make lint` from this directory. Local PostgreSQL and Redis are managed with `make infra` / `make infra-down`; migrations are explicit Atlas commands and never run during API startup. Keep `.env.example` as the safe configuration contract and do not commit `.env`, generated Ent output, build output, or local database state.
+Run `make format`, `make generate`, `make build`, and `make lint` from this directory. PostgreSQL and Redis must be provisioned separately and configured in `.env`; this repository has no Docker Compose bootstrap. Migrations are explicit Atlas commands and never run during API startup. Keep `.env.example` as the safe configuration contract and do not commit `.env`, generated Ent output, build output, or local database state.

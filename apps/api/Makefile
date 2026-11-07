@@ -3,12 +3,10 @@ SHELL := /bin/sh
 ATLAS ?= atlas
 ATLAS_DIR := file://ent/migrate/migrations
 
-.PHONY: help infra infra-down dev cli/user/platform format generate atlas/validate atlas/hash atlas/new atlas/apply build test lint tidy clean
+.PHONY: help dev cli/user/platform format generate atlas/validate atlas/hash atlas/new atlas/apply build test lint tidy clean
 
 help:
 	@printf "%s\n" \
-		"make infra          Start local PostgreSQL and Redis" \
-		"make infra-down     Stop local PostgreSQL and Redis" \
 		"make dev            Generate Ent code and start the API on port 36080" \
 		"make cli/user/platform ARGS=... Generate Ent code; prompt/create/link a platform admin" \
 		"make generate       Generate the Ent client" \
@@ -20,12 +18,6 @@ help:
 		"make test           Run Go tests" \
 		"make lint           Run gofmt and go vet" \
 		"make tidy           Sync Go module files"
-
-infra:
-	docker compose up -d --wait --wait-timeout 60 postgres redis
-
-infra-down:
-	docker compose down
 
 dev: generate
 	@set -a; [ ! -f .env ] || . ./.env; set +a; go run ./cmd/api

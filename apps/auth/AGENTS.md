@@ -14,7 +14,6 @@ Read [`.agents/auth/AGENTS.md`](../../.agents/auth/AGENTS.md) and the relevant r
 
 ```sh
 cp apps/auth/.env.example apps/auth/.env
-docker compose -f apps/api/compose.yaml up -d --wait postgres
 bun run --cwd apps/auth db:migrate
 bun run --cwd apps/auth dev
 bun run --cwd apps/auth check-types

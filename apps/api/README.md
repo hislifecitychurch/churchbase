@@ -4,17 +4,16 @@ Go/Fiber business API. BetterAuth owns identity and sessions; this service owns 
 
 ## Local development
 
-The example intentionally leaves values blank. Set `RL_DB_URL`, `KV_DB_URL`, and `AUTH_BASE_URL` before starting the API. For local Auth, use `ENVIRONMENT=development` and `AUTH_BASE_URL=http://localhost:36081`. `make infra` starts local PostgreSQL and Redis when you are not using managed services.
+The example intentionally leaves values blank. Set `RL_DB_URL`, `KV_DB_URL`, and `AUTH_BASE_URL` before starting the API. For local Auth, use `ENVIRONMENT=development` and `AUTH_BASE_URL=http://localhost:36081`. PostgreSQL and Redis must already be available at the configured URLs; this repository does not provide a Docker bootstrap.
 
 ```sh
 cp .env.example .env
-make infra # optional local PostgreSQL and Redis
 make atlas/validate
 make atlas/apply
 make dev
 ```
 
-The API listens on `:36080`. Liveness is `GET /api/v1/health/live`; readiness is `GET /api/v1/health/ready` and returns `503` until PostgreSQL and Redis respond. `GET /api/v1/users/me` requires a valid BetterAuth session and returns the Churchbase user ID, platform role, and profile names. It does not expose date of birth, address, or emergency-contact details. `make infra-down` stops the local dependencies.
+The API listens on `:36080`. Liveness is `GET /api/v1/health/live`; readiness is `GET /api/v1/health/ready` and returns `503` until PostgreSQL and Redis respond. `GET /api/v1/users/me` requires a valid BetterAuth session and returns the Churchbase user ID, platform role, and profile names. It does not expose date of birth, address, or emergency-contact details.
 
 ## API documentation
 
