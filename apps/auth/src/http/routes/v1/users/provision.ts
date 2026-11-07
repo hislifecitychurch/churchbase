@@ -1,21 +1,9 @@
-import { timingSafeEqual } from "node:crypto"
 import { isAPIError } from "better-auth/api"
 import type { Hono } from "hono"
-import { z } from "zod"
 
-export type ProvisionUserInput = {
-  email: string
-  name: string
-  password: string
-}
-
-export type ProvisionUser = (input: ProvisionUserInput) => Promise<string>
-
-const provisionUserSchema = z.object({
-  email: z.string().trim().toLowerCase().pipe(z.email()),
-  name: z.string().trim().min(1).max(255),
-  password: z.string().min(12).max(128),
-})
+import { hasServiceToken } from "../../../../../lib/has-service-token"
+import { provisionUserSchema } from "./_schema"
+import type { ProvisionUser } from "./_types"
 
 export function registerProvisionUserRoute(
   app: Hono,
@@ -48,12 +36,4 @@ export function registerProvisionUserRoute(
       return context.json({ error: "Unable to provision Auth user" }, 500)
     }
   })
-}
-
-function hasServiceToken(authorization: string | undefined, expected: string): boolean {
-  if (!authorization?.startsWith("Bearer ")) return false
-
-  const received = Buffer.from(authorization.slice("Bearer ".length))
-  const expectedBytes = Buffer.from(expected)
-  return received.length === expectedBytes.length && timingSafeEqual(received, expectedBytes)
 }

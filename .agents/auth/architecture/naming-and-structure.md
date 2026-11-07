@@ -9,7 +9,9 @@ apps/auth/
 ├── config/                          validated environment configuration
 ├── db/
 │   └── migrate.ts                   explicit BetterAuth migration command
-├── lib/                             shared config loading
+├── lib/
+│   ├── has-service-token.ts         constant-time service-token comparison
+│   └── load-config.ts               shared config loading
 └── src/
     ├── server.ts                   Bun entrypoint, composition, and shutdown
     ├── app.ts                      Hono application composition
@@ -26,7 +28,9 @@ apps/auth/
     │       ├── health.ts            liveness endpoint
     │       └── v1/
     │           ├── routes.ts        mount BetterAuth at /api/v1/auth
-    │           └── user/
+    │           └── users/
+    │               ├── _schema.ts   provisioning request validation
+    │               ├── _types.ts    provisioning operation types
     │               └── provision.ts service-token-protected identity creation
     └── user.ts                     BetterAuth user field mapping and extensions
 ```
@@ -38,7 +42,8 @@ Each directory has a distinct owner:
 - **`auth/better-auth.ts` owns BetterAuth setup.** It configures BetterAuth, plugins, sessions, cookies, and credential rules using validated configuration, the database adapter, and the user model. It does not register Hono routes or start the server.
 - **`src/db/postgres/client.ts` owns PostgreSQL resources.** It creates the PostgreSQL pool and Kysely adapter. The server owns closing the pool.
 - **`http/middleware/` owns one transport concern per module.** Keep CORS and access logging independent. Logs may include method, path, status, and duration; never log bodies, cookies, credentials, tokens, or secrets.
-- **`http/routes/` owns transport mapping.** `health.ts` returns liveness. `v1/routes.ts` mounts BetterAuth at `/api/v1/auth`; `v1/user/provision.ts` authenticates the shared service token and delegates identity creation to BetterAuth's server API at `/internal/provision-user`.
+- **`http/routes/` owns transport mapping.** `health.ts` returns liveness. `v1/routes.ts` mounts BetterAuth at `/api/v1/auth`; `v1/users/provision.ts` validates and handles the internal provisioning request at `/internal/provision-user`, using its local schema and types.
+- **`lib/has-service-token.ts` owns shared token comparison.** It validates the Bearer header with a constant-time comparison.
 - **`user.ts` owns the BetterAuth user schema configuration.** Keep BetterAuth field mappings and approved identity/profile fields here; do not duplicate BetterAuth's user model in another ORM or a hand-maintained SQL schema.
 - **`config/` owns environment parsing and validation.** No other module reads `process.env` directly.
 - **`db/migrate.ts` owns explicit schema migration execution.** Never run migrations during server startup.
