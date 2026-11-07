@@ -18,7 +18,7 @@ type WorkspacePageProps = {
   searchParams: Promise<{ returnTo?: string | string[] }>
 }
 
-export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX.Element {
+export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX.Element | null {
   const params = use(searchParams)
   const returnTo = getConfiguredReturnURL(
     typeof params.returnTo === "string" ? params.returnTo : undefined,
@@ -44,14 +44,8 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
     }
   }, [isRegularUser, returnTo])
 
-  if (currentUser.isPending || isUnauthenticated || isRegularUser) {
-    return (
-      <main className="flex min-h-svh items-center justify-center p-6">
-        <p className="text-muted-foreground text-sm" role="status">
-          Checking your account…
-        </p>
-      </main>
-    )
+  if (isUnauthenticated || isRegularUser) {
+    return null
   }
 
   if (currentUser.isError) {
@@ -77,6 +71,11 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
 
   return (
     <main className="flex min-h-svh flex-col items-center justify-center px-6 py-16">
+      {currentUser.isPending && (
+        <span className="sr-only" role="status">
+          Verifying workspace access
+        </span>
+      )}
       <div className="flex w-full max-w-2xl flex-col gap-6">
         <div className="flex flex-col gap-2 text-center">
           <h1 className="text-foreground text-2xl font-normal">Choose your workspace</h1>
