@@ -2,8 +2,8 @@ import { isAPIError } from "better-auth/api"
 import type { Hono } from "hono"
 
 import { hasServiceToken } from "@lib/has-service-token"
-import { provisionUserSchema } from "./_schema"
-import type { ProvisionUser } from "./_types"
+import { provisionUserSchema } from "@/http/routes/v1/users/_schema"
+import type { ProvisionUser } from "@/http/routes/v1/users/_types"
 
 export function registerProvisionUserRoute(
   app: Hono,
