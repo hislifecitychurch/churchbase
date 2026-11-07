@@ -1,8 +1,8 @@
 import { z } from "zod"
 
 import { loadConfig } from "@lib/load-config"
-import type { CorsConfig, Environment } from "./_types"
-import { environment } from "./env"
+import type { CorsConfig, Environment } from "@config/_types"
+import { environment } from "@config/env"
 
 const commaSeparatedValues = z.string().transform((value) =>
   value

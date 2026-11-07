@@ -1,7 +1,7 @@
-import { loadApplicationConfig } from "./app"
-import { loadBetterAuthConfig } from "./better-auth"
-import { loadCorsConfig } from "./cors"
-import { loadDatabaseConfig } from "./db"
+import { loadApplicationConfig } from "@config/app"
+import { loadBetterAuthConfig } from "@config/better-auth"
+import { loadCorsConfig } from "@config/cors"
+import { loadDatabaseConfig } from "@config/db"
 
 const application = loadApplicationConfig()
 const betterAuth = loadBetterAuthConfig()

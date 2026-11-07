@@ -1,8 +1,8 @@
 import { z } from "zod"
 
 import { loadConfig } from "@lib/load-config"
-import type { ApplicationConfig, Environment } from "./_types"
-import { environment } from "./env"
+import type { ApplicationConfig, Environment } from "@config/_types"
+import { environment } from "@config/env"
 
 const applicationSchema = z
   .object({

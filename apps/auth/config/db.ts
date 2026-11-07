@@ -1,8 +1,8 @@
 import { z } from "zod"
 
 import { loadConfig } from "@lib/load-config"
-import type { DatabaseConfig, Environment } from "./_types"
-import { environment } from "./env"
+import type { DatabaseConfig, Environment } from "@config/_types"
+import { environment } from "@config/env"
 
 const databaseSchema = z.object({
   RL_DB_URL: z
