@@ -10,6 +10,8 @@ import { ApiError } from "@/api/client"
 import { getConfiguredReturnURL } from "@/lib/return-url"
 
 import { Button } from "@packages/ui-w/shared/button/button"
+import { Card } from "@packages/ui-w/shared/card/card"
+import { Skeleton } from "@packages/ui-w/shared/skeleton/skeleton"
 
 import { AppWorkspaceCard } from "@/components/pages/workspace/_card/app-workspace-card"
 import { PlatformWorkspaceCard } from "@/components/pages/workspace/_card/platform-workspace-card"
@@ -44,6 +46,39 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
     }
   }, [isRegularUser, returnTo])
 
+  if (currentUser.isPending) {
+    return (
+      <>
+        <span className="sr-only" role="status">
+          Verifying workspace access
+        </span>
+        <main
+          aria-busy="true"
+          className="flex min-h-svh flex-col items-center justify-center px-6 py-16"
+        >
+          <div className="flex w-full max-w-2xl flex-col gap-6">
+            <div className="flex flex-col gap-2 text-center">
+              <Skeleton aria-hidden="true" className="mx-auto h-8 w-48 max-w-full" />
+              <Skeleton aria-hidden="true" className="mx-auto h-4 w-64 max-w-full" />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {Array.from({ length: 2 }, (_, index) => (
+                <Card aria-hidden="true" className="justify-between gap-6 p-4 sm:p-6" key={index}>
+                  <div className="flex flex-col gap-2">
+                    <Skeleton className="h-6 w-24" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-4/5" />
+                  </div>
+                  <Skeleton className="h-11 w-full" />
+                </Card>
+              ))}
+            </div>
+          </div>
+        </main>
+      </>
+    )
+  }
+
   if (isUnauthenticated || isRegularUser) {
     return null
   }
@@ -71,11 +106,6 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
 
   return (
     <main className="flex min-h-svh flex-col items-center justify-center px-6 py-16">
-      {currentUser.isPending && (
-        <span className="sr-only" role="status">
-          Verifying workspace access
-        </span>
-      )}
       <div className="flex w-full max-w-2xl flex-col gap-6">
         <div className="flex flex-col gap-2 text-center">
           <h1 className="text-foreground text-2xl font-normal">Choose your workspace</h1>
