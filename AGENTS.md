@@ -6,7 +6,7 @@ These instructions apply across the repository. More specific `AGENTS.md` files 
 
 - Follow [`.agents/workflow.md`](.agents/workflow.md) for branch, commit, delivery, and promotion rules.
 - Follow [`.agents/ui/AGENTS.md`](.agents/ui/AGENTS.md) for spacing and typography rules shared by every application.
-- Follow [`.agents/app/AGENTS.md`](.agents/app/AGENTS.md) for `apps/app/` architecture and feature guidance.
+- Follow [`.agents/app/AGENTS.md`](.agents/app/AGENTS.md) for `apps/app/` architecture and feature guidance; `apps/identity/` follows its app-structure and UI conventions.
 - Follow [`.agents/api/AGENTS.md`](.agents/api/AGENTS.md) for `apps/api/` architecture and feature guidance.
 - Follow [`.agents/auth/AGENTS.md`](.agents/auth/AGENTS.md) for `apps/auth/` architecture and identity guidance.
 - `.agents/` contains agent instructions and workflow guidance; read relevant files explicitly.
@@ -18,6 +18,7 @@ These instructions apply across the repository. More specific `AGENTS.md` files 
 - `apps/` — product applications.
 - `apps/api/` — Go/Fiber business API.
 - `apps/auth/` — Bun/Hono authentication service using BetterAuth.
+- `apps/identity/` — shared sign-in UI for Churchbase applications.
 - `packages/ui-w/` — shared React UI components.
 - `packages/eslint/` — shared ESLint configuration.
 - `packages/metadata/` — shared Next.js metadata defaults and helpers.

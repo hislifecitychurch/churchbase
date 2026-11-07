@@ -4,6 +4,7 @@ These ports are configured for Churchbase local development. A port is not expec
 
 | Service           |    Port | Local address            | Configuration                                                 |
 | ----------------- | ------: | ------------------------ | ------------------------------------------------------------- |
+| Identity portal   | `36003` | <http://localhost:36003> | `apps/identity/package.json`, `apps/identity/vite.config.ts`  |
 | Staff application | `36002` | <http://localhost:36002> | `apps/app/package.json`, `apps/app/vite.config.ts`            |
 | API               | `36080` | <http://localhost:36080> | `apps/api/.env.example`, `apps/api/internal/config/config.go` |
 | Auth              | `36081` | <http://localhost:36081> | `apps/auth/.env.example`, `apps/auth/config/app.ts`           |

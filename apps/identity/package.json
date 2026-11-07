@@ -1,0 +1,39 @@
+{
+  "name": "identity",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "bun@1.3.14",
+  "dependencies": {
+    "@packages/metadata": "workspace:*",
+    "@packages/ui-w": "*",
+    "@vinext/cloudflare": "latest",
+    "geist": "^1.9.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-server-dom-webpack": "latest",
+    "vinext": "latest"
+  },
+  "devDependencies": {
+    "@packages/typescript": "*",
+    "@cloudflare/vite-plugin": "beta",
+    "@tailwindcss/postcss": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "latest",
+    "@vitejs/plugin-rsc": "latest",
+    "cf": "1.0.0-beta.27",
+    "tailwindcss": "latest",
+    "typescript": "latest",
+    "vite": "8.3.5"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "bun run cf-typegen && vinext dev --port 36003",
+    "build": "bun run cf-typegen && vinext build",
+    "start": "vite preview --port 36003",
+    "deploy": "vinext-cloudflare deploy",
+    "preview": "bun run build && bun run start",
+    "cf-typegen": "cf workers types"
+  }
+}
