@@ -4,8 +4,9 @@ import type { JSX } from "react"
 import { useEffect, useState } from "react"
 
 import { Button } from "@packages/ui-w/shared/button/button"
-import { Card } from "@packages/ui-w/shared/card/card"
 
+import { AppWorkspaceCard } from "@/components/pages/workspace/_card/app-workspace-card"
+import { PlatformWorkspaceCard } from "@/components/pages/workspace/_card/platform-workspace-card"
 import { CurrentUserRequestError, getCurrentUser } from "@/lib/current-user"
 
 type WorkspaceGateProps = {
@@ -101,33 +102,8 @@ export function WorkspaceGate({ returnTo }: WorkspaceGateProps): JSX.Element {
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Card className="justify-between gap-6 p-4 sm:p-6">
-            <div className="flex flex-col gap-2">
-              <h2 className="text-foreground text-lg font-medium">Platform</h2>
-              <p className="text-muted-foreground text-sm">
-                The platform workspace is not available yet.
-              </p>
-            </div>
-            <Button className="w-full" disabled size="lg" type="button" variant="outline">
-              Coming soon
-            </Button>
-          </Card>
-          <Card className="justify-between gap-6 p-4 sm:p-6">
-            <div className="flex flex-col gap-2">
-              <h2 className="text-foreground text-lg font-medium">App</h2>
-              <p className="text-muted-foreground text-sm">
-                Organize your church's work, care for members, and coordinate ministries.
-              </p>
-            </div>
-            <Button
-              className="w-full"
-              onClick={() => window.location.assign(returnTo)}
-              size="lg"
-              type="button"
-            >
-              Open App
-            </Button>
-          </Card>
+          <PlatformWorkspaceCard />
+          <AppWorkspaceCard returnTo={returnTo} />
         </div>
       </div>
     </main>
