@@ -1,3 +1,5 @@
+import { env } from "@/lib/env"
+
 const REQUEST_TIMEOUT_MS = 10_000
 
 type ApiEnvelope<T> = {
@@ -18,11 +20,7 @@ export class ApiError extends Error {
 }
 
 export async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const apiBaseURL = process.env.NEXT_PUBLIC_API_URL_V1?.replace(/\/+$/, "")
-  if (!apiBaseURL) {
-    throw new ApiError(0, "api_url_missing", "The API URL is not configured.")
-  }
-
+  const apiBaseURL = env.NEXT_PUBLIC_API_URL_V1.replace(/\/+$/, "")
   const headers = new Headers(init.headers)
   if (init.body && !headers.has("content-type")) {
     headers.set("content-type", "application/json")

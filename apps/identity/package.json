@@ -12,7 +12,8 @@
     "react": "latest",
     "react-dom": "latest",
     "react-server-dom-webpack": "latest",
-    "vinext": "latest"
+    "vinext": "latest",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@packages/typescript": "*",

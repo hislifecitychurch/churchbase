@@ -1,6 +1,6 @@
 # Churchbase Identity
 
-Shared email-or-username sign-in and workspace chooser for Churchbase applications. Identity authenticates with BetterAuth at `NEXT_PUBLIC_AUTH_URL`, then reads the Churchbase `platform_role` from the API using the session cookie. Admins and staff see `/workspace`, where App is available and Platform is disabled until it exists; regular users go directly to their validated App return URL. These `NEXT_PUBLIC_*` values are public build-time configuration; set them per deployment and never place secrets in them.
+Shared email-or-username sign-in and workspace chooser for Churchbase applications. Identity authenticates with BetterAuth at `NEXT_PUBLIC_AUTH_URL`, then reads the Churchbase `platform_role` from the API using the session cookie. Admins and staff see `/workspace`, where App is available and Platform is disabled until it exists; regular users go directly to their validated App return URL. These `NEXT_PUBLIC_*` values are public build-time configuration, validated with Zod in `lib/env.ts`. The schema defaults to local development URLs; set deployment values explicitly and never place secrets in them.
 
 ## Local development
 

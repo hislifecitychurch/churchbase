@@ -1,14 +1,10 @@
 import { usernameClient } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"
 
-const baseURL = process.env.NEXT_PUBLIC_AUTH_URL
-
-if (!baseURL) {
-  throw new Error("NEXT_PUBLIC_AUTH_URL is required")
-}
+import { env } from "@/lib/env"
 
 const authClient = createAuthClient({
-  baseURL,
+  baseURL: env.NEXT_PUBLIC_AUTH_URL,
   basePath: "/api/v1/auth",
   fetchOptions: { credentials: "include" },
   plugins: [usernameClient({ displayUsername: false })],

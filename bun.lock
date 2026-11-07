@@ -75,6 +75,7 @@
         "react-dom": "latest",
         "react-server-dom-webpack": "latest",
         "vinext": "latest",
+        "zod": "^4.5.4",
       },
       "devDependencies": {
         "@cloudflare/vite-plugin": "beta",

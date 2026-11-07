@@ -2,9 +2,10 @@ import { afterEach, describe, expect, it } from "bun:test"
 
 import { ApiError } from "@/api/client"
 import { getCurrentUser } from "@/api/users/current-user"
+import { env } from "@/lib/env"
 
 const originalFetch = globalThis.fetch
-const originalApiURL = process.env.NEXT_PUBLIC_API_URL_V1
+const apiBaseURL = env.NEXT_PUBLIC_API_URL_V1.replace(/\/+$/, "")
 
 afterEach(() => {
   Object.defineProperty(globalThis, "fetch", {
@@ -12,21 +13,14 @@ afterEach(() => {
     value: originalFetch,
     writable: true,
   })
-
-  if (originalApiURL === undefined) {
-    delete process.env.NEXT_PUBLIC_API_URL_V1
-  } else {
-    process.env.NEXT_PUBLIC_API_URL_V1 = originalApiURL
-  }
 })
 
 describe("getCurrentUser", () => {
   it("loads the platform role from the API with session credentials", async () => {
-    process.env.NEXT_PUBLIC_API_URL_V1 = "https://api.example/api/v1/"
     Object.defineProperty(globalThis, "fetch", {
       configurable: true,
       value: async (input: RequestInfo | URL, init?: RequestInit) => {
-        expect(String(input)).toBe("https://api.example/api/v1/users/me")
+        expect(String(input)).toBe(`${apiBaseURL}/users/me`)
         expect(init?.credentials).toBe("include")
         return new Response(JSON.stringify({ success: true, data: { platform_role: "staff" } }), {
           status: 200,
@@ -39,7 +33,6 @@ describe("getCurrentUser", () => {
   })
 
   it("preserves API error codes for callers", async () => {
-    process.env.NEXT_PUBLIC_API_URL_V1 = "https://api.example/api/v1"
     Object.defineProperty(globalThis, "fetch", {
       configurable: true,
       value: async () =>

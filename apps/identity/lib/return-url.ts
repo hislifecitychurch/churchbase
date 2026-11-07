@@ -1,3 +1,5 @@
+import { env } from "@/lib/env"
+
 type ReturnURLConfig = {
   allowedOrigins: string[]
   defaultReturnURL: string
@@ -19,14 +21,9 @@ function parseOrigin(value: string): string {
 }
 
 export function getConfiguredReturnURL(candidate: string | undefined): string {
-  const configuredOrigins = process.env.NEXT_PUBLIC_IDENTITY_ALLOWED_RETURN_ORIGINS ?? ""
-
   return getSafeReturnURL(candidate, {
-    allowedOrigins: configuredOrigins
-      .split(",")
-      .map((origin) => origin.trim())
-      .filter(Boolean),
-    defaultReturnURL: process.env.NEXT_PUBLIC_IDENTITY_DEFAULT_RETURN_URL ?? "",
+    allowedOrigins: env.NEXT_PUBLIC_IDENTITY_ALLOWED_RETURN_ORIGINS,
+    defaultReturnURL: env.NEXT_PUBLIC_IDENTITY_DEFAULT_RETURN_URL,
   })
 }
 
