@@ -3,9 +3,9 @@
 import type * as React from "react"
 import { useState } from "react"
 
+import { useSignIn } from "@/hooks/api/auth/use-sign-in"
+import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 import { ApiError } from "@/api/client"
-import { signIn } from "@/api/auth/client"
-import { getCurrentUser } from "@/api/users/current-user"
 import { getPostLoginDestination } from "@/lib/post-login-destination"
 
 import { Button } from "@packages/ui-w/shared/button/button"
@@ -21,23 +21,29 @@ type LoginFormProps = {
 export function LoginForm({ returnTo }: LoginFormProps): React.ReactElement {
   const [identifier, setIdentifier] = useState<string>("")
   const [password, setPassword] = useState<string>("")
-  const [isPending, setIsPending] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const signInMutation = useSignIn()
+  const currentUserQuery = useCurrentUser({ enabled: false })
+  const isPending = signInMutation.isPending || currentUserQuery.isFetching
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault()
     setErrorMessage(null)
-    setIsPending(true)
 
     try {
-      const authenticated = await signIn(identifier, password)
+      const authenticated = await signInMutation.mutateAsync({ identifier, password })
 
       if (!authenticated) {
         setErrorMessage("Email or username and password do not match.")
         return
       }
 
-      const currentUser = await getCurrentUser()
+      const { data: currentUser } = await currentUserQuery.refetch({ throwOnError: true })
+
+      if (!currentUser) {
+        throw new Error("The current user could not be loaded.")
+      }
+
       window.location.assign(getPostLoginDestination(currentUser.platform_role, returnTo))
     } catch (error) {
       setErrorMessage(
@@ -45,8 +51,6 @@ export function LoginForm({ returnTo }: LoginFormProps): React.ReactElement {
           ? "Your sign-in isn't linked to a Churchbase account. Ask your administrator to provision access."
           : "We couldn't verify your Churchbase account. Please try again.",
       )
-    } finally {
-      setIsPending(false)
     }
   }
 

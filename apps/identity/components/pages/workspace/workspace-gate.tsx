@@ -1,10 +1,10 @@
 "use client"
 
 import type { JSX } from "react"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
+import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 import { ApiError } from "@/api/client"
-import { getCurrentUser } from "@/api/users/current-user"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 
@@ -15,56 +15,29 @@ type WorkspaceGateProps = {
   returnTo: string
 }
 
-type AccessState = "checking" | "allowed" | "unavailable" | "not-provisioned"
-
 export function WorkspaceGate({ returnTo }: WorkspaceGateProps): JSX.Element {
-  const [access, setAccess] = useState<AccessState>("checking")
+  const currentUser = useCurrentUser()
+  const isUnauthenticated =
+    currentUser.error instanceof ApiError && currentUser.error.status === 401
+  const isRegularUser = currentUser.data?.platform_role === null
 
   useEffect(() => {
-    let active = true
-
-    async function verifyAccess(): Promise<void> {
-      try {
-        const currentUser = await getCurrentUser()
-
-        if (!active) {
-          return
-        }
-
-        if (currentUser.platform_role === null) {
-          window.location.replace(returnTo)
-          return
-        }
-
-        setAccess("allowed")
-      } catch (error) {
-        if (!active) {
-          return
-        }
-
-        if (error instanceof ApiError && error.status === 401) {
-          const loginURL = new URL("/login", window.location.origin)
-          loginURL.searchParams.set("returnTo", returnTo)
-          window.location.replace(loginURL.toString())
-          return
-        }
-
-        setAccess(
-          error instanceof ApiError && error.code === "user_not_provisioned"
-            ? "not-provisioned"
-            : "unavailable",
-        )
-      }
+    if (!isUnauthenticated) {
+      return
     }
 
-    void verifyAccess()
+    const loginURL = new URL("/login", window.location.origin)
+    loginURL.searchParams.set("returnTo", returnTo)
+    window.location.replace(loginURL.toString())
+  }, [isUnauthenticated, returnTo])
 
-    return () => {
-      active = false
+  useEffect(() => {
+    if (isRegularUser) {
+      window.location.replace(returnTo)
     }
-  }, [returnTo])
+  }, [isRegularUser, returnTo])
 
-  if (access === "checking") {
+  if (currentUser.isPending || isUnauthenticated || isRegularUser) {
     return (
       <main className="flex min-h-svh items-center justify-center p-6">
         <p className="text-muted-foreground text-sm" role="status">
@@ -74,8 +47,9 @@ export function WorkspaceGate({ returnTo }: WorkspaceGateProps): JSX.Element {
     )
   }
 
-  if (access !== "allowed") {
-    const notProvisioned = access === "not-provisioned"
+  if (currentUser.isError) {
+    const notProvisioned =
+      currentUser.error instanceof ApiError && currentUser.error.code === "user_not_provisioned"
 
     return (
       <main className="flex min-h-svh flex-col items-center justify-center gap-4 p-6 text-center">

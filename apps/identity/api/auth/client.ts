@@ -10,7 +10,12 @@ const authClient = createAuthClient({
   plugins: [usernameClient({ displayUsername: false })],
 })
 
-export async function signIn(identifier: string, password: string): Promise<boolean> {
+export type SignInInput = {
+  identifier: string
+  password: string
+}
+
+export async function signIn({ identifier, password }: SignInInput): Promise<boolean> {
   const value = identifier.trim()
   const result = value.includes("@")
     ? await authClient.signIn.email({ email: value, password })

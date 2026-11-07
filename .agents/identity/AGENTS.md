@@ -22,9 +22,9 @@ bun run --cwd apps/identity build
 
 - Keep routes and route groups under `app/`; route files own metadata and compose their page.
 - Keep page-local pieces in `components/pages/<page>/`. Use focused private folders such as `_field/`, `_form/`, and `_card/` when extracting page-specific components. Avoid splitting markup into files without a meaningful component boundary.
-- Keep API clients and endpoint functions in `api/`; keep route and security helpers in `lib/`. Keep tests under `test/`.
-- Components should call API modules rather than implementing `fetch` or parsing API envelopes themselves.
-- Use `@/` for Identity-local imports. Keep imports grouped as external packages, API modules, local helpers, shared UI, then page-local components. Import shared primitives directly from `@packages/ui-w/`.
+- Keep API clients and endpoint functions in `api/`, React Query hooks in `hooks/api/`, route and security helpers in `lib/`, and providers in `providers/`. Keep tests under `test/`.
+- Components should consume API hooks rather than call endpoint functions directly; API modules own `fetch` and response parsing. Mount the Query provider from `app/layout.tsx`.
+- Use `@/` for Identity-local imports. Keep imports grouped as external packages, API hooks, API modules, local helpers, shared UI, then page-local components. Import shared primitives directly from `@packages/ui-w/`.
 
 ## Identity and routing boundaries
 
