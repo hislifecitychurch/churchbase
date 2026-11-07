@@ -7,6 +7,7 @@ import { SidebarInset } from "@packages/ui-w/shared/sidebar/sidebar-inset"
 
 import { MobileNavTrigger } from "@/components/shared/_header/mobile-nav-trigger"
 import { AppSidebar } from "@/components/shared/_sidebar/app-sidebar"
+import { CurrentUserGate } from "@/components/shared/current-user-gate"
 
 export default async function ProtectedLayout({
   children,
@@ -15,14 +16,16 @@ export default async function ProtectedLayout({
   const sidebarOpen = cookieStore.get(SIDEBAR_COOKIE_NAME)?.value !== "false"
 
   return (
-    <SidebarProvider className="items-start" defaultOpen={sidebarOpen}>
-      <AppSidebar />
-      <SidebarInset className="min-h-0 gap-0 self-stretch p-4 sm:p-6">
-        <header className="flex items-center md:hidden">
-          <MobileNavTrigger />
-        </header>
-        {children}
-      </SidebarInset>
-    </SidebarProvider>
+    <CurrentUserGate>
+      <SidebarProvider className="items-start" defaultOpen={sidebarOpen}>
+        <AppSidebar />
+        <SidebarInset className="min-h-0 gap-0 self-stretch p-4 sm:p-6">
+          <header className="flex items-center md:hidden">
+            <MobileNavTrigger />
+          </header>
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
+    </CurrentUserGate>
   )
 }

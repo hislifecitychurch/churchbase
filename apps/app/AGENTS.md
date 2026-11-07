@@ -73,7 +73,7 @@ Import shared UI from its module path, such as `@packages/ui-w/shared/button/but
 
 ## Current auth state
 
-The login screen is presentation only. Its identifier field accepts an email address or username, but it has no auth provider, session handling, middleware, or submit behavior; `LoginForm` prevents the default submit. The `(protected)` route group is a layout shell, not an authorization boundary: it renders the sidebar for any visitor. Adding authentication is a product decision, not part of a visual change.
+`apps/identity` owns the shared email/username sign-in UI and BetterAuth client. The App's `/login` route is a compatibility redirect that forwards `returnTo`; Identity accepts only exact origins in its configured allowlist. The protected layout uses `CurrentUserGate` to load `GET /api/v1/users/me` with session cookies and redirect unauthenticated visitors to Identity. This is a UI gate, not an authorization boundary: every protected API operation must still validate the session and enforce access server-side. Keep Auth CORS origins exact for the browser apps and API CORS restricted to the App origin.
 
 ## Verification
 

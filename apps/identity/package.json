@@ -7,6 +7,7 @@
     "@packages/metadata": "workspace:*",
     "@packages/ui-w": "*",
     "@vinext/cloudflare": "latest",
+    "better-auth": "1.7.16",
     "geist": "^1.9.0",
     "react": "latest",
     "react-dom": "latest",
@@ -22,6 +23,7 @@
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "latest",
     "@vitejs/plugin-rsc": "latest",
+    "bun-types": "1.4.2",
     "cf": "1.0.0-beta.27",
     "tailwindcss": "latest",
     "typescript": "latest",
@@ -31,6 +33,7 @@
   "scripts": {
     "dev": "bun run cf-typegen && vinext dev --port 36000",
     "build": "bun run cf-typegen && vinext build",
+    "test": "bun test",
     "start": "vite preview --port 36000",
     "deploy": "vinext-cloudflare deploy",
     "preview": "bun run build && bun run start",

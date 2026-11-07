@@ -1,23 +1,22 @@
-import type { Metadata } from "next"
-import type { JSX } from "react"
+import { redirect } from "next/navigation"
 
-import { LoginForm } from "@/components/pages/login/_form/login-form"
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ returnTo?: string | string[] }>
+}): Promise<never> {
+  const params = await searchParams
+  const identityURL = process.env.NEXT_PUBLIC_IDENTITY_URL
+  const appURL = process.env.NEXT_PUBLIC_APP_URL
 
-export const metadata: Metadata = {
-  title: "Log in",
-}
+  if (!identityURL || !appURL) {
+    throw new Error("NEXT_PUBLIC_IDENTITY_URL and NEXT_PUBLIC_APP_URL are required")
+  }
 
-export default function LoginPage(): JSX.Element {
-  return (
-    <div className="flex min-h-svh flex-col items-center justify-center px-6 py-16">
-      <div className="flex w-full max-w-xs flex-col items-center">
-        <h1 className="text-foreground text-2xl font-normal">Churchbase</h1>
-        <p className="text-muted-foreground mt-2 text-center text-sm text-balance">
-          A shared foundation for church teams to organize their work, care for members, and
-          coordinate ministries.
-        </p>
-        <LoginForm />
-      </div>
-    </div>
-  )
+  const destination = new URL("/login", identityURL)
+  const returnTo =
+    typeof params.returnTo === "string" ? params.returnTo : new URL("/", appURL).toString()
+  destination.searchParams.set("returnTo", returnTo)
+
+  redirect(destination.toString())
 }

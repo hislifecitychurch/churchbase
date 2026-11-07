@@ -4,7 +4,7 @@ Go/Fiber business API. BetterAuth owns identity and sessions; this service owns 
 
 ## Local development
 
-The example intentionally leaves values blank. Set `RL_DB_URL`, `KV_DB_URL`, and `AUTH_BASE_URL` before starting the API. For local Auth, use `ENVIRONMENT=development` and `AUTH_BASE_URL=http://localhost:36081`. PostgreSQL and Redis must already be available at the configured URLs; this repository does not provide a Docker bootstrap.
+The example sets the local Auth origin and App CORS origin. Set `ENVIRONMENT=development`, `RL_DB_URL`, and `KV_DB_URL` before starting the API. For local Auth, keep `AUTH_BASE_URL=http://localhost:36081`. PostgreSQL and Redis must already be available at the configured URLs; this repository does not provide a Docker bootstrap.
 
 ```sh
 cp .env.example .env
