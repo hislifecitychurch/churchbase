@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 
-import { formatAccessLog } from "../../../../src/http/middleware/access-log"
+import { formatAccessLog } from "@/http/middleware/access-log"
 
 describe("formatAccessLog", () => {
   it("formats a readable request line", () => {

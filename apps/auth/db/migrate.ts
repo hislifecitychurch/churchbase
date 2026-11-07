@@ -1,8 +1,8 @@
 import { getMigrations } from "better-auth/db/migration"
 
-import { config } from "../config/_index"
-import { createAuth } from "../src/auth/better-auth"
-import { createPostgresDatabase } from "../src/db/postgres/client"
+import { config } from "@config/_index"
+import { createAuth } from "@/auth/better-auth"
+import { createPostgresDatabase } from "@/db/postgres/client"
 
 async function migrate(): Promise<void> {
   const { authDatabase, postgresPool } = createPostgresDatabase(config.database.url)

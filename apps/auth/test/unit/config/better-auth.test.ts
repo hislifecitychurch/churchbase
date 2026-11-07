@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 
-import { loadBetterAuthConfig } from "../../../config/better-auth"
+import { loadBetterAuthConfig } from "@config/better-auth"
 
 const baseEnvironment = {
   ENVIRONMENT: "development",

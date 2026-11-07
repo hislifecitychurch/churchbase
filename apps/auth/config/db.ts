@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { loadConfig } from "../lib/load-config"
+import { loadConfig } from "@lib/load-config"
 import type { DatabaseConfig, Environment } from "./_types"
 import { environment } from "./env"
 

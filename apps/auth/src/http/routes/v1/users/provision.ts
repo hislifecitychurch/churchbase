@@ -1,7 +1,7 @@
 import { isAPIError } from "better-auth/api"
 import type { Hono } from "hono"
 
-import { hasServiceToken } from "../../../../../lib/has-service-token"
+import { hasServiceToken } from "@lib/has-service-token"
 import { provisionUserSchema } from "./_schema"
 import type { ProvisionUser } from "./_types"
 

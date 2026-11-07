@@ -1,6 +1,6 @@
 import { cors } from "hono/cors"
 
-import type { CorsConfig } from "../../../config/_types"
+import type { CorsConfig } from "@config/_types"
 
 export function createCorsMiddleware(config: CorsConfig) {
   return cors({

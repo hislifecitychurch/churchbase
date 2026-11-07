@@ -1,9 +1,9 @@
 import { betterAuth } from "better-auth"
 import { admin, username } from "better-auth/plugins"
 
-import type { config } from "../../config/_index"
-import type { createPostgresDatabase } from "../db/postgres/client"
-import { userModel } from "../user"
+import type { config } from "@config/_index"
+import type { createPostgresDatabase } from "@/db/postgres/client"
+import { userModel } from "@/user"
 
 type AuthConfig = typeof config
 type AuthDatabase = ReturnType<typeof createPostgresDatabase>["authDatabase"]

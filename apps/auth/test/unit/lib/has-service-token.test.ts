@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 
-import { hasServiceToken } from "../../../lib/has-service-token"
+import { hasServiceToken } from "@lib/has-service-token"
 
 const token = "01234567890123456789012345678901"
 

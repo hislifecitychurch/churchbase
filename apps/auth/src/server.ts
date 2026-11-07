@@ -1,7 +1,7 @@
-import { config } from "../config/_index"
-import { createAuth } from "./auth/better-auth"
-import { createPostgresDatabase } from "./db/postgres/client"
-import { createApp } from "./app"
+import { config } from "@config/_index"
+import { createApp } from "@/app"
+import { createAuth } from "@/auth/better-auth"
+import { createPostgresDatabase } from "@/db/postgres/client"
 
 export function startServer() {
   const { authDatabase, postgresPool } = createPostgresDatabase(config.database.url)

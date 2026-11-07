@@ -1,7 +1,7 @@
 import { z } from "zod"
 
-import { environment } from "../config/env"
-import type { Environment } from "../config/_types"
+import { environment } from "@config/env"
+import type { Environment } from "@config/_types"
 
 export function loadConfig<TSchema extends z.ZodType>(
   schema: TSchema,

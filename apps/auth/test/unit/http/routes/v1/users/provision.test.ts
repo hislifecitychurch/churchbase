@@ -2,7 +2,7 @@ import { describe, expect, it } from "bun:test"
 import { APIError } from "better-auth/api"
 import { Hono } from "hono"
 
-import { registerProvisionUserRoute } from "../../../../../../src/http/routes/v1/users/provision"
+import { registerProvisionUserRoute } from "@/http/routes/v1/users/provision"
 
 const token = "01234567890123456789012345678901"
 const validUser = {

@@ -46,6 +46,7 @@ Each directory has a distinct owner:
 - **`lib/has-service-token.ts` owns shared token comparison.** It validates the Bearer header with a constant-time comparison.
 - **`user.ts` owns the BetterAuth user schema configuration.** Keep BetterAuth field mappings and approved identity/profile fields here; do not duplicate BetterAuth's user model in another ORM or a hand-maintained SQL schema.
 - **`config/` owns environment parsing and validation.** No other module reads `process.env` directly.
+- **Import aliases** in `apps/auth/tsconfig.json` map `@/*` to `src/`, `@config/*` to `config/`, and `@lib/*` to `lib/`. Use them for cross-directory imports; keep same-directory imports relative.
 - **`db/migrate.ts` owns explicit schema migration execution.** Never run migrations during server startup.
 
 The composition direction is:
