@@ -3,15 +3,14 @@
 import type * as React from "react"
 import { useState } from "react"
 
+import { ApiError } from "@/api/client"
+import { signIn } from "@/api/auth/client"
+import { getCurrentUser } from "@/api/users/current-user"
+import { getPostLoginDestination } from "@/lib/post-login-destination"
+
 import { Button } from "@packages/ui-w/shared/button/button"
 import { SpinnerFlicker18 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-18"
 
-import {
-  CurrentUserRequestError,
-  getCurrentUser,
-  getPostLoginDestination,
-} from "@/lib/current-user"
-import { signIn } from "@/lib/auth-client"
 import { IdentifierField } from "@/components/pages/login/_field/identifier-field"
 import { PasswordField } from "@/components/pages/login/_field/password-field"
 
@@ -42,7 +41,7 @@ export function LoginForm({ returnTo }: LoginFormProps): React.ReactElement {
       window.location.assign(getPostLoginDestination(currentUser.platform_role, returnTo))
     } catch (error) {
       setErrorMessage(
-        error instanceof CurrentUserRequestError && error.code === "user_not_provisioned"
+        error instanceof ApiError && error.code === "user_not_provisioned"
           ? "Your sign-in isn't linked to a Churchbase account. Ask your administrator to provision access."
           : "We couldn't verify your Churchbase account. Please try again.",
       )

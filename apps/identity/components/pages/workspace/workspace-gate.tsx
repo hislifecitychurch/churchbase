@@ -3,11 +3,13 @@
 import type { JSX } from "react"
 import { useEffect, useState } from "react"
 
+import { ApiError } from "@/api/client"
+import { getCurrentUser } from "@/api/users/current-user"
+
 import { Button } from "@packages/ui-w/shared/button/button"
 
 import { AppWorkspaceCard } from "@/components/pages/workspace/_card/app-workspace-card"
 import { PlatformWorkspaceCard } from "@/components/pages/workspace/_card/platform-workspace-card"
-import { CurrentUserRequestError, getCurrentUser } from "@/lib/current-user"
 
 type WorkspaceGateProps = {
   returnTo: string
@@ -40,7 +42,7 @@ export function WorkspaceGate({ returnTo }: WorkspaceGateProps): JSX.Element {
           return
         }
 
-        if (error instanceof CurrentUserRequestError && error.status === 401) {
+        if (error instanceof ApiError && error.status === 401) {
           const loginURL = new URL("/login", window.location.origin)
           loginURL.searchParams.set("returnTo", returnTo)
           window.location.replace(loginURL.toString())
@@ -48,7 +50,7 @@ export function WorkspaceGate({ returnTo }: WorkspaceGateProps): JSX.Element {
         }
 
         setAccess(
-          error instanceof CurrentUserRequestError && error.code === "user_not_provisioned"
+          error instanceof ApiError && error.code === "user_not_provisioned"
             ? "not-provisioned"
             : "unavailable",
         )

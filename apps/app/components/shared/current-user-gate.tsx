@@ -3,86 +3,17 @@
 import { useEffect } from "react"
 import type { ReactNode } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { useQuery } from "@tanstack/react-query"
+
+import { useCurrentUser } from "@/hooks/api/users/use-current-user"
+import { ApiError } from "@/api/client"
 
 import { Button } from "@packages/ui-w/shared/button/button"
-
-type CurrentUser = {
-  id: string
-  platform_role: string | null
-  profile: {
-    first_name: string | null
-    last_name: string | null
-  }
-}
-
-type APIErrorEnvelope = {
-  errors?: { code?: unknown }[]
-  success?: unknown
-  data?: unknown
-}
-
-class CurrentUserRequestError extends Error {
-  constructor(
-    readonly status: number,
-    readonly code?: string,
-  ) {
-    super("Could not load the current Churchbase user")
-  }
-}
-
-function isCurrentUser(value: unknown): value is CurrentUser {
-  if (typeof value !== "object" || value === null) {
-    return false
-  }
-
-  const user = value as Record<string, unknown>
-  const profile = user.profile
-
-  if (typeof profile !== "object" || profile === null) {
-    return false
-  }
-
-  const names = profile as Record<string, unknown>
-  return (
-    typeof user.id === "string" &&
-    (user.platform_role === null || typeof user.platform_role === "string") &&
-    (names.first_name === null || typeof names.first_name === "string") &&
-    (names.last_name === null || typeof names.last_name === "string")
-  )
-}
-
-async function getCurrentUser(): Promise<CurrentUser> {
-  const apiURL = process.env.NEXT_PUBLIC_API_URL_V1
-
-  if (!apiURL) {
-    throw new CurrentUserRequestError(0, "api_url_missing")
-  }
-
-  const response = await fetch(`${apiURL.replace(/\/+$/, "")}/users/me`, {
-    cache: "no-store",
-    credentials: "include",
-  })
-  const body = (await response.json().catch(() => null)) as APIErrorEnvelope | null
-  const code = typeof body?.errors?.[0]?.code === "string" ? body.errors[0].code : undefined
-
-  if (!response.ok || body?.success !== true || !isCurrentUser(body.data)) {
-    throw new CurrentUserRequestError(response.status, code)
-  }
-
-  return body.data
-}
 
 export function CurrentUserGate({ children }: Readonly<{ children: ReactNode }>): ReactNode {
   const pathname = usePathname()
   const router = useRouter()
-  const query = useQuery({
-    queryKey: ["current-user"],
-    queryFn: getCurrentUser,
-    retry: false,
-  })
-  const isUnauthenticated =
-    query.error instanceof CurrentUserRequestError && query.error.status === 401
+  const query = useCurrentUser()
+  const isUnauthenticated = query.error instanceof ApiError && query.error.status === 401
 
   useEffect(() => {
     if (!isUnauthenticated || !pathname) {
@@ -105,7 +36,7 @@ export function CurrentUserGate({ children }: Readonly<{ children: ReactNode }>)
 
   if (query.isError) {
     const isNotProvisioned =
-      query.error instanceof CurrentUserRequestError && query.error.code === "user_not_provisioned"
+      query.error instanceof ApiError && query.error.code === "user_not_provisioned"
 
     return (
       <main className="flex min-h-svh flex-col items-center justify-center gap-3 p-6 text-center">

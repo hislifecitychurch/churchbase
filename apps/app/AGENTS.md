@@ -33,6 +33,7 @@ bun run --cwd apps/app preview
 ## Structure
 
 ```text
+api/                  API client and endpoint functions
 app/
   layout.tsx          root shell: styles, fonts, providers
   (auth)/             unauthenticated screens, with its own <main>
@@ -41,10 +42,12 @@ components/
   pages/              page-local composition
   shared/             app shell and other shared App pieces
 data/menu/            navigation destinations
+hooks/api/            React Query wrappers for API modules
 lib/                  small App helpers
 providers/            app-wide client providers
 ```
 
+- Keep API transport and endpoint functions in `api/`; put React Query wrappers in `hooks/api/`. Components should consume those modules instead of fetching or parsing API envelopes themselves.
 - Keep route files in `app/`. A route's `page.tsx` owns its composition.
 - Keep page-local pieces under `components/pages/<page>/`, using private folders such as `_form/` and `_field/`.
 - Keep the shell under `components/shared/`. The protected sidebar, mobile trigger, and navigation data are documented in [app shell](../../.agents/app/architecture/app-shell.md).
@@ -57,8 +60,10 @@ Keep imports in this order, with one blank line between groups:
 
 1. File directive such as `"use client"`.
 2. External packages.
-3. `@packages/ui-w/...`.
-4. `@/...` local modules.
+3. `@/hooks/...` custom hooks.
+4. `@/api/...` API modules.
+5. `@packages/ui-w/...`.
+6. Other `@/...` local modules.
 
 The global stylesheet import in `app/layout.tsx` is the exception and stays first as a side-effect import.
 

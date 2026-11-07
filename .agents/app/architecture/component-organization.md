@@ -6,8 +6,10 @@ Keep imports in this order:
 
 1. A file directive such as `"use client"`, when needed.
 2. External libraries and packages (`react`, `next/*`, `@tanstack/*`, and similar).
-3. Shared workspace UI from `@packages/ui-w/...`.
-4. Local App modules from `@/...`.
+3. Custom App hooks from `@/hooks/...`.
+4. App API modules from `@/api/...`.
+5. Shared workspace UI from `@packages/ui-w/...`.
+6. Other local App modules from `@/...`.
 
 Use one blank line between groups. Keep type-only imports in the group for the module they import from.
 
@@ -17,6 +19,7 @@ Use the configured `@/` alias for cross-directory App imports; it maps to `apps/
 
 ## Placement
 
+- Keep API transport and endpoint functions in `api/`, with React Query hooks in `hooks/api/`. Components should consume those modules instead of fetching or parsing API envelopes themselves.
 - Keep route files under `app/` and organize them with route groups: `(auth)` for unauthenticated screens and `(protected)` for authenticated ones.
 - Keep route-specific composition in `page.tsx`. Do not add a whole-page component under `components/pages/<page>/` solely for its route to render.
 - Put page-local pieces under `components/pages/<page>/` when they are reused or the extraction creates a meaningful boundary.

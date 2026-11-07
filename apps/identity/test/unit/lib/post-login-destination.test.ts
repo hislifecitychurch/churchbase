@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 
-import { getPostLoginDestination } from "@/lib/current-user"
+import { getPostLoginDestination } from "@/lib/post-login-destination"
 
 const returnTo = "http://localhost:36002/people?view=active"
 
