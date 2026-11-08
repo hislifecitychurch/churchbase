@@ -47,18 +47,18 @@ afterEach(() => {
 describe("getWorkspaceEntryID", () => {
   it("reuses the entry ID on refresh", () => {
     setBrowserMocks()
-    values.set("churchbase:workspace-entry:user-1:app", "entry-existing")
+    values.set("churchbase:workspace-entry:app", "entry-existing")
     navigationType = "reload"
 
-    expect(getWorkspaceEntryID("user-1", "app")).toBe("entry-existing")
+    expect(getWorkspaceEntryID("app")).toBe("entry-existing")
     expect(generatedID).toBe(0)
   })
 
   it("creates a new ID for a new workspace visit", () => {
     setBrowserMocks()
-    values.set("churchbase:workspace-entry:user-1:app", "entry-previous")
+    values.set("churchbase:workspace-entry:app", "entry-previous")
 
-    expect(getWorkspaceEntryID("user-1", "app")).toBe("entry-1")
-    expect(values.get("churchbase:workspace-entry:user-1:app")).toBe("entry-1")
+    expect(getWorkspaceEntryID("app")).toBe("entry-1")
+    expect(values.get("churchbase:workspace-entry:app")).toBe("entry-1")
   })
 })

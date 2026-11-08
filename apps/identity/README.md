@@ -11,7 +11,7 @@ cp apps/identity/.env.example apps/identity/.env
 bun run --cwd apps/identity dev
 ```
 
-The development server uses <http://localhost:36000>. BetterAuth must allow the Identity and App origins with credentials; the API must allow both origins for the session-backed `GET /api/v1/users/me` request. The workspace chooser is only a navigation decision; API authorization remains server-side.
+The development server uses <http://localhost:36000>. BetterAuth must allow the Identity and App origins with credentials; the API must allow both origins for Identity's session-backed `GET /api/v1/users/me` and the App's `POST /api/v1/users/me/workspace-access-events`. The workspace chooser is only a navigation decision; API authorization remains server-side.
 
 Run the return-URL security tests with:
 

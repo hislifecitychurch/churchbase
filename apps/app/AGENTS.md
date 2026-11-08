@@ -78,7 +78,7 @@ Import shared UI from its module path, such as `@packages/ui-w/shared/button/but
 
 ## Current auth state
 
-`apps/identity` owns the shared email/username sign-in UI, BetterAuth client, and admin/staff workspace chooser. It reads Churchbase `platform_role` from `GET /api/v1/users/me`: platform admins/staff see the chooser, while regular users go to the App. The App's `/login` route forwards `returnTo`, which Identity restricts to exact configured origins. The protected layout also loads `/users/me` with session cookies. These are UI gates, not authorization boundaries: every protected API operation must still validate the session and enforce access server-side. Keep Auth CORS origins exact for browser apps and API CORS restricted to the App and Identity origins.
+`apps/identity` owns the shared email/username sign-in UI, BetterAuth client, and admin/staff workspace chooser. It reads Churchbase `platform_role` from `GET /api/v1/users/me`: platform admins/staff see the chooser, while regular users go to the App. The App's `/login` route forwards `returnTo`, which Identity restricts to exact configured origins. The protected layout records an App workspace-entry event using the session cookie; the API validates the session and provisioning in that request. This is a UI gate, not an authorization boundary: every protected API operation must still validate the session and enforce access server-side. Keep Auth CORS origins exact for browser apps and API CORS restricted to the App and Identity origins.
 
 ## Verification
 

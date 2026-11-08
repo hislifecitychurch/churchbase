@@ -1,8 +1,8 @@
 import type { Workspace } from "@/api/workspace-access-events"
 
-export function getWorkspaceEntryID(userID: string, workspace: Workspace): string {
+export function getWorkspaceEntryID(workspace: Workspace): string {
   try {
-    const key = `churchbase:workspace-entry:${userID}:${workspace}`
+    const key = `churchbase:workspace-entry:${workspace}`
     const navigation = performance.getEntriesByType("navigation")[0] as
       PerformanceNavigationTiming | undefined
     const existing = sessionStorage.getItem(key)
