@@ -28,7 +28,7 @@ export function AppWorkspaceCard({ returnTo, isLastUsed }: AppWorkspaceCardProps
             Organize your church's work, care for members, and coordinate ministries.
           </p>
         </div>
-        <span className="text-foreground text-sm font-medium">Open App</span>
+        <span className="text-muted-foreground text-sm">Available now</span>
       </Card>
     </a>
   )
