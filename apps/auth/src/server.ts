@@ -3,9 +3,17 @@ import { createApp } from "@/app"
 import { createAuth } from "@/auth/better-auth"
 import { createPostgresDatabase } from "@/db/postgres/client"
 
-export function startServer() {
+export async function startServer() {
   const { authDatabase, postgresPool } = createPostgresDatabase(config.database.url)
   const auth = createAuth(authDatabase, config)
+  try {
+    await postgresPool.query("SELECT 1")
+    const authContext = await auth.$context
+    await authContext.checkSchema?.()
+  } catch {
+    await postgresPool.end()
+    throw new Error("Auth database validation failed; verify PostgreSQL and run db:migrate.")
+  }
   const app = createApp({
     cors: config.cors,
     authHandler: (request) => auth.handler(request),
@@ -32,4 +40,11 @@ export function startServer() {
   return server
 }
 
-if (import.meta.main) startServer()
+if (import.meta.main) {
+  startServer().catch((error: unknown) => {
+    console.error(
+      error instanceof Error ? `[AUTH SERVER] ${error.message}` : "[AUTH SERVER] Startup failed.",
+    )
+    process.exitCode = 1
+  })
+}
