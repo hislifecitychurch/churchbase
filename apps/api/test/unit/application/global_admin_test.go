@@ -28,7 +28,7 @@ func (p *fakeIdentityProvisioner) CreateUser(_ context.Context, email, name, pas
 	return p.userID, nil
 }
 
-type fakePlatformAdminUserCreator struct {
+type fakeGlobalAdminUserCreator struct {
 	calls   int
 	input   userdomain.CreateInput
 	profile userprofile.Details
@@ -36,25 +36,25 @@ type fakePlatformAdminUserCreator struct {
 	err     error
 }
 
-func (c *fakePlatformAdminUserCreator) CreatePlatformAdmin(_ context.Context, input userdomain.CreateInput, profile userprofile.Details) (userdomain.User, error) {
+func (c *fakeGlobalAdminUserCreator) CreateGlobalAdmin(_ context.Context, input userdomain.CreateInput, profile userprofile.Details) (userdomain.User, error) {
 	c.calls++
 	c.input = input
 	c.profile = profile
 	return c.result, c.err
 }
 
-func TestPlatformAdminCreatorCreatesIdentityAndAPIUser(t *testing.T) {
+func TestGlobalAdminCreatorCreatesIdentityAndAPIUser(t *testing.T) {
 	authUserID := "auth-user-1"
-	role := userdomain.PlatformRoleAdmin
+	role := userdomain.GlobalRoleAdmin
 	identity := &fakeIdentityProvisioner{userID: authUserID}
-	users := &fakePlatformAdminUserCreator{result: userdomain.User{
-		ID:           uuid.New(),
-		AuthUserID:   &authUserID,
-		PlatformRole: &role,
+	users := &fakeGlobalAdminUserCreator{result: userdomain.User{
+		ID:          uuid.New(),
+		AuthUserID:  &authUserID,
+		GlobalRoles: &role,
 	}}
-	creator := application.NewPlatformAdminCreator(identity, users)
+	creator := application.NewGlobalAdminCreator(identity, users)
 
-	created, err := creator.Create(context.Background(), application.PlatformAdminInput{
+	created, err := creator.Create(context.Background(), application.GlobalAdminInput{
 		Email:           "admin@example.org",
 		AuthName:        "Ada Lovelace",
 		Password:        "strong-password",
@@ -74,17 +74,17 @@ func TestPlatformAdminCreatorCreatesIdentityAndAPIUser(t *testing.T) {
 	if users.profile.FirstName == nil || *users.profile.FirstName != "Ada" || users.profile.LastName == nil || *users.profile.LastName != "Lovelace" {
 		t.Fatalf("profile details = %+v, want Ada Lovelace", users.profile)
 	}
-	if created.PlatformRole == nil || *created.PlatformRole != userdomain.PlatformRoleAdmin {
-		t.Fatalf("created platform role = %v, want admin", created.PlatformRole)
+	if created.GlobalRoles == nil || *created.GlobalRoles != userdomain.GlobalRoleAdmin {
+		t.Fatalf("created global role = %v, want admin", created.GlobalRoles)
 	}
 }
 
-func TestPlatformAdminCreatorReportsAuthIDWhenAPIUserCreationFails(t *testing.T) {
+func TestGlobalAdminCreatorReportsAuthIDWhenAPIUserCreationFails(t *testing.T) {
 	identity := &fakeIdentityProvisioner{userID: "auth-user-1"}
-	users := &fakePlatformAdminUserCreator{err: errors.New("database unavailable")}
-	creator := application.NewPlatformAdminCreator(identity, users)
+	users := &fakeGlobalAdminUserCreator{err: errors.New("database unavailable")}
+	creator := application.NewGlobalAdminCreator(identity, users)
 
-	_, err := creator.Create(context.Background(), application.PlatformAdminInput{
+	_, err := creator.Create(context.Background(), application.GlobalAdminInput{
 		Email:           "admin@example.org",
 		AuthName:        "Ada Lovelace",
 		Password:        "strong-password",
@@ -95,12 +95,12 @@ func TestPlatformAdminCreatorReportsAuthIDWhenAPIUserCreationFails(t *testing.T)
 	}
 }
 
-func TestPlatformAdminCreatorRejectsMissingPassword(t *testing.T) {
+func TestGlobalAdminCreatorRejectsMissingPassword(t *testing.T) {
 	identity := &fakeIdentityProvisioner{userID: "auth-user-1"}
-	users := &fakePlatformAdminUserCreator{}
-	creator := application.NewPlatformAdminCreator(identity, users)
+	users := &fakeGlobalAdminUserCreator{}
+	creator := application.NewGlobalAdminCreator(identity, users)
 
-	_, err := creator.Create(context.Background(), application.PlatformAdminInput{
+	_, err := creator.Create(context.Background(), application.GlobalAdminInput{
 		Email:    "admin@example.org",
 		AuthName: "Ada Lovelace",
 	})
@@ -112,12 +112,12 @@ func TestPlatformAdminCreatorRejectsMissingPassword(t *testing.T) {
 	}
 }
 
-func TestPlatformAdminCreatorRejectsMismatchedPassword(t *testing.T) {
+func TestGlobalAdminCreatorRejectsMismatchedPassword(t *testing.T) {
 	identity := &fakeIdentityProvisioner{userID: "auth-user-1"}
-	users := &fakePlatformAdminUserCreator{}
-	creator := application.NewPlatformAdminCreator(identity, users)
+	users := &fakeGlobalAdminUserCreator{}
+	creator := application.NewGlobalAdminCreator(identity, users)
 
-	_, err := creator.Create(context.Background(), application.PlatformAdminInput{
+	_, err := creator.Create(context.Background(), application.GlobalAdminInput{
 		Email:           "admin@example.org",
 		AuthName:        "Ada Lovelace",
 		Password:        "strong-password",
@@ -131,12 +131,12 @@ func TestPlatformAdminCreatorRejectsMismatchedPassword(t *testing.T) {
 	}
 }
 
-func TestPlatformAdminCreatorRejectsEmptyAuthID(t *testing.T) {
+func TestGlobalAdminCreatorRejectsEmptyAuthID(t *testing.T) {
 	identity := &fakeIdentityProvisioner{}
-	users := &fakePlatformAdminUserCreator{}
-	creator := application.NewPlatformAdminCreator(identity, users)
+	users := &fakeGlobalAdminUserCreator{}
+	creator := application.NewGlobalAdminCreator(identity, users)
 
-	_, err := creator.Create(context.Background(), application.PlatformAdminInput{
+	_, err := creator.Create(context.Background(), application.GlobalAdminInput{
 		Email:           "admin@example.org",
 		AuthName:        "Ada Lovelace",
 		Password:        "strong-password",
@@ -150,12 +150,12 @@ func TestPlatformAdminCreatorRejectsEmptyAuthID(t *testing.T) {
 	}
 }
 
-func TestPlatformAdminCreatorUsesExistingIdentity(t *testing.T) {
+func TestGlobalAdminCreatorUsesExistingIdentity(t *testing.T) {
 	authUserID := "existing-auth-user"
-	users := &fakePlatformAdminUserCreator{result: userdomain.User{AuthUserID: &authUserID}}
-	creator := application.NewPlatformAdminCreator(nil, users)
+	users := &fakeGlobalAdminUserCreator{result: userdomain.User{AuthUserID: &authUserID}}
+	creator := application.NewGlobalAdminCreator(nil, users)
 
-	created, err := creator.Create(context.Background(), application.PlatformAdminInput{AuthUserID: authUserID})
+	created, err := creator.Create(context.Background(), application.GlobalAdminInput{AuthUserID: authUserID})
 	if err != nil {
 		t.Fatal(err)
 	}

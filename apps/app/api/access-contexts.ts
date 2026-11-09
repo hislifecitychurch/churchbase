@@ -1,6 +1,10 @@
 import { ApiError, apiRequest } from "@/api/client"
 import { accessCapabilities, type AccessCapability } from "@/lib/access-capabilities"
 
+export type GlobalRole = "admin" | "staff"
+
+type AccessContextRole = "admin" | "staff" | "lead" | "member" | "global_admin" | "global_staff"
+
 export type AccessContext = {
   id: string
   church_id: string
@@ -8,8 +12,13 @@ export type AccessContext = {
   slug: string
   name: string
   church_name: string
-  role: "admin" | "staff" | "lead" | "member"
+  role: AccessContextRole
   capabilities: AccessCapability[]
+}
+
+export type CurrentAccessContexts = {
+  global_roles: GlobalRole | null
+  contexts: AccessContext[]
 }
 
 const capabilitySet = new Set<string>(accessCapabilities)
@@ -49,14 +58,16 @@ function parseAccessContext(value: unknown): AccessContext | null {
     typeof churchName !== "string" ||
     !churchName.trim() ||
     typeof role !== "string" ||
-    !["admin", "staff", "lead", "member"].includes(role) ||
+    !["admin", "staff", "lead", "member", "global_admin", "global_staff"].includes(role) ||
     !Array.isArray(capabilities) ||
     capabilities.some((capability) => typeof capability !== "string")
   ) {
     return null
   }
 
+  const globalRole = role === "global_admin" || role === "global_staff"
   const allowedRole =
+    globalRole ||
     (kind === "church" && (role === "admin" || role === "staff")) ||
     (kind === "ministry" && (role === "lead" || role === "member"))
   if (!allowedRole) {
@@ -70,16 +81,24 @@ function parseAccessContext(value: unknown): AccessContext | null {
     slug,
     name,
     church_name: churchName,
-    role: role as AccessContext["role"],
+    role: role as AccessContextRole,
     capabilities: capabilities.filter((capability): capability is AccessCapability =>
       capabilitySet.has(capability),
     ),
   }
 }
 
-export async function getAccessContexts(): Promise<AccessContext[]> {
+export async function getAccessContexts(): Promise<CurrentAccessContexts> {
   const data = await apiRequest<unknown>("/users/me/access-contexts")
-  if (!isRecord(data) || !Array.isArray(data.contexts)) {
+  if (
+    !isRecord(data) ||
+    !(
+      data.global_roles === null ||
+      data.global_roles === "admin" ||
+      data.global_roles === "staff"
+    ) ||
+    !Array.isArray(data.contexts)
+  ) {
     throw new ApiError(502, "invalid_api_response", "The API returned invalid access contexts.")
   }
 
@@ -91,5 +110,5 @@ export async function getAccessContexts(): Promise<AccessContext[]> {
     }
     contexts.push(context)
   }
-  return contexts
+  return { global_roles: data.global_roles, contexts }
 }

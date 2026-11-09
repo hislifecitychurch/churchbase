@@ -32,7 +32,7 @@ func TestWorkspaceAccessRecordsAnyProvisionedUserForApp(t *testing.T) {
 	}
 }
 
-func TestWorkspaceAccessRejectsPlatformEntryWithoutPlatformRole(t *testing.T) {
+func TestWorkspaceAccessRejectsPlatformEntryWithoutGlobalRole(t *testing.T) {
 	events := &workspaceAccessEventsFake{}
 	service := application.NewWorkspaceAccessService(
 		&workspaceAccessUserReader{result: userdomain.User{ID: uuid.New()}},
@@ -51,10 +51,10 @@ func TestWorkspaceAccessRejectsPlatformEntryWithoutPlatformRole(t *testing.T) {
 
 func TestWorkspaceAccessHistoryIsAdminOnlyAndIncludesProfileNames(t *testing.T) {
 	userID := uuid.New()
-	role := userdomain.PlatformRoleAdmin
+	role := userdomain.GlobalRoleAdmin
 	occurredAt := time.Date(2026, time.January, 2, 3, 4, 5, 0, time.UTC)
 	event := workspaceaccessevent.Event{ID: uuid.New(), UserID: userID, Workspace: workspaceaccessevent.WorkspaceApp, OccurredAt: occurredAt}
-	users := &workspaceAccessUserReader{result: userdomain.User{ID: uuid.New(), PlatformRole: &role}}
+	users := &workspaceAccessUserReader{result: userdomain.User{ID: uuid.New(), GlobalRoles: &role}}
 	profiles := workspaceProfilesFake{profiles: []userprofile.Profile{{UserID: userID, FirstName: workspaceAccessStringPointer("Ada"), LastName: workspaceAccessStringPointer("Lovelace")}}}
 	events := &workspaceAccessEventsFake{page: workspaceaccessevent.Page{Events: []workspaceaccessevent.Event{event}, Total: 1}}
 	service := application.NewWorkspaceAccessService(users, events, profiles)
@@ -67,7 +67,7 @@ func TestWorkspaceAccessHistoryIsAdminOnlyAndIncludesProfileNames(t *testing.T) 
 		t.Fatalf("history = %+v", history)
 	}
 
-	role = userdomain.PlatformRoleStaff
+	role = userdomain.GlobalRoleStaff
 	if _, err := service.ListForAdmin(context.Background(), "auth-staff", workspaceaccessevent.ListFilter{Page: 1, Limit: 25}); !errors.Is(err, application.ErrWorkspaceAccessForbidden) {
 		t.Fatalf("staff ListForAdmin error = %v, want forbidden", err)
 	}

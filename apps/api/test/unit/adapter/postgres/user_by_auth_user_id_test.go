@@ -19,7 +19,7 @@ func TestUserRepositoryGetByAuthUserID(t *testing.T) {
 	soft_delete.ConfigureClient(client)
 
 	const authUserID = "auth-user-lookup"
-	created, err := client.User.Create().SetAuthUserID(authUserID).SetPlatformRole(entuser.PlatformRoleAdmin).Save(context.Background())
+	created, err := client.User.Create().SetAuthUserID(authUserID).SetGlobalRoles(entuser.GlobalRolesAdmin).Save(context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -28,7 +28,7 @@ func TestUserRepositoryGetByAuthUserID(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if user.ID != created.ID || user.AuthUserID == nil || *user.AuthUserID != authUserID || user.PlatformRole == nil || *user.PlatformRole != userdomain.PlatformRoleAdmin {
+	if user.ID != created.ID || user.AuthUserID == nil || *user.AuthUserID != authUserID || user.GlobalRoles == nil || *user.GlobalRoles != userdomain.GlobalRoleAdmin {
 		t.Fatalf("user = %+v, want API user %s with Auth ID and admin role", user, created.ID)
 	}
 }

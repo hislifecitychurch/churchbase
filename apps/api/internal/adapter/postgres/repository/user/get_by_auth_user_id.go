@@ -19,14 +19,14 @@ func (r *UserRepository) GetByAuthUserID(ctx context.Context, authUserID string)
 		return userdomain.User{}, fmt.Errorf("get API user by Auth user ID: %w", err)
 	}
 
-	var platformRole *userdomain.PlatformRole
-	if record.PlatformRole != nil {
-		role := userdomain.PlatformRole(*record.PlatformRole)
-		platformRole = &role
+	var globalRole *userdomain.GlobalRole
+	if record.GlobalRoles != nil {
+		role := userdomain.GlobalRole(*record.GlobalRoles)
+		globalRole = &role
 	}
 	return userdomain.User{
-		ID:           record.ID,
-		AuthUserID:   record.AuthUserID,
-		PlatformRole: platformRole,
+		ID:          record.ID,
+		AuthUserID:  record.AuthUserID,
+		GlobalRoles: globalRole,
 	}, nil
 }

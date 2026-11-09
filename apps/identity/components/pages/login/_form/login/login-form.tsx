@@ -46,7 +46,7 @@ export function LoginForm({ returnTo }: LoginFormProps): React.ReactElement {
         throw new Error("The current user could not be loaded.")
       }
 
-      window.location.assign(getPostLoginDestination(currentUser.platform_role, returnTo))
+      window.location.assign(getPostLoginDestination(currentUser.global_roles, returnTo))
     } catch (error) {
       setErrorMessage(
         error instanceof ApiError && error.code === "user_not_provisioned"

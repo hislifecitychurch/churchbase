@@ -9,19 +9,19 @@ import (
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 )
 
-func (r *UserRepository) CreatePlatformAdmin(ctx context.Context, input userdomain.CreateInput) (userdomain.User, error) {
+func (r *UserRepository) CreateGlobalAdmin(ctx context.Context, input userdomain.CreateInput) (userdomain.User, error) {
 	created, err := transaction.Client(ctx, r.client).User.Create().
 		SetNillableAuthUserID(input.AuthUserID).
-		SetPlatformRole(entuser.PlatformRoleAdmin).
+		SetGlobalRoles(entuser.GlobalRolesAdmin).
 		Save(ctx)
 	if err != nil {
-		return userdomain.User{}, fmt.Errorf("create platform admin API user: %w", err)
+		return userdomain.User{}, fmt.Errorf("create global admin API user: %w", err)
 	}
 
-	role := userdomain.PlatformRoleAdmin
+	role := userdomain.GlobalRoleAdmin
 	return userdomain.User{
-		ID:           created.ID,
-		AuthUserID:   created.AuthUserID,
-		PlatformRole: &role,
+		ID:          created.ID,
+		AuthUserID:  created.AuthUserID,
+		GlobalRoles: &role,
 	}, nil
 }

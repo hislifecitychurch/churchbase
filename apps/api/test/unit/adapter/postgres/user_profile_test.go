@@ -28,7 +28,7 @@ func TestUserCreationCreatesProfile(t *testing.T) {
 	service := newUserService(client, userprofileservice.NewService(userprofilerepository.NewUserProfileRepository(client)))
 	authUserID := "auth-user-1"
 	firstName, lastName := "Ada", "Lovelace"
-	created, err := service.CreatePlatformAdmin(
+	created, err := service.CreateGlobalAdmin(
 		context.Background(),
 		user.CreateInput{AuthUserID: &authUserID},
 		userprofiledomain.Details{FirstName: &firstName, LastName: &lastName},
@@ -58,8 +58,8 @@ func TestUserCreationRollsBackWhenProfileCreationFails(t *testing.T) {
 	}
 	service := newUserService(client, profiles)
 	authUserID := "auth-user-rollback"
-	if _, err := service.CreatePlatformAdmin(context.Background(), user.CreateInput{AuthUserID: &authUserID}, userprofiledomain.Details{}); !errors.Is(err, profileErr) {
-		t.Fatalf("CreatePlatformAdmin error = %v, want profile error", err)
+	if _, err := service.CreateGlobalAdmin(context.Background(), user.CreateInput{AuthUserID: &authUserID}, userprofiledomain.Details{}); !errors.Is(err, profileErr) {
+		t.Fatalf("CreateGlobalAdmin error = %v, want profile error", err)
 	}
 
 	users, err := client.User.Query().Where(entuser.AuthUserID(authUserID)).All(context.Background())

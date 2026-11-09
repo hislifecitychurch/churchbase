@@ -25,9 +25,9 @@ import (
 func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
 	userID := uuid.New()
 	firstName, lastName := "Ada", "Lovelace"
-	role := userdomain.PlatformRoleAdmin
+	role := userdomain.GlobalRoleAdmin
 	service := &currentUserServiceFake{result: application.CurrentUser{
-		User:    userdomain.User{ID: userID, PlatformRole: &role},
+		User:    userdomain.User{ID: userID, GlobalRoles: &role},
 		Profile: userprofile.Profile{UserID: userID, FirstName: &firstName, LastName: &lastName},
 		LastWorkspaceAccess: &workspaceaccessevent.Event{
 			UserID: userID, Workspace: workspaceaccessevent.WorkspaceApp,
@@ -51,9 +51,9 @@ func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
 		t.Fatal(err)
 	}
 	var payload apiresponse.Envelope[struct {
-		ID           string `json:"id"`
-		PlatformRole string `json:"platform_role"`
-		Profile      struct {
+		ID          string `json:"id"`
+		GlobalRoles string `json:"global_roles"`
+		Profile     struct {
 			FirstName string `json:"first_name"`
 			LastName  string `json:"last_name"`
 		} `json:"profile"`
@@ -65,7 +65,7 @@ func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
 	if err := json.Unmarshal(body, &payload); err != nil {
 		t.Fatal(err)
 	}
-	if response.StatusCode != http.StatusOK || !payload.Success || payload.Data.ID != userID.String() || payload.Data.PlatformRole != "admin" || payload.Data.Profile.FirstName != firstName || payload.Data.Profile.LastName != lastName || payload.Data.LastWorkspaceAccess.Workspace != "app" {
+	if response.StatusCode != http.StatusOK || !payload.Success || payload.Data.ID != userID.String() || payload.Data.GlobalRoles != "admin" || payload.Data.Profile.FirstName != firstName || payload.Data.Profile.LastName != lastName || payload.Data.LastWorkspaceAccess.Workspace != "app" {
 		t.Fatalf("response = %d %s", response.StatusCode, body)
 	}
 	if payload.Log.UserID == nil || *payload.Log.UserID != userID.String() {

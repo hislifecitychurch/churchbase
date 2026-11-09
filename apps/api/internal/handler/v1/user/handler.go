@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
-	accesscontext "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/access_context"
 )
 
 type CurrentUserService interface {
@@ -12,7 +11,7 @@ type CurrentUserService interface {
 }
 
 type AccessContextsService interface {
-	ListByAuthUserID(context.Context, string) ([]accesscontext.Context, error)
+	ListByAuthUserID(context.Context, string) (application.CurrentAccessContexts, error)
 }
 
 type Handler struct {

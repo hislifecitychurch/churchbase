@@ -12,6 +12,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
 	accesscontext "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/access_context"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/user"
@@ -21,11 +22,11 @@ import (
 
 func TestHandlerGetAccessContextsReturnsServerComputedContexts(t *testing.T) {
 	contextID, churchID := uuid.New(), uuid.New()
-	service := &accessContextsServiceFake{result: []accesscontext.Context{{
+	service := &accessContextsServiceFake{result: application.CurrentAccessContexts{Contexts: []accesscontext.Context{{
 		ID: contextID, ChurchID: churchID, Kind: accesscontext.KindChurch, Slug: "churchbase",
 		Name: "Church-wide", ChurchName: "Sample Church", Role: "staff",
 		Capabilities: []string{accesscontext.CapabilityChurchOverviewRead, accesscontext.CapabilityChurchPeopleRead},
-	}}}
+	}}}}
 	response := getAccessContexts(t, service, true)
 	defer response.Body.Close()
 
@@ -34,7 +35,8 @@ func TestHandlerGetAccessContextsReturnsServerComputedContexts(t *testing.T) {
 		t.Fatal(err)
 	}
 	var body apiresponse.Envelope[struct {
-		Contexts []struct {
+		GlobalRoles *string `json:"global_roles"`
+		Contexts    []struct {
 			ID           string   `json:"id"`
 			ChurchID     string   `json:"church_id"`
 			Kind         string   `json:"kind"`
@@ -48,7 +50,7 @@ func TestHandlerGetAccessContextsReturnsServerComputedContexts(t *testing.T) {
 	if err := json.Unmarshal(rawBody, &body); err != nil {
 		t.Fatal(err)
 	}
-	if response.StatusCode != http.StatusOK || !body.Success || len(body.Data.Contexts) != 1 {
+	if response.StatusCode != http.StatusOK || !body.Success || body.Data.GlobalRoles != nil || len(body.Data.Contexts) != 1 {
 		t.Fatalf("response = %d %+v", response.StatusCode, body)
 	}
 	got := body.Data.Contexts[0]
@@ -109,11 +111,11 @@ func getAccessContexts(t *testing.T, service *accessContextsServiceFake, authent
 type accessContextsServiceFake struct {
 	called     bool
 	authUserID string
-	result     []accesscontext.Context
+	result     application.CurrentAccessContexts
 	err        error
 }
 
-func (s *accessContextsServiceFake) ListByAuthUserID(_ context.Context, authUserID string) ([]accesscontext.Context, error) {
+func (s *accessContextsServiceFake) ListByAuthUserID(_ context.Context, authUserID string) (application.CurrentAccessContexts, error) {
 	s.called, s.authUserID = true, authUserID
 	return s.result, s.err
 }

@@ -8,6 +8,28 @@ import (
 	accesscontext "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/access_context"
 )
 
+func (s *Service) ListAll(ctx context.Context) ([]accesscontext.Context, error) {
+	memberships, err := s.repository.ListAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	contexts := make([]accesscontext.Context, 0, len(memberships))
+	for _, membership := range memberships {
+		contexts = append(contexts, accesscontext.Context{
+			ID:           membership.ID,
+			ChurchID:     membership.ChurchID,
+			Kind:         membership.Kind,
+			Slug:         membership.Slug,
+			Name:         membership.Name,
+			ChurchName:   membership.ChurchName,
+			Capabilities: allCapabilities(),
+		})
+	}
+	sortContexts(contexts)
+	return contexts, nil
+}
+
 func (s *Service) ListByUserID(ctx context.Context, userID uuid.UUID) ([]accesscontext.Context, error) {
 	memberships, err := s.repository.ListByUserID(ctx, userID)
 	if err != nil {
@@ -32,6 +54,11 @@ func (s *Service) ListByUserID(ctx context.Context, userID uuid.UUID) ([]accessc
 		})
 	}
 
+	sortContexts(contexts)
+	return contexts, nil
+}
+
+func sortContexts(contexts []accesscontext.Context) {
 	sort.Slice(contexts, func(i, j int) bool {
 		if contexts[i].Kind != contexts[j].Kind {
 			return contexts[i].Kind == accesscontext.KindChurch
@@ -44,10 +71,30 @@ func (s *Service) ListByUserID(ctx context.Context, userID uuid.UUID) ([]accessc
 		}
 		return contexts[i].ID.String() < contexts[j].ID.String()
 	})
-	return contexts, nil
 }
 
-// shortcut: extra grants are not stored yet, add persisted grants before enabling Care, Kids check-in/safety, or Church-wide Ministries for staff.
+func allCapabilities() []string {
+	return []string{
+		accesscontext.CapabilityChurchOverviewRead,
+		accesscontext.CapabilityChurchPeopleRead,
+		accesscontext.CapabilityChurchMinistriesRead,
+		accesscontext.CapabilityCareRead,
+		accesscontext.CapabilityBroadcastOverviewRead,
+		accesscontext.CapabilityBroadcastServicesRead,
+		accesscontext.CapabilityBroadcastMediaRead,
+		accesscontext.CapabilityBroadcastTeamRead,
+		accesscontext.CapabilityMusicOverviewRead,
+		accesscontext.CapabilityMusicSongsRead,
+		accesscontext.CapabilityMusicRehearsalsRead,
+		accesscontext.CapabilityMusicTeamRead,
+		accesscontext.CapabilityKidsOverviewRead,
+		accesscontext.CapabilityKidsClassesRead,
+		accesscontext.CapabilityKidsCheckInRead,
+		accesscontext.CapabilityKidsSafetyRead,
+	}
+}
+
+// shortcut: extra grants are not stored yet; replace the global-role mapping with persisted grants if access must vary by role.
 func capabilitiesFor(membership accesscontext.MembershipContext) []string {
 	if membership.Kind == accesscontext.KindChurch {
 		switch membership.Role {

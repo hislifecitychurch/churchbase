@@ -1,4 +1,4 @@
 $kind: collection
 name: /platform
-description: Platform-operator endpoints. Workspace access history is restricted to platform admins and contains sensitive user activity.
+description: Global-operator endpoints. Workspace access history is restricted to Global Admins and contains sensitive user activity.
 order: 3000

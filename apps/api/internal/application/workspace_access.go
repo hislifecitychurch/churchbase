@@ -54,7 +54,7 @@ func (s *WorkspaceAccessService) RecordByAuthUserID(
 	if err != nil {
 		return workspaceaccessevent.Event{}, false, err
 	}
-	if input.Workspace == workspaceaccessevent.WorkspacePlatform && !hasPlatformRole(user) {
+	if input.Workspace == workspaceaccessevent.WorkspacePlatform && !hasGlobalRole(user) {
 		return workspaceaccessevent.Event{}, false, ErrWorkspaceAccessForbidden
 	}
 	input.UserID = user.ID
@@ -70,7 +70,7 @@ func (s *WorkspaceAccessService) ListForAdmin(
 	if err != nil {
 		return WorkspaceAccessHistory{}, err
 	}
-	if user.PlatformRole == nil || *user.PlatformRole != userdomain.PlatformRoleAdmin {
+	if user.GlobalRoles == nil || *user.GlobalRoles != userdomain.GlobalRoleAdmin {
 		return WorkspaceAccessHistory{}, ErrWorkspaceAccessForbidden
 	}
 
@@ -99,7 +99,7 @@ func (s *WorkspaceAccessService) ListForAdmin(
 	return WorkspaceAccessHistory{Events: records, Total: page.Total}, nil
 }
 
-func hasPlatformRole(user userdomain.User) bool {
-	return user.PlatformRole != nil &&
-		(*user.PlatformRole == userdomain.PlatformRoleAdmin || *user.PlatformRole == userdomain.PlatformRoleStaff)
+func hasGlobalRole(user userdomain.User) bool {
+	return user.GlobalRoles != nil &&
+		(*user.GlobalRoles == userdomain.GlobalRoleAdmin || *user.GlobalRoles == userdomain.GlobalRoleStaff)
 }

@@ -2,7 +2,7 @@
 
 BetterAuth is the canonical identity owner. It stores users, credential hashes, accounts, sessions, verification records, and opaque identity IDs. The Go API consumes a validated BetterAuth user ID and owns business data and authorization.
 
-Email/password sign-in remains available, and BetterAuth's username plugin adds a separate username/password sign-in endpoint. `apps/identity` is the browser client for both methods and relies on BetterAuth's session cookie. After sign-in, it reads the API-owned `platform_role` to route admins/staff to the workspace chooser and regular users to an exact-origin allowlisted return target. Identity does not assign or authorize Churchbase roles. Usernames are identity data; church and ministry roles remain API-owned business data.
+Email/password sign-in remains available, and BetterAuth's username plugin adds a separate username/password sign-in endpoint. `apps/identity` is the browser client for both methods and relies on BetterAuth's session cookie. After sign-in, it reads the API-owned `global_roles` to route Global Admin/Global Staff to the workspace chooser and regular users to an exact-origin allowlisted return target. Identity does not assign or authorize Churchbase roles. Usernames are identity data; church and ministry roles remain API-owned business data.
 
 ```text
 Browser → Identity → Hono HTTP/CORS boundary → BetterAuth → Kysely/pg → PostgreSQL auth schema
@@ -11,7 +11,7 @@ Browser → Identity → Hono HTTP/CORS boundary → BetterAuth → Kysely/pg �
 - HTTP code handles transport and delegates authentication behavior to BetterAuth.
 - BetterAuth configuration does not contain church or ministry workflows.
 - The API must not query the auth schema or copy credentials, authentication sessions, or auth-owned identity fields. Its `User` is a separate Churchbase business/directory record and may reference an Auth user through an opaque ID.
-- Platform-operator, church-membership, and ministry-membership roles are API-owned authorization data. BetterAuth authenticates the account but does not store Churchbase application roles; the API associates platform roles only with users linked to an Auth identity. BetterAuth's optional admin-plugin role is internal to Auth and must remain separate from Churchbase authorization.
+- Global, church-membership, and ministry-membership roles are API-owned authorization data. BetterAuth authenticates the account but does not store Churchbase application roles; the API associates global roles only with users linked to an Auth identity. BetterAuth's optional admin-plugin role is internal to Auth and must remain separate from Churchbase authorization.
 - The UI and ministry switcher do not authorize access; the API checks every protected operation.
 - Keep BetterAuth IDs opaque strings; do not assume a UUID format.
-- Do not copy Mnemora's platform-access or invitation management routes. The approved platform-admin CLI provisions identities through a narrowly scoped, service-token-protected Auth operation; it creates the Auth identity only, while the Go API assigns Churchbase platform roles.
+- Do not copy Mnemora's global-access or invitation management routes. The approved Global Admin CLI provisions identities through a narrowly scoped, service-token-protected Auth operation; it creates the Auth identity only, while the Go API assigns Churchbase global roles.

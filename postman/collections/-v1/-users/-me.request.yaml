@@ -1,6 +1,6 @@
 $kind: http-request
 name: /me
-description: Returns the current Churchbase user ID, platform role, first/last names, and latest successful workspace entry when one exists. Requires a valid BetterAuth session; sign in through either request in /auth/sign-in first so Postman's cookie jar can send the session cookie. Authentication is intentionally left to the cookie jar, not a cookie-as-API-key header. An Auth identity without a provisioned Churchbase user receives 403. Sensitive profile details are not returned.
+description: Returns the current Churchbase user ID, `global_roles`, first/last names, and latest successful workspace entry when one exists. Requires a valid BetterAuth session; sign in through either request in /auth/sign-in first so Postman's cookie jar can send the session cookie. Authentication is intentionally left to the cookie jar, not a cookie-as-API-key header. An Auth identity without a provisioned Churchbase user receives 403. Sensitive profile details are not returned.
 url: "{{host-api}}/v1/users/me"
 method: GET
 headers:

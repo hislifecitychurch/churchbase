@@ -10,7 +10,7 @@ apps/api/
 │   ├── api/                    API executable entrypoint
 │   └── cli/
 │       └── user/
-│           └── platform/       platform-user CLI executable
+│           └── global/         global-role CLI executable
 ├── ent/schema/                 Ent source schemas
 ├── internal/
 │   ├── app/                    bootstrap and dependency composition
@@ -37,7 +37,7 @@ This is a placement guide. Do not add empty directories or placeholder files jus
 | -------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | API entrypoint             | `cmd/api/main.go`                                | Load configuration, handle process signals, and call `app.New` / `Run`.                                                                                                                                                                                             |
 | API response contract     | `internal/shared/response/`                     | Define the API-wide HTTP JSON envelope and helpers; keep feature-specific data DTOs beside their handlers.                                                                                                                                                            |
-| Operator CLI entrypoint    | `cmd/cli/<feature>/<scope>/main.go`              | Parse CLI input, wire dependencies, and call domain/application services; keep business rules out of the CLI. Platform-user bootstrapping belongs in `cmd/cli/user/platform/` and provisions identities through the protected Auth operation.                       |
+| Operator CLI entrypoint    | `cmd/cli/<feature>/<scope>/main.go`              | Parse CLI input, wire dependencies, and call domain/application services; keep business rules out of the CLI. Global-user bootstrapping belongs in `cmd/cli/user/global/` and provisions identities through the protected Auth operation.                       |
 | Composition root           | `internal/app/app.go`                            | Construct concrete dependencies, connect handlers and routes, and own shutdown. Wire dependencies directly here; add a generator only if the graph becomes hard to maintain.                                                                                        |
 | Domain model and service   | `internal/domain/<schema>/`                      | Give each persisted Ent schema its own domain model and repository port. Put the service type/constructor in `service/service.go` and each operation in `service/<operation>.go`; services own business invariants and coordinate related schema ports when needed. |
 | Repository port            | `internal/domain/<schema>/repository.go`         | Declare only the operations needed for that schema; keep the interface beside its domain model.                                                                                                                                                                     |
@@ -70,7 +70,7 @@ internal/domain/<schema>/
 └── service/
     ├── service.go               service type and constructor
     ├── create.go
-    ├── create_platform_admin.go   explicit privileged user creation
+    ├── create_global_admin.go     explicit privileged user creation
     ├── get_all.go
     ├── get_by_id.go
     ├── update_by_id.go
@@ -79,7 +79,7 @@ internal/domain/<schema>/
 internal/adapter/postgres/repository/<schema>/
 ├── repository.go                concrete repository type and constructor
 ├── create.go
-├── create_platform_admin.go      when the schema has a privileged create operation
+├── create_global_admin.go        when the schema has a privileged create operation
 ├── get_all.go
 ├── get_by_id.go
 ├── update_by_id.go

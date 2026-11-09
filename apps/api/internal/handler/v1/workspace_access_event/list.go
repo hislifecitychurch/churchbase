@@ -42,7 +42,7 @@ func (h *Handler) ListForAdmin(c *fiber.Ctx) error {
 	}
 	if errors.Is(err, application.ErrWorkspaceAccessForbidden) {
 		return response.JSON(c, http.StatusForbidden, response.Failure[any](
-			"Platform administrator access is required", "forbidden", c, "workspace_access_event.list.forbidden", "", "warning",
+			"Global administrator access is required", "forbidden", c, "workspace_access_event.list.forbidden", "", "warning",
 		))
 	}
 	if errors.Is(err, workspaceaccesseventdomain.ErrInvalidEvent) {

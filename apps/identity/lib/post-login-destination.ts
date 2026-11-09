@@ -1,7 +1,7 @@
-import type { PlatformRole } from "@/api/users/current-user"
+import type { GlobalRole } from "@/api/users/current-user"
 
-export function getPostLoginDestination(platformRole: PlatformRole, returnTo: string): string {
-  if (platformRole === "admin" || platformRole === "staff") {
+export function getPostLoginDestination(globalRole: GlobalRole, returnTo: string): string {
+  if (globalRole === "admin" || globalRole === "staff") {
     return `/workspace?${new URLSearchParams({ returnTo }).toString()}`
   }
 

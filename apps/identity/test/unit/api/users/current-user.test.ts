@@ -16,7 +16,7 @@ afterEach(() => {
 })
 
 describe("getCurrentUser", () => {
-  it("loads the platform role from the API with session credentials", async () => {
+  it("loads the global role from the API with session credentials", async () => {
     Object.defineProperty(globalThis, "fetch", {
       configurable: true,
       value: async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -26,7 +26,7 @@ describe("getCurrentUser", () => {
           JSON.stringify({
             success: true,
             data: {
-              platform_role: "staff",
+              global_roles: "staff",
               last_workspace_access: { workspace: "app", occurred_at: "2026-01-02T03:04:05Z" },
             },
           }),
@@ -37,19 +37,19 @@ describe("getCurrentUser", () => {
     })
 
     await expect(getCurrentUser()).resolves.toEqual({
-      platform_role: "staff",
+      global_roles: "staff",
       last_workspace_access: { workspace: "app", occurred_at: "2026-01-02T03:04:05Z" },
     })
   })
 
-  it("accepts users with no workspace history", async () => {
+  it("accepts users with no global role or workspace history", async () => {
     Object.defineProperty(globalThis, "fetch", {
       configurable: true,
       value: async () =>
         new Response(
           JSON.stringify({
             success: true,
-            data: { platform_role: null, last_workspace_access: null },
+            data: { global_roles: null, last_workspace_access: null },
           }),
           { status: 200 },
         ),
@@ -57,7 +57,7 @@ describe("getCurrentUser", () => {
     })
 
     await expect(getCurrentUser()).resolves.toEqual({
-      platform_role: null,
+      global_roles: null,
       last_workspace_access: null,
     })
   })

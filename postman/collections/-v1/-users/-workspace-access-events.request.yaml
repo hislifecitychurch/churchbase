@@ -5,7 +5,7 @@ description: >-
   Call only after the destination workspace access check succeeds. The API derives the user
   and occurrence timestamp from the validated request; workspace is app or platform. entry_id
   is a client-generated UUID idempotency key. Reuse it on retries and generate a new UUID for
-  a new workspace visit. Platform entries require an admin or staff platform role. Requires
+  a new workspace visit. Platform entries require a Global Admin or Global Staff role. Requires
   a valid BetterAuth session in Postman's cookie jar.
 url: "{{host-api}}/v1/users/me/workspace-access-events"
 method: POST

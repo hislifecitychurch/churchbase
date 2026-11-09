@@ -74,11 +74,11 @@ func TestServiceCreateDoesNotCommitWhenProfileCreationFails(t *testing.T) {
 }
 
 type fakeRepository struct {
-	called              bool
-	platformAdminCalled bool
-	input               userdomain.CreateInput
-	result              userdomain.User
-	calls               *[]string
+	called            bool
+	globalAdminCalled bool
+	input             userdomain.CreateInput
+	result            userdomain.User
+	calls             *[]string
 }
 
 func (r *fakeRepository) Create(_ context.Context, input userdomain.CreateInput) (userdomain.User, error) {
@@ -90,11 +90,11 @@ func (r *fakeRepository) Create(_ context.Context, input userdomain.CreateInput)
 	return r.result, nil
 }
 
-func (r *fakeRepository) CreatePlatformAdmin(_ context.Context, input userdomain.CreateInput) (userdomain.User, error) {
-	r.platformAdminCalled = true
+func (r *fakeRepository) CreateGlobalAdmin(_ context.Context, input userdomain.CreateInput) (userdomain.User, error) {
+	r.globalAdminCalled = true
 	r.input = input
 	if r.calls != nil {
-		*r.calls = append(*r.calls, "platform admin")
+		*r.calls = append(*r.calls, "global admin")
 	}
 	return r.result, nil
 }

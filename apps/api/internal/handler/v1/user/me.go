@@ -36,7 +36,7 @@ func (h *Handler) Get(c *fiber.Ctx) error {
 
 	return response.JSON(c, fiber.StatusOK, response.Success(currentUserResponse{
 		ID:                  current.User.ID,
-		PlatformRole:        current.User.PlatformRole,
+		GlobalRoles:         current.User.GlobalRoles,
 		Profile:             profileResponse{FirstName: current.Profile.FirstName, LastName: current.Profile.LastName},
 		LastWorkspaceAccess: toLastWorkspaceAccess(current.LastWorkspaceAccess),
 	}, "Current user retrieved", c, "me.retrieved", current.User.ID.String(), "info"))
@@ -44,7 +44,7 @@ func (h *Handler) Get(c *fiber.Ctx) error {
 
 type currentUserResponse struct {
 	ID                  uuid.UUID                    `json:"id"`
-	PlatformRole        *userdomain.PlatformRole     `json:"platform_role"`
+	GlobalRoles         *userdomain.GlobalRole       `json:"global_roles"`
 	Profile             profileResponse              `json:"profile"`
 	LastWorkspaceAccess *lastWorkspaceAccessResponse `json:"last_workspace_access"`
 }

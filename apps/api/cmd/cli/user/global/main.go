@@ -29,7 +29,7 @@ func main() {
 }
 
 func run() error {
-	authUserID := flag.String("auth-user-id", "", "existing BetterAuth user ID to grant platform admin access")
+	authUserID := flag.String("auth-user-id", "", "existing BetterAuth user ID to grant global admin access")
 	email := flag.String("email", "", "email for a new BetterAuth identity")
 	firstName := flag.String("first-name", "", "API user's first name")
 	lastName := flag.String("last-name", "", "API user's last name")
@@ -38,10 +38,10 @@ func run() error {
 	flag.Parse()
 
 	interactive := flag.NFlag() == 0 && flag.NArg() == 0
-	var input application.PlatformAdminInput
+	var input application.GlobalAdminInput
 	var err error
 	if interactive {
-		input, err = promptPlatformAdmin()
+		input, err = promptGlobalAdmin()
 	} else {
 		if flag.NArg() != 0 {
 			return fmt.Errorf("unexpected positional arguments")
@@ -49,7 +49,7 @@ func run() error {
 		if !*yes {
 			return fmt.Errorf("flag-driven provisioning requires --yes")
 		}
-		input, err = platformAdminInputFromFlags(*authUserID, *email, *firstName, *lastName, *passwordStdin)
+		input, err = globalAdminInputFromFlags(*authUserID, *email, *firstName, *lastName, *passwordStdin)
 	}
 	if err != nil {
 		return err
@@ -60,7 +60,7 @@ func run() error {
 	}()
 
 	if interactive {
-		if err := confirmPlatformAdmin(input); errors.Is(err, promptui.ErrAbort) {
+		if err := confirmGlobalAdmin(input); errors.Is(err, promptui.ErrAbort) {
 			fmt.Println("Cancelled; no changes made.")
 			return nil
 		} else if err != nil {
@@ -98,7 +98,7 @@ func run() error {
 		userprofileservice.NewService(store.UserProfileRepository()),
 		store,
 	)
-	creator := application.NewPlatformAdminCreator(identityProvisioner, users)
+	creator := application.NewGlobalAdminCreator(identityProvisioner, users)
 	created, err := creator.Create(ctx, input)
 	input.Password = ""
 	input.ConfirmPassword = ""
@@ -110,69 +110,69 @@ func run() error {
 		return fmt.Errorf("API user was created without an Auth user ID")
 	}
 	fullName := strings.TrimSpace(strings.Join([]string{*input.FirstName, *input.LastName}, " "))
-	fmt.Println(cli.FormatPlatformAdminSuccess(fullName, input.Email))
+	fmt.Println(cli.FormatGlobalAdminSuccess(fullName, input.Email))
 	return nil
 }
 
-func promptPlatformAdmin() (application.PlatformAdminInput, error) {
+func promptGlobalAdmin() (application.GlobalAdminInput, error) {
 	_, choice, err := (&promptui.Select{
-		Label: "Platform admin setup",
+		Label: "Global admin setup",
 		Items: []string{"Create a new Auth identity", "Link an existing Auth identity"},
 	}).Run()
 	if err != nil {
-		return application.PlatformAdminInput{}, err
+		return application.GlobalAdminInput{}, err
 	}
 
 	switch choice {
 	case "Link an existing Auth identity":
 		authUserID, err := promptRequired("BetterAuth user ID")
 		if err != nil {
-			return application.PlatformAdminInput{}, err
+			return application.GlobalAdminInput{}, err
 		}
 		firstName, err := promptOptional("First name (optional)")
 		if err != nil {
-			return application.PlatformAdminInput{}, err
+			return application.GlobalAdminInput{}, err
 		}
 		lastName, err := promptOptional("Last name (optional)")
 		if err != nil {
-			return application.PlatformAdminInput{}, err
+			return application.GlobalAdminInput{}, err
 		}
-		return application.PlatformAdminInput{
+		return application.GlobalAdminInput{
 			AuthUserID: strings.TrimSpace(authUserID),
 			FirstName:  optional(&firstName),
 			LastName:   optional(&lastName),
 		}, nil
 	case "Create a new Auth identity":
 	default:
-		return application.PlatformAdminInput{}, fmt.Errorf("unexpected platform admin setup choice")
+		return application.GlobalAdminInput{}, fmt.Errorf("unexpected global admin setup choice")
 	}
 
 	email, err := promptValue("Email", validateEmail)
 	if err != nil {
-		return application.PlatformAdminInput{}, err
+		return application.GlobalAdminInput{}, err
 	}
 	firstName, err := promptRequired("First name")
 	if err != nil {
-		return application.PlatformAdminInput{}, err
+		return application.GlobalAdminInput{}, err
 	}
 	lastName, err := promptOptional("Last name (optional)")
 	if err != nil {
-		return application.PlatformAdminInput{}, err
+		return application.GlobalAdminInput{}, err
 	}
 	password, err := promptPassword("Password", nil)
 	if err != nil {
-		return application.PlatformAdminInput{}, err
+		return application.GlobalAdminInput{}, err
 	}
 	confirmation, err := promptPassword("Confirm password", func(value string) error {
 		return application.ValidatePasswordConfirmation(password, value)
 	})
 	if err != nil {
-		return application.PlatformAdminInput{}, err
+		return application.GlobalAdminInput{}, err
 	}
 
 	firstName = strings.TrimSpace(firstName)
 	lastName = strings.TrimSpace(lastName)
-	return application.PlatformAdminInput{
+	return application.GlobalAdminInput{
 		Email:           strings.TrimSpace(email),
 		AuthName:        strings.TrimSpace(strings.Join([]string{firstName, lastName}, " ")),
 		Password:        password,
@@ -182,13 +182,13 @@ func promptPlatformAdmin() (application.PlatformAdminInput, error) {
 	}, nil
 }
 
-func platformAdminInputFromFlags(authUserID, email, firstName, lastName string, passwordStdin bool) (application.PlatformAdminInput, error) {
+func globalAdminInputFromFlags(authUserID, email, firstName, lastName string, passwordStdin bool) (application.GlobalAdminInput, error) {
 	authUserID = strings.TrimSpace(authUserID)
 	if authUserID != "" {
 		if email != "" || passwordStdin {
-			return application.PlatformAdminInput{}, fmt.Errorf("--auth-user-id cannot be combined with --email or --password-stdin")
+			return application.GlobalAdminInput{}, fmt.Errorf("--auth-user-id cannot be combined with --email or --password-stdin")
 		}
-		return application.PlatformAdminInput{
+		return application.GlobalAdminInput{
 			AuthUserID: authUserID,
 			FirstName:  optional(&firstName),
 			LastName:   optional(&lastName),
@@ -199,21 +199,21 @@ func platformAdminInputFromFlags(authUserID, email, firstName, lastName string, 
 	firstName = strings.TrimSpace(firstName)
 	lastName = strings.TrimSpace(lastName)
 	if !passwordStdin || email == "" || (firstName == "" && lastName == "") || !validEmail(email) {
-		return application.PlatformAdminInput{}, fmt.Errorf("provide a valid --email, a first or last name, and --password-stdin, or use --auth-user-id")
+		return application.GlobalAdminInput{}, fmt.Errorf("provide a valid --email, a first or last name, and --password-stdin, or use --auth-user-id")
 	}
 	if input, err := os.Stdin.Stat(); err != nil {
-		return application.PlatformAdminInput{}, fmt.Errorf("check password input: %w", err)
+		return application.GlobalAdminInput{}, fmt.Errorf("check password input: %w", err)
 	} else if input.Mode()&os.ModeCharDevice != 0 {
-		return application.PlatformAdminInput{}, fmt.Errorf("password stdin must be piped from a protected source; terminal input is not hidden")
+		return application.GlobalAdminInput{}, fmt.Errorf("password stdin must be piped from a protected source; terminal input is not hidden")
 	}
 	password, confirmation, err := cli.ReadPasswordConfirmation(os.Stdin)
 	if err != nil {
-		return application.PlatformAdminInput{}, err
+		return application.GlobalAdminInput{}, err
 	}
 	if err := application.ValidatePasswordConfirmation(password, confirmation); err != nil {
-		return application.PlatformAdminInput{}, err
+		return application.GlobalAdminInput{}, err
 	}
-	return application.PlatformAdminInput{
+	return application.GlobalAdminInput{
 		Email:           email,
 		AuthName:        strings.TrimSpace(strings.Join([]string{firstName, lastName}, " ")),
 		Password:        password,
@@ -265,13 +265,13 @@ func promptPassword(label string, validate func(string) error) (string, error) {
 	return value, nil
 }
 
-func confirmPlatformAdmin(input application.PlatformAdminInput) error {
+func confirmGlobalAdmin(input application.GlobalAdminInput) error {
 	target := input.Email
 	if input.AuthUserID != "" {
 		target = fmt.Sprintf("Auth user %s", input.AuthUserID)
 	}
 	_, err := (&promptui.Prompt{
-		Label:     fmt.Sprintf("Create platform admin for %s", target),
+		Label:     fmt.Sprintf("Create global admin for %s", target),
 		IsConfirm: true,
 	}).Run()
 	return err

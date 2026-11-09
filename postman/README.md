@@ -21,7 +21,7 @@ Keep actual credentials and tokens in the local environment, never in collection
 ## Try the current-user flow
 
 1. Start the API and Auth against disposable local data. Do not use a shared or production database for this flow.
-2. Provision a local Churchbase user with the API's platform-admin CLI, or use an already-provisioned disposable local identity.
+2. Provision a local Churchbase user with the API's Global Admin CLI, or use an already-provisioned disposable local identity.
 3. Run **`/email`** or **`/username`** under `/auth/sign-in`. BetterAuth sets the session cookie; Postman stores it in the cookie jar.
 4. Run **`/me`** under `/users`. Postman sends the session cookie to the API. An Auth identity without a Churchbase API user returns `403`.
 5. Use `/health/live` and `/health/ready` under `/health` to check API liveness and dependency readiness; neither requires authentication.

@@ -21,6 +21,7 @@ response:
         "success": true,
         "message": "Access contexts retrieved",
         "data": {
+          "global_roles": null,
           "contexts": [
             {
               "id": "018f47b8-8cb2-7d15-b28e-4a26843d81c1",

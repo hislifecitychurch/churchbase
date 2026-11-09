@@ -8,6 +8,6 @@
     "test": "make test",
     "lint": "make lint",
     "format": "make format",
-    "cli:admin:platform": "make cli/user/platform"
+    "cli:admin:global": "make cli/user/global"
   }
 }

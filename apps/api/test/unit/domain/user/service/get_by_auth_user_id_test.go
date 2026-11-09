@@ -47,7 +47,7 @@ func (r *userLookupRepository) Create(context.Context, userdomain.CreateInput) (
 	return userdomain.User{}, nil
 }
 
-func (r *userLookupRepository) CreatePlatformAdmin(context.Context, userdomain.CreateInput) (userdomain.User, error) {
+func (r *userLookupRepository) CreateGlobalAdmin(context.Context, userdomain.CreateInput) (userdomain.User, error) {
 	return userdomain.User{}, nil
 }
 

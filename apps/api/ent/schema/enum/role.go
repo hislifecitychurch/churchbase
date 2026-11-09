@@ -1,8 +1,8 @@
 package enum
 
 const (
-	PlatformRoleAdmin = "admin"
-	PlatformRoleStaff = "staff"
+	GlobalRoleAdmin = "admin"
+	GlobalRoleStaff = "staff"
 
 	ChurchMembershipRoleAdmin  = "admin"
 	ChurchMembershipRoleStaff  = "staff"

@@ -1,4 +1,4 @@
-import type { AccessContext } from "@/api/access-contexts"
+import type { AccessContext, GlobalRole } from "@/api/access-contexts"
 import { getMainMenuItems, mainMenuItemsByMinistry } from "@/data/menu"
 import { getMinistrySlugFromPath } from "@/lib/menu/get-ministry-slug-from-path"
 import { isPathActive } from "@/lib/menu/is-path-active"
@@ -9,6 +9,7 @@ export function getAccessContextForPath(
   contexts: readonly AccessContext[],
   pathname: string,
   contextID: string | null,
+  globalRole: GlobalRole | null = null,
 ): AccessContext | null {
   if (pathname === "/settings") {
     return contexts.find((context) => context.id === contextID) ?? contexts[0] ?? null
@@ -21,7 +22,8 @@ export function getAccessContextForPath(
   const kind = slug === "churchbase" ? "church" : "ministry"
   const candidates = contexts.filter((context) => context.kind === kind && context.slug === slug)
   return contextID
-    ? (candidates.find((context) => context.id === contextID) ?? null)
+    ? (candidates.find((context) => context.id === contextID) ??
+        (globalRole ? (candidates[0] ?? null) : null))
     : (candidates[0] ?? null)
 }
 
@@ -37,9 +39,13 @@ export function canAccessPath(
   contexts: readonly AccessContext[],
   pathname: string,
   contextID: string | null,
+  globalRole: GlobalRole | null = null,
 ): boolean {
   if (pathname === "/settings") {
     return true
+  }
+  if (globalRole) {
+    return isConfiguredAccessPath(pathname)
   }
   const context = getAccessContextForPath(contexts, pathname, contextID)
   if (!context) {
@@ -54,11 +60,7 @@ export function contextHomePath(context: AccessContext): string {
   return context.kind === "church" ? "/" : `/ministries/${context.slug}`
 }
 
-export function pathWithContext(
-  path: string,
-  contextID: string,
-  currentQuery = "",
-): string {
+export function pathWithContext(path: string, contextID: string, currentQuery = ""): string {
   const query = new URLSearchParams(currentQuery)
   query.set(ACCESS_CONTEXT_QUERY_PARAM, contextID)
   return `${path}?${query.toString()}`

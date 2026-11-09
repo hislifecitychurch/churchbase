@@ -11,13 +11,13 @@ import (
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 )
 
-func TestServiceCreatePlatformAdmin(t *testing.T) {
+func TestServiceCreateGlobalAdmin(t *testing.T) {
 	authUserID := "auth-user-1"
-	platformRole := userdomain.PlatformRoleAdmin
+	globalRole := userdomain.GlobalRoleAdmin
 	expected := userdomain.User{
-		ID:           uuid.New(),
-		AuthUserID:   &authUserID,
-		PlatformRole: &platformRole,
+		ID:          uuid.New(),
+		AuthUserID:  &authUserID,
+		GlobalRoles: &globalRole,
 	}
 	firstName, lastName := "Ada", "Lovelace"
 	calls := []string{}
@@ -26,7 +26,7 @@ func TestServiceCreatePlatformAdmin(t *testing.T) {
 	transactions := &fakeTransactionRunner{}
 	service := userservice.NewService(repository, profiles, transactions)
 
-	created, err := service.CreatePlatformAdmin(
+	created, err := service.CreateGlobalAdmin(
 		context.Background(),
 		userdomain.CreateInput{AuthUserID: &authUserID},
 		userprofile.Details{FirstName: &firstName, LastName: &lastName},
@@ -34,24 +34,24 @@ func TestServiceCreatePlatformAdmin(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !repository.platformAdminCalled || repository.called {
-		t.Fatalf("repository calls = (create: %t, create platform admin: %t), want (false, true)", repository.called, repository.platformAdminCalled)
+	if !repository.globalAdminCalled || repository.called {
+		t.Fatalf("repository calls = (create: %t, create global admin: %t), want (false, true)", repository.called, repository.globalAdminCalled)
 	}
 	if repository.input.AuthUserID == nil || *repository.input.AuthUserID != authUserID {
 		t.Fatalf("repository AuthUserID = %v, want %q", repository.input.AuthUserID, authUserID)
 	}
-	if created.ID != expected.ID || created.PlatformRole == nil || *created.PlatformRole != userdomain.PlatformRoleAdmin {
-		t.Fatalf("created user = %+v, want platform admin with ID %s", created, expected.ID)
+	if created.ID != expected.ID || created.GlobalRoles == nil || *created.GlobalRoles != userdomain.GlobalRoleAdmin {
+		t.Fatalf("created user = %+v, want global admin with ID %s", created, expected.ID)
 	}
 	if !profiles.called || profiles.input.UserID != expected.ID || profiles.input.FirstName == nil || *profiles.input.FirstName != firstName || profiles.input.LastName == nil || *profiles.input.LastName != lastName || !transactions.committed {
 		t.Fatalf("profile/transaction state = (%+v, committed %t), want profile for user and committed transaction", profiles.input, transactions.committed)
 	}
-	if len(calls) != 2 || calls[0] != "platform admin" || calls[1] != "profile" {
-		t.Fatalf("creation order = %v, want [platform admin profile]", calls)
+	if len(calls) != 2 || calls[0] != "global admin" || calls[1] != "profile" {
+		t.Fatalf("creation order = %v, want [global admin profile]", calls)
 	}
 }
 
-func TestServiceCreatePlatformAdminRequiresAuthUserID(t *testing.T) {
+func TestServiceCreateGlobalAdminRequiresAuthUserID(t *testing.T) {
 	blank := "  \t "
 	tests := []struct {
 		name   string
@@ -67,12 +67,12 @@ func TestServiceCreatePlatformAdminRequiresAuthUserID(t *testing.T) {
 			transactions := &fakeTransactionRunner{}
 			service := userservice.NewService(repository, &fakeProfileCreator{}, transactions)
 
-			_, err := service.CreatePlatformAdmin(context.Background(), userdomain.CreateInput{AuthUserID: test.authID}, userprofile.Details{})
+			_, err := service.CreateGlobalAdmin(context.Background(), userdomain.CreateInput{AuthUserID: test.authID}, userprofile.Details{})
 			if !errors.Is(err, userdomain.ErrInvalidUser) {
-				t.Fatalf("CreatePlatformAdmin error = %v, want ErrInvalidUser", err)
+				t.Fatalf("CreateGlobalAdmin error = %v, want ErrInvalidUser", err)
 			}
-			if repository.platformAdminCalled || transactions.called {
-				t.Fatal("platform admin creation started without an Auth user ID")
+			if repository.globalAdminCalled || transactions.called {
+				t.Fatal("global admin creation started without an Auth user ID")
 			}
 		})
 	}

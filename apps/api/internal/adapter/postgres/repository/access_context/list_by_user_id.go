@@ -57,3 +57,37 @@ func (r *AccessContextRepository) ListByUserID(ctx context.Context, userID uuid.
 	}
 	return contexts, nil
 }
+
+func (r *AccessContextRepository) ListAll(ctx context.Context) ([]accesscontext.MembershipContext, error) {
+	churches, err := transaction.Client(ctx, r.client).Church.Query().WithMinistries().All(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("list all churches and ministries for global access contexts: %w", err)
+	}
+
+	contexts := make([]accesscontext.MembershipContext, 0, len(churches))
+	for _, church := range churches {
+		contexts = append(contexts, accesscontext.MembershipContext{
+			ID:         church.ID,
+			ChurchID:   church.ID,
+			Kind:       accesscontext.KindChurch,
+			Slug:       "churchbase",
+			Name:       "Church-wide",
+			ChurchName: church.Name,
+		})
+
+		for _, ministry := range church.Edges.Ministries {
+			if ministry.ChurchID != church.ID {
+				continue
+			}
+			contexts = append(contexts, accesscontext.MembershipContext{
+				ID:         ministry.ID,
+				ChurchID:   church.ID,
+				Kind:       accesscontext.KindMinistry,
+				Slug:       ministry.Slug,
+				Name:       ministry.Name,
+				ChurchName: church.Name,
+			})
+		}
+	}
+	return contexts, nil
+}

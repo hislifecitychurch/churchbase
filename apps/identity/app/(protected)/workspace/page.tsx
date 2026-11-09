@@ -28,7 +28,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
   const currentUser = useCurrentUser()
   const isUnauthenticated =
     currentUser.error instanceof ApiError && currentUser.error.status === 401
-  const isRegularUser = currentUser.data?.platform_role === null
+  const isRegularUser = currentUser.data?.global_roles === null
   const lastUsedWorkspace = currentUser.data?.last_workspace_access?.workspace
 
   useEffect(() => {

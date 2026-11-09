@@ -46,6 +46,13 @@ describe("access contexts", () => {
     expect(canAccessPath([churchContext, kidsContext], "/", kidsContext.id)).toBe(false)
   })
 
+  it("allows global roles across configured sections without a membership context", () => {
+    expect(canAccessPath([], "/people", null, "admin")).toBe(true)
+    expect(canAccessPath([], "/ministries/kids/volunteers-and-safety", null, "staff")).toBe(true)
+    expect(canAccessPath([], "/ministries/kids/unknown", null, "admin")).toBe(false)
+    expect(getAccessContextForPath([], "/people", null, "admin")).toBeNull()
+  })
+
   it("distinguishes configured menu routes from framework 404s", () => {
     expect(isConfiguredAccessPath("/ministries/kids/classes")).toBe(true)
     expect(isConfiguredAccessPath("/ministries/kids/unknown")).toBe(false)

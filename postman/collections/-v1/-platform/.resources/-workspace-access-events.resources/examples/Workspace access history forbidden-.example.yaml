@@ -16,13 +16,13 @@ response:
     content: |-
       {
         "success": false,
-        "message": "Platform administrator access is required",
+        "message": "Global administrator access is required",
         "data": null,
         "filters": null,
         "errors": [
           {
             "code": "forbidden",
-            "message": "Platform administrator access is required"
+            "message": "Global administrator access is required"
           }
         ],
         "pagination": null,

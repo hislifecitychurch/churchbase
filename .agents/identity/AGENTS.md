@@ -28,7 +28,7 @@ bun run --cwd apps/identity build
 
 ## Identity and routing boundaries
 
-- BetterAuth owns credentials and sessions. The API owns Churchbase users, `platform_role`, and authorization.
+- BetterAuth owns credentials and sessions. The API owns Churchbase users, `global_roles`, and authorization. Global Admin and Global Staff use the workspace chooser; regular users go to their validated App destination.
 - Use the API's `GET /api/v1/users/me` response for role-aware navigation; never infer Churchbase permissions from BetterAuth roles. Identity routing and the workspace chooser are presentation only—protected API operations must authorize server-side.
 - Keep return targets restricted to the exact configured origins through `lib/return-url.ts`.
 - Include the session cookie for browser API calls. Never log or commit credentials, cookies, tokens, or personal data; keep local values in ignored `.env` files and safe examples in `.env.example`.

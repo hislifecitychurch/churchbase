@@ -22,7 +22,7 @@ response:
         "message": "Current user retrieved",
         "data": {
           "id": "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
-          "platform_role": "admin",
+          "global_roles": "admin",
           "profile": {
             "first_name": "Sample",
             "last_name": "Member"

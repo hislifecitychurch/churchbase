@@ -2,7 +2,7 @@
 
 import { IconCheck, IconBuildingChurch, IconSelector } from "@tabler/icons-react"
 
-import type { AccessContext } from "@/api/access-contexts"
+import type { AccessContext, GlobalRole } from "@/api/access-contexts"
 
 import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
 import { Menu } from "@packages/ui-w/shared/menu/menu"
@@ -17,6 +17,7 @@ import { ministries } from "@/data/ministries"
 
 type MinistrySwitcherProps = {
   contexts: AccessContext[]
+  globalRole: GlobalRole | null
   activeContextID: string | null
   onContextChange: (context: AccessContext) => void
 }
@@ -26,11 +27,13 @@ const roleLabels: Record<AccessContext["role"], string> = {
   staff: "Staff",
   lead: "Leader",
   member: "Member",
+  global_admin: "Global Admin",
+  global_staff: "Global Staff",
 }
 
-function contextName(context: AccessContext | undefined): string {
+function contextName(context: AccessContext | undefined, globalRole: GlobalRole | null): string {
   if (!context) {
-    return "Choose a workspace"
+    return globalRole ? "Global access" : "Choose a workspace"
   }
   return context.kind === "church" ? "Church-wide" : context.name
 }
@@ -48,6 +51,7 @@ function contextDetail(context: AccessContext, contexts: AccessContext[]): strin
 
 export function MinistrySwitcher({
   contexts,
+  globalRole,
   activeContextID,
   onContextChange,
 }: MinistrySwitcherProps): React.ReactElement {
@@ -63,7 +67,7 @@ export function MinistrySwitcher({
           <MenuTrigger
             render={
               <SidebarMenuButton
-                aria-label={contextName(activeContext)}
+                aria-label={contextName(activeContext, globalRole)}
                 className="data-[popup-open]:bg-sidebar-accent data-[popup-open]:text-sidebar-accent-foreground"
                 size="lg"
               />
@@ -73,9 +77,15 @@ export function MinistrySwitcher({
               <ActiveIcon aria-hidden className="size-4" />
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-              <span className="truncate font-medium">{contextName(activeContext)}</span>
+              <span className="truncate font-medium">{contextName(activeContext, globalRole)}</span>
               <span className="text-muted-foreground truncate text-xs">
-                {activeContext ? contextDetail(activeContext, contexts) : "No access context"}
+                {activeContext
+                  ? contextDetail(activeContext, contexts)
+                  : globalRole === "admin"
+                    ? roleLabels.global_admin
+                    : globalRole === "staff"
+                      ? roleLabels.global_staff
+                      : "No access context"}
               </span>
             </div>
             <IconSelector
@@ -90,6 +100,11 @@ export function MinistrySwitcher({
             sideOffset={4}
           >
             <div className="text-muted-foreground px-2 py-1.5 text-xs font-medium">Workspaces</div>
+            {contexts.length === 0 ? (
+              <div className="text-muted-foreground px-2 py-1.5 text-xs">
+                {globalRole ? "No church contexts configured" : "No available workspaces"}
+              </div>
+            ) : null}
             {contexts.map((context) => {
               const ContextIcon =
                 ministries.find((ministry) => ministry.slug === context.slug)?.icon ??
@@ -104,7 +119,9 @@ export function MinistrySwitcher({
                   <div className="border-border flex size-6 items-center justify-center rounded-md border">
                     <ContextIcon aria-hidden className="size-3.5 shrink-0" />
                   </div>
-                  <span className="min-w-0 flex-1 truncate">{contextName(context)}</span>
+                  <span className="min-w-0 flex-1 truncate">
+                    {contextName(context, globalRole)}
+                  </span>
                   <span className="text-muted-foreground shrink-0 text-xs">
                     {contextDetail(context, contexts)}
                   </span>

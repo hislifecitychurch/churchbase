@@ -22,9 +22,10 @@ export function WorkspaceAccessGate({ children }: Readonly<{ children: ReactNode
   const searchParams = useSearchParams()
   const contextID = searchParams.get("context_id")
   const accessContexts = useAccessContexts()
-  const contexts = accessContexts.data ?? []
-  const activeContext = getAccessContextForPath(contexts, pathname, contextID)
-  const isPathAllowed = canAccessPath(contexts, pathname, contextID)
+  const contexts = accessContexts.data?.contexts ?? []
+  const globalRole = accessContexts.data?.global_roles ?? null
+  const activeContext = getAccessContextForPath(contexts, pathname, contextID, globalRole)
+  const isPathAllowed = canAccessPath(contexts, pathname, contextID, globalRole)
   const isConfiguredPath = isConfiguredAccessPath(pathname)
   const defaultContext = contexts.find((context) => context.kind === "church") ?? contexts[0]
   const redirectContext = activeContext ?? defaultContext
@@ -122,7 +123,7 @@ export function WorkspaceAccessGate({ children }: Readonly<{ children: ReactNode
     )
   }
 
-  if (contexts.length === 0 && isConfiguredPath && pathname !== "/settings") {
+  if (contexts.length === 0 && !globalRole && isConfiguredPath && pathname !== "/settings") {
     return (
       <main className="flex min-h-svh flex-col items-center justify-center gap-3 p-6 text-center">
         <h1 className="text-foreground text-lg font-medium">No workspace access</h1>

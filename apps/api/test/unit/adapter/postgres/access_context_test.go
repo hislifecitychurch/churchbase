@@ -2,9 +2,11 @@ package postgres_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/google/uuid"
+	"github.com/hislifecitychurch/churchbase/apps/api/ent"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/churchmembership"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/ministrymembership"
@@ -83,5 +85,59 @@ func TestAccessContextRepositoryListsOnlyActiveSameChurchMemberships(t *testing.
 	}
 	if contexts[1].ID == uuid.Nil {
 		t.Fatal("ministry context has empty ID")
+	}
+}
+
+func TestAccessContextRepositoryListsEveryChurchAndMinistryForGlobalRoles(t *testing.T) {
+	client := enttest.Open(t, "sqlite3", "file:global-access-contexts?mode=memory&cache=shared&_fk=1")
+	defer client.Close()
+	soft_delete.ConfigureClient(client)
+
+	ctx := context.Background()
+	churches := make([]*ent.Church, 0, 2)
+	for _, name := range []string{"First Church", "Second Church"} {
+		church, err := client.Church.Create().SetName(name).SetSlug(strings.ToLower(strings.ReplaceAll(name, " ", "-"))).Save(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		churches = append(churches, church)
+		if _, err := client.Ministry.Create().SetChurch(church).SetName("Kids").SetSlug("kids").Save(ctx); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	contexts, err := accesscontextrepository.NewAccessContextRepository(client).ListAll(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(contexts) != 4 {
+		t.Fatalf("got %d contexts, want two churches and two ministries: %+v", len(contexts), contexts)
+	}
+	churchCount, ministryCount := 0, 0
+	for _, context := range contexts {
+		switch context.Kind {
+		case accesscontext.KindChurch:
+			churchCount++
+		case accesscontext.KindMinistry:
+			ministryCount++
+		default:
+			t.Fatalf("unexpected context kind %q", context.Kind)
+		}
+	}
+	if churchCount != 2 || ministryCount != 2 {
+		t.Fatalf("context kinds = (%d churches, %d ministries), want (2, 2)", churchCount, ministryCount)
+	}
+	for _, church := range churches {
+		foundChurch, foundMinistry := false, false
+		for _, context := range contexts {
+			if context.ChurchID != church.ID {
+				continue
+			}
+			foundChurch = foundChurch || context.Kind == accesscontext.KindChurch
+			foundMinistry = foundMinistry || (context.Kind == accesscontext.KindMinistry && context.Slug == "kids")
+		}
+		if !foundChurch || !foundMinistry {
+			t.Fatalf("global contexts for %q are missing: %+v", church.Name, contexts)
+		}
 	}
 }

@@ -21,14 +21,14 @@ import (
 )
 
 func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
-	role := userdomain.PlatformRoleStaff
+	role := userdomain.GlobalRoleStaff
 	app := fiber.New()
 	httpv1.Register(
 		app.Group("/api/v1"),
 		health.New(),
 		sessionValidatorFake{},
 		userhandler.NewHandler(currentUserFake{current: application.CurrentUser{
-			User:    userdomain.User{ID: uuid.New(), PlatformRole: &role},
+			User:    userdomain.User{ID: uuid.New(), GlobalRoles: &role},
 			Profile: userprofile.Profile{},
 		}}, accessContextsFake{}),
 		workspaceaccesshandler.NewHandler(nil),
@@ -106,6 +106,6 @@ func (s currentUserFake) GetByAuthUserID(context.Context, string) (application.C
 
 type accessContextsFake struct{}
 
-func (accessContextsFake) ListByAuthUserID(context.Context, string) ([]accesscontext.Context, error) {
-	return []accesscontext.Context{}, nil
+func (accessContextsFake) ListByAuthUserID(context.Context, string) (application.CurrentAccessContexts, error) {
+	return application.CurrentAccessContexts{Contexts: []accesscontext.Context{}}, nil
 }

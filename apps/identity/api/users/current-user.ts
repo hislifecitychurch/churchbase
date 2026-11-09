@@ -1,6 +1,6 @@
 import { ApiError, apiRequest } from "@/api/client"
 
-export type PlatformRole = "admin" | "staff" | null
+export type GlobalRole = "admin" | "staff" | null
 
 export type LastWorkspaceAccess = {
   workspace: "app" | "platform"
@@ -8,7 +8,7 @@ export type LastWorkspaceAccess = {
 }
 
 export type CurrentUser = {
-  platform_role: PlatformRole
+  global_roles: GlobalRole
   last_workspace_access: LastWorkspaceAccess | null
 }
 
@@ -34,7 +34,7 @@ function isCurrentUser(value: unknown): value is CurrentUser {
   }
 
   const user = value as Record<string, unknown>
-  const role = user.platform_role
+  const role = user.global_roles
   const validRole = role === null || role === "admin" || role === "staff"
   return validRole && isLastWorkspaceAccess(user.last_workspace_access)
 }
@@ -47,7 +47,7 @@ export async function getCurrentUser(): Promise<CurrentUser> {
   }
 
   return {
-    platform_role: user.platform_role,
+    global_roles: user.global_roles,
     last_workspace_access: user.last_workspace_access,
   }
 }

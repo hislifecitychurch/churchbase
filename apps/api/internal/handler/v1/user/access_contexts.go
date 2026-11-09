@@ -33,8 +33,8 @@ func (h *Handler) GetAccessContexts(c *fiber.Ctx) error {
 		))
 	}
 
-	items := make([]accessContextResponse, 0, len(contexts))
-	for _, item := range contexts {
+	items := make([]accessContextResponse, 0, len(contexts.Contexts))
+	for _, item := range contexts.Contexts {
 		items = append(items, accessContextResponse{
 			ID:           item.ID,
 			ChurchID:     item.ChurchID,
@@ -46,11 +46,12 @@ func (h *Handler) GetAccessContexts(c *fiber.Ctx) error {
 			Capabilities: item.Capabilities,
 		})
 	}
-	return response.JSON(c, fiber.StatusOK, response.Success(accessContextsResponse{Contexts: items}, "Access contexts retrieved", c, "me.access_contexts.retrieved", "", "info"))
+	return response.JSON(c, fiber.StatusOK, response.Success(accessContextsResponse{GlobalRoles: contexts.GlobalRoles, Contexts: items}, "Access contexts retrieved", c, "me.access_contexts.retrieved", "", "info"))
 }
 
 type accessContextsResponse struct {
-	Contexts []accessContextResponse `json:"contexts"`
+	GlobalRoles *userdomain.GlobalRole  `json:"global_roles"`
+	Contexts    []accessContextResponse `json:"contexts"`
 }
 
 type accessContextResponse struct {

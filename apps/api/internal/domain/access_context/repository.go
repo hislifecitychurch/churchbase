@@ -8,4 +8,5 @@ import (
 
 type Repository interface {
 	ListByUserID(ctx context.Context, userID uuid.UUID) ([]MembershipContext, error)
+	ListAll(ctx context.Context) ([]MembershipContext, error)
 }

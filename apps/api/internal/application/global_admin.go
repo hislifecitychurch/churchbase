@@ -14,11 +14,11 @@ type AuthIdentityProvisioner interface {
 	CreateUser(ctx context.Context, email, name, password string) (string, error)
 }
 
-type PlatformAdminUserCreator interface {
-	CreatePlatformAdmin(ctx context.Context, input userdomain.CreateInput, profile userprofile.Details) (userdomain.User, error)
+type GlobalAdminUserCreator interface {
+	CreateGlobalAdmin(ctx context.Context, input userdomain.CreateInput, profile userprofile.Details) (userdomain.User, error)
 }
 
-type PlatformAdminInput struct {
+type GlobalAdminInput struct {
 	AuthUserID      string
 	Email           string
 	AuthName        string
@@ -28,13 +28,13 @@ type PlatformAdminInput struct {
 	LastName        *string
 }
 
-type PlatformAdminCreator struct {
+type GlobalAdminCreator struct {
 	identities AuthIdentityProvisioner
-	users      PlatformAdminUserCreator
+	users      GlobalAdminUserCreator
 }
 
-func NewPlatformAdminCreator(identities AuthIdentityProvisioner, users PlatformAdminUserCreator) *PlatformAdminCreator {
-	return &PlatformAdminCreator{identities: identities, users: users}
+func NewGlobalAdminCreator(identities AuthIdentityProvisioner, users GlobalAdminUserCreator) *GlobalAdminCreator {
+	return &GlobalAdminCreator{identities: identities, users: users}
 }
 
 func ValidatePasswordConfirmation(password, confirmation string) error {
@@ -47,7 +47,7 @@ func ValidatePasswordConfirmation(password, confirmation string) error {
 	return nil
 }
 
-func (c *PlatformAdminCreator) Create(ctx context.Context, input PlatformAdminInput) (userdomain.User, error) {
+func (c *GlobalAdminCreator) Create(ctx context.Context, input GlobalAdminInput) (userdomain.User, error) {
 	authUserID := strings.TrimSpace(input.AuthUserID)
 	createdAuthIdentity := false
 	if authUserID == "" {
@@ -69,14 +69,14 @@ func (c *PlatformAdminCreator) Create(ctx context.Context, input PlatformAdminIn
 		createdAuthIdentity = true
 	}
 
-	created, err := c.users.CreatePlatformAdmin(
+	created, err := c.users.CreateGlobalAdmin(
 		ctx,
 		userdomain.CreateInput{AuthUserID: &authUserID},
 		userprofile.Details{FirstName: input.FirstName, LastName: input.LastName},
 	)
 	// shortcut: Auth and API writes are not atomic; retry API failures with the returned ID, add idempotent recovery if Auth timeouts must self-heal.
 	if err != nil && createdAuthIdentity {
-		return userdomain.User{}, fmt.Errorf("Auth identity %q was created, but API platform admin creation failed: %w; retry with --auth-user-id=%s", authUserID, err, authUserID)
+		return userdomain.User{}, fmt.Errorf("Auth identity %q was created, but API global admin creation failed: %w; retry with --auth-user-id=%s", authUserID, err, authUserID)
 	}
 	return created, err
 }

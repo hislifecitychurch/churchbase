@@ -3,12 +3,12 @@ SHELL := /bin/sh
 ATLAS ?= atlas
 ATLAS_DIR := file://ent/migrate/migrations
 
-.PHONY: help dev cli/user/platform format generate atlas/validate atlas/hash atlas/new atlas/apply build test lint tidy clean
+.PHONY: help dev cli/user/global format generate atlas/validate atlas/hash atlas/new atlas/apply build test lint tidy clean
 
 help:
 	@printf "%s\n" \
 		"make dev            Generate Ent code and start the API on port 36080" \
-		"make cli/user/platform ARGS=... Generate Ent code; prompt/create/link a platform admin" \
+		"make cli/user/global ARGS=... Generate Ent code; prompt/create/link a global admin" \
 		"make generate       Generate the Ent client" \
 		"make atlas/validate Validate Atlas migration checksums and SQL" \
 		"make atlas/hash     Recompute Atlas migration checksums" \
@@ -22,8 +22,8 @@ help:
 dev: generate
 	@set -a; [ ! -f .env ] || . ./.env; set +a; go run ./cmd/api
 
-cli/user/platform: generate
-	@set -a; [ ! -f .env ] || . ./.env; set +a; go run ./cmd/cli/user/platform $(ARGS)
+cli/user/global: generate
+	@set -a; [ ! -f .env ] || . ./.env; set +a; go run ./cmd/cli/user/global $(ARGS)
 
 format:
 	gofmt -w $$(find . -type f -name '*.go')

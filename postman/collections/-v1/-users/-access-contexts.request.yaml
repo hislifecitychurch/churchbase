@@ -1,6 +1,6 @@
 $kind: http-request
 name: /access-contexts
-description: Returns the authenticated user's active Church-wide and ministry contexts with server-computed capabilities for App navigation. Requires a valid BetterAuth session and a provisioned Churchbase user; sign in first so Postman's cookie jar can send the session cookie. Church-wide contexts are available to active church admins and staff. Ministry contexts require active church and ministry memberships in the same church. Care, Kids check-in, and Kids safety capabilities remain unavailable until explicit grants are implemented. Capability metadata is not a substitute for authorization checks on future data operations.
+description: Returns the authenticated user's active Church-wide and ministry contexts with server-computed capabilities for App navigation, plus `global_roles`. Requires a valid BetterAuth session and a provisioned Churchbase user; sign in first so Postman's cookie jar can send the session cookie. Global Admin and Global Staff receive all church/ministry contexts and all defined navigation capabilities without memberships. Other users receive contexts from active church and ministry memberships in the same church. Care, Kids check-in, and Kids safety capabilities remain unavailable to membership roles until explicit grants are implemented. Capability metadata is not a substitute for authorization checks on future data operations.
 url: "{{host-api}}/v1/users/me/access-contexts"
 method: GET
 headers:

@@ -12,13 +12,13 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func TestUserRepositoryCreatePlatformAdmin(t *testing.T) {
-	client := enttest.Open(t, "sqlite3", "file:create-platform-admin?mode=memory&cache=shared&_fk=1")
+func TestUserRepositoryCreateGlobalAdmin(t *testing.T) {
+	client := enttest.Open(t, "sqlite3", "file:create-global-admin?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
 	soft_delete.ConfigureClient(client)
 
 	authUserID := "auth-user-1"
-	created, err := userrepository.NewUserRepository(client).CreatePlatformAdmin(context.Background(), userdomain.CreateInput{
+	created, err := userrepository.NewUserRepository(client).CreateGlobalAdmin(context.Background(), userdomain.CreateInput{
 		AuthUserID: &authUserID,
 	})
 	if err != nil {
@@ -27,13 +27,13 @@ func TestUserRepositoryCreatePlatformAdmin(t *testing.T) {
 	if created.AuthUserID == nil || *created.AuthUserID != authUserID {
 		t.Fatalf("created Auth user ID = %v, want %q", created.AuthUserID, authUserID)
 	}
-	if created.PlatformRole == nil || *created.PlatformRole != userdomain.PlatformRoleAdmin {
-		t.Fatalf("created platform role = %v, want admin", created.PlatformRole)
+	if created.GlobalRoles == nil || *created.GlobalRoles != userdomain.GlobalRoleAdmin {
+		t.Fatalf("created global role = %v, want admin", created.GlobalRoles)
 	}
 }
 
-func TestUserPlatformRoleIsOptionalAndRestricted(t *testing.T) {
-	client := enttest.Open(t, "sqlite3", "file:user-platform-role?mode=memory&cache=shared&_fk=1")
+func TestUserGlobalRolesIsOptionalAndRestricted(t *testing.T) {
+	client := enttest.Open(t, "sqlite3", "file:user-global-roles?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
 	soft_delete.ConfigureClient(client)
 
@@ -42,32 +42,32 @@ func TestUserPlatformRoleIsOptionalAndRestricted(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if regularUser.PlatformRole != nil {
-		t.Fatalf("regular user's platform role = %v, want nil", *regularUser.PlatformRole)
+	if regularUser.GlobalRoles != nil {
+		t.Fatalf("regular user's global role = %v, want nil", *regularUser.GlobalRoles)
 	}
 
-	for _, role := range []entuser.PlatformRole{entuser.PlatformRoleAdmin, entuser.PlatformRoleStaff} {
+	for _, role := range []entuser.GlobalRoles{entuser.GlobalRolesAdmin, entuser.GlobalRolesStaff} {
 		created, err := client.User.Create().
 			SetAuthUserID(string(role) + "-auth-id").
-			SetPlatformRole(role).
+			SetGlobalRoles(role).
 			Save(ctx)
 		if err != nil {
-			t.Fatalf("create user with platform role %q: %v", role, err)
+			t.Fatalf("create user with global role %q: %v", role, err)
 		}
-		if created.PlatformRole == nil || *created.PlatformRole != role {
-			t.Fatalf("platform role = %v, want %q", created.PlatformRole, role)
+		if created.GlobalRoles == nil || *created.GlobalRoles != role {
+			t.Fatalf("stored global role = %v, want %q", created.GlobalRoles, role)
 		}
 	}
 
 	if _, err := client.User.Create().
-		SetPlatformRole(entuser.PlatformRoleAdmin).
+		SetGlobalRoles(entuser.GlobalRolesAdmin).
 		Save(ctx); err == nil {
-		t.Fatal("created platform admin without an Auth user ID")
+		t.Fatal("created global admin without an Auth user ID")
 	}
 	if _, err := client.User.Create().
 		SetAuthUserID("auth-user-invalid-role").
-		SetPlatformRole(entuser.PlatformRole("member")).
+		SetGlobalRoles(entuser.GlobalRoles("member")).
 		Save(ctx); err == nil {
-		t.Fatal("created user with unsupported platform role")
+		t.Fatal("created user with unsupported global role")
 	}
 }

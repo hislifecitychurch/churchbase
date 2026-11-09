@@ -2,17 +2,17 @@ package user
 
 import "github.com/google/uuid"
 
-type PlatformRole string
+type GlobalRole string
 
 const (
-	PlatformRoleAdmin PlatformRole = "admin"
-	PlatformRoleStaff PlatformRole = "staff"
+	GlobalRoleAdmin GlobalRole = "admin"
+	GlobalRoleStaff GlobalRole = "staff"
 )
 
 type User struct {
-	ID           uuid.UUID
-	AuthUserID   *string
-	PlatformRole *PlatformRole
+	ID          uuid.UUID
+	AuthUserID  *string
+	GlobalRoles *GlobalRole
 }
 
 type CreateInput struct {

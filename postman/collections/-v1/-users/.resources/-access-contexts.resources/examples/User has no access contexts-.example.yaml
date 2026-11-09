@@ -1,5 +1,5 @@
 $kind: http-example
-name: User has no access contexts
+name: User has no membership contexts
 request:
   url: "{{host-api}}/v1/users/me/access-contexts"
   method: GET
@@ -21,6 +21,7 @@ response:
         "success": true,
         "message": "Access contexts retrieved",
         "data": {
+          "global_roles": null,
           "contexts": []
         },
         "filters": null,

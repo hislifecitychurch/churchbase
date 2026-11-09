@@ -35,6 +35,7 @@ describe("getAccessContexts", () => {
   it("loads validated server contexts and ignores capabilities the UI does not know", async () => {
     process.env.NEXT_PUBLIC_API_URL_V1 = "http://localhost:36080/api/v1"
     setResponse({
+      global_roles: null,
       contexts: [
         {
           id: "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
@@ -49,23 +50,51 @@ describe("getAccessContexts", () => {
       ],
     })
 
-    await expect(getAccessContexts()).resolves.toEqual([
-      {
-        id: "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
-        church_id: "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
-        kind: "church",
-        slug: "churchbase",
-        name: "Church-wide",
-        church_name: "Sample Church",
-        role: "staff",
-        capabilities: ["church.overview.read"],
-      },
-    ])
+    await expect(getAccessContexts()).resolves.toEqual({
+      global_roles: null,
+      contexts: [
+        {
+          id: "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
+          church_id: "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
+          kind: "church",
+          slug: "churchbase",
+          name: "Church-wide",
+          church_name: "Sample Church",
+          role: "staff",
+          capabilities: ["church.overview.read"],
+        },
+      ],
+    })
+  })
+
+  it("accepts global contexts without church or ministry memberships", async () => {
+    process.env.NEXT_PUBLIC_API_URL_V1 = "http://localhost:36080/api/v1"
+    setResponse({
+      global_roles: "admin",
+      contexts: [
+        {
+          id: "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
+          church_id: "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
+          kind: "church",
+          slug: "churchbase",
+          name: "Church-wide",
+          church_name: "Sample Church",
+          role: "global_admin",
+          capabilities: ["church.overview.read"],
+        },
+      ],
+    })
+
+    await expect(getAccessContexts()).resolves.toMatchObject({
+      global_roles: "admin",
+      contexts: [{ role: "global_admin" }],
+    })
   })
 
   it("rejects malformed or unsafe contexts", async () => {
     process.env.NEXT_PUBLIC_API_URL_V1 = "http://localhost:36080/api/v1"
     setResponse({
+      global_roles: null,
       contexts: [
         {
           id: "not-a-uuid",
