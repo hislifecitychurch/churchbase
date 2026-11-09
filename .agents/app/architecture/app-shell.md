@@ -35,7 +35,7 @@ The root layout must not render `<main>`. `(auth)/layout.tsx` provides `<main>` 
 - Pass `render={<SidebarMenuButton size="lg" />}` to `MenuTrigger` and leave `tooltip` off. A tooltip-enabled `SidebarMenuButton` renders a tooltip root instead of a button, which breaks the trigger.
 - Hide the name, role line, and `IconSelector` with `group-data-[collapsible=icon]:hidden`. The tile stays visible in the collapsed rail, so the header still shows the active ministry.
 - Open the popup at `right` on desktop and `bottom` on mobile (`useSidebar().isMobile`), with `align="start"` and `sideOffset={4}`. Keep the popup at `w-56`; the primitive's default `min-w-32` is skipped when a width class is present.
-- Keep "All ministries" first in the list. It is the church-wide context, so the switcher adds scope instead of replacing the rest of the app.
+- Keep "Church-wide" first in the list, labeled "Admin" to indicate its scope; the switcher adds scope instead of replacing the rest of the app.
 - Show the user's role per ministry in the row (`detail`) and a check on the active item.
 
 `AppSidebar` owns the selected ministry slug and passes it to the switcher. Selection is local demo state; it changes the header label, tile, and check mark, but does not route, persist, or authorize data. The ministry is not a tenant: one staff app serves every ministry, and scoping will be enforced by the API once roles and sessions exist.

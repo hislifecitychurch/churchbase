@@ -16,8 +16,8 @@ export type Ministry = {
 export const ministries: [Ministry, ...Ministry[]] = [
   {
     slug: "churchbase",
-    name: "All ministries",
-    detail: "Church-wide",
+    name: "Church-wide",
+    detail: "Admin",
     icon: IconBuildingChurch,
   },
   {
