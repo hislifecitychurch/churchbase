@@ -1,0 +1,68 @@
+$kind: http-example
+name: Active access contexts
+request:
+  url: "{{host-api}}/v1/users/me/access-contexts"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": true,
+        "message": "Access contexts retrieved",
+        "data": {
+          "contexts": [
+            {
+              "id": "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
+              "church_id": "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
+              "kind": "church",
+              "slug": "churchbase",
+              "name": "Church-wide",
+              "church_name": "Sample Church",
+              "role": "staff",
+              "capabilities": [
+                "church.overview.read",
+                "church.people.read"
+              ]
+            },
+            {
+              "id": "018f47b8-8cb2-7d15-b28e-4a26843d81c2",
+              "church_id": "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
+              "kind": "ministry",
+              "slug": "broadcast",
+              "name": "Broadcast",
+              "church_name": "Sample Church",
+              "role": "lead",
+              "capabilities": [
+                "broadcast.overview.read",
+                "broadcast.services.read",
+                "broadcast.media.read",
+                "broadcast.team.read"
+              ]
+            }
+          ]
+        },
+        "filters": null,
+        "errors": [],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000004",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "me.access_contexts.retrieved",
+          "user_id": null,
+          "status": "info"
+        }
+      }
+order: 1000

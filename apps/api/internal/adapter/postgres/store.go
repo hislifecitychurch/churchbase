@@ -10,10 +10,12 @@ import (
 	entclient "github.com/hislifecitychurch/churchbase/apps/api/ent"
 	_ "github.com/hislifecitychurch/churchbase/apps/api/ent/runtime"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/actions/soft_delete"
+	accesscontextrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/access_context"
 	userrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user"
 	userprofilerepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/user_profile"
 	workspaceaccesseventrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/workspace_access_event"
 	postgresTransaction "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/transaction"
+	accesscontext "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/access_context"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 	workspaceaccessevent "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/workspace_access_event"
@@ -35,6 +37,10 @@ func (s *Store) UserProfileRepository() userprofile.Repository {
 
 func (s *Store) WorkspaceAccessEventRepository() workspaceaccessevent.Repository {
 	return workspaceaccesseventrepository.NewWorkspaceAccessEventRepository(s.client)
+}
+
+func (s *Store) AccessContextRepository() accesscontext.Repository {
+	return accesscontextrepository.NewAccessContextRepository(s.client)
 }
 
 func (s *Store) WithinTransaction(ctx context.Context, run func(context.Context) error) error {

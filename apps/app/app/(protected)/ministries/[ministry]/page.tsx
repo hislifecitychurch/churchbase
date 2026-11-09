@@ -1,7 +1,7 @@
 import type { JSX } from "react"
 import { notFound } from "next/navigation"
 
-import { getMainMenuItems } from "@/data/menu"
+import { mainMenuItemsByMinistry } from "@/data/menu"
 import { ministries } from "@/data/ministries"
 
 type MinistryPageProps = {
@@ -13,7 +13,7 @@ export default async function MinistryOverviewPage({
 }: MinistryPageProps): Promise<JSX.Element> {
   const { ministry: slug } = await params
   const ministry = ministries.find((item) => item.slug === slug)
-  const hasOverviewRoute = getMainMenuItems(slug).some(
+  const hasOverviewRoute = (mainMenuItemsByMinistry[slug] ?? []).some(
     (item) => item.path === `/ministries/${slug}`,
   )
 

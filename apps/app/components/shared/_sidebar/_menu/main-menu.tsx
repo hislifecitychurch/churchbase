@@ -10,13 +10,15 @@ import { SidebarMenuButton } from "@packages/ui-w/shared/sidebar/sidebar-menu-bu
 import { SidebarMenuItem } from "@packages/ui-w/shared/sidebar/sidebar-menu-item"
 
 import type { MainMenuItem } from "@/data/menu"
+import { pathWithContext } from "@/lib/access-contexts"
 import { isPathActive } from "@/lib/menu/is-path-active"
 
 type MainMenuProps = {
   items: MainMenuItem[]
+  contextID?: string
 }
 
-export function MainMenu({ items }: MainMenuProps): React.ReactElement {
+export function MainMenu({ items, contextID }: MainMenuProps): React.ReactElement {
   const pathname = usePathname()
 
   return (
@@ -35,7 +37,10 @@ export function MainMenu({ items }: MainMenuProps): React.ReactElement {
                   isActive={isActive}
                   tooltip={item.title}
                 >
-                  <Link href={item.path} prefetch={false}>
+                  <Link
+                    href={contextID ? pathWithContext(item.path, contextID) : item.path}
+                    prefetch={false}
+                  >
                     <Icon aria-hidden />
                     <span className="group-data-[collapsible=icon]:hidden">{item.title}</span>
                   </Link>

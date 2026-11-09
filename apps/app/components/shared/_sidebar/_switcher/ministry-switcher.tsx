@@ -1,6 +1,8 @@
 "use client"
 
-import { IconCheck, IconSelector } from "@tabler/icons-react"
+import { IconCheck, IconBuildingChurch, IconSelector } from "@tabler/icons-react"
+
+import type { AccessContext } from "@/api/access-contexts"
 
 import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
 import { Menu } from "@packages/ui-w/shared/menu/menu"
@@ -14,19 +16,45 @@ import { SidebarMenuItem } from "@packages/ui-w/shared/sidebar/sidebar-menu-item
 import { ministries } from "@/data/ministries"
 
 type MinistrySwitcherProps = {
-  activeSlug: string
-  onMinistryChange: (slug: string) => void
+  contexts: AccessContext[]
+  activeContextID: string | null
+  onContextChange: (context: AccessContext) => void
+}
+
+const roleLabels: Record<AccessContext["role"], string> = {
+  admin: "Admin",
+  staff: "Staff",
+  lead: "Leader",
+  member: "Member",
+}
+
+function contextName(context: AccessContext | undefined): string {
+  if (!context) {
+    return "Choose a workspace"
+  }
+  return context.kind === "church" ? "Church-wide" : context.name
+}
+
+function contextDetail(context: AccessContext, contexts: AccessContext[]): string {
+  const role = roleLabels[context.role]
+  const duplicate = contexts.some(
+    (candidate) =>
+      candidate.id !== context.id &&
+      candidate.kind === context.kind &&
+      candidate.slug === context.slug,
+  )
+  return duplicate ? `${role} · ${context.church_name}` : role
 }
 
 export function MinistrySwitcher({
-  activeSlug,
-  onMinistryChange,
+  contexts,
+  activeContextID,
+  onContextChange,
 }: MinistrySwitcherProps): React.ReactElement {
   const { isMobile } = useSidebar()
-
-  const activeMinistry =
-    ministries.find((ministry) => ministry.slug === activeSlug) ?? ministries[0]
-  const ActiveIcon = activeMinistry.icon
+  const activeContext = contexts.find((context) => context.id === activeContextID) ?? contexts[0]
+  const ActiveIcon =
+    ministries.find((ministry) => ministry.slug === activeContext?.slug)?.icon ?? IconBuildingChurch
 
   return (
     <SidebarMenu>
@@ -35,7 +63,7 @@ export function MinistrySwitcher({
           <MenuTrigger
             render={
               <SidebarMenuButton
-                aria-label={activeMinistry.name}
+                aria-label={contextName(activeContext)}
                 className="data-[popup-open]:bg-sidebar-accent data-[popup-open]:text-sidebar-accent-foreground"
                 size="lg"
               />
@@ -45,9 +73,9 @@ export function MinistrySwitcher({
               <ActiveIcon aria-hidden className="size-4" />
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-              <span className="truncate font-medium">{activeMinistry.name}</span>
+              <span className="truncate font-medium">{contextName(activeContext)}</span>
               <span className="text-muted-foreground truncate text-xs">
-                {activeMinistry.detail}
+                {activeContext ? contextDetail(activeContext, contexts) : "No access context"}
               </span>
             </div>
             <IconSelector
@@ -61,22 +89,26 @@ export function MinistrySwitcher({
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}
           >
-            <div className="text-muted-foreground px-2 py-1.5 text-xs font-medium">Ministries</div>
-            {ministries.map((ministry) => {
-              const MinistryIcon = ministry.icon
+            <div className="text-muted-foreground px-2 py-1.5 text-xs font-medium">Workspaces</div>
+            {contexts.map((context) => {
+              const ContextIcon =
+                ministries.find((ministry) => ministry.slug === context.slug)?.icon ??
+                IconBuildingChurch
 
               return (
                 <MenuItem
-                  key={ministry.slug}
+                  key={context.id}
                   className="gap-2 p-2"
-                  onClick={() => onMinistryChange(ministry.slug)}
+                  onClick={() => onContextChange(context)}
                 >
                   <div className="border-border flex size-6 items-center justify-center rounded-md border">
-                    <MinistryIcon aria-hidden className="size-3.5 shrink-0" />
+                    <ContextIcon aria-hidden className="size-3.5 shrink-0" />
                   </div>
-                  <span className="min-w-0 flex-1 truncate">{ministry.name}</span>
-                  <span className="text-muted-foreground shrink-0 text-xs">{ministry.detail}</span>
-                  {ministry.slug === activeSlug ? (
+                  <span className="min-w-0 flex-1 truncate">{contextName(context)}</span>
+                  <span className="text-muted-foreground shrink-0 text-xs">
+                    {contextDetail(context, contexts)}
+                  </span>
+                  {context.id === activeContextID ? (
                     <IconCheck aria-hidden className="ms-auto size-4" />
                   ) : null}
                 </MenuItem>

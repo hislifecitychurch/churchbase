@@ -39,7 +39,7 @@ func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
 		c.SetUserContext(actor.WithID(c.UserContext(), "auth-user-private"))
 		return c.Next()
 	})
-	app.Get("/api/v1/users/me", user.NewHandler(service).Get)
+	app.Get("/api/v1/users/me", user.NewHandler(service, nil).Get)
 
 	response, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil))
 	if err != nil {
@@ -79,7 +79,7 @@ func TestHandlerGetReturnsCurrentAPIUser(t *testing.T) {
 func TestHandlerGetRejectsMissingActor(t *testing.T) {
 	service := &currentUserServiceFake{}
 	app := fiber.New()
-	app.Get("/api/v1/users/me", user.NewHandler(service).Get)
+	app.Get("/api/v1/users/me", user.NewHandler(service, nil).Get)
 
 	response, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil))
 	if err != nil {
@@ -134,7 +134,7 @@ func getCurrentUser(t *testing.T, service *currentUserServiceFake) *http.Respons
 		c.SetUserContext(actor.WithID(c.UserContext(), "auth-user-1"))
 		return c.Next()
 	})
-	app.Get("/api/v1/users/me", user.NewHandler(service).Get)
+	app.Get("/api/v1/users/me", user.NewHandler(service, nil).Get)
 	response, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil))
 	if err != nil {
 		t.Fatal(err)

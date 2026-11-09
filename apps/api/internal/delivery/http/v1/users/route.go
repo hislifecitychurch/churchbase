@@ -8,4 +8,5 @@ import (
 
 func Register(router fiber.Router, validator authmiddleware.Validator, handler *userhandler.Handler) {
 	router.Get("/users/me", authmiddleware.Require(validator), handler.Get)
+	router.Get("/users/me/access-contexts", authmiddleware.Require(validator), handler.GetAccessContexts)
 }

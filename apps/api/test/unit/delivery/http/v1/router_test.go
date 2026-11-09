@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
 	httpv1 "github.com/hislifecitychurch/churchbase/apps/api/internal/delivery/http/v1"
+	accesscontext "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/access_context"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/health"
@@ -29,7 +30,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 		userhandler.NewHandler(currentUserFake{current: application.CurrentUser{
 			User:    userdomain.User{ID: uuid.New(), PlatformRole: &role},
 			Profile: userprofile.Profile{},
-		}}),
+		}}, accessContextsFake{}),
 		workspaceaccesshandler.NewHandler(nil),
 	)
 
@@ -46,6 +47,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 		method string
 		path   string
 	}{
+		{method: http.MethodGet, path: "/api/v1/users/me/access-contexts"},
 		{method: http.MethodPost, path: "/api/v1/users/me/workspace-access-events"},
 		{method: http.MethodGet, path: "/api/v1/platform/workspace-access-events"},
 	} {
@@ -75,6 +77,17 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 	if authenticated.StatusCode != http.StatusOK || !body.Success || body.Data.ID == "" {
 		t.Fatalf("authenticated /users/me response = %d %+v", authenticated.StatusCode, body)
 	}
+
+	contextsRequest := httptest.NewRequest(http.MethodGet, "/api/v1/users/me/access-contexts", nil)
+	contextsRequest.Header.Set("Cookie", "session=valid")
+	contextsResponse, err := app.Test(contextsRequest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer contextsResponse.Body.Close()
+	if contextsResponse.StatusCode != http.StatusOK {
+		t.Fatalf("authenticated /users/me/access-contexts status = %d", contextsResponse.StatusCode)
+	}
 }
 
 type sessionValidatorFake struct{}
@@ -89,4 +102,10 @@ type currentUserFake struct {
 
 func (s currentUserFake) GetByAuthUserID(context.Context, string) (application.CurrentUser, error) {
 	return s.current, nil
+}
+
+type accessContextsFake struct{}
+
+func (accessContextsFake) ListByAuthUserID(context.Context, string) ([]accesscontext.Context, error) {
+	return []accesscontext.Context{}, nil
 }

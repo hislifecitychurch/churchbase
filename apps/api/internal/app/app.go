@@ -15,6 +15,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/config"
 	deliveryhttp "github.com/hislifecitychurch/churchbase/apps/api/internal/delivery/http"
+	accesscontextservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/access_context/service"
 	userservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user/service"
 	userprofileservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile/service"
 	workspaceaccesseventservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/workspace_access_event/service"
@@ -44,12 +45,14 @@ func New(cfg config.Config) (*Application, error) {
 	users := userservice.NewService(db.UserRepository(), profiles, db)
 	workspaceAccessEvents := workspaceaccesseventservice.NewService(db.WorkspaceAccessEventRepository())
 	currentUsers := application.NewCurrentUserReader(users, profiles, workspaceAccessEvents)
+	accessContexts := accesscontextservice.NewService(db.AccessContextRepository())
+	currentAccessContexts := application.NewCurrentAccessContextsReader(users, accessContexts)
 	workspaceAccess := application.NewWorkspaceAccessService(users, workspaceAccessEvents, profiles)
 	return &Application{
 		http: deliveryhttp.New(
 			cfg.AllowedOrigin,
 			betterauthadapter.NewSessionClient(cfg.AuthBaseURL),
-			user.NewHandler(currentUsers),
+			user.NewHandler(currentUsers, currentAccessContexts),
 			workspaceaccesshandler.NewHandler(workspaceAccess),
 			db,
 			redis,

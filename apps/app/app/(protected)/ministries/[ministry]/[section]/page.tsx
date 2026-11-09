@@ -1,7 +1,7 @@
 import type { JSX } from "react"
 import { notFound } from "next/navigation"
 
-import { getMainMenuItems } from "@/data/menu"
+import { mainMenuItemsByMinistry } from "@/data/menu"
 import { ministries } from "@/data/ministries"
 
 type MinistrySectionPageProps = {
@@ -13,7 +13,9 @@ export default async function MinistrySectionPage({
 }: MinistrySectionPageProps): Promise<JSX.Element> {
   const { ministry: slug, section } = await params
   const ministry = ministries.find((item) => item.slug === slug)
-  const page = getMainMenuItems(slug).find((item) => item.path === `/ministries/${slug}/${section}`)
+  const page = (mainMenuItemsByMinistry[slug] ?? []).find(
+    (item) => item.path === `/ministries/${slug}/${section}`,
+  )
 
   if (!ministry || slug === "churchbase" || !page) {
     notFound()
