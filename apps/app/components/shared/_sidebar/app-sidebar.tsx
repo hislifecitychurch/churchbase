@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
 
 import { Sidebar } from "@packages/ui-w/shared/sidebar/sidebar"
 import { SidebarContent } from "@packages/ui-w/shared/sidebar/sidebar-content"
@@ -10,11 +10,14 @@ import { SidebarHeader } from "@packages/ui-w/shared/sidebar/sidebar-header"
 import { FooterMenu } from "@/components/shared/_sidebar/_menu/footer-menu"
 import { MainMenu } from "@/components/shared/_sidebar/_menu/main-menu"
 import { MinistrySwitcher } from "@/components/shared/_sidebar/_switcher/ministry-switcher"
-import { mainMenuItems } from "@/data/menu/main"
-import { ministries } from "@/data/ministries"
+import { getMainMenuItems } from "@/data/menu/main"
+import { getMinistrySlugFromPath } from "@/lib/menu/get-ministry-slug-from-path"
 
 export function AppSidebar(): React.ReactElement {
-  const [activeMinistrySlug, setActiveMinistrySlug] = useState(ministries[0].slug)
+  const pathname = usePathname()
+  const router = useRouter()
+  const activeMinistrySlug = getMinistrySlugFromPath(pathname)
+  const menuItems = getMainMenuItems(activeMinistrySlug)
 
   return (
     <div className="flex h-svh shrink-0 self-start">
@@ -22,11 +25,13 @@ export function AppSidebar(): React.ReactElement {
         <SidebarHeader>
           <MinistrySwitcher
             activeSlug={activeMinistrySlug}
-            onMinistryChange={setActiveMinistrySlug}
+            onMinistryChange={(slug) =>
+              router.push(slug === "churchbase" ? "/" : `/ministries/${slug}`)
+            }
           />
         </SidebarHeader>
         <SidebarContent>
-          <MainMenu items={mainMenuItems} />
+          <MainMenu items={menuItems} />
         </SidebarContent>
         <SidebarFooter>
           <FooterMenu />

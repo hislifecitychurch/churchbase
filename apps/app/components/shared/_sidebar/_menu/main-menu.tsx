@@ -24,7 +24,7 @@ export function MainMenu({ items }: MainMenuProps): React.ReactElement {
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => {
-            const isActive = isPathActive(pathname, item.path)
+            const isActive = isPathActive(pathname, item.path, item.exact)
             const Icon = item.icon
 
             return (

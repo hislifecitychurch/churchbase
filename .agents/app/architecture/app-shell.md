@@ -17,9 +17,9 @@ The root layout must not render `<main>`. `(auth)/layout.tsx` provides `<main>` 
 
 ## Navigation
 
-- Keep main destinations in `data/menu/main.tsx` as `MainMenuItem[]` with `title`, `path`, and `icon`.
+- Keep main destinations in `data/menu/main.tsx` as `MainMenuItem[]` lists keyed by ministry slug. Church-wide routes stay global; ministry routes live under `/ministries/[ministry]`.
 - Keep footer entries in `data/menu/footer.tsx`: Settings is a link, and the sidebar trigger is an action descriptor rendered by `FooterMenu`.
-- Derive the active item from `usePathname` and `lib/menu/is-path-active.ts`. The root path matches only `/`; every other path also matches its descendants.
+- Derive the active item from `usePathname` and `lib/menu/is-path-active.ts`. The root path matches only `/`; other paths match descendants unless the menu item sets `exact: true` (used for ministry Overview routes).
 - Leave sidebar icons at the primitive default `size-4`. A 16px icon fits the collapsed 32px button with `p-2` exactly (8px each side), so it is centered in both the button and the 66px rail. A larger icon such as `size-5!` overflows the 16px content box and sits right of center.
 - Do not add `group-data-[collapsible=icon]:justify-center`. The button transitions its own width, so centering applied at collapse throws the icon to the right before the width catches up. The symmetric padding already centers a `size-4` icon, so no override is needed.
 - Keep `SidebarTrigger` on the same default icon size; it renders through `SidebarMenuButton` and needs no per-caller sizing override.
@@ -38,13 +38,11 @@ The root layout must not render `<main>`. `(auth)/layout.tsx` provides `<main>` 
 - Keep "Church-wide" first in the list, labeled "Admin" to indicate its scope; the switcher adds scope instead of replacing the rest of the app.
 - Show the user's role per ministry in the row (`detail`) and a check on the active item.
 
-`AppSidebar` owns the selected ministry slug and passes it to the switcher. Selection is local demo state; it changes the header label, tile, and check mark, but does not route, persist, or authorize data. The ministry is not a tenant: one staff app serves every ministry, and scoping will be enforced by the API once roles and sessions exist.
+`AppSidebar` derives the selected ministry from the pathname and displays that ministry's menu. The switcher navigates to `/` for Church-wide or `/ministries/[ministry]` for a ministry, so reloads and deep links preserve context. This is navigation state only, not authorization; the ministry is not a tenant, and API access must be scoped and authorized server-side.
 
 ## Deferred
 
 - The footer user menu and logout require a session. Do not add them before authentication exists.
-- Ministry-specific main menus belong in `data/menu/main.tsx`; their entries need real or placeholder routes before they are shown.
-- Role filtering of ministry menus requires a role model and server-side authorization.
-- Routing the switcher to `/ministries/[ministry]` and guarding it server-side require sessions and roles. The URL, not the switcher state, must become the source of truth.
+- Role-filtering menus and protecting ministry routes require a role model and server-side authorization; the selected ministry and visible menu are presentation only.
 - Scope analytics with the ministry id on the server. Never fetch church-wide numbers and filter them in the browser, and keep care data behind a separate permission from ministry leadership.
 - Pending-navigation state is unnecessary until routes become slow enough to need it.
