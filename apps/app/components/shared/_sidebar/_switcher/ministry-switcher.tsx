@@ -2,7 +2,7 @@
 
 import { IconCheck, IconBuildingChurch, IconSelector } from "@tabler/icons-react"
 
-import type { AccessContext, GlobalRole } from "@/api/access-contexts"
+import type { AccessContext } from "@/api/access-contexts"
 
 import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
 import { Menu } from "@packages/ui-w/shared/menu/menu"
@@ -17,7 +17,6 @@ import { ministries } from "@/data/ministries"
 
 type MinistrySwitcherProps = {
   contexts: AccessContext[]
-  globalRole: GlobalRole | null
   activeContextID: string | null
   onContextChange: (context: AccessContext) => void
 }
@@ -31,10 +30,7 @@ const roleLabels: Record<AccessContext["role"], string> = {
   global_staff: "Global Staff",
 }
 
-function contextName(context: AccessContext | undefined, globalRole: GlobalRole | null): string {
-  if (!context) {
-    return globalRole ? "Global access" : "Choose a workspace"
-  }
+function contextName(context: AccessContext): string {
   return context.kind === "church" ? "Church-wide" : context.name
 }
 
@@ -51,14 +47,17 @@ function contextDetail(context: AccessContext, contexts: AccessContext[]): strin
 
 export function MinistrySwitcher({
   contexts,
-  globalRole,
   activeContextID,
   onContextChange,
-}: MinistrySwitcherProps): React.ReactElement {
+}: MinistrySwitcherProps): React.ReactElement | null {
   const { isMobile } = useSidebar()
   const activeContext = contexts.find((context) => context.id === activeContextID) ?? contexts[0]
+  if (!activeContext) {
+    return null
+  }
+
   const ActiveIcon =
-    ministries.find((ministry) => ministry.slug === activeContext?.slug)?.icon ?? IconBuildingChurch
+    ministries.find((ministry) => ministry.slug === activeContext.slug)?.icon ?? IconBuildingChurch
 
   return (
     <SidebarMenu>
@@ -67,7 +66,7 @@ export function MinistrySwitcher({
           <MenuTrigger
             render={
               <SidebarMenuButton
-                aria-label={contextName(activeContext, globalRole)}
+                aria-label={contextName(activeContext)}
                 className="data-[popup-open]:bg-sidebar-accent data-[popup-open]:text-sidebar-accent-foreground"
                 size="lg"
               />
@@ -77,15 +76,9 @@ export function MinistrySwitcher({
               <ActiveIcon aria-hidden className="size-4" />
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-              <span className="truncate font-medium">{contextName(activeContext, globalRole)}</span>
+              <span className="truncate font-medium">{contextName(activeContext)}</span>
               <span className="text-muted-foreground truncate text-xs">
-                {activeContext
-                  ? contextDetail(activeContext, contexts)
-                  : globalRole === "admin"
-                    ? roleLabels.global_admin
-                    : globalRole === "staff"
-                      ? roleLabels.global_staff
-                      : "No access context"}
+                {contextDetail(activeContext, contexts)}
               </span>
             </div>
             <IconSelector
@@ -100,11 +93,6 @@ export function MinistrySwitcher({
             sideOffset={4}
           >
             <div className="text-muted-foreground px-2 py-1.5 text-xs font-medium">Workspaces</div>
-            {contexts.length === 0 ? (
-              <div className="text-muted-foreground px-2 py-1.5 text-xs">
-                {globalRole ? "No church contexts configured" : "No available workspaces"}
-              </div>
-            ) : null}
             {contexts.map((context) => {
               const ContextIcon =
                 ministries.find((ministry) => ministry.slug === context.slug)?.icon ??
@@ -119,9 +107,7 @@ export function MinistrySwitcher({
                   <div className="border-border flex size-6 items-center justify-center rounded-md border">
                     <ContextIcon aria-hidden className="size-3.5 shrink-0" />
                   </div>
-                  <span className="min-w-0 flex-1 truncate">
-                    {contextName(context, globalRole)}
-                  </span>
+                  <span className="min-w-0 flex-1 truncate">{contextName(context)}</span>
                   <span className="text-muted-foreground shrink-0 text-xs">
                     {contextDetail(context, contexts)}
                   </span>
