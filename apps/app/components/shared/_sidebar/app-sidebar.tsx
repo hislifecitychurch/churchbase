@@ -38,10 +38,11 @@ export function AppSidebar(): React.ReactElement {
   return (
     <div className="flex h-svh shrink-0 self-start">
       <Sidebar collapsible="icon" variant="floating">
-        {contexts.length > 0 ? (
+        {contexts.length > 0 || globalRole ? (
           <SidebarHeader>
             <MinistrySwitcher
               contexts={contexts}
+              globalRole={globalRole}
               activeContextID={activeContext?.id ?? null}
               onContextChange={(context) =>
                 router.push(pathWithContext(contextHomePath(context), context.id))

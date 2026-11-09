@@ -2,7 +2,7 @@
 
 import { IconCheck, IconBuildingChurch, IconSelector } from "@tabler/icons-react"
 
-import type { AccessContext } from "@/api/access-contexts"
+import type { AccessContext, GlobalRole } from "@/api/access-contexts"
 
 import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
 import { Menu } from "@packages/ui-w/shared/menu/menu"
@@ -17,6 +17,7 @@ import { ministries } from "@/data/ministries"
 
 type MinistrySwitcherProps = {
   contexts: AccessContext[]
+  globalRole: GlobalRole | null
   activeContextID: string | null
   onContextChange: (context: AccessContext) => void
 }
@@ -47,13 +48,39 @@ function contextDetail(context: AccessContext, contexts: AccessContext[]): strin
 
 export function MinistrySwitcher({
   contexts,
+  globalRole,
   activeContextID,
   onContextChange,
 }: MinistrySwitcherProps): React.ReactElement | null {
   const { isMobile } = useSidebar()
   const activeContext = contexts.find((context) => context.id === activeContextID) ?? contexts[0]
   if (!activeContext) {
-    return null
+    if (!globalRole) {
+      return null
+    }
+    const role = globalRole === "admin" ? roleLabels.global_admin : roleLabels.global_staff
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            asChild
+            aria-label={`All churches, ${role}`}
+            className="hover:text-sidebar-foreground cursor-default hover:bg-transparent"
+            size="lg"
+          >
+            <div>
+              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-xl">
+                <IconBuildingChurch aria-hidden className="size-4" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+                <span className="truncate font-medium">All churches</span>
+                <span className="text-muted-foreground truncate text-xs">{role}</span>
+              </div>
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    )
   }
 
   const ActiveIcon =
