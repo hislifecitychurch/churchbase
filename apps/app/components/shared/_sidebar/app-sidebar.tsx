@@ -10,7 +10,7 @@ import { SidebarHeader } from "@packages/ui-w/shared/sidebar/sidebar-header"
 import { FooterMenu } from "@/components/shared/_sidebar/_menu/footer-menu"
 import { MainMenu } from "@/components/shared/_sidebar/_menu/main-menu"
 import { MinistrySwitcher } from "@/components/shared/_sidebar/_switcher/ministry-switcher"
-import { getMainMenuItems } from "@/data/menu/main"
+import { getMainMenuItems } from "@/data/menu"
 import { getMinistrySlugFromPath } from "@/lib/menu/get-ministry-slug-from-path"
 
 export function AppSidebar(): React.ReactElement {

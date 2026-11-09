@@ -1,7 +1,7 @@
 import type { JSX } from "react"
 import { notFound } from "next/navigation"
 
-import { getMainMenuItems } from "@/data/menu/main"
+import { getMainMenuItems } from "@/data/menu"
 import { ministries } from "@/data/ministries"
 
 type MinistryPageProps = {

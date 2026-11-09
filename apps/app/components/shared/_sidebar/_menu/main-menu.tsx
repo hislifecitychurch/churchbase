@@ -9,7 +9,7 @@ import { SidebarMenu } from "@packages/ui-w/shared/sidebar/sidebar-menu"
 import { SidebarMenuButton } from "@packages/ui-w/shared/sidebar/sidebar-menu-button"
 import { SidebarMenuItem } from "@packages/ui-w/shared/sidebar/sidebar-menu-item"
 
-import type { MainMenuItem } from "@/data/menu/main"
+import type { MainMenuItem } from "@/data/menu"
 import { isPathActive } from "@/lib/menu/is-path-active"
 
 type MainMenuProps = {

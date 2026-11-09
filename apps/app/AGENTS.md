@@ -41,7 +41,7 @@ app/
 components/
   pages/              page-local composition
   shared/             app shell and other shared App pieces
-data/menu/            navigation destinations
+data/menu.tsx         main and footer navigation definitions
 hooks/api/            React Query wrappers for API modules
 lib/                  small App helpers
 providers/            app-wide client providers

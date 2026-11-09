@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 
-import { getMainMenuItems } from "@/data/menu/main"
+import { getMainMenuItems } from "@/data/menu"
 import { getMinistrySlugFromPath } from "@/lib/menu/get-ministry-slug-from-path"
 
 describe("ministry navigation", () => {

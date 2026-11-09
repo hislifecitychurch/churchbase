@@ -8,7 +8,7 @@ import { SidebarMenuButton } from "@packages/ui-w/shared/sidebar/sidebar-menu-bu
 import { SidebarMenuItem } from "@packages/ui-w/shared/sidebar/sidebar-menu-item"
 import { SidebarTrigger } from "@packages/ui-w/shared/sidebar/sidebar-trigger"
 
-import { footerMenuItems } from "@/data/menu/footer"
+import { footerMenuItems } from "@/data/menu"
 import { isPathActive } from "@/lib/menu/is-path-active"
 
 export function FooterMenu(): React.ReactElement {

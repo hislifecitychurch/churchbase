@@ -5,9 +5,9 @@ import {
   IconHeartHandshake,
   IconLayoutDashboard,
   IconListDetails,
-  IconMoodKid,
   IconMusic,
   IconSchool,
+  IconSettings,
   IconShieldCheck,
   IconUserCheck,
   IconUsers,
@@ -21,6 +21,9 @@ export type MainMenuItem = {
   icon: TablerIcon
   exact?: boolean
 }
+
+export type FooterMenuItem =
+  { type: "link"; title: string; path: string; icon: TablerIcon } | { type: "sidebar-trigger" }
 
 const churchWideMenuItems: MainMenuItem[] = [
   { title: "Overview", path: "/", icon: IconLayoutDashboard },
@@ -58,6 +61,16 @@ export const mainMenuItemsByMinistry: Record<string, MainMenuItem[]> = {
     },
   ],
 }
+
+export const footerMenuItems: FooterMenuItem[] = [
+  {
+    type: "link",
+    title: "Settings",
+    path: "/settings",
+    icon: IconSettings,
+  },
+  { type: "sidebar-trigger" },
+]
 
 export function getMainMenuItems(ministrySlug: string): MainMenuItem[] {
   return mainMenuItemsByMinistry[ministrySlug] ?? churchWideMenuItems

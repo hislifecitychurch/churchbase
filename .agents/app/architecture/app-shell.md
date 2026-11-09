@@ -17,8 +17,8 @@ The root layout must not render `<main>`. `(auth)/layout.tsx` provides `<main>` 
 
 ## Navigation
 
-- Keep main destinations in `data/menu/main.tsx` as `MainMenuItem[]` lists keyed by ministry slug. Church-wide routes stay global; ministry routes live under `/ministries/[ministry]`.
-- Keep footer entries in `data/menu/footer.tsx`: Settings is a link, and the sidebar trigger is an action descriptor rendered by `FooterMenu`.
+- Keep main and footer navigation definitions in `data/menu.tsx`. Main destinations are `MainMenuItem[]` lists keyed by ministry slug; Church-wide routes stay global and ministry routes live under `/ministries/[ministry]`.
+- Footer entries use link items for destinations such as Settings and an action descriptor for the `FooterMenu` sidebar trigger.
 - Derive the active item from `usePathname` and `lib/menu/is-path-active.ts`. The root path matches only `/`; other paths match descendants unless the menu item sets `exact: true` (used for ministry Overview routes).
 - Leave sidebar icons at the primitive default `size-4`. A 16px icon fits the collapsed 32px button with `p-2` exactly (8px each side), so it is centered in both the button and the 66px rail. A larger icon such as `size-5!` overflows the 16px content box and sits right of center.
 - Do not add `group-data-[collapsible=icon]:justify-center`. The button transitions its own width, so centering applied at collapse throws the icon to the right before the width catches up. The symmetric padding already centers a `size-4` icon, so no override is needed.
