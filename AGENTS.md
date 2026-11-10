@@ -21,6 +21,7 @@ These instructions apply across the repository. More specific `AGENTS.md` files 
 - `apps/api/` — Go/Fiber business API.
 - `apps/auth/` — Bun/Hono authentication service using BetterAuth.
 - `apps/identity/` — shared sign-in UI and workspace routing for Churchbase applications.
+- `apps/platform/` — authenticated deployment-wide workspace; church/ministry management is planned.
 - `packages/ui-w/` — shared React UI components.
 - `packages/eslint/` — shared ESLint configuration.
 - `packages/metadata/` — shared Next.js metadata defaults and helpers.

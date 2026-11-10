@@ -46,7 +46,7 @@ func Load() (Config, error) {
 
 	origin := strings.TrimSpace(os.Getenv("CORS_ALLOWED_ORIGINS"))
 	if origin == "" {
-		origin = "http://localhost:36002"
+		origin = "http://localhost:36000,http://localhost:36001,http://localhost:36002"
 	}
 	origins := strings.Split(origin, ",")
 	for i, candidate := range origins {

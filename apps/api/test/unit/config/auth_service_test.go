@@ -6,6 +6,24 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/config"
 )
 
+func TestLoadDefaultCORSOriginsIncludeLocalApplications(t *testing.T) {
+	t.Setenv("PORT", "")
+	t.Setenv("RL_DB_URL", "postgres://user:password@localhost:5432/churchbase")
+	t.Setenv("KV_DB_URL", "redis://localhost:6379")
+	t.Setenv("AUTH_BASE_URL", "http://localhost:36081")
+	t.Setenv("ENVIRONMENT", "development")
+	t.Setenv("CORS_ALLOWED_ORIGINS", "")
+
+	settings, err := config.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := "http://localhost:36000,http://localhost:36001,http://localhost:36002"
+	if settings.AllowedOrigin != want {
+		t.Fatalf("AllowedOrigin = %q, want %q", settings.AllowedOrigin, want)
+	}
+}
+
 func TestLoadAuthBaseURLDoesNotRequireServiceToken(t *testing.T) {
 	t.Setenv("AUTH_BASE_URL", "https://auth.example.org/")
 	t.Setenv("AUTH_SERVICE_TOKEN", "")
