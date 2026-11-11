@@ -1,6 +1,8 @@
 "use client"
 
+import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { IconBuildingChurch } from "@tabler/icons-react"
 
 import { useAccessContexts } from "@/hooks/api/access-contexts/use-access-contexts"
 
@@ -8,6 +10,9 @@ import { Sidebar } from "@packages/ui-w/shared/sidebar/sidebar"
 import { SidebarContent } from "@packages/ui-w/shared/sidebar/sidebar-content"
 import { SidebarFooter } from "@packages/ui-w/shared/sidebar/sidebar-footer"
 import { SidebarHeader } from "@packages/ui-w/shared/sidebar/sidebar-header"
+import { SidebarMenu } from "@packages/ui-w/shared/sidebar/sidebar-menu"
+import { SidebarMenuButton } from "@packages/ui-w/shared/sidebar/sidebar-menu-button"
+import { SidebarMenuItem } from "@packages/ui-w/shared/sidebar/sidebar-menu-item"
 
 import { accessCapabilities } from "@/lib/access-capabilities"
 
@@ -38,15 +43,33 @@ export function AppSidebar(): React.ReactElement {
   return (
     <div className="flex h-svh shrink-0 self-start">
       <Sidebar collapsible="icon" variant="floating">
-        {contexts.length > 0 ? (
+        {contexts.length > 0 || globalRole ? (
           <SidebarHeader>
-            <MinistrySwitcher
-              contexts={contexts}
-              activeContextID={activeContext?.id ?? null}
-              onContextChange={(context) =>
-                router.push(pathWithContext(contextHomePath(context), context.id))
-              }
-            />
+            {contexts.length > 0 ? (
+              <MinistrySwitcher
+                contexts={contexts}
+                activeContextID={activeContext?.id ?? null}
+                onContextChange={(context) =>
+                  router.push(pathWithContext(contextHomePath(context), context.id))
+                }
+              />
+            ) : (
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild size="lg" tooltip="Churchbase App">
+                    <Link href="/" prefetch={false}>
+                      <div className="bg-sidebar-primary text-sidebar-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-xl">
+                        <IconBuildingChurch aria-hidden className="size-4" />
+                      </div>
+                      <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+                        <span className="truncate font-medium">Churchbase</span>
+                        <span className="text-muted-foreground truncate text-xs">App</span>
+                      </div>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            )}
           </SidebarHeader>
         ) : null}
         <SidebarContent>

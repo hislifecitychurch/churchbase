@@ -28,7 +28,7 @@ The root layout must not render `<main>`. `(auth)/layout.tsx` provides `<main>` 
 
 ## Ministry switcher
 
-`MinistrySwitcher` replaces the static logo row in the sidebar header. It is the app's context control, modeled on shadcn's `team-switcher` but built only from `ui-w` pieces.
+When real church or ministry contexts exist, `MinistrySwitcher` occupies the sidebar header. Global users without contexts see a static Churchbase App brand row instead; never synthesize an affiliation just to fill the header. The switcher is the app's context control, modeled on shadcn's `team-switcher` but built only from `ui-w` pieces.
 
 - Keep the ministry list in `data/ministries.tsx` as a non-empty tuple (`[Ministry, ...Ministry[]]`) so the first item is always available under `noUncheckedIndexedAccess`.
 - Render the switcher with `Menu`, `MenuTrigger`, `MenuPopup`, and `MenuItem`; do not import `@base-ui/react` or a dropdown primitive directly.
