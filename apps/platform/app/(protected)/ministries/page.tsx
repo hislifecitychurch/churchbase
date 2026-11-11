@@ -1,4 +1,9 @@
+import type { Metadata } from "next"
 import type { JSX } from "react"
+
+export const metadata: Metadata = {
+  title: "Ministries",
+}
 
 export default function MinistriesPage(): JSX.Element {
   return (
