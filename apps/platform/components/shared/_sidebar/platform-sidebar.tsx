@@ -2,10 +2,12 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { IconBuildingChurch } from "@tabler/icons-react"
 
 import { Sidebar } from "@packages/ui-w/shared/sidebar/sidebar"
 import { SidebarContent } from "@packages/ui-w/shared/sidebar/sidebar-content"
 import { SidebarFooter } from "@packages/ui-w/shared/sidebar/sidebar-footer"
+import { SidebarHeader } from "@packages/ui-w/shared/sidebar/sidebar-header"
 import { SidebarGroup } from "@packages/ui-w/shared/sidebar/sidebar-group"
 import { SidebarGroupContent } from "@packages/ui-w/shared/sidebar/sidebar-group-content"
 import { SidebarMenu } from "@packages/ui-w/shared/sidebar/sidebar-menu"
@@ -22,6 +24,23 @@ export function PlatformSidebar(): React.ReactElement {
   return (
     <div className="flex h-svh shrink-0 self-start">
       <Sidebar collapsible="icon" variant="floating">
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild size="lg" tooltip="Churchbase Platform">
+                <Link href="/" prefetch={false}>
+                  <div className="bg-sidebar-primary text-sidebar-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-xl">
+                    <IconBuildingChurch aria-hidden className="size-4" />
+                  </div>
+                  <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+                    <span className="truncate font-medium">Churchbase</span>
+                    <span className="text-muted-foreground truncate text-xs">Platform</span>
+                  </div>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupContent>
