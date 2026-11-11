@@ -1,19 +1,45 @@
 "use client"
 
 import { useEffect } from "react"
-import type { ReactNode } from "react"
+import type { JSX, ReactNode } from "react"
+import { IconMenu2 } from "@tabler/icons-react"
 
 import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 import { ApiError } from "@/api/client"
 
+import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
 import { Button } from "@packages/ui-w/shared/button/button"
+import { SidebarProvider } from "@packages/ui-w/providers/sidebar-provider"
+import { SidebarInset } from "@packages/ui-w/shared/sidebar/sidebar-inset"
 
-export function PlatformAccessGate({ children }: Readonly<{ children: ReactNode }>): ReactNode {
+import { PlatformSidebar } from "@/components/shared/_sidebar/platform-sidebar"
+
+type PlatformShellProps = {
+  children: ReactNode
+  sidebarOpen: boolean
+}
+
+function MobileNavTrigger(): JSX.Element {
+  const { setOpenMobile } = useSidebar()
+
+  return (
+    <Button
+      aria-label="Open navigation"
+      onClick={() => setOpenMobile(true)}
+      size="icon-lg"
+      variant="ghost"
+    >
+      <IconMenu2 aria-hidden />
+    </Button>
+  )
+}
+
+export function PlatformShell({ children, sidebarOpen }: PlatformShellProps): JSX.Element {
   const currentUser = useCurrentUser()
   const isUnauthenticated =
     currentUser.error instanceof ApiError && currentUser.error.status === 401
   const hasGlobalRole =
-    currentUser.data?.global_roles !== undefined && currentUser.data.global_roles !== null
+    currentUser.data?.global_roles === "admin" || currentUser.data?.global_roles === "staff"
 
   useEffect(() => {
     if (!isUnauthenticated) {
@@ -66,5 +92,15 @@ export function PlatformAccessGate({ children }: Readonly<{ children: ReactNode 
     )
   }
 
-  return children
+  return (
+    <SidebarProvider className="items-start" defaultOpen={sidebarOpen}>
+      <PlatformSidebar />
+      <SidebarInset className="min-h-0 gap-0 self-stretch p-4 sm:p-6">
+        <header className="flex items-center md:hidden">
+          <MobileNavTrigger />
+        </header>
+        {children}
+      </SidebarInset>
+    </SidebarProvider>
+  )
 }
