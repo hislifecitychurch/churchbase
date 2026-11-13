@@ -6,7 +6,7 @@ import { SidebarProvider } from "@packages/ui-w/providers/sidebar-provider"
 import { SidebarInset } from "@packages/ui-w/shared/sidebar/sidebar-inset"
 
 import { MobileNavTrigger } from "@/components/shared/_header/mobile-nav-trigger"
-import { AppSidebar } from "@/components/shared/_sidebar/app-sidebar"
+import { MainSidebar } from "@/components/shared/_sidebar/main-sidebar"
 import { WorkspaceAccessGate } from "@/components/shared/workspace-access-gate"
 
 export default async function ProtectedLayout({
@@ -18,7 +18,7 @@ export default async function ProtectedLayout({
   return (
     <WorkspaceAccessGate>
       <SidebarProvider className="items-start" defaultOpen={sidebarOpen}>
-        <AppSidebar />
+        <MainSidebar />
         <SidebarInset className="min-h-0 gap-0 self-stretch p-4 sm:p-6">
           <header className="flex items-center md:hidden">
             <MobileNavTrigger />

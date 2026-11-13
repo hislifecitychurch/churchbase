@@ -14,7 +14,7 @@ import { SidebarMenuItem } from "@packages/ui-w/shared/sidebar/sidebar-menu-item
 import { FooterMenu } from "@/components/shared/_sidebar/_menu/footer-menu"
 import { MainMenu } from "@/components/shared/_sidebar/_menu/main-menu"
 
-export function PlatformSidebar(): React.ReactElement {
+export function MainSidebar(): React.ReactElement {
   return (
     <div className="flex h-svh shrink-0 self-start">
       <Sidebar collapsible="icon" variant="floating">

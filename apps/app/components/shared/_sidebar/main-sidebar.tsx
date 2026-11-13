@@ -23,7 +23,7 @@ import { getMainMenuItems } from "@/data/menu"
 import { getMinistrySlugFromPath } from "@/lib/menu/get-ministry-slug-from-path"
 import { contextHomePath, getAccessContextForPath, pathWithContext } from "@/lib/access-contexts"
 
-export function AppSidebar(): React.ReactElement {
+export function MainSidebar(): React.ReactElement {
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()

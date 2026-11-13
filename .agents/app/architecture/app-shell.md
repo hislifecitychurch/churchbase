@@ -5,7 +5,7 @@
 The protected shell lives in `app/(protected)/layout.tsx` and is composed in one place:
 
 - `SidebarProvider` owns the open state and persists it in the `sidebar_state` cookie.
-- `AppSidebar` renders the ministry switcher, main menu, and footer collapse trigger.
+- `MainSidebar` renders the ministry switcher, main menu, and footer collapse trigger.
 - `SidebarInset` is the single `<main>` for protected routes and carries the page gutter.
 - `MobileNavTrigger` opens the sidebar sheet below the `md` breakpoint.
 
@@ -38,7 +38,7 @@ When real church or ministry contexts exist, `MinistrySwitcher` occupies the sid
 - Keep "Church-wide" first in the list, labeled "Admin" to indicate its scope; the switcher adds scope instead of replacing the rest of the app.
 - Show the user's role per ministry in the row (`detail`) and a check on the active item.
 
-`AppSidebar` loads the authenticated user's contexts from `GET /users/me/access-contexts`, displays only those contexts, and filters menu entries by the returned capabilities. The selected context ID is kept in the `context_id` query parameter so refreshes and deep links retain scope, including when ministry slugs repeat across churches. `WorkspaceAccessGate` checks that the selected context exposes the current route and redirects to an accessible overview otherwise. This is a UI guard only: every API data operation must still validate the session, tenant, membership, and required capability server-side.
+`MainSidebar` loads the authenticated user's contexts from `GET /users/me/access-contexts`, displays only those contexts, and filters menu entries by the returned capabilities. The selected context ID is kept in the `context_id` query parameter so refreshes and deep links retain scope, including when ministry slugs repeat across churches. `WorkspaceAccessGate` checks that the selected context exposes the current route and redirects to an accessible overview otherwise. This is a UI guard only: every API data operation must still validate the session, tenant, membership, and required capability server-side.
 
 ## Deferred
 
