@@ -15,7 +15,7 @@
 
 - Use the matching form in `.github/ISSUE_TEMPLATE/`. When creating issues as an agent, follow the same form and set the native issue Type.
 - Titles are concise, sentence case, and have no type prefix or trailing period. Feature and Task titles state the action and outcome; Bug titles describe the observed failure.
-- Feature descriptions capture the user problem, desired outcome, scope, acceptance criteria, and dependencies or open questions. Task descriptions capture the goal, deliverables, acceptance criteria, and dependencies. Bug descriptions capture actual and expected behavior, reproduction steps, impact/context, and how the fix will be verified.
+- Feature and Task descriptions share the same required sections: Goal, Scope, and Acceptance criteria. Use Goal for the problem and desired outcome; Scope for included work and important constraints. Dependencies and open questions are optional. Bug descriptions capture actual and expected behavior, reproduction steps, impact/context, and how the fix will be verified.
 
 ### Project status
 

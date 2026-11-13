@@ -9,24 +9,17 @@ body:
 
         Do not include real member or church personal data, credentials, or session tokens; sanitize examples.
   - type: textarea
-    id: user-need
+    id: goal
     attributes:
-      label: Problem or user need
-      description: Who needs this, and what problem or need does it address?
-    validations:
-      required: true
-  - type: textarea
-    id: outcome
-    attributes:
-      label: Desired outcome
-      description: What should users be able to do when this is complete?
+      label: Goal
+      description: What problem or user need does this address, and what outcome should it produce?
     validations:
       required: true
   - type: textarea
     id: scope
     attributes:
-      label: Scope and non-goals
-      description: What belongs in this change, and what should remain out of scope?
+      label: Scope
+      description: What belongs in this change? Note important exclusions or constraints.
     validations:
       required: true
   - type: textarea

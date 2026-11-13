@@ -18,8 +18,8 @@ body:
   - type: textarea
     id: scope
     attributes:
-      label: Deliverables and scope
-      description: What concrete work is included? Note non-goals when needed.
+      label: Scope
+      description: What concrete work is included? Note important exclusions or constraints when useful.
     validations:
       required: true
   - type: textarea
