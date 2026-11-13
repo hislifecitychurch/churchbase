@@ -15,6 +15,7 @@
     "**/.next/**",
     "**/.turbo/**",
     "**/.wrangler/**",
+    "**/.cloudflare/**",
     "**/.expo/**",
     "**/dist/**",
     "**/.vinext/**",
