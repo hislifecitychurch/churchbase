@@ -1,7 +1,7 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
-import { IconBuildingChurch } from "@tabler/icons-react"
 
 import { Sidebar } from "@packages/ui-w/shared/sidebar/sidebar"
 import { SidebarContent } from "@packages/ui-w/shared/sidebar/sidebar-content"
@@ -23,9 +23,13 @@ export function MainSidebar(): React.ReactElement {
             <SidebarMenuItem>
               <SidebarMenuButton asChild size="lg" tooltip="Churchbase Platform">
                 <Link href="/" prefetch={false}>
-                  <div className="bg-sidebar-primary text-sidebar-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-xl">
-                    <IconBuildingChurch aria-hidden className="size-4" />
-                  </div>
+                  <Image
+                    src="/logo/churchbase-logo.webp"
+                    alt=""
+                    width={32}
+                    height={32}
+                    className="size-8 shrink-0 rounded-xl object-cover"
+                  />
                   <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                     <span className="truncate font-medium">Churchbase</span>
                     <span className="text-muted-foreground truncate text-xs">Platform</span>
