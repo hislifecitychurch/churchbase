@@ -58,6 +58,7 @@ export function createMetadata(config: MetadataConfig): Metadata {
     icons: {
       icon: "/favicon.ico",
     },
+    manifest: "/site.webmanifest",
     ...rest,
   }
 }
