@@ -1,6 +1,6 @@
 # Issue labels
 
-Churchbase keeps issue labels limited to work type; the project’s Status, Priority, and Size fields cover workflow and planning.
+Use GitHub’s native issue Type—Task, Bug, or Feature—to classify work. Reserve labels for recurring cross-cutting concerns. These `type:*` labels are legacy: do not add them to new issues; remove existing assignments as issues are migrated to native types.
 
 | Label               | Color     | Use                                                             |
 | ------------------- | --------- | --------------------------------------------------------------- |

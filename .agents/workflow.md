@@ -8,7 +8,14 @@
 - Propose issue or project changes before making them. Create, edit, prioritize, or link GitHub work items only when the user selects the work or asks for those changes.
 - Before implementation, make the issue actionable: state the goal, scope, acceptance criteria, dependencies, and how it will be verified. Resolve product, authorization, or sensitive-data decisions before building.
 - Use a parent issue for an outcome and sub-issues for independently deliverable slices. Do not create sub-issues for every implementation step; each child should have a clear result that can be reviewed on its own.
-- Use the three work-type labels documented in [`.docs/issues/labels.md`](../.docs/issues/labels.md); add another only for a recurring need. Set Priority and Size only when the available information supports a useful choice.
+- Set the native GitHub issue Type to **Task**, **Bug**, or **Feature**. Do not add a duplicate type label; use labels only for recurring cross-cutting needs. Current repository labels are documented in [`.docs/issues/labels.md`](../.docs/issues/labels.md).
+- Set Priority and Size only when the available information supports a useful choice.
+
+### Issue format
+
+- Use the matching form in `.github/ISSUE_TEMPLATE/`. When creating issues as an agent, follow the same form and set the native issue Type.
+- Titles are concise, sentence case, and have no type prefix or trailing period. Feature and Task titles state the action and outcome; Bug titles describe the observed failure.
+- Feature descriptions capture the user problem, desired outcome, scope, acceptance criteria, and dependencies or open questions. Task descriptions capture the goal, deliverables, acceptance criteria, and dependencies. Bug descriptions capture actual and expected behavior, reproduction steps, impact/context, and how the fix will be verified.
 
 ### Project status
 
@@ -35,9 +42,9 @@ When the user asks to build a tracked issue, move it to **In progress**. When im
 
 ### Commit message convention
 
-Use Conventional Commits: `<type>(<scope>): <imperative summary>` (omit an unnecessary scope). Use a concise subject, followed by a blank line and `-` bullets describing what changed and why. Allowed types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, and `revert`. For breaking changes, append `!` and include a `BREAKING CHANGE:` footer.
+For commits linked to a GitHub issue, use `(#<number>) <type>(<scope>): <imperative summary>`, for example `(#4) feat(api): add authorized church creation`. For commits without a linked issue, use `<type>(<scope>): <imperative summary>`. Omit an unnecessary scope. Use a concise subject, followed by a blank line and `-` bullets describing what changed and why. Allowed types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, and `revert`. For breaking changes, append `!` and include a `BREAKING CHANGE:` footer.
 
-Pull-request titles use the same convention. For reviewed PR merges, preserve individual commits with a merge commit rather than squashing them.
+The `(#number)` prefix is a Churchbase convention outside the standard Conventional Commit header; any commit parser must strip or explicitly allow it. Pull-request titles remain Conventional Commits without the issue prefix. For reviewed PR merges, preserve individual commits with a merge commit rather than squashing them.
 
 ### Local loop (default)
 
