@@ -23,7 +23,7 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
-func TestChurchRepositoryPostgresListsByNameAndExcludesSoftDeleted(t *testing.T) {
+func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.T) {
 	databaseURL := os.Getenv("RL_TEST_DB_URL")
 	if databaseURL == "" {
 		t.Skip("set RL_TEST_DB_URL to a disposable PostgreSQL test database")
@@ -65,7 +65,7 @@ func TestChurchRepositoryPostgresListsByNameAndExcludesSoftDeleted(t *testing.T)
 			return err
 		}
 
-		churches, err := repository.List(txCtx)
+		churches, err := repository.GetAll(txCtx)
 		if err != nil {
 			return err
 		}
@@ -85,13 +85,13 @@ func TestChurchRepositoryPostgresListsByNameAndExcludesSoftDeleted(t *testing.T)
 		if err := transaction.Client(txCtx, client).Church.DeleteOneID(deleted.ID).Exec(txCtx); err != nil {
 			return err
 		}
-		churches, err = repository.List(txCtx)
+		churches, err = repository.GetAll(txCtx)
 		if err != nil {
 			return err
 		}
 		for _, church := range churches {
 			if church.ID == deleted.ID {
-				return errors.New("soft-deleted church appeared in list")
+				return errors.New("soft-deleted church appeared in GetAll result")
 			}
 		}
 		// Roll back test churches instead of leaving rows in the shared database.

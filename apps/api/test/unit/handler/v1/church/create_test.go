@@ -99,19 +99,19 @@ func appWithActor(handler *churchhandler.Handler) *fiber.App {
 		c.SetUserContext(actor.WithID(c.UserContext(), "auth-admin"))
 		return c.Next()
 	})
-	app.Get("/churches", handler.List)
+	app.Get("/churches", handler.GetAll)
 	app.Post("/churches", handler.Create)
 	return app
 }
 
 type churchCreationServiceFake struct {
-	called     bool
-	listCalled bool
-	authUserID string
-	created    churchdomain.Church
-	churches   []churchdomain.Church
-	err        error
-	listErr    error
+	called       bool
+	getAllCalled bool
+	authUserID   string
+	created      churchdomain.Church
+	churches     []churchdomain.Church
+	err          error
+	getAllErr    error
 }
 
 func (s *churchCreationServiceFake) CreateByAuthUserID(_ context.Context, authUserID string, _ churchdomain.CreateInput) (churchdomain.Church, error) {
@@ -119,7 +119,7 @@ func (s *churchCreationServiceFake) CreateByAuthUserID(_ context.Context, authUs
 	return s.created, s.err
 }
 
-func (s *churchCreationServiceFake) ListByAuthUserID(_ context.Context, authUserID string) ([]churchdomain.Church, error) {
-	s.listCalled, s.authUserID = true, authUserID
-	return s.churches, s.listErr
+func (s *churchCreationServiceFake) GetAllByAuthUserID(_ context.Context, authUserID string) ([]churchdomain.Church, error) {
+	s.getAllCalled, s.authUserID = true, authUserID
+	return s.churches, s.getAllErr
 }

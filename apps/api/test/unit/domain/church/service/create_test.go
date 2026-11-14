@@ -39,13 +39,13 @@ func TestCreateTrimsRequiredFieldsAndReturnsRepositoryChurch(t *testing.T) {
 }
 
 type churchRepositoryFake struct {
-	called     bool
-	listCalled bool
-	input      churchdomain.CreateInput
-	result     churchdomain.Church
-	listResult []churchdomain.Church
-	err        error
-	listErr    error
+	called       bool
+	getAllCalled bool
+	input        churchdomain.CreateInput
+	result       churchdomain.Church
+	getAllResult []churchdomain.Church
+	err          error
+	getAllErr    error
 }
 
 func (r *churchRepositoryFake) Create(_ context.Context, input churchdomain.CreateInput) (churchdomain.Church, error) {
@@ -53,7 +53,7 @@ func (r *churchRepositoryFake) Create(_ context.Context, input churchdomain.Crea
 	return r.result, r.err
 }
 
-func (r *churchRepositoryFake) List(context.Context) ([]churchdomain.Church, error) {
-	r.listCalled = true
-	return r.listResult, r.listErr
+func (r *churchRepositoryFake) GetAll(context.Context) ([]churchdomain.Church, error) {
+	r.getAllCalled = true
+	return r.getAllResult, r.getAllErr
 }

@@ -34,7 +34,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 			Profile: userprofile.Profile{},
 		}}, accessContextsFake{}),
 		workspaceaccesshandler.NewHandler(nil),
-		churchhandler.NewHandler(churchCreatorFake{}, churchListerFake{}),
+		churchhandler.NewHandler(churchCreatorFake{}, churchGetterFake{}),
 	)
 
 	unauthenticated, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil))
@@ -101,9 +101,9 @@ func (churchCreatorFake) CreateByAuthUserID(context.Context, string, churchdomai
 	return churchdomain.Church{}, nil
 }
 
-type churchListerFake struct{}
+type churchGetterFake struct{}
 
-func (churchListerFake) ListByAuthUserID(context.Context, string) ([]churchdomain.Church, error) {
+func (churchGetterFake) GetAllByAuthUserID(context.Context, string) ([]churchdomain.Church, error) {
 	return nil, nil
 }
 

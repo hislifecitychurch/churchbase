@@ -6,6 +6,6 @@ import (
 	churchdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/church"
 )
 
-func (s *Service) List(ctx context.Context) ([]churchdomain.Church, error) {
-	return s.repository.List(ctx)
+func (s *Service) GetAll(ctx context.Context) ([]churchdomain.Church, error) {
+	return s.repository.GetAll(ctx)
 }

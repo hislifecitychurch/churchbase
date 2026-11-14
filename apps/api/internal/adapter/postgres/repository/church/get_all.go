@@ -9,12 +9,12 @@ import (
 	churchdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/church"
 )
 
-func (r *ChurchRepository) List(ctx context.Context) ([]churchdomain.Church, error) {
+func (r *ChurchRepository) GetAll(ctx context.Context) ([]churchdomain.Church, error) {
 	records, err := transaction.Client(ctx, r.client).Church.Query().
 		Order(entchurch.ByName()).
 		All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("list churches: %w", err)
+		return nil, fmt.Errorf("get all churches: %w", err)
 	}
 
 	churches := make([]churchdomain.Church, 0, len(records))
