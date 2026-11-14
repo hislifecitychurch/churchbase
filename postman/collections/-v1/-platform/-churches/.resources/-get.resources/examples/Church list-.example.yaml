@@ -1,0 +1,40 @@
+$kind: http-example
+name: Church list
+request:
+  url: "{{host-api}}/v1/platform/churches"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": true,
+        "message": "Churches retrieved",
+        "data": [
+          {
+            "id": "018f47b8-8cb2-7d15-b28e-4a26843d81c2",
+            "name": "Example Church",
+            "slug": "example-church"
+          }
+        ],
+        "filters": null,
+        "errors": [],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000031",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "churches.listed",
+          "user_id": null,
+          "status": "info"
+        }
+      }
+order: 1000

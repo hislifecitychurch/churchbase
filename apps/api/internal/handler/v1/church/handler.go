@@ -10,10 +10,15 @@ type Creator interface {
 	CreateByAuthUserID(context.Context, string, churchdomain.CreateInput) (churchdomain.Church, error)
 }
 
-type Handler struct {
-	creator Creator
+type Lister interface {
+	ListByAuthUserID(context.Context, string) ([]churchdomain.Church, error)
 }
 
-func NewHandler(creator Creator) *Handler {
-	return &Handler{creator: creator}
+type Handler struct {
+	creator Creator
+	lister  Lister
+}
+
+func NewHandler(creator Creator, lister Lister) *Handler {
+	return &Handler{creator: creator, lister: lister}
 }

@@ -21,7 +21,7 @@ import (
 
 func TestCreateRejectsMissingFieldsBeforeCallingService(t *testing.T) {
 	service := &churchCreationServiceFake{}
-	app := appWithActor(churchhandler.NewHandler(service))
+	app := appWithActor(churchhandler.NewHandler(service, service))
 	for _, body := range []string{"{", `{"name":" ","slug":"sample"}`, `{"name":"Sample Church"}`} {
 		request := httptest.NewRequest(http.MethodPost, "/churches", strings.NewReader(body))
 		request.Header.Set("Content-Type", "application/json")
@@ -39,7 +39,7 @@ func TestCreateRejectsMissingFieldsBeforeCallingService(t *testing.T) {
 func TestCreateReturnsCreatedChurch(t *testing.T) {
 	id := uuid.New()
 	service := &churchCreationServiceFake{created: churchdomain.Church{ID: id, Name: "Sample Church", Slug: "sample-church"}}
-	app := appWithActor(churchhandler.NewHandler(service))
+	app := appWithActor(churchhandler.NewHandler(service, service))
 	request := httptest.NewRequest(http.MethodPost, "/churches", strings.NewReader(`{"name":"Sample Church","slug":"sample-church"}`))
 	request.Header.Set("Content-Type", "application/json")
 	created, err := app.Test(request)
@@ -73,7 +73,8 @@ func TestCreateMapsAuthorizationAndSlugConflict(t *testing.T) {
 		{name: "internal failure", err: errors.New("database details stay private"), code: "internal_error", want: http.StatusInternalServerError},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			app := appWithActor(churchhandler.NewHandler(&churchCreationServiceFake{err: test.err}))
+			service := &churchCreationServiceFake{err: test.err}
+			app := appWithActor(churchhandler.NewHandler(service, service))
 			request := httptest.NewRequest(http.MethodPost, "/churches", strings.NewReader(`{"name":"Sample","slug":"sample"}`))
 			request.Header.Set("Content-Type", "application/json")
 			created, err := app.Test(request)
@@ -98,18 +99,27 @@ func appWithActor(handler *churchhandler.Handler) *fiber.App {
 		c.SetUserContext(actor.WithID(c.UserContext(), "auth-admin"))
 		return c.Next()
 	})
+	app.Get("/churches", handler.List)
 	app.Post("/churches", handler.Create)
 	return app
 }
 
 type churchCreationServiceFake struct {
 	called     bool
+	listCalled bool
 	authUserID string
 	created    churchdomain.Church
+	churches   []churchdomain.Church
 	err        error
+	listErr    error
 }
 
 func (s *churchCreationServiceFake) CreateByAuthUserID(_ context.Context, authUserID string, _ churchdomain.CreateInput) (churchdomain.Church, error) {
 	s.called, s.authUserID = true, authUserID
 	return s.created, s.err
+}
+
+func (s *churchCreationServiceFake) ListByAuthUserID(_ context.Context, authUserID string) ([]churchdomain.Church, error) {
+	s.listCalled, s.authUserID = true, authUserID
+	return s.churches, s.listErr
 }

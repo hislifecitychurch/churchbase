@@ -1,0 +1,39 @@
+$kind: http-example
+name: Church list failed
+request:
+  url: "{{host-api}}/v1/platform/churches"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+response:
+  statusCode: 500
+  statusText: Internal Server Error
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": false,
+        "message": "An internal error occurred",
+        "data": null,
+        "filters": null,
+        "errors": [
+          {
+            "code": "internal_error",
+            "message": "An internal error occurred"
+          }
+        ],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000035",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "church.list.failed",
+          "user_id": null,
+          "status": "error"
+        }
+      }
+order: 5000

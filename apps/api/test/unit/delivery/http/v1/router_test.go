@@ -34,7 +34,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 			Profile: userprofile.Profile{},
 		}}, accessContextsFake{}),
 		workspaceaccesshandler.NewHandler(nil),
-		churchhandler.NewHandler(churchCreatorFake{}),
+		churchhandler.NewHandler(churchCreatorFake{}, churchListerFake{}),
 	)
 
 	unauthenticated, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil))
@@ -52,6 +52,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 	}{
 		{method: http.MethodGet, path: "/api/v1/users/me/access-contexts"},
 		{method: http.MethodPost, path: "/api/v1/users/me/workspace-access-events"},
+		{method: http.MethodGet, path: "/api/v1/platform/churches"},
 		{method: http.MethodPost, path: "/api/v1/platform/churches"},
 		{method: http.MethodGet, path: "/api/v1/platform/workspace-access-events"},
 	} {
@@ -98,6 +99,12 @@ type churchCreatorFake struct{}
 
 func (churchCreatorFake) CreateByAuthUserID(context.Context, string, churchdomain.CreateInput) (churchdomain.Church, error) {
 	return churchdomain.Church{}, nil
+}
+
+type churchListerFake struct{}
+
+func (churchListerFake) ListByAuthUserID(context.Context, string) ([]churchdomain.Church, error) {
+	return nil, nil
 }
 
 type sessionValidatorFake struct{}

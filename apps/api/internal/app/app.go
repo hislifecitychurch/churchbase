@@ -52,13 +52,14 @@ func New(cfg config.Config) (*Application, error) {
 	workspaceAccess := application.NewWorkspaceAccessService(users, workspaceAccessEvents, profiles)
 	churches := churchservice.NewService(db.ChurchRepository())
 	churchCreation := application.NewChurchCreationService(users, churches)
+	churchListing := application.NewChurchListingService(users, churches)
 	return &Application{
 		http: deliveryhttp.New(
 			cfg.AllowedOrigin,
 			betterauthadapter.NewSessionClient(cfg.AuthBaseURL),
 			user.NewHandler(currentUsers, currentAccessContexts),
 			workspaceaccesshandler.NewHandler(workspaceAccess),
-			churchhandler.NewHandler(churchCreation),
+			churchhandler.NewHandler(churchCreation, churchListing),
 			db,
 			redis,
 		),

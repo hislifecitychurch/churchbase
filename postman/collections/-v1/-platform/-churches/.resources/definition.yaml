@@ -1,0 +1,4 @@
+$kind: collection
+name: /churches
+description: Lists and creates churches for the Platform workspace. Listing requires a provisioned Global Admin or Global Staff; creation is restricted to Global Admins.
+order: 2000
