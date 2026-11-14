@@ -6,7 +6,7 @@ export type Church = {
   slug: string
 }
 
-function isChurch(value: unknown): value is Church {
+export function isChurch(value: unknown): value is Church {
   if (typeof value !== "object" || value === null) {
     return false
   }
