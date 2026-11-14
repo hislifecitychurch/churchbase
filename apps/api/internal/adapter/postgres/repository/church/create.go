@@ -1,0 +1,24 @@
+package church
+
+import (
+	"context"
+	"fmt"
+
+	entclient "github.com/hislifecitychurch/churchbase/apps/api/ent"
+	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/transaction"
+	churchdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/church"
+)
+
+func (r *ChurchRepository) Create(ctx context.Context, input churchdomain.CreateInput) (churchdomain.Church, error) {
+	record, err := transaction.Client(ctx, r.client).Church.Create().
+		SetName(input.Name).
+		SetSlug(input.Slug).
+		Save(ctx)
+	if entclient.IsConstraintError(err) {
+		return churchdomain.Church{}, churchdomain.ErrChurchSlugConflict
+	}
+	if err != nil {
+		return churchdomain.Church{}, fmt.Errorf("create church: %w", err)
+	}
+	return churchdomain.Church{ID: record.ID, Name: record.Name, Slug: record.Slug}, nil
+}

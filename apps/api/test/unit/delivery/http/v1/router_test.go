@@ -12,8 +12,10 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/application"
 	httpv1 "github.com/hislifecitychurch/churchbase/apps/api/internal/delivery/http/v1"
 	accesscontext "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/access_context"
+	churchdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/church"
 	userdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user"
 	userprofile "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/user_profile"
+	churchhandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/church"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/health"
 	userhandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/user"
 	workspaceaccesshandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/workspace_access_event"
@@ -32,6 +34,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 			Profile: userprofile.Profile{},
 		}}, accessContextsFake{}),
 		workspaceaccesshandler.NewHandler(nil),
+		churchhandler.NewHandler(churchCreatorFake{}),
 	)
 
 	unauthenticated, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil))
@@ -49,6 +52,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 	}{
 		{method: http.MethodGet, path: "/api/v1/users/me/access-contexts"},
 		{method: http.MethodPost, path: "/api/v1/users/me/workspace-access-events"},
+		{method: http.MethodPost, path: "/api/v1/platform/churches"},
 		{method: http.MethodGet, path: "/api/v1/platform/workspace-access-events"},
 	} {
 		response, err := app.Test(httptest.NewRequest(endpoint.method, endpoint.path, nil))
@@ -88,6 +92,12 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 	if contextsResponse.StatusCode != http.StatusOK {
 		t.Fatalf("authenticated /users/me/access-contexts status = %d", contextsResponse.StatusCode)
 	}
+}
+
+type churchCreatorFake struct{}
+
+func (churchCreatorFake) CreateByAuthUserID(context.Context, string, churchdomain.CreateInput) (churchdomain.Church, error) {
+	return churchdomain.Church{}, nil
 }
 
 type sessionValidatorFake struct{}

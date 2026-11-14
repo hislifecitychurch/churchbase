@@ -1,0 +1,21 @@
+$kind: http-request
+name: /churches
+description: Creates a church without creating users or memberships. Requires a valid BetterAuth session linked to a provisioned Churchbase Global Admin. Name and slug are required; a slug already used by another church returns 409.
+url: "{{host-api}}/v1/platform/churches"
+method: POST
+headers:
+  - key: Accept
+    value: application/json
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Example Church",
+      "slug": "example-church"
+    }
+auth:
+  type: noauth
+examples: ./.resources/-churches.resources/examples
+order: 2000

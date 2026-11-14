@@ -6,6 +6,7 @@ Use GitHub’s native issue Type—Task, Bug, or Feature—to classify work. Use
 
 | Label            | Color     | Use                                                     |
 | ---------------- | --------- | ------------------------------------------------------- |
+| `area: api`      | `#D93F0B` | Go API endpoints, authorization, and persistence.       |
 | `area: branding` | `#C2E0C6` | Churchbase logos, favicons, manifests, and brand usage. |
 | `area: ui`       | `#BFD4F2` | User-facing interface layout and interactions.          |
 | `area: workflow` | `#D4C5F9` | Repository and engineering workflow conventions.        |

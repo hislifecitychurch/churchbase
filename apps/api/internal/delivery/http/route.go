@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	httpv1 "github.com/hislifecitychurch/churchbase/apps/api/internal/delivery/http/v1"
+	churchhandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/church"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/health"
 	userhandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/user"
 	workspaceaccesshandler "github.com/hislifecitychurch/churchbase/apps/api/internal/handler/v1/workspace_access_event"
@@ -20,6 +21,7 @@ func New(
 	validator authmiddleware.Validator,
 	currentUserHandler *userhandler.Handler,
 	workspaceAccessHandler *workspaceaccesshandler.Handler,
+	churchHandler *churchhandler.Handler,
 	dependencies ...health.Checker,
 ) *fiber.App {
 	app := fiber.New(fiber.Config{
@@ -37,6 +39,6 @@ func New(
 		AllowCredentials: true,
 	}))
 
-	httpv1.Register(app.Group("/api/v1"), health.New(dependencies...), validator, currentUserHandler, workspaceAccessHandler)
+	httpv1.Register(app.Group("/api/v1"), health.New(dependencies...), validator, currentUserHandler, workspaceAccessHandler, churchHandler)
 	return app
 }
