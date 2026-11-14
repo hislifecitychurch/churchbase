@@ -7,12 +7,15 @@ import { FieldDescription } from "@packages/ui-w/shared/field/field-description"
 import { FieldLabel } from "@packages/ui-w/shared/field/field-label"
 import { Input } from "@packages/ui-w/shared/input/input"
 
-type ChurchSlugFieldProps = {
+type AddChurchSlugFieldProps = {
   disabled?: boolean
   value: string
 }
 
-export function ChurchSlugField({ disabled, value }: ChurchSlugFieldProps): React.ReactElement {
+export function AddChurchSlugField({
+  disabled,
+  value,
+}: AddChurchSlugFieldProps): React.ReactElement {
   return (
     <Field className="w-full">
       <FieldLabel htmlFor="church-slug">Church slug</FieldLabel>

@@ -1,0 +1,23 @@
+$kind: http-request
+name: PUT /churches/:churchID
+description: Updates a church's name and existing directory metadata. Replace the example UUID with the target church ID. The slug remains unchanged; blank timezone, website, and bio values clear those fields. Requires a valid BetterAuth session linked to a provisioned Global Admin. A missing church returns 404.
+url: "{{host-api}}/v1/platform/churches/018f47b8-8cb2-7d15-b28e-4a26843d81c2"
+method: PUT
+headers:
+  - key: Accept
+    value: application/json
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Example Church",
+      "timezone": "America/Chicago",
+      "website": "https://example.org",
+      "bio": "A welcoming church in Springfield."
+    }
+auth:
+  type: noauth
+examples: ./.resources/-put.resources/examples
+order: 3000

@@ -7,30 +7,49 @@ import { FieldLabel } from "@packages/ui-w/shared/field/field-label"
 import { Input } from "@packages/ui-w/shared/input/input"
 import { Textarea } from "@packages/ui-w/shared/textarea/textarea"
 
-export type ChurchMetadataValues = {
+export type UpdateChurchValues = {
+  name: string
   timezone: string
   website: string
   bio: string
 }
 
-type ChurchMetadataFieldsProps = {
+type UpdateChurchFieldsProps = {
   disabled?: boolean
-  onChange: (field: keyof ChurchMetadataValues, value: string) => void
-  value: ChurchMetadataValues
+  onChange: (field: keyof UpdateChurchValues, value: string) => void
+  slug: string
+  value: UpdateChurchValues
 }
 
-export function ChurchMetadataFields({
+export function UpdateChurchFields({
   disabled,
   onChange,
+  slug,
   value,
-}: ChurchMetadataFieldsProps): React.ReactElement {
+}: UpdateChurchFieldsProps): React.ReactElement {
   return (
     <div className="flex flex-col gap-4">
       <Field className="w-full">
-        <FieldLabel htmlFor="church-timezone">Time zone</FieldLabel>
+        <FieldLabel htmlFor="update-church-name">Church name</FieldLabel>
         <Input
+          autoComplete="organization"
           disabled={disabled}
-          id="church-timezone"
+          id="update-church-name"
+          name="name"
+          nativeInput
+          onChange={(event) => onChange("name", event.target.value)}
+          required
+          size="lg"
+          value={value.name}
+        />
+      </Field>
+      <p className="text-muted-foreground text-sm">Church slug “{slug}” remains unchanged.</p>
+      <Field className="w-full">
+        <FieldLabel htmlFor="update-church-timezone">Time zone</FieldLabel>
+        <Input
+          autoComplete="off"
+          disabled={disabled}
+          id="update-church-timezone"
           name="timezone"
           nativeInput
           onChange={(event) => onChange("timezone", event.target.value)}
@@ -40,11 +59,11 @@ export function ChurchMetadataFields({
         />
       </Field>
       <Field className="w-full">
-        <FieldLabel htmlFor="church-website">Website</FieldLabel>
+        <FieldLabel htmlFor="update-church-website">Website</FieldLabel>
         <Input
           autoComplete="url"
           disabled={disabled}
-          id="church-website"
+          id="update-church-website"
           name="website"
           nativeInput
           onChange={(event) => onChange("website", event.target.value)}
@@ -55,10 +74,10 @@ export function ChurchMetadataFields({
         />
       </Field>
       <Field className="w-full">
-        <FieldLabel htmlFor="church-bio">About this church</FieldLabel>
+        <FieldLabel htmlFor="update-church-bio">About this church</FieldLabel>
         <Textarea
           disabled={disabled}
-          id="church-bio"
+          id="update-church-bio"
           name="bio"
           onChange={(event) => onChange("bio", event.target.value)}
           placeholder="A short description of this church"

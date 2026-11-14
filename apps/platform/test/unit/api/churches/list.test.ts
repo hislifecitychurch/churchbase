@@ -35,6 +35,7 @@ describe("getChurches", () => {
         timezone: null,
         website: null,
         bio: null,
+        active_member_count: 0,
       },
     ]
     mockFetch(async (input, init) => {

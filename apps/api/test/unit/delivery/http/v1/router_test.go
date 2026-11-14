@@ -34,7 +34,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 			Profile: userprofile.Profile{},
 		}}, accessContextsFake{}),
 		workspaceaccesshandler.NewHandler(nil),
-		churchhandler.NewHandler(churchCreatorFake{}, churchGetterFake{}),
+		churchhandler.NewHandler(churchCreatorFake{}, churchGetterFake{}, churchUpdaterFake{}),
 	)
 
 	unauthenticated, err := app.Test(httptest.NewRequest(http.MethodGet, "/api/v1/users/me", nil))
@@ -54,6 +54,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 		{method: http.MethodPost, path: "/api/v1/users/me/workspace-access-events"},
 		{method: http.MethodGet, path: "/api/v1/platform/churches"},
 		{method: http.MethodPost, path: "/api/v1/platform/churches"},
+		{method: http.MethodPut, path: "/api/v1/platform/churches/00000000-0000-4000-8000-000000000001"},
 		{method: http.MethodGet, path: "/api/v1/platform/workspace-access-events"},
 	} {
 		response, err := app.Test(httptest.NewRequest(endpoint.method, endpoint.path, nil))
@@ -105,6 +106,12 @@ type churchGetterFake struct{}
 
 func (churchGetterFake) GetAllByAuthUserID(context.Context, string) ([]churchdomain.Church, error) {
 	return nil, nil
+}
+
+type churchUpdaterFake struct{}
+
+func (churchUpdaterFake) UpdateByAuthUserID(context.Context, string, uuid.UUID, churchdomain.UpdateInput) error {
+	return nil
 }
 
 type sessionValidatorFake struct{}

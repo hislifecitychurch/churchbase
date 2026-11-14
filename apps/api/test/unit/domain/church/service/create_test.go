@@ -81,16 +81,25 @@ func stringPointer(value string) *string {
 type churchRepositoryFake struct {
 	called       bool
 	getAllCalled bool
+	updateCalled bool
 	input        churchdomain.CreateInput
+	updateID     uuid.UUID
+	updateInput  churchdomain.UpdateInput
 	result       churchdomain.Church
 	getAllResult []churchdomain.Church
 	err          error
 	getAllErr    error
+	updateErr    error
 }
 
 func (r *churchRepositoryFake) Create(_ context.Context, input churchdomain.CreateInput) (churchdomain.Church, error) {
 	r.called, r.input = true, input
 	return r.result, r.err
+}
+
+func (r *churchRepositoryFake) Update(_ context.Context, id uuid.UUID, input churchdomain.UpdateInput) error {
+	r.updateCalled, r.updateID, r.updateInput = true, id, input
+	return r.updateErr
 }
 
 func (r *churchRepositoryFake) GetAll(context.Context) ([]churchdomain.Church, error) {

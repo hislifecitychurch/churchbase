@@ -43,16 +43,18 @@ func (h *Handler) GetAll(c *fiber.Ctx) error {
 		items = append(items, getAllResponse{
 			ID: item.ID.String(), Name: item.Name, Slug: item.Slug,
 			Timezone: item.Timezone, Website: item.Website, Bio: item.Bio,
+			ActiveMemberCount: item.ActiveMemberCount,
 		})
 	}
 	return response.JSON(c, http.StatusOK, response.Success(items, "Churches retrieved", c, "churches.listed", "", "info"))
 }
 
 type getAllResponse struct {
-	ID       string  `json:"id"`
-	Name     string  `json:"name"`
-	Slug     string  `json:"slug"`
-	Timezone *string `json:"timezone"`
-	Website  *string `json:"website"`
-	Bio      *string `json:"bio"`
+	ID                string  `json:"id"`
+	Name              string  `json:"name"`
+	Slug              string  `json:"slug"`
+	Timezone          *string `json:"timezone"`
+	Website           *string `json:"website"`
+	Bio               *string `json:"bio"`
+	ActiveMemberCount int     `json:"active_member_count"`
 }

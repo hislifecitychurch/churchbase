@@ -1,24 +1,35 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
+import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 import { useChurches } from "@/hooks/api/churches/use-churches"
+import type { Church } from "@/api/churches/list"
 import { getDataTableEmptyState } from "@/lib/data-table/empty-state"
 
 import { DataTable } from "@packages/ui-w/shared/data-table/data-table"
+import { Dialog } from "@packages/ui-w/shared/dialog/dialog"
 
 import { ChurchesEmptyState } from "@/components/pages/churches/_data-table/_empty/churches-empty-state"
 import { ChurchesErrorState } from "@/components/pages/churches/_data-table/_empty/churches-error-state"
 import { ChurchesLoadingState } from "@/components/pages/churches/_data-table/_empty/churches-loading-state"
 import { ChurchesNotFoundState } from "@/components/pages/churches/_data-table/_empty/churches-not-found-state"
 import { ChurchesDataTableActions } from "./actions"
-import { churchesDataTableColumns } from "./columns"
+import { getChurchesDataTableColumns } from "./columns"
+import { UpdateChurchDialog } from "@/components/pages/churches/_dialog/update-church-dialog"
 import { churchesDataTableSearch, filterChurchesByName } from "./filters"
 
 export function ChurchesDataTable(): React.ReactElement {
   const [search, setSearch] = useState("")
   const [pageIndex, setPageIndex] = useState(0)
   const [isManualRefreshing, setIsManualRefreshing] = useState(false)
+  const [editingChurch, setEditingChurch] = useState<Church | null>(null)
+  const currentUser = useCurrentUser()
+  const canUpdateChurch = currentUser.data?.global_roles === "admin"
+  const columns = useMemo(
+    () => getChurchesDataTableColumns((church) => setEditingChurch(church), canUpdateChurch),
+    [canUpdateChurch],
+  )
   const churches = useChurches()
   const hasCachedRows = (churches.data?.length ?? 0) > 0
   const filteredChurches = filterChurchesByName(
@@ -64,8 +75,22 @@ export function ChurchesDataTable(): React.ReactElement {
           The latest church list couldn't be loaded. Showing the last successful results.
         </p>
       ) : null}
+      <Dialog
+        onOpenChange={(open) => {
+          if (!open) setEditingChurch(null)
+        }}
+        open={editingChurch !== null}
+      >
+        {editingChurch ? (
+          <UpdateChurchDialog
+            key={editingChurch.id}
+            church={editingChurch}
+            onUpdated={() => setEditingChurch(null)}
+          />
+        ) : null}
+      </Dialog>
       <DataTable
-        columns={churchesDataTableColumns}
+        columns={columns}
         data={filteredChurches}
         emptyMessage={emptyState}
         getRowId={(church) => church.id}

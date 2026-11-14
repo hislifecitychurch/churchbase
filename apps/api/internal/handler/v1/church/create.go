@@ -58,6 +58,7 @@ func (h *Handler) Create(c *fiber.Ctx) error {
 	return response.JSON(c, http.StatusCreated, response.Success(createResponse{
 		ID: created.ID.String(), Name: created.Name, Slug: created.Slug,
 		Timezone: created.Timezone, Website: created.Website, Bio: created.Bio,
+		ActiveMemberCount: created.ActiveMemberCount,
 	}, "Church created", c, "church.created", "", "info"))
 }
 
@@ -70,12 +71,13 @@ type createRequest struct {
 }
 
 type createResponse struct {
-	ID       string  `json:"id"`
-	Name     string  `json:"name"`
-	Slug     string  `json:"slug"`
-	Timezone *string `json:"timezone"`
-	Website  *string `json:"website"`
-	Bio      *string `json:"bio"`
+	ID                string  `json:"id"`
+	Name              string  `json:"name"`
+	Slug              string  `json:"slug"`
+	Timezone          *string `json:"timezone"`
+	Website           *string `json:"website"`
+	Bio               *string `json:"bio"`
+	ActiveMemberCount int     `json:"active_member_count"`
 }
 
 func invalidChurch(c *fiber.Ctx) error {

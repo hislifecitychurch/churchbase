@@ -11,12 +11,12 @@ import { DialogClose } from "@packages/ui-w/shared/dialog/dialog-close"
 import { DialogFooter } from "@packages/ui-w/shared/dialog/dialog-footer"
 import { DialogPanel } from "@packages/ui-w/shared/dialog/dialog-panel"
 
-import { ChurchMetadataFields } from "@/components/pages/churches/_dialog/_form/_field/church-metadata-fields"
-import type { ChurchMetadataValues } from "@/components/pages/churches/_dialog/_form/_field/church-metadata-fields"
-import { ChurchNameField } from "@/components/pages/churches/_dialog/_form/_field/church-name-field"
-import { ChurchSlugField } from "@/components/pages/churches/_dialog/_form/_field/church-slug-field"
+import { AddChurchMetadataFields } from "@/components/pages/churches/_dialog/_form/_field/add-church-metadata-fields"
+import type { AddChurchMetadata } from "@/components/pages/churches/_dialog/_form/_field/add-church-metadata-fields"
+import { AddChurchNameField } from "@/components/pages/churches/_dialog/_form/_field/add-church-name-field"
+import { AddChurchSlugField } from "@/components/pages/churches/_dialog/_form/_field/add-church-slug-field"
 
-const emptyChurchMetadata: ChurchMetadataValues = { timezone: "", website: "", bio: "" }
+const emptyChurchMetadata: AddChurchMetadata = { timezone: "", website: "", bio: "" }
 
 type AddChurchFormProps = {
   onCreated: () => void
@@ -52,7 +52,7 @@ export function AddChurchForm({ onCreated }: AddChurchFormProps): React.ReactEle
     <form className="flex min-h-0 flex-1 flex-col" onSubmit={handleSubmit}>
       <DialogPanel className="min-h-0 flex-1 overflow-y-auto">
         <div className="flex flex-col gap-4">
-          <ChurchNameField
+          <AddChurchNameField
             disabled={createChurch.isPending}
             onChange={(event) => {
               setName(event.target.value)
@@ -60,8 +60,8 @@ export function AddChurchForm({ onCreated }: AddChurchFormProps): React.ReactEle
             }}
             value={name}
           />
-          <ChurchSlugField disabled={createChurch.isPending} value={slug} />
-          <ChurchMetadataFields
+          <AddChurchSlugField disabled={createChurch.isPending} value={slug} />
+          <AddChurchMetadataFields
             disabled={createChurch.isPending}
             onChange={(field, value) => {
               setMetadata((current) => ({ ...current, [field]: value }))

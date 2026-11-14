@@ -6,17 +6,17 @@ import { Field } from "@packages/ui-w/shared/field/field"
 import { FieldLabel } from "@packages/ui-w/shared/field/field-label"
 import { Input } from "@packages/ui-w/shared/input/input"
 
-type ChurchNameFieldProps = {
+type AddChurchNameFieldProps = {
   disabled?: boolean
   onChange: React.ChangeEventHandler<HTMLInputElement>
   value: string
 }
 
-export function ChurchNameField({
+export function AddChurchNameField({
   disabled,
   onChange,
   value,
-}: ChurchNameFieldProps): React.ReactElement {
+}: AddChurchNameFieldProps): React.ReactElement {
   return (
     <Field className="w-full">
       <FieldLabel htmlFor="church-name">Church name</FieldLabel>

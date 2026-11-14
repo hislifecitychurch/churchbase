@@ -7,6 +7,7 @@ export type Church = {
   timezone: string | null
   website: string | null
   bio: string | null
+  active_member_count: number
 }
 
 export function isChurch(value: unknown): value is Church {
@@ -24,7 +25,9 @@ export function isChurch(value: unknown): value is Church {
     church.slug.length > 0 &&
     [church.timezone, church.website, church.bio].every(
       (field) => field === null || typeof field === "string",
-    )
+    ) &&
+    Number.isSafeInteger(church.active_member_count) &&
+    (church.active_member_count as number) >= 0
   )
 }
 

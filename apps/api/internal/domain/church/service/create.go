@@ -17,7 +17,7 @@ func (s *Service) Create(ctx context.Context, input churchdomain.CreateInput) (c
 	input.Timezone = cleanOptional(input.Timezone)
 	input.Website = cleanOptional(input.Website)
 	input.Bio = cleanOptional(input.Bio)
-	if input.Name == "" || input.Slug == "" || !validChurchDetails(input) {
+	if input.Name == "" || input.Slug == "" || !validChurchDetails(input.Timezone, input.Website) {
 		return churchdomain.Church{}, fmt.Errorf("%w: invalid required or optional church details", churchdomain.ErrInvalidChurch)
 	}
 	return s.repository.Create(ctx, input)
@@ -34,17 +34,17 @@ func cleanOptional(value *string) *string {
 	return &trimmed
 }
 
-func validChurchDetails(input churchdomain.CreateInput) bool {
-	if input.Timezone != nil {
-		if *input.Timezone == "Local" {
+func validChurchDetails(timezone, websiteValue *string) bool {
+	if timezone != nil {
+		if *timezone == "Local" {
 			return false
 		}
-		if _, err := time.LoadLocation(*input.Timezone); err != nil {
+		if _, err := time.LoadLocation(*timezone); err != nil {
 			return false
 		}
 	}
-	if input.Website != nil {
-		website, err := url.Parse(*input.Website)
+	if websiteValue != nil {
+		website, err := url.Parse(*websiteValue)
 		if err != nil || (website.Scheme != "http" && website.Scheme != "https") || website.Hostname() == "" || website.User != nil {
 			return false
 		}

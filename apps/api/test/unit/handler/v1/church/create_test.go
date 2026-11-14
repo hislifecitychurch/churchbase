@@ -21,7 +21,7 @@ import (
 
 func TestCreateRejectsMissingFieldsBeforeCallingService(t *testing.T) {
 	service := &churchCreationServiceFake{}
-	app := appWithActor(churchhandler.NewHandler(service, service))
+	app := appWithActor(churchhandler.NewHandler(service, service, service))
 	for _, body := range []string{"{", `{"name":" ","slug":"sample"}`, `{"name":"Sample Church"}`} {
 		request := httptest.NewRequest(http.MethodPost, "/churches", strings.NewReader(body))
 		request.Header.Set("Content-Type", "application/json")
@@ -40,9 +40,10 @@ func TestCreateReturnsCreatedChurch(t *testing.T) {
 	id := uuid.New()
 	timezone, website, bio := "America/Chicago", "https://example.org", "A welcoming church."
 	service := &churchCreationServiceFake{created: churchdomain.Church{
-		ID: id, Name: "Sample Church", Slug: "sample-church", Timezone: &timezone, Website: &website, Bio: &bio,
+		ID: id, Name: "Sample Church", Slug: "sample-church",
+		Timezone: &timezone, Website: &website, Bio: &bio,
 	}}
-	app := appWithActor(churchhandler.NewHandler(service, service))
+	app := appWithActor(churchhandler.NewHandler(service, service, service))
 	request := httptest.NewRequest(http.MethodPost, "/churches", strings.NewReader(`{"name":"Sample Church","slug":"sample-church","timezone":"America/Chicago","website":"https://example.org","bio":"A welcoming church."}`))
 	request.Header.Set("Content-Type", "application/json")
 	created, err := app.Test(request)
@@ -51,17 +52,18 @@ func TestCreateReturnsCreatedChurch(t *testing.T) {
 	}
 	defer created.Body.Close()
 	var payload response.Envelope[struct {
-		ID       string  `json:"id"`
-		Name     string  `json:"name"`
-		Slug     string  `json:"slug"`
-		Timezone *string `json:"timezone"`
-		Website  *string `json:"website"`
-		Bio      *string `json:"bio"`
+		ID                string  `json:"id"`
+		Name              string  `json:"name"`
+		Slug              string  `json:"slug"`
+		Timezone          *string `json:"timezone"`
+		Website           *string `json:"website"`
+		Bio               *string `json:"bio"`
+		ActiveMemberCount int     `json:"active_member_count"`
 	}]
 	if err := json.NewDecoder(created.Body).Decode(&payload); err != nil {
 		t.Fatal(err)
 	}
-	if created.StatusCode != http.StatusCreated || !payload.Success || payload.Data.ID != id.String() || payload.Data.Name != "Sample Church" || payload.Data.Slug != "sample-church" || payload.Data.Timezone == nil || *payload.Data.Timezone != timezone || payload.Data.Website == nil || *payload.Data.Website != website || payload.Data.Bio == nil || *payload.Data.Bio != bio || service.authUserID != "auth-admin" {
+	if created.StatusCode != http.StatusCreated || !payload.Success || payload.Data.ID != id.String() || payload.Data.Name != "Sample Church" || payload.Data.Slug != "sample-church" || payload.Data.Timezone == nil || *payload.Data.Timezone != timezone || payload.Data.Website == nil || *payload.Data.Website != website || payload.Data.Bio == nil || *payload.Data.Bio != bio || payload.Data.ActiveMemberCount != 0 || service.authUserID != "auth-admin" {
 		t.Fatalf("response = %d %+v, Auth user ID = %q", created.StatusCode, payload, service.authUserID)
 	}
 	if service.input.Timezone == nil || *service.input.Timezone != timezone || service.input.Website == nil || *service.input.Website != website || service.input.Bio == nil || *service.input.Bio != bio {
@@ -83,7 +85,7 @@ func TestCreateMapsAuthorizationAndSlugConflict(t *testing.T) {
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			service := &churchCreationServiceFake{err: test.err}
-			app := appWithActor(churchhandler.NewHandler(service, service))
+			app := appWithActor(churchhandler.NewHandler(service, service, service))
 			request := httptest.NewRequest(http.MethodPost, "/churches", strings.NewReader(`{"name":"Sample","slug":"sample"}`))
 			request.Header.Set("Content-Type", "application/json")
 			created, err := app.Test(request)
@@ -110,18 +112,23 @@ func appWithActor(handler *churchhandler.Handler) *fiber.App {
 	})
 	app.Get("/churches", handler.GetAll)
 	app.Post("/churches", handler.Create)
+	app.Put("/churches/:churchID", handler.Update)
 	return app
 }
 
 type churchCreationServiceFake struct {
-	called       bool
-	getAllCalled bool
-	authUserID   string
-	created      churchdomain.Church
-	input        churchdomain.CreateInput
-	churches     []churchdomain.Church
-	err          error
-	getAllErr    error
+	called        bool
+	getAllCalled  bool
+	updateCalled  bool
+	authUserID    string
+	updatedChurch uuid.UUID
+	created       churchdomain.Church
+	input         churchdomain.CreateInput
+	updateInput   churchdomain.UpdateInput
+	churches      []churchdomain.Church
+	err           error
+	getAllErr     error
+	updateErr     error
 }
 
 func (s *churchCreationServiceFake) CreateByAuthUserID(_ context.Context, authUserID string, input churchdomain.CreateInput) (churchdomain.Church, error) {
@@ -132,4 +139,9 @@ func (s *churchCreationServiceFake) CreateByAuthUserID(_ context.Context, authUs
 func (s *churchCreationServiceFake) GetAllByAuthUserID(_ context.Context, authUserID string) ([]churchdomain.Church, error) {
 	s.getAllCalled, s.authUserID = true, authUserID
 	return s.churches, s.getAllErr
+}
+
+func (s *churchCreationServiceFake) UpdateByAuthUserID(_ context.Context, authUserID string, churchID uuid.UUID, input churchdomain.UpdateInput) error {
+	s.updateCalled, s.authUserID, s.updatedChurch, s.updateInput = true, authUserID, churchID, input
+	return s.updateErr
 }

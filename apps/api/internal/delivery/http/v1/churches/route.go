@@ -9,4 +9,5 @@ import (
 func Register(router fiber.Router, validator authmiddleware.Validator, handler *churchhandler.Handler) {
 	router.Get("/platform/churches", authmiddleware.Require(validator), handler.GetAll)
 	router.Post("/platform/churches", authmiddleware.Require(validator), handler.Create)
+	router.Put("/platform/churches/:churchID", authmiddleware.Require(validator), handler.Update)
 }

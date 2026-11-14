@@ -34,7 +34,7 @@ describe("createChurch", () => {
       website: "https://example.org",
       bio: "A welcoming church.",
     }
-    const church = { id: "church-1", ...input }
+    const church = { id: "church-1", ...input, active_member_count: 0 }
     mockFetch(async (url, init) => {
       expect(String(url)).toBe(`${apiBaseURL}/platform/churches`)
       expect(init?.method).toBe("POST")

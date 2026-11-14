@@ -11,6 +11,7 @@ const churches: Church[] = [
     timezone: null,
     website: null,
     bio: null,
+    active_member_count: 0,
   },
   {
     id: "2",
@@ -19,6 +20,7 @@ const churches: Church[] = [
     timezone: null,
     website: null,
     bio: null,
+    active_member_count: 0,
   },
 ]
 
