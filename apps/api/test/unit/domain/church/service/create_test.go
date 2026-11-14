@@ -3,6 +3,7 @@ package service_test
 import (
 	"context"
 	"errors"
+	"reflect"
 	"testing"
 
 	"github.com/google/uuid"
@@ -24,18 +25,57 @@ func TestCreateRequiresNameAndSlug(t *testing.T) {
 	}
 }
 
-func TestCreateTrimsRequiredFieldsAndReturnsRepositoryChurch(t *testing.T) {
-	created := churchdomain.Church{ID: uuid.New(), Name: "Sample Church", Slug: "sample-church"}
+func TestCreateTrimsRequiredAndOptionalFields(t *testing.T) {
+	timezone, website, bio := "America/Los_Angeles", "https://example.org", "A welcoming church."
+	created := churchdomain.Church{
+		ID: uuid.New(), Name: "Sample Church", Slug: "sample-church",
+		Timezone: &timezone, Website: &website, Bio: &bio,
+	}
 	repository := &churchRepositoryFake{result: created}
 	got, err := churchservice.NewService(repository).Create(context.Background(), churchdomain.CreateInput{
 		Name: " Sample Church ", Slug: " sample-church ",
+		Timezone: stringPointer(" America/Los_Angeles "), Website: stringPointer(" https://example.org "),
+		Bio: stringPointer(" A welcoming church. "),
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got != created || repository.input != (churchdomain.CreateInput{Name: created.Name, Slug: created.Slug}) {
-		t.Fatalf("Create result = %+v, input = %+v", got, repository.input)
+	wantInput := churchdomain.CreateInput{
+		Name: "Sample Church", Slug: "sample-church", Timezone: &timezone, Website: &website, Bio: &bio,
 	}
+	if got != created || !reflect.DeepEqual(repository.input, wantInput) {
+		t.Fatalf("Create result = %+v, input = %+v, want %+v", got, repository.input, wantInput)
+	}
+}
+
+func TestCreateTreatsBlankOptionalFieldsAsUnset(t *testing.T) {
+	repository := &churchRepositoryFake{}
+	_, err := churchservice.NewService(repository).Create(context.Background(), churchdomain.CreateInput{
+		Name: "Sample Church", Slug: "sample", Timezone: stringPointer(" "), Website: stringPointer(""), Bio: stringPointer("  "),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if repository.input.Timezone != nil || repository.input.Website != nil || repository.input.Bio != nil {
+		t.Fatalf("blank optional fields were not cleared: %+v", repository.input)
+	}
+}
+
+func TestCreateRejectsInvalidTimezoneAndWebsite(t *testing.T) {
+	for _, input := range []churchdomain.CreateInput{
+		{Name: "Sample Church", Slug: "sample", Timezone: stringPointer("Not/A_Timezone")},
+		{Name: "Sample Church", Slug: "sample", Website: stringPointer("javascript:alert(1)")},
+		{Name: "Sample Church", Slug: "sample", Website: stringPointer("ftp://example.org")},
+	} {
+		repository := &churchRepositoryFake{}
+		if _, err := churchservice.NewService(repository).Create(context.Background(), input); !errors.Is(err, churchdomain.ErrInvalidChurch) || repository.called {
+			t.Fatalf("Create(%+v) error = %v, repository called = %t", input, err, repository.called)
+		}
+	}
+}
+
+func stringPointer(value string) *string {
+	return &value
 }
 
 type churchRepositoryFake struct {

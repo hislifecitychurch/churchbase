@@ -13,6 +13,9 @@ func (r *ChurchRepository) Create(ctx context.Context, input churchdomain.Create
 	record, err := transaction.Client(ctx, r.client).Church.Create().
 		SetName(input.Name).
 		SetSlug(input.Slug).
+		SetNillableTimezone(input.Timezone).
+		SetNillableWebsite(input.Website).
+		SetNillableBio(input.Bio).
 		Save(ctx)
 	if entclient.IsConstraintError(err) {
 		return churchdomain.Church{}, churchdomain.ErrChurchSlugConflict
@@ -20,5 +23,8 @@ func (r *ChurchRepository) Create(ctx context.Context, input churchdomain.Create
 	if err != nil {
 		return churchdomain.Church{}, fmt.Errorf("create church: %w", err)
 	}
-	return churchdomain.Church{ID: record.ID, Name: record.Name, Slug: record.Slug}, nil
+	return churchdomain.Church{
+		ID: record.ID, Name: record.Name, Slug: record.Slug,
+		Timezone: record.Timezone, Website: record.Website, Bio: record.Bio,
+	}, nil
 }

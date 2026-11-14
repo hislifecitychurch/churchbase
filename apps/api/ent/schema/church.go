@@ -27,6 +27,9 @@ func (Church) Fields() []ent.Field {
 
 		field.String("name"),
 		field.String("slug").Unique(),
+		field.String("timezone").Optional().Nillable(),
+		field.String("website").Optional().Nillable(),
+		field.String("bio").Optional().Nillable(),
 	}
 }
 

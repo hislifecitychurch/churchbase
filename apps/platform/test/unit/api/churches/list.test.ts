@@ -27,7 +27,16 @@ afterEach(() => {
 
 describe("getChurches", () => {
   it("loads the authenticated church list", async () => {
-    const churches = [{ id: "church-1", name: "Example Church", slug: "example" }]
+    const churches = [
+      {
+        id: "church-1",
+        name: "Example Church",
+        slug: "example",
+        timezone: null,
+        website: null,
+        bio: null,
+      },
+    ]
     mockFetch(async (input, init) => {
       expect(String(input)).toBe(`${apiBaseURL}/platform/churches`)
       expect(init?.method).toBeUndefined()

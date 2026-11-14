@@ -52,7 +52,10 @@ func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.
 
 	err = transaction.Within(ctx, client, func(txCtx context.Context) error {
 		txCtx = actor.WithID(txCtx, "auth-integration-admin")
-		alpha, err := repository.Create(txCtx, churchdomain.CreateInput{Name: prefix + " Alpha", Slug: slugs[0]})
+		timezone, website, bio := "America/Chicago", "https://example.org", "A welcoming church."
+		alpha, err := repository.Create(txCtx, churchdomain.CreateInput{
+			Name: prefix + " Alpha", Slug: slugs[0], Timezone: &timezone, Website: &website, Bio: &bio,
+		})
 		if err != nil {
 			return err
 		}
@@ -76,6 +79,9 @@ func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.
 			}
 			if church.ID == alpha.ID || church.ID == zulu.ID {
 				positions[church.ID] = index
+			}
+			if church.ID == alpha.ID && (church.Timezone == nil || *church.Timezone != timezone || church.Website == nil || *church.Website != website || church.Bio == nil || *church.Bio != bio) {
+				return fmt.Errorf("GetAll did not return alpha metadata: %+v", church)
 			}
 		}
 		if positions[alpha.ID] >= positions[zulu.ID] {

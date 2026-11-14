@@ -27,7 +27,13 @@ afterEach(() => {
 
 describe("createChurch", () => {
   it("creates a church and returns the validated response", async () => {
-    const input = { name: "Example Church", slug: "example-church" }
+    const input = {
+      name: "Example Church",
+      slug: "example-church",
+      timezone: "America/Chicago",
+      website: "https://example.org",
+      bio: "A welcoming church.",
+    }
     const church = { id: "church-1", ...input }
     mockFetch(async (url, init) => {
       expect(String(url)).toBe(`${apiBaseURL}/platform/churches`)

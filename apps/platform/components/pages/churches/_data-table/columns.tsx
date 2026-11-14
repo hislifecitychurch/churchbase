@@ -11,7 +11,16 @@ export const churchesDataTableColumns: ColumnDef<Church>[] = [
     accessorKey: "name",
     size: 320,
     header: ({ column }) => <DataTableColumnHeader column={column} title="Church" />,
-    cell: ({ row }) => <span className="block truncate font-medium">{row.original.name}</span>,
+    cell: ({ row }) => (
+      <div className="flex min-w-0 flex-col gap-0.5">
+        <span className="block truncate font-medium">{row.original.name}</span>
+        {row.original.bio ? (
+          <span className="text-muted-foreground block truncate text-xs" title={row.original.bio}>
+            {row.original.bio}
+          </span>
+        ) : null}
+      </div>
+    ),
   },
   {
     accessorKey: "slug",
@@ -21,6 +30,33 @@ export const churchesDataTableColumns: ColumnDef<Church>[] = [
       <span className="text-muted-foreground block truncate font-mono text-sm">
         {row.original.slug}
       </span>
+    ),
+  },
+  {
+    accessorKey: "website",
+    size: 220,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Website" />,
+    cell: ({ row }) =>
+      row.original.website ? (
+        <a
+          aria-label={`Visit ${row.original.name} website`}
+          className="text-muted-foreground block truncate hover:underline"
+          href={row.original.website}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {row.original.website}
+        </a>
+      ) : (
+        <span className="text-muted-foreground">—</span>
+      ),
+  },
+  {
+    accessorKey: "timezone",
+    size: 190,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Time zone" />,
+    cell: ({ row }) => (
+      <span className="text-muted-foreground block truncate">{row.original.timezone || "—"}</span>
     ),
   },
   {

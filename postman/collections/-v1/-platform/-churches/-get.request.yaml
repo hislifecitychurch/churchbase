@@ -1,6 +1,6 @@
 $kind: http-request
 name: GET /churches
-description: Lists active churches ordered by name, with each church's ID, name, and slug. Requires a valid BetterAuth session linked to a provisioned Global Admin or Global Staff. Soft-deleted churches are omitted.
+description: Lists churches ordered by name, including each church's ID, name, slug, timezone, website, and bio. Requires a valid BetterAuth session linked to a provisioned Global Admin or Global Staff. Soft-deleted churches are omitted.
 url: "{{host-api}}/v1/platform/churches"
 method: GET
 headers:

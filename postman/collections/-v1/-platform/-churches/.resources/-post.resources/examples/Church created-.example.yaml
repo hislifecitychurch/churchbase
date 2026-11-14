@@ -13,7 +13,10 @@ request:
     content: |-
       {
         "name": "Example Church",
-        "slug": "example-church"
+        "slug": "example-church",
+        "timezone": "America/Chicago",
+        "website": "https://example.org",
+        "bio": "A welcoming church in Springfield."
       }
 response:
   statusCode: 201
@@ -29,7 +32,10 @@ response:
         "data": {
           "id": "018f47b8-8cb2-7d15-b28e-4a26843d81c2",
           "name": "Example Church",
-          "slug": "example-church"
+          "slug": "example-church",
+          "timezone": "America/Chicago",
+          "website": "https://example.org",
+          "bio": "A welcoming church in Springfield."
         },
         "filters": null,
         "errors": [],

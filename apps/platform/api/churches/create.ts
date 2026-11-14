@@ -5,6 +5,9 @@ import type { Church } from "@/api/churches/list"
 export type CreateChurchInput = {
   name: string
   slug: string
+  timezone?: string
+  website?: string
+  bio?: string
 }
 
 export async function createChurch(input: CreateChurchInput): Promise<Church> {

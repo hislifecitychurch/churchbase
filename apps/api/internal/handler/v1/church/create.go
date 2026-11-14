@@ -27,8 +27,8 @@ func (h *Handler) Create(c *fiber.Ctx) error {
 	}
 
 	created, err := h.creator.CreateByAuthUserID(c.UserContext(), authUserID, churchdomain.CreateInput{
-		Name: request.Name,
-		Slug: request.Slug,
+		Name: request.Name, Slug: request.Slug,
+		Timezone: request.Timezone, Website: request.Website, Bio: request.Bio,
 	})
 	if errors.Is(err, userdomain.ErrUserNotFound) {
 		return response.JSON(c, http.StatusForbidden, response.Failure[any](
@@ -57,22 +57,29 @@ func (h *Handler) Create(c *fiber.Ctx) error {
 
 	return response.JSON(c, http.StatusCreated, response.Success(createResponse{
 		ID: created.ID.String(), Name: created.Name, Slug: created.Slug,
+		Timezone: created.Timezone, Website: created.Website, Bio: created.Bio,
 	}, "Church created", c, "church.created", "", "info"))
 }
 
 type createRequest struct {
-	Name string `json:"name"`
-	Slug string `json:"slug"`
+	Name     string  `json:"name"`
+	Slug     string  `json:"slug"`
+	Timezone *string `json:"timezone"`
+	Website  *string `json:"website"`
+	Bio      *string `json:"bio"`
 }
 
 type createResponse struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	Slug string `json:"slug"`
+	ID       string  `json:"id"`
+	Name     string  `json:"name"`
+	Slug     string  `json:"slug"`
+	Timezone *string `json:"timezone"`
+	Website  *string `json:"website"`
+	Bio      *string `json:"bio"`
 }
 
 func invalidChurch(c *fiber.Ctx) error {
 	return response.JSON(c, http.StatusBadRequest, response.Failure[any](
-		"Church name and slug are required", "invalid_church", c, "church.create.invalid", "", "warning",
+		"Church name and slug are required; website and time zone must be valid", "invalid_church", c, "church.create.invalid", "", "warning",
 	))
 }

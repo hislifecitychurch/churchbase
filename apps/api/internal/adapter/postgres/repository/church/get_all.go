@@ -20,9 +20,8 @@ func (r *ChurchRepository) GetAll(ctx context.Context) ([]churchdomain.Church, e
 	churches := make([]churchdomain.Church, 0, len(records))
 	for _, record := range records {
 		churches = append(churches, churchdomain.Church{
-			ID:   record.ID,
-			Name: record.Name,
-			Slug: record.Slug,
+			ID: record.ID, Name: record.Name, Slug: record.Slug,
+			Timezone: record.Timezone, Website: record.Website, Bio: record.Bio,
 		})
 	}
 	return churches, nil

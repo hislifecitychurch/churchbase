@@ -12,8 +12,9 @@ request:
     type: json
     content: |-
       {
-        "name": " ",
-        "slug": "example-church"
+        "name": "Example Church",
+        "slug": "example-church",
+        "timezone": "Invalid/Timezone"
       }
 response:
   statusCode: 400
@@ -25,13 +26,13 @@ response:
     content: |-
       {
         "success": false,
-        "message": "Church name and slug are required",
+        "message": "Church name and slug are required; website and time zone must be valid",
         "data": null,
         "filters": null,
         "errors": [
           {
             "code": "invalid_church",
-            "message": "Church name and slug are required"
+            "message": "Church name and slug are required; website and time zone must be valid"
           }
         ],
         "pagination": null,

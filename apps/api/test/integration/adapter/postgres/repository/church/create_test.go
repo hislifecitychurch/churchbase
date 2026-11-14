@@ -52,7 +52,11 @@ func TestChurchRepositoryPostgresCreatesMultipleChurchesAndRejectsDuplicateSlug(
 
 	err = transaction.Within(ctx, client, func(txCtx context.Context) error {
 		txCtx = actor.WithID(txCtx, "auth-integration-admin")
-		first, err := repository.Create(txCtx, churchdomain.CreateInput{Name: "First Test Church", Slug: slugPrefix + "-one"})
+		timezone, website, bio := "America/Los_Angeles", "https://example.org", "A welcoming church."
+		first, err := repository.Create(txCtx, churchdomain.CreateInput{
+			Name: "First Test Church", Slug: slugPrefix + "-one",
+			Timezone: &timezone, Website: &website, Bio: &bio,
+		})
 		if err != nil {
 			return err
 		}
@@ -62,6 +66,12 @@ func TestChurchRepositoryPostgresCreatesMultipleChurchesAndRejectsDuplicateSlug(
 		}
 		if first.ID == second.ID {
 			return errors.New("creating distinct churches returned the same ID")
+		}
+		if first.Timezone == nil || *first.Timezone != timezone || first.Website == nil || *first.Website != website || first.Bio == nil || *first.Bio != bio {
+			return fmt.Errorf("church metadata did not round-trip: %+v", first)
+		}
+		if second.Timezone != nil || second.Website != nil || second.Bio != nil {
+			return fmt.Errorf("unset metadata was not nil: %+v", second)
 		}
 
 		for _, church := range []churchdomain.Church{first, second} {

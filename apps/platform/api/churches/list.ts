@@ -4,6 +4,9 @@ export type Church = {
   id: string
   name: string
   slug: string
+  timezone: string | null
+  website: string | null
+  bio: string | null
 }
 
 export function isChurch(value: unknown): value is Church {
@@ -18,7 +21,10 @@ export function isChurch(value: unknown): value is Church {
     typeof church.name === "string" &&
     church.name.length > 0 &&
     typeof church.slug === "string" &&
-    church.slug.length > 0
+    church.slug.length > 0 &&
+    [church.timezone, church.website, church.bio].every(
+      (field) => field === null || typeof field === "string",
+    )
   )
 }
 

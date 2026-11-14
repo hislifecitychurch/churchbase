@@ -38,9 +38,12 @@ func TestCreateRejectsMissingFieldsBeforeCallingService(t *testing.T) {
 
 func TestCreateReturnsCreatedChurch(t *testing.T) {
 	id := uuid.New()
-	service := &churchCreationServiceFake{created: churchdomain.Church{ID: id, Name: "Sample Church", Slug: "sample-church"}}
+	timezone, website, bio := "America/Chicago", "https://example.org", "A welcoming church."
+	service := &churchCreationServiceFake{created: churchdomain.Church{
+		ID: id, Name: "Sample Church", Slug: "sample-church", Timezone: &timezone, Website: &website, Bio: &bio,
+	}}
 	app := appWithActor(churchhandler.NewHandler(service, service))
-	request := httptest.NewRequest(http.MethodPost, "/churches", strings.NewReader(`{"name":"Sample Church","slug":"sample-church"}`))
+	request := httptest.NewRequest(http.MethodPost, "/churches", strings.NewReader(`{"name":"Sample Church","slug":"sample-church","timezone":"America/Chicago","website":"https://example.org","bio":"A welcoming church."}`))
 	request.Header.Set("Content-Type", "application/json")
 	created, err := app.Test(request)
 	if err != nil {
@@ -48,15 +51,21 @@ func TestCreateReturnsCreatedChurch(t *testing.T) {
 	}
 	defer created.Body.Close()
 	var payload response.Envelope[struct {
-		ID   string `json:"id"`
-		Name string `json:"name"`
-		Slug string `json:"slug"`
+		ID       string  `json:"id"`
+		Name     string  `json:"name"`
+		Slug     string  `json:"slug"`
+		Timezone *string `json:"timezone"`
+		Website  *string `json:"website"`
+		Bio      *string `json:"bio"`
 	}]
 	if err := json.NewDecoder(created.Body).Decode(&payload); err != nil {
 		t.Fatal(err)
 	}
-	if created.StatusCode != http.StatusCreated || !payload.Success || payload.Data.ID != id.String() || payload.Data.Name != "Sample Church" || payload.Data.Slug != "sample-church" || service.authUserID != "auth-admin" {
+	if created.StatusCode != http.StatusCreated || !payload.Success || payload.Data.ID != id.String() || payload.Data.Name != "Sample Church" || payload.Data.Slug != "sample-church" || payload.Data.Timezone == nil || *payload.Data.Timezone != timezone || payload.Data.Website == nil || *payload.Data.Website != website || payload.Data.Bio == nil || *payload.Data.Bio != bio || service.authUserID != "auth-admin" {
 		t.Fatalf("response = %d %+v, Auth user ID = %q", created.StatusCode, payload, service.authUserID)
+	}
+	if service.input.Timezone == nil || *service.input.Timezone != timezone || service.input.Website == nil || *service.input.Website != website || service.input.Bio == nil || *service.input.Bio != bio {
+		t.Fatalf("service input = %+v", service.input)
 	}
 }
 
@@ -109,13 +118,14 @@ type churchCreationServiceFake struct {
 	getAllCalled bool
 	authUserID   string
 	created      churchdomain.Church
+	input        churchdomain.CreateInput
 	churches     []churchdomain.Church
 	err          error
 	getAllErr    error
 }
 
-func (s *churchCreationServiceFake) CreateByAuthUserID(_ context.Context, authUserID string, _ churchdomain.CreateInput) (churchdomain.Church, error) {
-	s.called, s.authUserID = true, authUserID
+func (s *churchCreationServiceFake) CreateByAuthUserID(_ context.Context, authUserID string, input churchdomain.CreateInput) (churchdomain.Church, error) {
+	s.called, s.authUserID, s.input = true, authUserID, input
 	return s.created, s.err
 }
 

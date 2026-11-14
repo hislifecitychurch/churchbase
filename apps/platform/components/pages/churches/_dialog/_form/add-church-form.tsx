@@ -11,8 +11,12 @@ import { DialogClose } from "@packages/ui-w/shared/dialog/dialog-close"
 import { DialogFooter } from "@packages/ui-w/shared/dialog/dialog-footer"
 import { DialogPanel } from "@packages/ui-w/shared/dialog/dialog-panel"
 
+import { ChurchMetadataFields } from "@/components/pages/churches/_dialog/_form/_field/church-metadata-fields"
+import type { ChurchMetadataValues } from "@/components/pages/churches/_dialog/_form/_field/church-metadata-fields"
 import { ChurchNameField } from "@/components/pages/churches/_dialog/_form/_field/church-name-field"
 import { ChurchSlugField } from "@/components/pages/churches/_dialog/_form/_field/church-slug-field"
+
+const emptyChurchMetadata: ChurchMetadataValues = { timezone: "", website: "", bio: "" }
 
 type AddChurchFormProps = {
   onCreated: () => void
@@ -20,6 +24,7 @@ type AddChurchFormProps = {
 
 export function AddChurchForm({ onCreated }: AddChurchFormProps): React.ReactElement {
   const [name, setName] = useState("")
+  const [metadata, setMetadata] = useState(emptyChurchMetadata)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const createChurch = useCreateChurch()
   const slug = slugifyChurchName(name)
@@ -34,18 +39,19 @@ export function AddChurchForm({ onCreated }: AddChurchFormProps): React.ReactEle
     }
 
     try {
-      await createChurch.mutateAsync({ name: name.trim(), slug })
+      await createChurch.mutateAsync({ name: name.trim(), slug, ...metadata })
       setName("")
+      setMetadata(emptyChurchMetadata)
       onCreated()
     } catch {
-      setErrorMessage("We couldn't add this church. Check that the slug is unique and try again.")
+      setErrorMessage("We couldn't add this church. Check the details and try again.")
     }
   }
 
   return (
     <form className="flex min-h-0 flex-1 flex-col" onSubmit={handleSubmit}>
-      <DialogPanel className="min-h-0 flex-1">
-        <div className="flex flex-col gap-5">
+      <DialogPanel className="min-h-0 flex-1 overflow-y-auto">
+        <div className="flex flex-col gap-4">
           <ChurchNameField
             disabled={createChurch.isPending}
             onChange={(event) => {
@@ -55,6 +61,14 @@ export function AddChurchForm({ onCreated }: AddChurchFormProps): React.ReactEle
             value={name}
           />
           <ChurchSlugField disabled={createChurch.isPending} value={slug} />
+          <ChurchMetadataFields
+            disabled={createChurch.isPending}
+            onChange={(field, value) => {
+              setMetadata((current) => ({ ...current, [field]: value }))
+              setErrorMessage(null)
+            }}
+            value={metadata}
+          />
         </div>
         {errorMessage ? (
           <p aria-live="polite" className="text-destructive mt-4 text-sm" role="alert">
