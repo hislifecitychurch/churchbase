@@ -24,7 +24,7 @@ export function MainSidebar(): React.ReactElement {
               <SidebarMenuButton asChild size="lg" tooltip="Churchbase Platform">
                 <Link href="/" prefetch={false}>
                   <Image
-                    src="/logo/churchbase-logo.webp"
+                    src="/logo/churchbase-logo-light.webp"
                     alt=""
                     width={32}
                     height={32}
