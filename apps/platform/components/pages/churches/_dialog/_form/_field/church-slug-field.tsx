@@ -9,33 +9,25 @@ import { Input } from "@packages/ui-w/shared/input/input"
 
 type ChurchSlugFieldProps = {
   disabled?: boolean
-  onChange: React.ChangeEventHandler<HTMLInputElement>
   value: string
 }
 
-export function ChurchSlugField({
-  disabled,
-  onChange,
-  value,
-}: ChurchSlugFieldProps): React.ReactElement {
+export function ChurchSlugField({ disabled, value }: ChurchSlugFieldProps): React.ReactElement {
   return (
     <Field className="w-full">
       <FieldLabel htmlFor="church-slug">Church slug</FieldLabel>
       <Input
-        autoCapitalize="none"
-        autoComplete="off"
         disabled={disabled}
         id="church-slug"
         name="slug"
         nativeInput
-        onChange={onChange}
-        placeholder="e.g. hope-community"
-        required
+        readOnly
         size="lg"
-        spellCheck={false}
         value={value}
       />
-      <FieldDescription>A unique identifier used in church links.</FieldDescription>
+      <FieldDescription>
+        Generated in lowercase from the church name; spaces and punctuation become dashes.
+      </FieldDescription>
     </Field>
   )
 }
