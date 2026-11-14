@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import type { JSX } from "react"
 
-import { ChurchesTable } from "@/components/pages/churches/churches-table"
+import { ChurchesDataTable } from "@/components/pages/churches/_data-table/churches-data-table"
 
 export const metadata: Metadata = {
   title: "Churches",
@@ -14,7 +14,7 @@ export default function ChurchesPage(): JSX.Element {
         <h1 className="text-foreground text-2xl font-medium">Churches</h1>
         <p className="text-muted-foreground text-sm">Review the churches in your deployment.</p>
       </div>
-      <ChurchesTable />
+      <ChurchesDataTable />
     </section>
   )
 }
