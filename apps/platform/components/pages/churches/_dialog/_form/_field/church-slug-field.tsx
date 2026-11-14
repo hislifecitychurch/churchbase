@@ -25,9 +25,7 @@ export function ChurchSlugField({ disabled, value }: ChurchSlugFieldProps): Reac
         size="lg"
         value={value}
       />
-      <FieldDescription>
-        Generated in lowercase from the church name; spaces and punctuation become dashes.
-      </FieldDescription>
+      <FieldDescription>A simple name that identifies this church.</FieldDescription>
     </Field>
   )
 }
