@@ -11,6 +11,7 @@ import { ChurchesEmptyState } from "@/components/pages/churches/_data-table/_emp
 import { ChurchesErrorState } from "@/components/pages/churches/_data-table/_empty/churches-error-state"
 import { ChurchesLoadingState } from "@/components/pages/churches/_data-table/_empty/churches-loading-state"
 import { ChurchesNotFoundState } from "@/components/pages/churches/_data-table/_empty/churches-not-found-state"
+import { CreateChurchButton } from "@/components/pages/churches/_button/create-church-button"
 import { churchesDataTableColumns } from "./columns"
 import { churchesDataTableSearch, filterChurchesByName } from "./filters"
 
@@ -83,6 +84,7 @@ export function ChurchesDataTable(): React.ReactElement {
         searchPlaceholder={churchesDataTableSearch.placeholder}
         searchValue={search}
         showSelectionCount={false}
+        toolbarActions={<CreateChurchButton />}
       />
     </div>
   )
