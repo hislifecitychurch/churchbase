@@ -25,7 +25,10 @@ export function ChurchSlugField({ disabled, value }: ChurchSlugFieldProps): Reac
         size="lg"
         value={value}
       />
-      <FieldDescription>A simple name that identifies this church.</FieldDescription>
+      <FieldDescription>
+        We’ll create a unique name from the one you enter so this church is easy to tell apart from
+        others.
+      </FieldDescription>
     </Field>
   )
 }
