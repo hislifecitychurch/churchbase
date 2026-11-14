@@ -6,7 +6,7 @@ export function AddChurchButton(): React.ReactElement {
   return (
     <Button size="lg" type="button">
       <IconPlus aria-hidden className="size-4" />
-      Create church
+      Add church
     </Button>
   )
 }
