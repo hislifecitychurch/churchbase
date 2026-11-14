@@ -28,7 +28,7 @@ bun run --cwd apps/app start
 bun run --cwd apps/app preview
 ```
 
-`dev` runs on port `36002` with `strictPort` and opens the Cloudflare inspector on `9232`. If a port is held, identify the listener before stopping anything; do not kill unrelated user processes. `deploy` publishes to Cloudflare and requires explicit authorization.
+`dev` runs on port `36002` with `strictPort` and opens the Cloudflare inspector on `36102`. If a port is held, identify the listener before stopping anything; do not kill unrelated user processes. `deploy` publishes to Cloudflare and requires explicit authorization.
 
 ## Structure
 

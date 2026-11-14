@@ -12,7 +12,18 @@ These ports are configured for Churchbase local development. A port is not expec
 
 Identity, Platform, and App use ports `36000`, `36001`, and `36002` for development and preview. The API defaults to `36080`, and Auth defaults to `36081`; both can be overridden through their `PORT` environment variable.
 
+## Cloudflare inspector ports
+
+| Service            |    Port | Local address            | Configuration                  |
+| ------------------ | ------: | ------------------------ | ------------------------------ |
+| Identity portal    | `36100` | <http://localhost:36100> | `apps/identity/vite.config.ts` |
+| Platform workspace | `36101` | <http://localhost:36101> | `apps/platform/vite.config.ts` |
+| Staff application  | `36102` | <http://localhost:36102> | `apps/app/vite.config.ts`      |
+
+These inspector ports are separate from the app and backend ports above and are only expected to be listening while the corresponding development server is running.
+
 ## Port ranges
 
 - `3600X` (`36000`–`36009`) is for user-facing applications and frontends.
 - `3608X` (`36080`–`36089`) is for backend services.
+- `3610X` (`36100`–`36109`) is for Cloudflare inspectors.

@@ -16,7 +16,7 @@ export default defineConfig({
       images: { optimizer: imagesOptimizer() },
     }),
     cloudflare({
-      inspectorPort: 9232,
+      inspectorPort: 36102,
       viteEnvironment: {
         name: "rsc",
         childEnvironments: ["ssr"],
