@@ -12,8 +12,7 @@ import { ChurchesErrorState } from "@/components/pages/churches/_data-table/_emp
 import { ChurchesLoadingState } from "@/components/pages/churches/_data-table/_empty/churches-loading-state"
 import { ChurchesNotFoundState } from "@/components/pages/churches/_data-table/_empty/churches-not-found-state"
 import { churchesDataTableColumns } from "./columns"
-import { filterChurchesByName } from "./filter-churches"
-import { churchesDataTableSearch } from "./filters"
+import { churchesDataTableSearch, filterChurchesByName } from "./filters"
 
 export function ChurchesDataTable(): React.ReactElement {
   const [search, setSearch] = useState("")

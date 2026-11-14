@@ -1,7 +1,7 @@
 import { describe, expect, it } from "bun:test"
 
 import type { Church } from "@/api/churches/list"
-import { filterChurchesByName } from "@/components/pages/churches/_data-table/filter-churches"
+import { filterChurchesByName } from "@/components/pages/churches/_data-table/filters"
 
 const churches: Church[] = [
   { id: "1", name: "Hope Community Church", slug: "hope-community" },
