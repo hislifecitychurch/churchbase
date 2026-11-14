@@ -11,12 +11,8 @@ import { DialogClose } from "@packages/ui-w/shared/dialog/dialog-close"
 import { DialogFooter } from "@packages/ui-w/shared/dialog/dialog-footer"
 import { DialogPanel } from "@packages/ui-w/shared/dialog/dialog-panel"
 
-import { AddChurchMetadataFields } from "@/components/pages/churches/_dialog/_form/_field/add-church-metadata-fields"
-import type { AddChurchMetadata } from "@/components/pages/churches/_dialog/_form/_field/add-church-metadata-fields"
 import { AddChurchNameField } from "@/components/pages/churches/_dialog/_form/_field/add-church-name-field"
 import { AddChurchSlugField } from "@/components/pages/churches/_dialog/_form/_field/add-church-slug-field"
-
-const emptyChurchMetadata: AddChurchMetadata = { timezone: "", website: "", bio: "" }
 
 type AddChurchFormProps = {
   onCreated: () => void
@@ -24,7 +20,6 @@ type AddChurchFormProps = {
 
 export function AddChurchForm({ onCreated }: AddChurchFormProps): React.ReactElement {
   const [name, setName] = useState("")
-  const [metadata, setMetadata] = useState(emptyChurchMetadata)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const createChurch = useCreateChurch()
   const slug = slugifyChurchName(name)
@@ -39,9 +34,8 @@ export function AddChurchForm({ onCreated }: AddChurchFormProps): React.ReactEle
     }
 
     try {
-      await createChurch.mutateAsync({ name: name.trim(), slug, ...metadata })
+      await createChurch.mutateAsync({ name: name.trim(), slug })
       setName("")
-      setMetadata(emptyChurchMetadata)
       onCreated()
     } catch {
       setErrorMessage("We couldn't add this church. Check the details and try again.")
@@ -61,14 +55,6 @@ export function AddChurchForm({ onCreated }: AddChurchFormProps): React.ReactEle
             value={name}
           />
           <AddChurchSlugField disabled={createChurch.isPending} value={slug} />
-          <AddChurchMetadataFields
-            disabled={createChurch.isPending}
-            onChange={(field, value) => {
-              setMetadata((current) => ({ ...current, [field]: value }))
-              setErrorMessage(null)
-            }}
-            value={metadata}
-          />
         </div>
         {errorMessage ? (
           <p aria-live="polite" className="text-destructive mt-4 text-sm" role="alert">
