@@ -8,7 +8,7 @@
 - Propose issue or project changes before making them. Create, edit, prioritize, or link GitHub work items only when the user selects the work or asks for those changes.
 - Before implementation, make the issue actionable: state the goal, scope, acceptance criteria, dependencies, and how it will be verified. Resolve product, authorization, or sensitive-data decisions before building.
 - Use a parent issue for an outcome and sub-issues for independently deliverable slices. Do not create sub-issues for every implementation step; each child should have a clear result that can be reviewed on its own.
-- Set the native GitHub issue Type to **Task**, **Bug**, or **Feature**. Do not add a duplicate type label; use labels only for recurring cross-cutting needs. Current repository labels are documented in [`.docs/issues/labels.md`](../.docs/issues/labels.md).
+- Set the native GitHub issue Type to **Task**, **Bug**, or **Feature**. Do not add a duplicate type label. Add an area or concern label when it helps triage, even for a specific task; prefer existing labels and add new ones only when a useful area is not covered. See [`.docs/issues/labels.md`](../.docs/issues/labels.md) for current labels and guidance.
 - Set Priority and Size only when the available information supports a useful choice.
 
 ### Issue format
