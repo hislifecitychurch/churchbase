@@ -61,7 +61,7 @@ export function ChurchesDataTable(): React.ReactElement {
     <div className="flex min-w-0 flex-col gap-4 pb-8">
       {churches.error && hasCachedRows && !isManualRefreshing ? (
         <p aria-live="polite" className="text-destructive text-sm" role="alert">
-          The latest church list couldn't be loaded. Showing the last successful results.
+          The church directory couldn’t be loaded. Showing the last successful results.
         </p>
       ) : null}
       <DataTable

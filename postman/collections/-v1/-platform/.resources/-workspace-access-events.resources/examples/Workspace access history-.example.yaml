@@ -47,7 +47,7 @@ response:
           "timestamp": "2026-01-01T00:00:00Z"
         },
         "log": {
-          "event": "workspace_access_event.listed",
+          "event": "workspace_access_event.retrieved",
           "user_id": null,
           "status": "info"
         }

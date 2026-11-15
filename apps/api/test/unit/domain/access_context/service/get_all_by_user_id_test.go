@@ -11,7 +11,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/domain/access_context/service"
 )
 
-func TestServiceListsRoleCapabilities(t *testing.T) {
+func TestServiceGetsAllRoleCapabilities(t *testing.T) {
 	churchID := uuid.New()
 	ministryID := uuid.New()
 	repository := &contextRepositoryFake{contexts: []accesscontext.MembershipContext{
@@ -22,7 +22,7 @@ func TestServiceListsRoleCapabilities(t *testing.T) {
 		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindMinistry, Slug: "broadcast", Role: "invalid", Name: "Invalid role"},
 		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindChurch, Role: "member", Name: "Church member"},
 	}}
-	contexts, err := service.NewService(repository).ListByUserID(context.Background(), uuid.New())
+	contexts, err := service.NewService(repository).GetAllByUserID(context.Background(), uuid.New())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,13 +45,13 @@ func TestServiceListsRoleCapabilities(t *testing.T) {
 	}
 }
 
-func TestServiceListsAllContextsWithEveryCapability(t *testing.T) {
+func TestServiceGetsAllContextsWithEveryCapability(t *testing.T) {
 	churchID := uuid.New()
 	repository := &contextRepositoryFake{allContexts: []accesscontext.MembershipContext{
 		{ID: churchID, ChurchID: churchID, Kind: accesscontext.KindChurch, Name: "Church-wide"},
 		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindMinistry, Slug: "kids", Name: "Kids"},
 	}}
-	contexts, err := service.NewService(repository).ListAll(context.Background())
+	contexts, err := service.NewService(repository).GetAll(context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -79,7 +79,7 @@ func TestServiceDoesNotGrantSensitiveCapabilitiesByRole(t *testing.T) {
 		{ID: uuid.New(), ChurchID: uuid.New(), Kind: accesscontext.KindChurch, Role: "admin", Name: "Church-wide"},
 		{ID: uuid.New(), ChurchID: uuid.New(), Kind: accesscontext.KindMinistry, Slug: "kids", Role: "lead", Name: "Kids"},
 	}}
-	contexts, err := service.NewService(repository).ListByUserID(context.Background(), uuid.New())
+	contexts, err := service.NewService(repository).GetAllByUserID(context.Background(), uuid.New())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,7 +94,7 @@ func TestServiceDoesNotGrantSensitiveCapabilitiesByRole(t *testing.T) {
 
 func TestServiceReturnsRepositoryError(t *testing.T) {
 	wantErr := errors.New("database unavailable")
-	_, err := service.NewService(&contextRepositoryFake{err: wantErr}).ListByUserID(context.Background(), uuid.New())
+	_, err := service.NewService(&contextRepositoryFake{err: wantErr}).GetAllByUserID(context.Background(), uuid.New())
 	if !errors.Is(err, wantErr) {
 		t.Fatalf("error = %v, want %v", err, wantErr)
 	}
@@ -106,11 +106,11 @@ type contextRepositoryFake struct {
 	err         error
 }
 
-func (r *contextRepositoryFake) ListByUserID(context.Context, uuid.UUID) ([]accesscontext.MembershipContext, error) {
+func (r *contextRepositoryFake) GetAllByUserID(context.Context, uuid.UUID) ([]accesscontext.MembershipContext, error) {
 	return r.contexts, r.err
 }
 
-func (r *contextRepositoryFake) ListAll(context.Context) ([]accesscontext.MembershipContext, error) {
+func (r *contextRepositoryFake) GetAll(context.Context) ([]accesscontext.MembershipContext, error) {
 	return r.allContexts, r.err
 }
 

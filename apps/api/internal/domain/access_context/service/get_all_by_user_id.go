@@ -8,8 +8,8 @@ import (
 	accesscontext "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/access_context"
 )
 
-func (s *Service) ListAll(ctx context.Context) ([]accesscontext.Context, error) {
-	memberships, err := s.repository.ListAll(ctx)
+func (s *Service) GetAll(ctx context.Context) ([]accesscontext.Context, error) {
+	memberships, err := s.repository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -30,8 +30,8 @@ func (s *Service) ListAll(ctx context.Context) ([]accesscontext.Context, error) 
 	return contexts, nil
 }
 
-func (s *Service) ListByUserID(ctx context.Context, userID uuid.UUID) ([]accesscontext.Context, error) {
-	memberships, err := s.repository.ListByUserID(ctx, userID)
+func (s *Service) GetAllByUserID(ctx context.Context, userID uuid.UUID) ([]accesscontext.Context, error) {
+	memberships, err := s.repository.GetAllByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}

@@ -9,5 +9,5 @@ import (
 type Repository interface {
 	Create(context.Context, RecordInput) (Event, bool, error)
 	GetLatestByUserID(context.Context, uuid.UUID) (Event, error)
-	List(context.Context, ListFilter) (Page, error)
+	GetAll(context.Context, GetAllFilter) (Page, error)
 }

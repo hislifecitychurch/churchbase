@@ -1,6 +1,6 @@
 $kind: http-request
 name: /workspace-access-events
-description: Lists successful App and Platform workspace entries for all users. Requires a valid BetterAuth session and the Global Admin role. Results are newest first and paginated; optional workspace filters by app or platform, and since/until accept RFC3339 timestamps. User names are included from the current Churchbase profile; credentials and session details are never returned.
+description: Returns successful App and Platform workspace entries for all users. Requires a valid BetterAuth session and the Global Admin role. Results are newest first and paginated; optional workspace filters by app or platform, and since/until accept RFC3339 timestamps. User names are included from the current Churchbase profile; credentials and session details are never returned.
 url: "{{host-api}}/v1/platform/workspace-access-events?page=1&limit=25"
 method: GET
 queryParams:

@@ -17,7 +17,7 @@ func TestCurrentAccessContextsReaderUsesProvisionedAPIUserID(t *testing.T) {
 	contexts := &accessContextReaderFake{result: []accesscontext.Context{{ID: uuid.New(), ChurchID: uuid.New(), Kind: accesscontext.KindChurch}}}
 	reader := application.NewCurrentAccessContextsReader(users, contexts)
 
-	result, err := reader.ListByAuthUserID(context.Background(), "opaque-auth-id")
+	result, err := reader.GetAllByAuthUserID(context.Background(), "opaque-auth-id")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,7 +29,7 @@ func TestCurrentAccessContextsReaderUsesProvisionedAPIUserID(t *testing.T) {
 	}
 }
 
-func TestCurrentAccessContextsReaderListsAllContextsForGlobalRoles(t *testing.T) {
+func TestCurrentAccessContextsReaderGetsAllContextsForGlobalRoles(t *testing.T) {
 	globalRole := userdomain.GlobalRoleAdmin
 	users := &accessContextUserReaderFake{user: userdomain.User{ID: uuid.New(), GlobalRoles: &globalRole}}
 	contexts := &accessContextReaderFake{allResult: []accesscontext.Context{{
@@ -38,7 +38,7 @@ func TestCurrentAccessContextsReaderListsAllContextsForGlobalRoles(t *testing.T)
 	}}}
 	reader := application.NewCurrentAccessContextsReader(users, contexts)
 
-	result, err := reader.ListByAuthUserID(context.Background(), "opaque-auth-id")
+	result, err := reader.GetAllByAuthUserID(context.Background(), "opaque-auth-id")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -56,7 +56,7 @@ func TestCurrentAccessContextsReaderListsAllContextsForGlobalRoles(t *testing.T)
 func TestCurrentAccessContextsReaderStopsWhenUserIsNotProvisioned(t *testing.T) {
 	users := &accessContextUserReaderFake{err: userdomain.ErrUserNotFound}
 	contexts := &accessContextReaderFake{}
-	_, err := application.NewCurrentAccessContextsReader(users, contexts).ListByAuthUserID(context.Background(), "missing")
+	_, err := application.NewCurrentAccessContextsReader(users, contexts).GetAllByAuthUserID(context.Background(), "missing")
 	if !errors.Is(err, userdomain.ErrUserNotFound) || contexts.called || contexts.calledAll {
 		t.Fatalf("error = %v, membership called = %v, all called = %v", err, contexts.called, contexts.calledAll)
 	}
@@ -82,12 +82,12 @@ type accessContextReaderFake struct {
 	err       error
 }
 
-func (r *accessContextReaderFake) ListByUserID(_ context.Context, userID uuid.UUID) ([]accesscontext.Context, error) {
+func (r *accessContextReaderFake) GetAllByUserID(_ context.Context, userID uuid.UUID) ([]accesscontext.Context, error) {
 	r.userID, r.called = userID, true
 	return r.result, r.err
 }
 
-func (r *accessContextReaderFake) ListAll(context.Context) ([]accesscontext.Context, error) {
+func (r *accessContextReaderFake) GetAll(context.Context) ([]accesscontext.Context, error) {
 	r.calledAll = true
 	return r.allResult, r.err
 }

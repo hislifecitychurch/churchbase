@@ -2,12 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query"
 
-import { getChurches } from "@/api/churches/list"
+import { getAllChurches } from "@/api/churches/get-all"
 
 export function useChurches() {
   return useQuery({
     queryKey: ["platform", "churches"],
-    queryFn: getChurches,
+    queryFn: getAllChurches,
     retry: false,
   })
 }

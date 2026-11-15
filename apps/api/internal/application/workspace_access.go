@@ -14,7 +14,7 @@ var ErrWorkspaceAccessForbidden = errors.New("workspace access is forbidden")
 
 type WorkspaceAccessEventService interface {
 	Record(context.Context, workspaceaccessevent.RecordInput) (workspaceaccessevent.Event, bool, error)
-	List(context.Context, workspaceaccessevent.ListFilter) (workspaceaccessevent.Page, error)
+	GetAll(context.Context, workspaceaccessevent.GetAllFilter) (workspaceaccessevent.Page, error)
 }
 
 type UserProfilesByIDs interface {
@@ -61,10 +61,10 @@ func (s *WorkspaceAccessService) RecordByAuthUserID(
 	return s.events.Record(ctx, input)
 }
 
-func (s *WorkspaceAccessService) ListForAdmin(
+func (s *WorkspaceAccessService) GetAllForAdmin(
 	ctx context.Context,
 	authUserID string,
-	filter workspaceaccessevent.ListFilter,
+	filter workspaceaccessevent.GetAllFilter,
 ) (WorkspaceAccessHistory, error) {
 	user, err := s.users.GetByAuthUserID(ctx, authUserID)
 	if err != nil {
@@ -74,7 +74,7 @@ func (s *WorkspaceAccessService) ListForAdmin(
 		return WorkspaceAccessHistory{}, ErrWorkspaceAccessForbidden
 	}
 
-	page, err := s.events.List(ctx, filter)
+	page, err := s.events.GetAll(ctx, filter)
 	if err != nil {
 		return WorkspaceAccessHistory{}, err
 	}

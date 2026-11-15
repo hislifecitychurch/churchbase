@@ -1,6 +1,6 @@
 $kind: http-request
 name: GET /churches
-description: Lists churches ordered by name, including active member and non-deleted ministry counts, city, state or province, country code, timezone, website, and bio. Active member count includes only non-deleted users with active member-role church memberships. Requires a valid BetterAuth session linked to a provisioned Global Admin or Global Staff. Soft-deleted churches are omitted.
+description: Returns all churches ordered by name, including active member and non-deleted ministry counts, city, state or province, country code, timezone, website, and bio. Active member count includes only non-deleted users with active member-role church memberships. Requires a valid BetterAuth session linked to a provisioned Global Admin or Global Staff. Soft-deleted churches are omitted.
 url: "{{host-api}}/v1/platform/churches"
 method: GET
 headers:

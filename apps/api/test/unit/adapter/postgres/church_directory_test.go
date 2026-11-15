@@ -15,7 +15,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func TestChurchRepositoryListsActiveMemberCounts(t *testing.T) {
+func TestChurchRepositoryGetsAllWithMemberAndMinistryCounts(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:church-directory?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
 	soft_delete.ConfigureClient(client)

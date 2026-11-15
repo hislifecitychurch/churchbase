@@ -47,7 +47,7 @@ func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.
 	soft_delete.ConfigureClient(client)
 	repository := churchrepository.NewChurchRepository(client)
 	rollback := errors.New("roll back church repository integration test")
-	prefix := "church-list-" + uuid.NewString()
+	prefix := "church-get-all-" + uuid.NewString()
 	slugs := []string{prefix + "-alpha", prefix + "-zulu", prefix + "-deleted"}
 
 	err = transaction.Within(ctx, client, func(txCtx context.Context) error {

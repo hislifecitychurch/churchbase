@@ -21,20 +21,20 @@ const (
 	maxPageSize     = 100
 )
 
-func (h *Handler) ListForAdmin(c *fiber.Ctx) error {
+func (h *Handler) GetAllForAdmin(c *fiber.Ctx) error {
 	authUserID, ok := actor.ID(c.UserContext())
 	if !ok {
 		return response.JSON(c, http.StatusUnauthorized, response.Failure[any](
 			"Unauthorized", "unauthorized", c, "workspace_access_event.unauthorized", "", "warning",
 		))
 	}
-	filter, err := parseListFilter(c)
+	filter, err := parseGetAllFilter(c)
 	if err != nil {
 		return response.JSON(c, http.StatusBadRequest, response.Failure[any](
 			"Invalid workspace entry filters", "invalid_query_parameters", c, "workspace_access_event.filters.invalid", "", "warning",
 		))
 	}
-	history, err := h.service.ListForAdmin(c.UserContext(), authUserID, filter)
+	history, err := h.service.GetAllForAdmin(c.UserContext(), authUserID, filter)
 	if errors.Is(err, userdomain.ErrUserNotFound) {
 		return response.JSON(c, http.StatusForbidden, response.Failure[any](
 			"User has not been provisioned for Churchbase", "user_not_provisioned", c, "workspace_access_event.user.not_provisioned", "", "warning",
@@ -42,7 +42,7 @@ func (h *Handler) ListForAdmin(c *fiber.Ctx) error {
 	}
 	if errors.Is(err, application.ErrWorkspaceAccessForbidden) {
 		return response.JSON(c, http.StatusForbidden, response.Failure[any](
-			"Global administrator access is required", "forbidden", c, "workspace_access_event.list.forbidden", "", "warning",
+			"Global administrator access is required", "forbidden", c, "workspace_access_event.get_all.forbidden", "", "warning",
 		))
 	}
 	if errors.Is(err, workspaceaccesseventdomain.ErrInvalidEvent) {
@@ -51,9 +51,9 @@ func (h *Handler) ListForAdmin(c *fiber.Ctx) error {
 		))
 	}
 	if err != nil {
-		log.Printf("workspace_access_event_list_failed request_id=%q error=%v", c.GetRespHeader("X-Request-ID"), err)
+		log.Printf("workspace_access_event_get_all_failed request_id=%q error=%v", c.GetRespHeader("X-Request-ID"), err)
 		return response.JSON(c, http.StatusInternalServerError, response.Failure[any](
-			"An internal error occurred", "internal_error", c, "workspace_access_event.list.failed", "", "error",
+			"An internal error occurred", "internal_error", c, "workspace_access_event.get_all.failed", "", "error",
 		))
 	}
 
@@ -69,7 +69,7 @@ func (h *Handler) ListForAdmin(c *fiber.Ctx) error {
 		})
 	}
 	pages := (history.Total + filter.Limit - 1) / filter.Limit
-	payload := response.Success(items, "Workspace access history retrieved", c, "workspace_access_event.listed", "", "info")
+	payload := response.Success(items, "Workspace access history retrieved", c, "workspace_access_event.retrieved", "", "info")
 	payload.Filters = map[string]any{
 		"workspace": filter.Workspace,
 		"since":     filter.Since,
@@ -91,31 +91,31 @@ type historyEventResponse struct {
 	OccurredAt time.Time                            `json:"occurred_at"`
 }
 
-func parseListFilter(c *fiber.Ctx) (workspaceaccesseventdomain.ListFilter, error) {
+func parseGetAllFilter(c *fiber.Ctx) (workspaceaccesseventdomain.GetAllFilter, error) {
 	page, err := queryInt(c, "page", 1, 1_000_000)
 	if err != nil {
-		return workspaceaccesseventdomain.ListFilter{}, err
+		return workspaceaccesseventdomain.GetAllFilter{}, err
 	}
 	limit, err := queryInt(c, "limit", defaultPageSize, maxPageSize)
 	if err != nil {
-		return workspaceaccesseventdomain.ListFilter{}, err
+		return workspaceaccesseventdomain.GetAllFilter{}, err
 	}
-	filter := workspaceaccesseventdomain.ListFilter{Page: page, Limit: limit}
+	filter := workspaceaccesseventdomain.GetAllFilter{Page: page, Limit: limit}
 	if value := c.Query("workspace"); value != "" {
 		workspace := workspaceaccesseventdomain.Workspace(value)
 		if workspace != workspaceaccesseventdomain.WorkspaceApp && workspace != workspaceaccesseventdomain.WorkspacePlatform {
-			return workspaceaccesseventdomain.ListFilter{}, errors.New("unsupported workspace")
+			return workspaceaccesseventdomain.GetAllFilter{}, errors.New("unsupported workspace")
 		}
 		filter.Workspace = &workspace
 	}
 	if filter.Since, err = queryTime(c, "since"); err != nil {
-		return workspaceaccesseventdomain.ListFilter{}, err
+		return workspaceaccesseventdomain.GetAllFilter{}, err
 	}
 	if filter.Until, err = queryTime(c, "until"); err != nil {
-		return workspaceaccesseventdomain.ListFilter{}, err
+		return workspaceaccesseventdomain.GetAllFilter{}, err
 	}
 	if filter.Since != nil && filter.Until != nil && filter.Since.After(*filter.Until) {
-		return workspaceaccesseventdomain.ListFilter{}, errors.New("since must not be after until")
+		return workspaceaccesseventdomain.GetAllFilter{}, errors.New("since must not be after until")
 	}
 	return filter, nil
 }

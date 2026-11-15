@@ -5,7 +5,7 @@ import type * as React from "react"
 
 import { useUpdateChurch } from "@/hooks/api/churches/use-update-church"
 import { useCurrentUser } from "@/hooks/api/users/use-current-user"
-import type { Church } from "@/api/churches/list"
+import type { Church } from "@/api/churches/get-all"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 

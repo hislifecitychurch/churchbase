@@ -1,5 +1,5 @@
 $kind: http-example
-name: Church list
+name: Get all churches
 request:
   url: "{{host-api}}/v1/platform/churches"
   method: GET
@@ -40,7 +40,7 @@ response:
           "timestamp": "2026-01-01T00:00:00Z"
         },
         "log": {
-          "event": "churches.listed",
+          "event": "churches.retrieved",
           "user_id": null,
           "status": "info"
         }

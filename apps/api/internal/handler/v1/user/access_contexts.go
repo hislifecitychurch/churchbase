@@ -20,7 +20,7 @@ func (h *Handler) GetAccessContexts(c *fiber.Ctx) error {
 		))
 	}
 
-	contexts, err := h.accessContexts.ListByAuthUserID(c.UserContext(), authUserID)
+	contexts, err := h.accessContexts.GetAllByAuthUserID(c.UserContext(), authUserID)
 	if errors.Is(err, userdomain.ErrUserNotFound) {
 		return response.JSON(c, fiber.StatusForbidden, response.Failure[any](
 			"User has not been provisioned for Churchbase", "user_not_provisioned", c, "me.access_contexts.user.not_provisioned", "", "warning",

@@ -1,5 +1,5 @@
 $kind: http-example
-name: Church list failed
+name: Get all churches is forbidden
 request:
   url: "{{host-api}}/v1/platform/churches"
   method: GET
@@ -7,8 +7,8 @@ request:
     - key: Accept
       value: application/json
 response:
-  statusCode: 500
-  statusText: Internal Server Error
+  statusCode: 403
+  statusText: Forbidden
   headers:
     Content-Type: application/json
   body:
@@ -16,24 +16,24 @@ response:
     content: |-
       {
         "success": false,
-        "message": "An internal error occurred",
+        "message": "Global administrator or staff access is required",
         "data": null,
         "filters": null,
         "errors": [
           {
-            "code": "internal_error",
-            "message": "An internal error occurred"
+            "code": "forbidden",
+            "message": "Global administrator or staff access is required"
           }
         ],
         "pagination": null,
         "metadata": {
-          "request_id": "00000000-0000-4000-8000-000000000035",
+          "request_id": "00000000-0000-4000-8000-000000000033",
           "timestamp": "2026-01-01T00:00:00Z"
         },
         "log": {
-          "event": "church.list.failed",
+          "event": "church.get_all.forbidden",
           "user_id": null,
-          "status": "error"
+          "status": "warning"
         }
       }
-order: 5000
+order: 3000

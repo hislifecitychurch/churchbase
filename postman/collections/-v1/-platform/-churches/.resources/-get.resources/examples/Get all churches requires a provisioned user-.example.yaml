@@ -1,5 +1,5 @@
 $kind: http-example
-name: Church list requires a session
+name: Get all churches requires a provisioned user
 request:
   url: "{{host-api}}/v1/platform/churches"
   method: GET
@@ -7,8 +7,8 @@ request:
     - key: Accept
       value: application/json
 response:
-  statusCode: 401
-  statusText: Unauthorized
+  statusCode: 403
+  statusText: Forbidden
   headers:
     Content-Type: application/json
   body:
@@ -16,24 +16,24 @@ response:
     content: |-
       {
         "success": false,
-        "message": "Unauthorized",
+        "message": "User has not been provisioned for Churchbase",
         "data": null,
         "filters": null,
         "errors": [
           {
-            "code": "unauthorized",
-            "message": "Unauthorized"
+            "code": "user_not_provisioned",
+            "message": "User has not been provisioned for Churchbase"
           }
         ],
         "pagination": null,
         "metadata": {
-          "request_id": "00000000-0000-4000-8000-000000000032",
+          "request_id": "00000000-0000-4000-8000-000000000034",
           "timestamp": "2026-01-01T00:00:00Z"
         },
         "log": {
-          "event": "church.list.unauthorized",
+          "event": "church.get_all.user.not_provisioned",
           "user_id": null,
           "status": "warning"
         }
       }
-order: 2000
+order: 4000

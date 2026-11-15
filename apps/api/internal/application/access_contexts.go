@@ -9,8 +9,8 @@ import (
 )
 
 type AccessContextsByUserID interface {
-	ListByUserID(context.Context, uuid.UUID) ([]accesscontext.Context, error)
-	ListAll(context.Context) ([]accesscontext.Context, error)
+	GetAllByUserID(context.Context, uuid.UUID) ([]accesscontext.Context, error)
+	GetAll(context.Context) ([]accesscontext.Context, error)
 }
 
 type CurrentAccessContexts struct {
@@ -27,14 +27,14 @@ func NewCurrentAccessContextsReader(users UserByAuthUserID, contexts AccessConte
 	return &CurrentAccessContextsReader{users: users, contexts: contexts}
 }
 
-func (r *CurrentAccessContextsReader) ListByAuthUserID(ctx context.Context, authUserID string) (CurrentAccessContexts, error) {
+func (r *CurrentAccessContextsReader) GetAllByAuthUserID(ctx context.Context, authUserID string) (CurrentAccessContexts, error) {
 	user, err := r.users.GetByAuthUserID(ctx, authUserID)
 	if err != nil {
 		return CurrentAccessContexts{}, err
 	}
 
 	if user.GlobalRoles != nil {
-		contexts, err := r.contexts.ListAll(ctx)
+		contexts, err := r.contexts.GetAll(ctx)
 		if err != nil {
 			return CurrentAccessContexts{}, err
 		}
@@ -45,7 +45,7 @@ func (r *CurrentAccessContextsReader) ListByAuthUserID(ctx context.Context, auth
 		return CurrentAccessContexts{GlobalRoles: user.GlobalRoles, Contexts: contexts}, nil
 	}
 
-	contexts, err := r.contexts.ListByUserID(ctx, user.ID)
+	contexts, err := r.contexts.GetAllByUserID(ctx, user.ID)
 	if err != nil {
 		return CurrentAccessContexts{}, err
 	}

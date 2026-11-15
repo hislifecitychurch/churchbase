@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "bun:test"
 
 import { ApiError } from "@/api/client"
-import { getChurches, isChurch } from "@/api/churches/list"
+import { getAllChurches, isChurch } from "@/api/churches/get-all"
 
 const originalFetch = globalThis.fetch
 const apiBaseURL = (process.env.NEXT_PUBLIC_API_URL_V1 ?? "http://localhost:36080/api/v1").replace(
@@ -25,7 +25,7 @@ afterEach(() => {
   mockFetch(originalFetch)
 })
 
-describe("getChurches", () => {
+describe("getAllChurches", () => {
   it("rejects a negative ministry count", () => {
     expect(
       isChurch({
@@ -44,7 +44,7 @@ describe("getChurches", () => {
     ).toBe(false)
   })
 
-  it("loads the authenticated church list", async () => {
+  it("gets all churches for the authenticated user", async () => {
     const churches = [
       {
         id: "church-1",
@@ -67,7 +67,7 @@ describe("getChurches", () => {
       return new Response(JSON.stringify({ success: true, data: churches }), { status: 200 })
     })
 
-    await expect(getChurches()).resolves.toEqual(churches)
+    await expect(getAllChurches()).resolves.toEqual(churches)
   })
 
   it("rejects malformed church data", async () => {
@@ -81,7 +81,7 @@ describe("getChurches", () => {
         ),
     )
 
-    await expect(getChurches()).rejects.toMatchObject({
+    await expect(getAllChurches()).rejects.toMatchObject({
       status: 502,
       code: "invalid_api_response",
     })
@@ -95,7 +95,7 @@ describe("getChurches", () => {
         }),
     )
 
-    const error = await getChurches().catch((cause: unknown) => cause)
+    const error = await getAllChurches().catch((cause: unknown) => cause)
     expect(error).toBeInstanceOf(ApiError)
     expect(error).toMatchObject({ status: 403, code: "forbidden" })
   })

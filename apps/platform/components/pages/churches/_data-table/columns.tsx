@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import type { Church } from "@/api/churches/list"
+import type { Church } from "@/api/churches/get-all"
 
 import type { ColumnDef } from "@tanstack/react-table"
 import type { LegacyFeatures } from "@tanstack/react-table/legacy"

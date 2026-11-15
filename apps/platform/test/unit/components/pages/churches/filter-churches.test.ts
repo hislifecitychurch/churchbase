@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 
-import type { Church } from "@/api/churches/list"
+import type { Church } from "@/api/churches/get-all"
 import { filterChurchesByName } from "@/components/pages/churches/_data-table/filters"
 
 const churches: Church[] = [

@@ -8,5 +8,5 @@ import (
 
 func Register(router fiber.Router, validator authmiddleware.Validator, handler *workspaceaccesshandler.Handler) {
 	router.Post("/users/me/workspace-access-events", authmiddleware.Require(validator), handler.Record)
-	router.Get("/platform/workspace-access-events", authmiddleware.Require(validator), handler.ListForAdmin)
+	router.Get("/platform/workspace-access-events", authmiddleware.Require(validator), handler.GetAllForAdmin)
 }

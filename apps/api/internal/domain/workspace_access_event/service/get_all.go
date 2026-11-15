@@ -9,7 +9,7 @@ import (
 
 const MaxPageSize = 100
 
-func (s *Service) List(ctx context.Context, filter workspaceaccessevent.ListFilter) (workspaceaccessevent.Page, error) {
+func (s *Service) GetAll(ctx context.Context, filter workspaceaccessevent.GetAllFilter) (workspaceaccessevent.Page, error) {
 	if filter.Page < 1 || filter.Page > 1_000_000 || filter.Limit < 1 || filter.Limit > MaxPageSize {
 		return workspaceaccessevent.Page{}, fmt.Errorf("%w: page and limit are out of range", workspaceaccessevent.ErrInvalidEvent)
 	}
@@ -19,5 +19,5 @@ func (s *Service) List(ctx context.Context, filter workspaceaccessevent.ListFilt
 	if filter.Since != nil && filter.Until != nil && filter.Since.After(*filter.Until) {
 		return workspaceaccessevent.Page{}, fmt.Errorf("%w: since must not be after until", workspaceaccessevent.ErrInvalidEvent)
 	}
-	return s.repository.List(ctx, filter)
+	return s.repository.GetAll(ctx, filter)
 }

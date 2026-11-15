@@ -115,7 +115,7 @@ type accessContextsServiceFake struct {
 	err        error
 }
 
-func (s *accessContextsServiceFake) ListByAuthUserID(_ context.Context, authUserID string) (application.CurrentAccessContexts, error) {
+func (s *accessContextsServiceFake) GetAllByAuthUserID(_ context.Context, authUserID string) (application.CurrentAccessContexts, error) {
 	s.called, s.authUserID = true, authUserID
 	return s.result, s.err
 }

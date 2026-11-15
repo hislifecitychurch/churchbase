@@ -130,6 +130,6 @@ func (s currentUserFake) GetByAuthUserID(context.Context, string) (application.C
 
 type accessContextsFake struct{}
 
-func (accessContextsFake) ListByAuthUserID(context.Context, string) (application.CurrentAccessContexts, error) {
+func (accessContextsFake) GetAllByAuthUserID(context.Context, string) (application.CurrentAccessContexts, error) {
 	return application.CurrentAccessContexts{Contexts: []accesscontext.Context{}}, nil
 }

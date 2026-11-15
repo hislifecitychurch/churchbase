@@ -90,7 +90,7 @@ func TestRecordMapsInvalidAndForbiddenInputs(t *testing.T) {
 	}
 }
 
-func TestListForAdminValidatesFiltersAndReturnsPagination(t *testing.T) {
+func TestGetAllForAdminValidatesFiltersAndReturnsPagination(t *testing.T) {
 	userID := uuid.New()
 	service := &workspaceAccessServiceFake{history: application.WorkspaceAccessHistory{
 		Events: []application.WorkspaceAccessRecord{{
@@ -104,20 +104,20 @@ func TestListForAdminValidatesFiltersAndReturnsPagination(t *testing.T) {
 	}}
 	app := appWithActor(workspaceaccesshandler.NewHandler(service))
 	request := httptest.NewRequest(http.MethodGet, "/events?page=2&limit=10&workspace=app&since=2026-01-01T00:00:00Z", nil)
-	listed, err := app.Test(request)
+	gotAll, err := app.Test(request)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer listed.Body.Close()
+	defer gotAll.Body.Close()
 	var payload response.Envelope[[]struct {
 		UserID    string  `json:"user_id"`
 		FirstName *string `json:"first_name"`
 	}]
-	if err := json.NewDecoder(listed.Body).Decode(&payload); err != nil {
+	if err := json.NewDecoder(gotAll.Body).Decode(&payload); err != nil {
 		t.Fatal(err)
 	}
-	if listed.StatusCode != http.StatusOK || payload.Pagination == nil || payload.Pagination.Page != 2 || payload.Pagination.Pages != 4 || len(payload.Data) != 1 || payload.Data[0].UserID != userID.String() || payload.Data[0].FirstName == nil || *payload.Data[0].FirstName != "Ada" || !service.listCalled {
-		t.Fatalf("response = %d %+v", listed.StatusCode, payload)
+	if gotAll.StatusCode != http.StatusOK || payload.Pagination == nil || payload.Pagination.Page != 2 || payload.Pagination.Pages != 4 || len(payload.Data) != 1 || payload.Data[0].UserID != userID.String() || payload.Data[0].FirstName == nil || *payload.Data[0].FirstName != "Ada" || !service.getAllCalled {
+		t.Fatalf("response = %d %+v", gotAll.StatusCode, payload)
 	}
 
 	invalid, err := app.Test(httptest.NewRequest(http.MethodGet, "/events?limit=101", nil))
@@ -130,16 +130,16 @@ func TestListForAdminValidatesFiltersAndReturnsPagination(t *testing.T) {
 	}
 }
 
-func TestListForAdminMapsForbidden(t *testing.T) {
-	service := &workspaceAccessServiceFake{listErr: application.ErrWorkspaceAccessForbidden}
+func TestGetAllForAdminMapsForbidden(t *testing.T) {
+	service := &workspaceAccessServiceFake{getAllErr: application.ErrWorkspaceAccessForbidden}
 	app := appWithActor(workspaceaccesshandler.NewHandler(service))
-	listed, err := app.Test(httptest.NewRequest(http.MethodGet, "/events", nil))
+	gotAll, err := app.Test(httptest.NewRequest(http.MethodGet, "/events", nil))
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer listed.Body.Close()
-	if listed.StatusCode != http.StatusForbidden {
-		t.Fatalf("forbidden status = %d, want 403", listed.StatusCode)
+	defer gotAll.Body.Close()
+	if gotAll.StatusCode != http.StatusForbidden {
+		t.Fatalf("forbidden status = %d, want 403", gotAll.StatusCode)
 	}
 }
 
@@ -150,7 +150,7 @@ func appWithActor(handler *workspaceaccesshandler.Handler) *fiber.App {
 		return c.Next()
 	})
 	app.Post("/events", handler.Record)
-	app.Get("/events", handler.ListForAdmin)
+	app.Get("/events", handler.GetAllForAdmin)
 	return app
 }
 
@@ -159,13 +159,13 @@ func stringPtr(value string) *string { return &value }
 type workspaceAccessServiceFake struct {
 	authUserID   string
 	recordCalled bool
-	listCalled   bool
+	getAllCalled bool
 	recordInput  workspaceaccessevent.RecordInput
 	recordResult workspaceaccessevent.Event
 	created      bool
 	recordErr    error
 	history      application.WorkspaceAccessHistory
-	listErr      error
+	getAllErr    error
 }
 
 func (s *workspaceAccessServiceFake) RecordByAuthUserID(_ context.Context, authUserID string, input workspaceaccessevent.RecordInput) (workspaceaccessevent.Event, bool, error) {
@@ -173,7 +173,7 @@ func (s *workspaceAccessServiceFake) RecordByAuthUserID(_ context.Context, authU
 	return s.recordResult, s.created, s.recordErr
 }
 
-func (s *workspaceAccessServiceFake) ListForAdmin(_ context.Context, authUserID string, _ workspaceaccessevent.ListFilter) (application.WorkspaceAccessHistory, error) {
-	s.authUserID, s.listCalled = authUserID, true
-	return s.history, s.listErr
+func (s *workspaceAccessServiceFake) GetAllForAdmin(_ context.Context, authUserID string, _ workspaceaccessevent.GetAllFilter) (application.WorkspaceAccessHistory, error) {
+	s.authUserID, s.getAllCalled = authUserID, true
+	return s.history, s.getAllErr
 }

@@ -1,5 +1,5 @@
 $kind: http-example
-name: Church list is forbidden
+name: Get all churches requires a session
 request:
   url: "{{host-api}}/v1/platform/churches"
   method: GET
@@ -7,8 +7,8 @@ request:
     - key: Accept
       value: application/json
 response:
-  statusCode: 403
-  statusText: Forbidden
+  statusCode: 401
+  statusText: Unauthorized
   headers:
     Content-Type: application/json
   body:
@@ -16,24 +16,24 @@ response:
     content: |-
       {
         "success": false,
-        "message": "Global administrator or staff access is required",
+        "message": "Unauthorized",
         "data": null,
         "filters": null,
         "errors": [
           {
-            "code": "forbidden",
-            "message": "Global administrator or staff access is required"
+            "code": "unauthorized",
+            "message": "Unauthorized"
           }
         ],
         "pagination": null,
         "metadata": {
-          "request_id": "00000000-0000-4000-8000-000000000033",
+          "request_id": "00000000-0000-4000-8000-000000000032",
           "timestamp": "2026-01-01T00:00:00Z"
         },
         "log": {
-          "event": "church.list.forbidden",
+          "event": "church.get_all.unauthorized",
           "user_id": null,
           "status": "warning"
         }
       }
-order: 3000
+order: 2000

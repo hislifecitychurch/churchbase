@@ -12,7 +12,7 @@ import (
 	accesscontext "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/access_context"
 )
 
-func (r *AccessContextRepository) ListByUserID(ctx context.Context, userID uuid.UUID) ([]accesscontext.MembershipContext, error) {
+func (r *AccessContextRepository) GetAllByUserID(ctx context.Context, userID uuid.UUID) ([]accesscontext.MembershipContext, error) {
 	memberships, err := transaction.Client(ctx, r.client).ChurchMembership.Query().
 		Where(churchmembership.UserID(userID), churchmembership.StatusEQ(churchmembership.StatusActive)).
 		WithChurch().
@@ -20,7 +20,7 @@ func (r *AccessContextRepository) ListByUserID(ctx context.Context, userID uuid.
 			query.Where(ministrymembership.StatusEQ(ministrymembership.StatusActive)).WithMinistry()
 		}).All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("list active church memberships for access contexts: %w", err)
+		return nil, fmt.Errorf("get active church memberships for access contexts: %w", err)
 	}
 
 	contexts := make([]accesscontext.MembershipContext, 0, len(memberships))
@@ -58,10 +58,10 @@ func (r *AccessContextRepository) ListByUserID(ctx context.Context, userID uuid.
 	return contexts, nil
 }
 
-func (r *AccessContextRepository) ListAll(ctx context.Context) ([]accesscontext.MembershipContext, error) {
+func (r *AccessContextRepository) GetAll(ctx context.Context) ([]accesscontext.MembershipContext, error) {
 	churches, err := transaction.Client(ctx, r.client).Church.Query().WithMinistries().All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("list all churches and ministries for global access contexts: %w", err)
+		return nil, fmt.Errorf("get all churches and ministries for global access contexts: %w", err)
 	}
 
 	contexts := make([]accesscontext.MembershipContext, 0, len(churches))

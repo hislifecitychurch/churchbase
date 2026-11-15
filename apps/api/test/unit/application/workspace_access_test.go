@@ -59,7 +59,7 @@ func TestWorkspaceAccessHistoryIsAdminOnlyAndIncludesProfileNames(t *testing.T) 
 	events := &workspaceAccessEventsFake{page: workspaceaccessevent.Page{Events: []workspaceaccessevent.Event{event}, Total: 1}}
 	service := application.NewWorkspaceAccessService(users, events, profiles)
 
-	history, err := service.ListForAdmin(context.Background(), "auth-admin", workspaceaccessevent.ListFilter{Page: 1, Limit: 25})
+	history, err := service.GetAllForAdmin(context.Background(), "auth-admin", workspaceaccessevent.GetAllFilter{Page: 1, Limit: 25})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -68,8 +68,8 @@ func TestWorkspaceAccessHistoryIsAdminOnlyAndIncludesProfileNames(t *testing.T) 
 	}
 
 	role = userdomain.GlobalRoleStaff
-	if _, err := service.ListForAdmin(context.Background(), "auth-staff", workspaceaccessevent.ListFilter{Page: 1, Limit: 25}); !errors.Is(err, application.ErrWorkspaceAccessForbidden) {
-		t.Fatalf("staff ListForAdmin error = %v, want forbidden", err)
+	if _, err := service.GetAllForAdmin(context.Background(), "auth-staff", workspaceaccessevent.GetAllFilter{Page: 1, Limit: 25}); !errors.Is(err, application.ErrWorkspaceAccessForbidden) {
+		t.Fatalf("staff GetAllForAdmin error = %v, want forbidden", err)
 	}
 }
 
@@ -103,7 +103,7 @@ func (r *workspaceAccessEventsFake) Record(_ context.Context, input workspaceacc
 	return r.recordResult, r.created, r.err
 }
 
-func (r *workspaceAccessEventsFake) List(context.Context, workspaceaccessevent.ListFilter) (workspaceaccessevent.Page, error) {
+func (r *workspaceAccessEventsFake) GetAll(context.Context, workspaceaccessevent.GetAllFilter) (workspaceaccessevent.Page, error) {
 	return r.page, r.err
 }
 

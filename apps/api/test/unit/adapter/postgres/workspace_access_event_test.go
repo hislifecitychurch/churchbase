@@ -53,8 +53,8 @@ func TestWorkspaceAccessEventRepositoryDeduplicatesEntry(t *testing.T) {
 	}
 }
 
-func TestWorkspaceAccessEventRepositoryListsNewestFirstAndFilters(t *testing.T) {
-	client := enttest.Open(t, "sqlite3", "file:workspace-access-event-list?mode=memory&cache=shared&_fk=1")
+func TestWorkspaceAccessEventRepositoryGetsAllNewestFirstAndFiltered(t *testing.T) {
+	client := enttest.Open(t, "sqlite3", "file:workspace-access-event-get-all?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
 	soft_delete.ConfigureClient(client)
 
@@ -91,7 +91,7 @@ func TestWorkspaceAccessEventRepositoryListsNewestFirstAndFilters(t *testing.T) 
 		t.Fatalf("latest event = %+v, want platform at %s", latest, newer)
 	}
 	workspace := workspaceaccesseventdomain.WorkspaceApp
-	page, err := repository.List(context.Background(), workspaceaccesseventdomain.ListFilter{
+	page, err := repository.GetAll(context.Background(), workspaceaccesseventdomain.GetAllFilter{
 		Workspace: &workspace, Since: &older, Page: 1, Limit: 10,
 	})
 	if err != nil {

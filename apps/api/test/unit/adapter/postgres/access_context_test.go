@@ -16,7 +16,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func TestAccessContextRepositoryListsOnlyActiveSameChurchMemberships(t *testing.T) {
+func TestAccessContextRepositoryGetsAllActiveSameChurchMemberships(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:access-contexts?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
 	soft_delete.ConfigureClient(client)
@@ -70,7 +70,7 @@ func TestAccessContextRepositoryListsOnlyActiveSameChurchMemberships(t *testing.
 	if _, err := client.MinistryMembership.Create().SetMinistry(inactiveChurchMinistry).SetChurchMembership(inactiveMembership).Save(ctx); err != nil {
 		t.Fatal(err)
 	}
-	contexts, err := accesscontextrepository.NewAccessContextRepository(client).ListByUserID(ctx, user.ID)
+	contexts, err := accesscontextrepository.NewAccessContextRepository(client).GetAllByUserID(ctx, user.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -88,7 +88,7 @@ func TestAccessContextRepositoryListsOnlyActiveSameChurchMemberships(t *testing.
 	}
 }
 
-func TestAccessContextRepositoryListsEveryChurchAndMinistryForGlobalRoles(t *testing.T) {
+func TestAccessContextRepositoryGetsAllChurchesAndMinistriesForGlobalRoles(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:global-access-contexts?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
 	soft_delete.ConfigureClient(client)
@@ -106,7 +106,7 @@ func TestAccessContextRepositoryListsEveryChurchAndMinistryForGlobalRoles(t *tes
 		}
 	}
 
-	contexts, err := accesscontextrepository.NewAccessContextRepository(client).ListAll(ctx)
+	contexts, err := accesscontextrepository.NewAccessContextRepository(client).GetAll(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}

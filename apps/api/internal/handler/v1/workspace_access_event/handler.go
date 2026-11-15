@@ -11,7 +11,7 @@ import (
 
 type Service interface {
 	RecordByAuthUserID(context.Context, string, workspaceaccesseventdomain.RecordInput) (workspaceaccesseventdomain.Event, bool, error)
-	ListForAdmin(context.Context, string, workspaceaccesseventdomain.ListFilter) (application.WorkspaceAccessHistory, error)
+	GetAllForAdmin(context.Context, string, workspaceaccesseventdomain.GetAllFilter) (application.WorkspaceAccessHistory, error)
 }
 
 type Handler struct {

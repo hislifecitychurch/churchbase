@@ -27,7 +27,7 @@ type RecordInput struct {
 	Workspace Workspace
 }
 
-type ListFilter struct {
+type GetAllFilter struct {
 	Workspace *Workspace
 	Since     *time.Time
 	Until     *time.Time

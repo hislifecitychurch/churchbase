@@ -16,25 +16,25 @@ func (h *Handler) GetAll(c *fiber.Ctx) error {
 	authUserID, ok := actor.ID(c.UserContext())
 	if !ok {
 		return response.JSON(c, http.StatusUnauthorized, response.Failure[any](
-			"Unauthorized", "unauthorized", c, "church.list.unauthorized", "", "warning",
+			"Unauthorized", "unauthorized", c, "church.get_all.unauthorized", "", "warning",
 		))
 	}
 
 	churches, err := h.directory.GetAllByAuthUserID(c.UserContext(), authUserID)
 	if errors.Is(err, userdomain.ErrUserNotFound) {
 		return response.JSON(c, http.StatusForbidden, response.Failure[any](
-			"User has not been provisioned for Churchbase", "user_not_provisioned", c, "church.list.user.not_provisioned", "", "warning",
+			"User has not been provisioned for Churchbase", "user_not_provisioned", c, "church.get_all.user.not_provisioned", "", "warning",
 		))
 	}
 	if errors.Is(err, application.ErrChurchDirectoryForbidden) {
 		return response.JSON(c, http.StatusForbidden, response.Failure[any](
-			"Global administrator or staff access is required", "forbidden", c, "church.list.forbidden", "", "warning",
+			"Global administrator or staff access is required", "forbidden", c, "church.get_all.forbidden", "", "warning",
 		))
 	}
 	if err != nil {
-		log.Printf("church_list_failed request_id=%q error=%v", c.GetRespHeader("X-Request-ID"), err)
+		log.Printf("church_get_all_failed request_id=%q error=%v", c.GetRespHeader("X-Request-ID"), err)
 		return response.JSON(c, http.StatusInternalServerError, response.Failure[any](
-			"An internal error occurred", "internal_error", c, "church.list.failed", "", "error",
+			"An internal error occurred", "internal_error", c, "church.get_all.failed", "", "error",
 		))
 	}
 
@@ -47,7 +47,7 @@ func (h *Handler) GetAll(c *fiber.Ctx) error {
 			ActiveMemberCount: item.ActiveMemberCount, MinistryCount: item.MinistryCount,
 		})
 	}
-	return response.JSON(c, http.StatusOK, response.Success(items, "Churches retrieved", c, "churches.listed", "", "info"))
+	return response.JSON(c, http.StatusOK, response.Success(items, "Churches retrieved", c, "churches.retrieved", "", "info"))
 }
 
 type getAllResponse struct {

@@ -1,4 +1,4 @@
-import type { Church } from "@/api/churches/list"
+import type { Church } from "@/api/churches/get-all"
 
 export const churchesDataTableSearch = {
   columnId: "name",

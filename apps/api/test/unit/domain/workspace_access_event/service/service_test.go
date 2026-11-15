@@ -28,26 +28,26 @@ func TestRecordValidatesRequiredIDsAndWorkspace(t *testing.T) {
 	}
 }
 
-func TestListRejectsOutOfRangePagination(t *testing.T) {
+func TestGetAllRejectsOutOfRangePagination(t *testing.T) {
 	repository := &workspaceAccessRepositoryFake{}
 	service := workspaceaccesseventservice.NewService(repository)
-	for _, filter := range []workspaceaccessevent.ListFilter{
+	for _, filter := range []workspaceaccessevent.GetAllFilter{
 		{Page: 0, Limit: 25},
 		{Page: 1, Limit: workspaceaccesseventservice.MaxPageSize + 1},
 		{Page: 1_000_001, Limit: 25},
 	} {
-		if _, err := service.List(context.Background(), filter); !errors.Is(err, workspaceaccessevent.ErrInvalidEvent) {
-			t.Fatalf("List(%+v) error = %v, want invalid event", filter, err)
+		if _, err := service.GetAll(context.Background(), filter); !errors.Is(err, workspaceaccessevent.ErrInvalidEvent) {
+			t.Fatalf("GetAll(%+v) error = %v, want invalid event", filter, err)
 		}
 	}
-	if repository.listCalled {
+	if repository.getAllCalled {
 		t.Fatal("repository called with invalid pagination")
 	}
 }
 
 type workspaceAccessRepositoryFake struct {
 	createCalled bool
-	listCalled   bool
+	getAllCalled bool
 }
 
 func (r *workspaceAccessRepositoryFake) Create(_ context.Context, input workspaceaccessevent.RecordInput) (workspaceaccessevent.Event, bool, error) {
@@ -59,7 +59,7 @@ func (*workspaceAccessRepositoryFake) GetLatestByUserID(context.Context, uuid.UU
 	return workspaceaccessevent.Event{}, workspaceaccessevent.ErrEventNotFound
 }
 
-func (r *workspaceAccessRepositoryFake) List(context.Context, workspaceaccessevent.ListFilter) (workspaceaccessevent.Page, error) {
-	r.listCalled = true
+func (r *workspaceAccessRepositoryFake) GetAll(context.Context, workspaceaccessevent.GetAllFilter) (workspaceaccessevent.Page, error) {
+	r.getAllCalled = true
 	return workspaceaccessevent.Page{}, nil
 }

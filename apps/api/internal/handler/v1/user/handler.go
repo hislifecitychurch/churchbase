@@ -11,7 +11,7 @@ type CurrentUserService interface {
 }
 
 type AccessContextsService interface {
-	ListByAuthUserID(context.Context, string) (application.CurrentAccessContexts, error)
+	GetAllByAuthUserID(context.Context, string) (application.CurrentAccessContexts, error)
 }
 
 type Handler struct {

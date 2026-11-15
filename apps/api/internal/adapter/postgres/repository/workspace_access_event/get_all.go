@@ -11,7 +11,7 @@ import (
 	workspaceaccesseventdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/workspace_access_event"
 )
 
-func (r *WorkspaceAccessEventRepository) List(ctx context.Context, filter workspaceaccesseventdomain.ListFilter) (workspaceaccesseventdomain.Page, error) {
+func (r *WorkspaceAccessEventRepository) GetAll(ctx context.Context, filter workspaceaccesseventdomain.GetAllFilter) (workspaceaccesseventdomain.Page, error) {
 	query := transaction.Client(ctx, r.client).WorkspaceAccessEvent.Query()
 	if filter.Workspace != nil {
 		query.Where(entworkspaceaccessevent.WorkspaceEQ(entworkspaceaccessevent.Workspace(*filter.Workspace)))
@@ -35,7 +35,7 @@ func (r *WorkspaceAccessEventRepository) List(ctx context.Context, filter worksp
 		Limit(filter.Limit).
 		All(ctx)
 	if err != nil {
-		return workspaceaccesseventdomain.Page{}, fmt.Errorf("list workspace access events: %w", err)
+		return workspaceaccesseventdomain.Page{}, fmt.Errorf("get all workspace access events: %w", err)
 	}
 	events := make([]workspaceaccesseventdomain.Event, 0, len(records))
 	for _, record := range records {

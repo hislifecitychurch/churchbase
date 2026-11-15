@@ -42,7 +42,7 @@ export function isChurch(value: unknown): value is Church {
   )
 }
 
-export async function getChurches(): Promise<Church[]> {
+export async function getAllChurches(): Promise<Church[]> {
   const churches = await apiRequest<unknown>("/platform/churches")
 
   if (!Array.isArray(churches) || !churches.every(isChurch)) {
