@@ -61,7 +61,7 @@ export function ChurchDetails({ churchId }: { churchId: string }): React.ReactEl
     <section className="flex flex-col gap-6">
       <BackToChurchesButton />
       <PageHeader description="Church details" title={church.name} />
-      <dl className="bg-card grid gap-x-8 gap-y-6 rounded-xl border p-6 sm:grid-cols-2">
+      <dl className="bg-card border-border grid gap-x-8 gap-y-6 rounded-xl border p-6 sm:grid-cols-2">
         <ChurchDetail label="Slug">{church.slug}</ChurchDetail>
         <ChurchDetail label="Active members">
           {church.active_member_count.toLocaleString()}

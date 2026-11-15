@@ -8,12 +8,12 @@ import { Button } from "@packages/ui-w/shared/button/button"
 export function BackToChurchesButton(): React.ReactElement {
   return (
     <Button
-      className="text-muted-foreground text-sm font-normal"
+      className="text-muted-foreground self-start text-sm font-normal"
       render={<Link href="/churches" />}
-      variant="link"
+      variant="ghost"
     >
       <IconArrowLeft aria-hidden />
-      All churches
+      Back to churches
     </Button>
   )
 }

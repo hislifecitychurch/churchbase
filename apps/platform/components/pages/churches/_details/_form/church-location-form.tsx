@@ -66,7 +66,10 @@ export function ChurchLocationForm({ church }: ChurchLocationFormProps): React.R
   }
 
   return (
-    <form className="flex flex-col gap-4 rounded-xl border p-6" onSubmit={handleSubmit}>
+    <form
+      className="border-border flex flex-col gap-4 rounded-xl border p-6"
+      onSubmit={handleSubmit}
+    >
       <div className="flex flex-col gap-2">
         <h2 className="text-foreground text-lg font-medium">Edit location</h2>
         <p className="text-muted-foreground text-sm">
