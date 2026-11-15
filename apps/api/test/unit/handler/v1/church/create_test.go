@@ -39,12 +39,14 @@ func TestCreateRejectsMissingFieldsBeforeCallingService(t *testing.T) {
 func TestCreateReturnsCreatedChurch(t *testing.T) {
 	id := uuid.New()
 	timezone, website, bio := "America/Chicago", "https://example.org", "A welcoming church."
+	city, state, countryCode := "Springfield", "Illinois", "US"
 	service := &churchCreationServiceFake{created: churchdomain.Church{
 		ID: id, Name: "Sample Church", Slug: "sample-church",
 		Timezone: &timezone, Website: &website, Bio: &bio,
+		City: &city, StateOrProvince: &state, CountryCode: &countryCode,
 	}}
 	app := appWithActor(churchhandler.NewHandler(service, service, service))
-	request := httptest.NewRequest(http.MethodPost, "/churches", strings.NewReader(`{"name":"Sample Church","slug":"sample-church","timezone":"America/Chicago","website":"https://example.org","bio":"A welcoming church."}`))
+	request := httptest.NewRequest(http.MethodPost, "/churches", strings.NewReader(`{"name":"Sample Church","slug":"sample-church","timezone":"America/Chicago","website":"https://example.org","bio":"A welcoming church.","city":"Springfield","state_or_province":"Illinois","country_code":"US"}`))
 	request.Header.Set("Content-Type", "application/json")
 	created, err := app.Test(request)
 	if err != nil {
@@ -58,15 +60,18 @@ func TestCreateReturnsCreatedChurch(t *testing.T) {
 		Timezone          *string `json:"timezone"`
 		Website           *string `json:"website"`
 		Bio               *string `json:"bio"`
+		City              *string `json:"city"`
+		StateOrProvince   *string `json:"state_or_province"`
+		CountryCode       *string `json:"country_code"`
 		ActiveMemberCount int     `json:"active_member_count"`
 	}]
 	if err := json.NewDecoder(created.Body).Decode(&payload); err != nil {
 		t.Fatal(err)
 	}
-	if created.StatusCode != http.StatusCreated || !payload.Success || payload.Data.ID != id.String() || payload.Data.Name != "Sample Church" || payload.Data.Slug != "sample-church" || payload.Data.Timezone == nil || *payload.Data.Timezone != timezone || payload.Data.Website == nil || *payload.Data.Website != website || payload.Data.Bio == nil || *payload.Data.Bio != bio || payload.Data.ActiveMemberCount != 0 || service.authUserID != "auth-admin" {
+	if created.StatusCode != http.StatusCreated || !payload.Success || payload.Data.ID != id.String() || payload.Data.Name != "Sample Church" || payload.Data.Slug != "sample-church" || payload.Data.Timezone == nil || *payload.Data.Timezone != timezone || payload.Data.Website == nil || *payload.Data.Website != website || payload.Data.Bio == nil || *payload.Data.Bio != bio || payload.Data.City == nil || *payload.Data.City != city || payload.Data.StateOrProvince == nil || *payload.Data.StateOrProvince != state || payload.Data.CountryCode == nil || *payload.Data.CountryCode != countryCode || payload.Data.ActiveMemberCount != 0 || service.authUserID != "auth-admin" {
 		t.Fatalf("response = %d %+v, Auth user ID = %q", created.StatusCode, payload, service.authUserID)
 	}
-	if service.input.Timezone == nil || *service.input.Timezone != timezone || service.input.Website == nil || *service.input.Website != website || service.input.Bio == nil || *service.input.Bio != bio {
+	if service.input.Timezone == nil || *service.input.Timezone != timezone || service.input.Website == nil || *service.input.Website != website || service.input.Bio == nil || *service.input.Bio != bio || service.input.City == nil || *service.input.City != city || service.input.StateOrProvince == nil || *service.input.StateOrProvince != state || service.input.CountryCode == nil || *service.input.CountryCode != countryCode {
 		t.Fatalf("service input = %+v", service.input)
 	}
 }

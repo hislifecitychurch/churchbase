@@ -13,17 +13,22 @@ import (
 
 func TestUpdateTrimsChurchNameAndOptionalFields(t *testing.T) {
 	timezone, website, bio := "America/Chicago", "https://example.org", "A welcoming church."
+	city, state, countryCode := "Springfield", "Illinois", "US"
 	repository := &churchRepositoryFake{}
 	churchID := uuid.New()
 
 	err := churchservice.NewService(repository).Update(context.Background(), churchID, churchdomain.UpdateInput{
 		Name: " Updated Church ", Timezone: stringPointer(" America/Chicago "),
 		Website: stringPointer(" https://example.org "), Bio: stringPointer(" A welcoming church. "),
+		City: stringPointer(" Springfield "), StateOrProvince: stringPointer(" Illinois "), CountryCode: stringPointer(" us "),
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := churchdomain.UpdateInput{Name: "Updated Church", Timezone: &timezone, Website: &website, Bio: &bio}
+	want := churchdomain.UpdateInput{
+		Name: "Updated Church", Timezone: &timezone, Website: &website, Bio: &bio,
+		City: &city, StateOrProvince: &state, CountryCode: &countryCode,
+	}
 	if !repository.updateCalled || repository.updateID != churchID || !reflect.DeepEqual(repository.updateInput, want) {
 		t.Fatalf("update called = %t, ID = %s, input = %+v, want %+v", repository.updateCalled, repository.updateID, repository.updateInput, want)
 	}
@@ -34,6 +39,9 @@ func TestUpdateRejectsInvalidInputBeforeRepository(t *testing.T) {
 		{Name: " "},
 		{Name: "Church", Timezone: stringPointer("Not/A_Timezone")},
 		{Name: "Church", Website: stringPointer("javascript:alert(1)")},
+		{Name: "Church", CountryCode: stringPointer("USA")},
+		{Name: "Church", CountryCode: stringPointer("1U")},
+		{Name: "Church", CountryCode: stringPointer("ß")},
 	} {
 		repository := &churchRepositoryFake{}
 		if err := churchservice.NewService(repository).Update(context.Background(), uuid.New(), input); !errors.Is(err, churchdomain.ErrInvalidChurch) || repository.updateCalled {

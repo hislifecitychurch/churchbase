@@ -46,6 +46,7 @@ func (r *ChurchRepository) GetAll(ctx context.Context) ([]churchdomain.Church, e
 		churches = append(churches, churchdomain.Church{
 			ID: record.ID, Name: record.Name, Slug: record.Slug,
 			Timezone: record.Timezone, Website: record.Website, Bio: record.Bio,
+			City: record.City, StateOrProvince: record.StateOrProvince, CountryCode: record.CountryCode,
 			ActiveMemberCount: memberCounts[record.ID],
 		})
 	}

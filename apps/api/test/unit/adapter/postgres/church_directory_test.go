@@ -22,7 +22,10 @@ func TestChurchRepositoryListsActiveMemberCounts(t *testing.T) {
 
 	ctx := actor.WithID(context.Background(), "auth-test-admin")
 	repository := churchrepository.NewChurchRepository(client)
-	alpha, err := repository.Create(ctx, churchdomain.CreateInput{Name: "Alpha Church", Slug: "alpha"})
+	city, state, countryCode := "Springfield", "Illinois", "US"
+	alpha, err := repository.Create(ctx, churchdomain.CreateInput{
+		Name: "Alpha Church", Slug: "alpha", City: &city, StateOrProvince: &state, CountryCode: &countryCode,
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -73,6 +76,9 @@ func TestChurchRepositoryListsActiveMemberCounts(t *testing.T) {
 	if len(churches) != 2 || churches[0].ID != alpha.ID {
 		t.Fatalf("churches = %+v, want Alpha and Zulu in name order", churches)
 	}
+	if churches[0].City == nil || *churches[0].City != city || churches[0].StateOrProvince == nil || *churches[0].StateOrProvince != state || churches[0].CountryCode == nil || *churches[0].CountryCode != countryCode {
+		t.Fatalf("Alpha location = %+v, want %s, %s, %s", churches[0], city, state, countryCode)
+	}
 	if churches[0].ActiveMemberCount != 1 {
 		t.Fatalf("Alpha active member count = %d, want 1", churches[0].ActiveMemberCount)
 	}
@@ -93,8 +99,10 @@ func TestChurchRepositoryUpdatesAndClearsChurchMetadata(t *testing.T) {
 		t.Fatal(err)
 	}
 	timezone, website, bio := "America/Chicago", "https://example.org", "A welcoming church."
+	city, state, countryCode := "Springfield", "Illinois", "US"
 	if err := repository.Update(ctx, church.ID, churchdomain.UpdateInput{
 		Name: "New Name", Timezone: &timezone, Website: &website, Bio: &bio,
+		City: &city, StateOrProvince: &state, CountryCode: &countryCode,
 	}); err != nil {
 		t.Fatal(err)
 	}
@@ -102,7 +110,7 @@ func TestChurchRepositoryUpdatesAndClearsChurchMetadata(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(churches) != 1 || churches[0].Name != "New Name" || churches[0].Timezone == nil || *churches[0].Timezone != timezone || churches[0].Website == nil || *churches[0].Website != website || churches[0].Bio == nil || *churches[0].Bio != bio {
+	if len(churches) != 1 || churches[0].Name != "New Name" || churches[0].Timezone == nil || *churches[0].Timezone != timezone || churches[0].Website == nil || *churches[0].Website != website || churches[0].Bio == nil || *churches[0].Bio != bio || churches[0].City == nil || *churches[0].City != city || churches[0].StateOrProvince == nil || *churches[0].StateOrProvince != state || churches[0].CountryCode == nil || *churches[0].CountryCode != countryCode {
 		t.Fatalf("updated church = %+v", churches)
 	}
 	if err := repository.Update(ctx, church.ID, churchdomain.UpdateInput{Name: "New Name"}); err != nil {
@@ -112,7 +120,7 @@ func TestChurchRepositoryUpdatesAndClearsChurchMetadata(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if churches[0].Timezone != nil || churches[0].Website != nil || churches[0].Bio != nil {
+	if churches[0].Timezone != nil || churches[0].Website != nil || churches[0].Bio != nil || churches[0].City != nil || churches[0].StateOrProvince != nil || churches[0].CountryCode != nil {
 		t.Fatalf("cleared metadata = %+v", churches[0])
 	}
 	if err := repository.Update(ctx, uuid.New(), churchdomain.UpdateInput{Name: "Missing"}); err != churchdomain.ErrChurchNotFound {

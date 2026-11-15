@@ -43,6 +43,7 @@ func (h *Handler) GetAll(c *fiber.Ctx) error {
 		items = append(items, getAllResponse{
 			ID: item.ID.String(), Name: item.Name, Slug: item.Slug,
 			Timezone: item.Timezone, Website: item.Website, Bio: item.Bio,
+			City: item.City, StateOrProvince: item.StateOrProvince, CountryCode: item.CountryCode,
 			ActiveMemberCount: item.ActiveMemberCount,
 		})
 	}
@@ -56,5 +57,8 @@ type getAllResponse struct {
 	Timezone          *string `json:"timezone"`
 	Website           *string `json:"website"`
 	Bio               *string `json:"bio"`
+	City              *string `json:"city"`
+	StateOrProvince   *string `json:"state_or_province"`
+	CountryCode       *string `json:"country_code"`
 	ActiveMemberCount int     `json:"active_member_count"`
 }

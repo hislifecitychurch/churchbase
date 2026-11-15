@@ -17,7 +17,10 @@ func (s *Service) Create(ctx context.Context, input churchdomain.CreateInput) (c
 	input.Timezone = cleanOptional(input.Timezone)
 	input.Website = cleanOptional(input.Website)
 	input.Bio = cleanOptional(input.Bio)
-	if input.Name == "" || input.Slug == "" || !validChurchDetails(input.Timezone, input.Website) {
+	input.City = cleanOptional(input.City)
+	input.StateOrProvince = cleanOptional(input.StateOrProvince)
+	input.CountryCode = cleanCountryCode(input.CountryCode)
+	if input.Name == "" || input.Slug == "" || !validChurchDetails(input.Timezone, input.Website) || !validCountryCode(input.CountryCode) {
 		return churchdomain.Church{}, fmt.Errorf("%w: invalid required or optional church details", churchdomain.ErrInvalidChurch)
 	}
 	return s.repository.Create(ctx, input)
@@ -32,6 +35,26 @@ func cleanOptional(value *string) *string {
 		return nil
 	}
 	return &trimmed
+}
+
+func cleanCountryCode(value *string) *string {
+	countryCode := cleanOptional(value)
+	if countryCode == nil || len(*countryCode) != 2 || !isASCIILetter((*countryCode)[0]) || !isASCIILetter((*countryCode)[1]) {
+		return countryCode
+	}
+	upper := strings.ToUpper(*countryCode)
+	return &upper
+}
+
+func isASCIILetter(value byte) bool {
+	return value >= 'A' && value <= 'Z' || value >= 'a' && value <= 'z'
+}
+
+func validCountryCode(value *string) bool {
+	if value == nil {
+		return true
+	}
+	return len(*value) == 2 && (*value)[0] >= 'A' && (*value)[0] <= 'Z' && (*value)[1] >= 'A' && (*value)[1] <= 'Z'
 }
 
 func validChurchDetails(timezone, websiteValue *string) bool {

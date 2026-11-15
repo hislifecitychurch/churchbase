@@ -33,6 +33,9 @@ describe("createChurch", () => {
       timezone: "America/Chicago",
       website: "https://example.org",
       bio: "A welcoming church.",
+      city: "Springfield",
+      state_or_province: "Illinois",
+      country_code: "US",
     }
     const church = { id: "church-1", ...input, active_member_count: 0 }
     mockFetch(async (url, init) => {

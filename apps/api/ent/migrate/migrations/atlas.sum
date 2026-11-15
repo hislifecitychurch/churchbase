@@ -1,4 +1,4 @@
-h1:vx4fNAfM26Ua89x/mPYgM5L8m2vxkJ4NEJRnmehH+do=
+h1:8pjACSSObZtfi8VFYUroTM4v+7P56OYZAU6DyrbFjXQ=
 20261104120000_create_churches.sql h1:4UZKfz4Jd2T0m5t8BzaBxzEuFqlqy1RgksC8Vkn53kw=
 20261104130000_use_uuidv7_for_church_ids.sql h1:i0+eFlP30SZCGsn0WiNG28iUPSqXp/lBS2AA/KoOVyw=
 20261104153939_create_church_memberships_and_ministries.sql h1:XK7YDPBxFII6tQHr3SyNjceYxVBXRouMzN9mQb6lxu0=
@@ -14,3 +14,4 @@ h1:vx4fNAfM26Ua89x/mPYgM5L8m2vxkJ4NEJRnmehH+do=
 20261107154748_create_workspace_access_events.sql h1:Nze9YaOeD9b4QB7yZq0TZH+s+t1EZseOHIqfYIszP78=
 20261109161102_rename_platform_role_to_global_roles.sql h1:vlYE9uNlsnFSX/fZ315CNnycniEO9pPGzAztNbGtTFI=
 20261114160020_add_church_metadata_fields.sql h1:mrpS1I/smwK3xf/Vj4ZdP+0u91wsWvsEwWcPelKmHAU=
+20261114235230_add_church_location_fields.sql h1:A0fw559DLgN/wftHEt7KvsfyAq/7oyObY2b0pY07jrA=

@@ -15,7 +15,10 @@ request:
         "name": "Example Church",
         "timezone": "America/Chicago",
         "website": "https://example.org",
-        "bio": "A welcoming church in Springfield."
+        "bio": "A welcoming church in Springfield.",
+        "city": "Springfield",
+        "state_or_province": "Illinois",
+        "country_code": "US"
       }
 response:
   statusCode: 200

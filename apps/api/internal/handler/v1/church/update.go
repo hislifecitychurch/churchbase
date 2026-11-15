@@ -37,6 +37,7 @@ func (h *Handler) Update(c *fiber.Ctx) error {
 
 	err = h.updater.UpdateByAuthUserID(c.UserContext(), authUserID, churchID, churchdomain.UpdateInput{
 		Name: request.Name, Timezone: request.Timezone, Website: request.Website, Bio: request.Bio,
+		City: request.City, StateOrProvince: request.StateOrProvince, CountryCode: request.CountryCode,
 	})
 	if errors.Is(err, userdomain.ErrUserNotFound) {
 		return response.JSON(c, http.StatusForbidden, response.Failure[any](
@@ -67,10 +68,13 @@ func (h *Handler) Update(c *fiber.Ctx) error {
 }
 
 type updateRequest struct {
-	Name     string  `json:"name"`
-	Timezone *string `json:"timezone"`
-	Website  *string `json:"website"`
-	Bio      *string `json:"bio"`
+	Name            string  `json:"name"`
+	Timezone        *string `json:"timezone"`
+	Website         *string `json:"website"`
+	Bio             *string `json:"bio"`
+	City            *string `json:"city"`
+	StateOrProvince *string `json:"state_or_province"`
+	CountryCode     *string `json:"country_code"`
 }
 
 type updateResponse struct {
@@ -79,6 +83,6 @@ type updateResponse struct {
 
 func invalidChurchUpdate(c *fiber.Ctx) error {
 	return response.JSON(c, http.StatusBadRequest, response.Failure[any](
-		"Church name is required; website and time zone must be valid", "invalid_church", c, "church.update.invalid", "", "warning",
+		"Church name is required; website, time zone, and country code must be valid", "invalid_church", c, "church.update.invalid", "", "warning",
 	))
 }

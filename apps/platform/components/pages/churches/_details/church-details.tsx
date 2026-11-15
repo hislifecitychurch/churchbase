@@ -8,6 +8,8 @@ import { useChurches } from "@/hooks/api/churches/use-churches"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 
+import { ChurchLocationForm } from "@/components/pages/churches/_details/_form/church-location-form"
+
 function ChurchDetail({ children, label }: { children: React.ReactNode; label: string }) {
   return (
     <div className="flex flex-col gap-1">
@@ -72,6 +74,11 @@ export function ChurchDetails({ churchID }: { churchID: string }): React.ReactEl
         <ChurchDetail label="Active members">
           {church.active_member_count.toLocaleString()}
         </ChurchDetail>
+        <ChurchDetail label="City">{church.city || "Not provided"}</ChurchDetail>
+        <ChurchDetail label="State or province">
+          {church.state_or_province || "Not provided"}
+        </ChurchDetail>
+        <ChurchDetail label="Country code">{church.country_code || "Not provided"}</ChurchDetail>
         <ChurchDetail label="Time zone">{church.timezone || "Not provided"}</ChurchDetail>
         <ChurchDetail label="Website">
           {church.website ? (
@@ -89,6 +96,7 @@ export function ChurchDetails({ churchID }: { churchID: string }): React.ReactEl
         </ChurchDetail>
         <ChurchDetail label="About this church">{church.bio || "Not provided"}</ChurchDetail>
       </dl>
+      <ChurchLocationForm church={church} />
     </section>
   )
 }

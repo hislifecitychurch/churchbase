@@ -16,6 +16,9 @@ func (r *ChurchRepository) Create(ctx context.Context, input churchdomain.Create
 		SetNillableTimezone(input.Timezone).
 		SetNillableWebsite(input.Website).
 		SetNillableBio(input.Bio).
+		SetNillableCity(input.City).
+		SetNillableStateOrProvince(input.StateOrProvince).
+		SetNillableCountryCode(input.CountryCode).
 		Save(ctx)
 	if entclient.IsConstraintError(err) {
 		return churchdomain.Church{}, churchdomain.ErrChurchSlugConflict
@@ -26,5 +29,6 @@ func (r *ChurchRepository) Create(ctx context.Context, input churchdomain.Create
 	return churchdomain.Church{
 		ID: record.ID, Name: record.Name, Slug: record.Slug,
 		Timezone: record.Timezone, Website: record.Website, Bio: record.Bio,
+		City: record.City, StateOrProvince: record.StateOrProvince, CountryCode: record.CountryCode,
 	}, nil
 }

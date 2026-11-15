@@ -35,6 +35,9 @@ describe("getChurches", () => {
         timezone: null,
         website: null,
         bio: null,
+        city: null,
+        state_or_province: null,
+        country_code: null,
         active_member_count: 0,
       },
     ]

@@ -20,7 +20,7 @@ func TestUpdateChurchReturnsUpdatedID(t *testing.T) {
 	churchID := uuid.New()
 	service := &churchCreationServiceFake{}
 	app := appWithActor(churchhandler.NewHandler(service, service, service))
-	request := httptest.NewRequest(http.MethodPut, "/churches/"+churchID.String(), strings.NewReader(`{"name":"Updated Church","timezone":"America/Chicago","website":"https://example.org","bio":"A welcoming church."}`))
+	request := httptest.NewRequest(http.MethodPut, "/churches/"+churchID.String(), strings.NewReader(`{"name":"Updated Church","timezone":"America/Chicago","website":"https://example.org","bio":"A welcoming church.","city":"Springfield","state_or_province":"Illinois","country_code":"US"}`))
 	request.Header.Set("Content-Type", "application/json")
 	updated, err := app.Test(request)
 	if err != nil {
@@ -37,7 +37,7 @@ func TestUpdateChurchReturnsUpdatedID(t *testing.T) {
 	if updated.StatusCode != http.StatusOK || !payload.Success || payload.Data.ID != churchID.String() || !service.updateCalled || service.authUserID != "auth-admin" || service.updatedChurch != churchID {
 		t.Fatalf("response = %d %+v, update called = %t, auth user = %q, church = %s", updated.StatusCode, payload, service.updateCalled, service.authUserID, service.updatedChurch)
 	}
-	if service.updateInput.Name != "Updated Church" || service.updateInput.Timezone == nil || *service.updateInput.Timezone != "America/Chicago" || service.updateInput.Website == nil || *service.updateInput.Website != "https://example.org" || service.updateInput.Bio == nil || *service.updateInput.Bio != "A welcoming church." {
+	if service.updateInput.Name != "Updated Church" || service.updateInput.Timezone == nil || *service.updateInput.Timezone != "America/Chicago" || service.updateInput.Website == nil || *service.updateInput.Website != "https://example.org" || service.updateInput.Bio == nil || *service.updateInput.Bio != "A welcoming church." || service.updateInput.City == nil || *service.updateInput.City != "Springfield" || service.updateInput.StateOrProvince == nil || *service.updateInput.StateOrProvince != "Illinois" || service.updateInput.CountryCode == nil || *service.updateInput.CountryCode != "US" {
 		t.Fatalf("update input = %+v", service.updateInput)
 	}
 }

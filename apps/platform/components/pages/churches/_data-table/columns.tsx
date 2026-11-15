@@ -4,13 +4,12 @@ import type { Church } from "@/api/churches/list"
 
 import type { ColumnDef } from "@tanstack/react-table"
 import type { LegacyFeatures } from "@tanstack/react-table/legacy"
-import { DataTableColumnHeader } from "@packages/ui-w/shared/data-table/data-table-column-header"
 
 export const churchesDataTableColumns: ColumnDef<LegacyFeatures, Church>[] = [
   {
     accessorKey: "name",
-    size: 300,
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Church" />,
+    size: 260,
+    header: "Church",
     cell: ({ row }) => (
       <div className="flex min-w-0 flex-col gap-0.5">
         <Link
@@ -19,9 +18,6 @@ export const churchesDataTableColumns: ColumnDef<LegacyFeatures, Church>[] = [
         >
           {row.original.name}
         </Link>
-        <span className="text-muted-foreground block truncate font-mono text-xs">
-          {row.original.slug}
-        </span>
         {row.original.bio ? (
           <span className="text-muted-foreground block truncate text-xs" title={row.original.bio}>
             {row.original.bio}
@@ -31,34 +27,40 @@ export const churchesDataTableColumns: ColumnDef<LegacyFeatures, Church>[] = [
     ),
   },
   {
+    accessorKey: "slug",
+    size: 180,
+    header: "Slug",
+    cell: ({ row }) => (
+      <span className="text-muted-foreground block truncate font-mono text-xs">
+        {row.original.slug}
+      </span>
+    ),
+  },
+  {
     accessorKey: "active_member_count",
     size: 130,
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Active members" />,
+    header: "Active members",
     cell: ({ row }) => <span>{row.original.active_member_count.toLocaleString()}</span>,
   },
   {
-    accessorKey: "website",
+    id: "location",
     size: 220,
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Website" />,
-    cell: ({ row }) =>
-      row.original.website ? (
-        <a
-          aria-label={`Visit ${row.original.name} website`}
-          className="text-muted-foreground block truncate hover:underline"
-          href={row.original.website}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {row.original.website}
-        </a>
-      ) : (
-        <span className="text-muted-foreground">—</span>
-      ),
+    header: "Location",
+    cell: ({ row }) => {
+      const location = [
+        row.original.city,
+        row.original.state_or_province,
+        row.original.country_code,
+      ]
+        .filter(Boolean)
+        .join(", ")
+      return <span className="text-muted-foreground block truncate">{location || "—"}</span>
+    },
   },
   {
     accessorKey: "timezone",
     size: 190,
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Time zone" />,
+    header: "Time zone",
     cell: ({ row }) => (
       <span className="text-muted-foreground block truncate">{row.original.timezone || "—"}</span>
     ),

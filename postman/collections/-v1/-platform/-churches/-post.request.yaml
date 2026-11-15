@@ -1,6 +1,6 @@
 $kind: http-request
 name: POST /churches
-description: Creates a church without creating users or memberships. Requires a valid BetterAuth session linked to a provisioned Churchbase Global Admin. Name and slug are required; timezone, website, and bio are optional. A supplied timezone must be an IANA time zone and website must use http or https. A slug already used by another church returns 409.
+description: Creates a church without creating users or memberships. Requires a valid BetterAuth session linked to a provisioned Churchbase Global Admin. Name and slug are required; timezone, website, bio, city, state_or_province, and country_code are optional. A supplied timezone must be an IANA time zone, website must use http or https, and country_code must be two letters. A slug already used by another church returns 409.
 url: "{{host-api}}/v1/platform/churches"
 method: POST
 headers:
@@ -16,7 +16,10 @@ body:
       "slug": "example-church",
       "timezone": "America/Chicago",
       "website": "https://example.org",
-      "bio": "A welcoming church in Springfield."
+      "bio": "A welcoming church in Springfield.",
+      "city": "Springfield",
+      "state_or_province": "Illinois",
+      "country_code": "US"
     }
 auth:
   type: noauth

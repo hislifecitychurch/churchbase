@@ -30,6 +30,21 @@ func (r *ChurchRepository) Update(ctx context.Context, id uuid.UUID, input churc
 	} else {
 		update.SetBio(*input.Bio)
 	}
+	if input.City == nil {
+		update.ClearCity()
+	} else {
+		update.SetCity(*input.City)
+	}
+	if input.StateOrProvince == nil {
+		update.ClearStateOrProvince()
+	} else {
+		update.SetStateOrProvince(*input.StateOrProvince)
+	}
+	if input.CountryCode == nil {
+		update.ClearCountryCode()
+	} else {
+		update.SetCountryCode(*input.CountryCode)
+	}
 	_, err := update.Save(ctx)
 	if entclient.IsNotFound(err) {
 		return churchdomain.ErrChurchNotFound

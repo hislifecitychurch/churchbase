@@ -8,6 +8,9 @@ export type CreateChurchInput = {
   timezone?: string
   website?: string
   bio?: string
+  city?: string
+  state_or_province?: string
+  country_code?: string
 }
 
 export async function createChurch(input: CreateChurchInput): Promise<Church> {

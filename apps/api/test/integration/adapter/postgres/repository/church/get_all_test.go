@@ -53,8 +53,10 @@ func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.
 	err = transaction.Within(ctx, client, func(txCtx context.Context) error {
 		txCtx = actor.WithID(txCtx, "auth-integration-admin")
 		timezone, website, bio := "America/Chicago", "https://example.org", "A welcoming church."
+		city, state, countryCode := "Springfield", "Illinois", "US"
 		alpha, err := repository.Create(txCtx, churchdomain.CreateInput{
 			Name: prefix + " Alpha", Slug: slugs[0], Timezone: &timezone, Website: &website, Bio: &bio,
+			City: &city, StateOrProvince: &state, CountryCode: &countryCode,
 		})
 		if err != nil {
 			return err
@@ -80,7 +82,7 @@ func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.
 			if church.ID == alpha.ID || church.ID == zulu.ID {
 				positions[church.ID] = index
 			}
-			if church.ID == alpha.ID && (church.Timezone == nil || *church.Timezone != timezone || church.Website == nil || *church.Website != website || church.Bio == nil || *church.Bio != bio) {
+			if church.ID == alpha.ID && (church.Timezone == nil || *church.Timezone != timezone || church.Website == nil || *church.Website != website || church.Bio == nil || *church.Bio != bio || church.City == nil || *church.City != city || church.StateOrProvince == nil || *church.StateOrProvince != state || church.CountryCode == nil || *church.CountryCode != countryCode) {
 				return fmt.Errorf("GetAll did not return alpha metadata: %+v", church)
 			}
 		}
