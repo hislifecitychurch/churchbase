@@ -10,8 +10,8 @@ export type UpdateChurchInput = {
   country_code: string | null
 }
 
-export async function updateChurch(churchID: string, input: UpdateChurchInput): Promise<void> {
-  await apiRequest<unknown>(`/platform/churches/${encodeURIComponent(churchID)}`, {
+export async function updateChurch(churchId: string, input: UpdateChurchInput): Promise<void> {
+  await apiRequest<unknown>(`/platform/churches/${encodeURIComponent(churchId)}`, {
     method: "PUT",
     body: JSON.stringify(input),
   })

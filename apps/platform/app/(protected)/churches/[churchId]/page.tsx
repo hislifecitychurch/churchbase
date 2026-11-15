@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 }
 
 type ChurchPageProps = {
-  params: Promise<{ churchID: string }>
+  params: Promise<{ churchId: string }>
 }
 
 export default async function ChurchPage({ params }: ChurchPageProps): Promise<JSX.Element> {
-  const { churchID } = await params
-  return <ChurchDetails churchID={churchID} />
+  const { churchId } = await params
+  return <ChurchDetails churchId={churchId} />
 }

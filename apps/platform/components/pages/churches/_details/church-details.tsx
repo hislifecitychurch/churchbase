@@ -2,13 +2,13 @@
 
 import type * as React from "react"
 
-import Link from "next/link"
-
 import { useChurches } from "@/hooks/api/churches/use-churches"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 
+import { BackToChurchesButton } from "@/components/pages/churches/[churchId]/_button/back-to-churches-button"
 import { ChurchLocationForm } from "@/components/pages/churches/_details/_form/church-location-form"
+import { PageHeader } from "@/components/shared/_header/page-header"
 
 function ChurchDetail({ children, label }: { children: React.ReactNode; label: string }) {
   return (
@@ -19,19 +19,14 @@ function ChurchDetail({ children, label }: { children: React.ReactNode; label: s
   )
 }
 
-export function ChurchDetails({ churchID }: { churchID: string }): React.ReactElement {
+export function ChurchDetails({ churchId }: { churchId: string }): React.ReactElement {
   const churches = useChurches()
-  const church = churches.data?.find((item) => item.id === churchID)
-  const backLink = (
-    <Link className="text-muted-foreground text-sm hover:underline" href="/churches">
-      ← All churches
-    </Link>
-  )
+  const church = churches.data?.find((item) => item.id === churchId)
 
   if (churches.isPending && !churches.data) {
     return (
       <section className="flex flex-col gap-6">
-        {backLink}
+        <BackToChurchesButton />
         <p className="text-muted-foreground" role="status">
           Loading church details…
         </p>
@@ -42,7 +37,7 @@ export function ChurchDetails({ churchID }: { churchID: string }): React.ReactEl
   if (churches.isError && !churches.data) {
     return (
       <section className="flex flex-col items-start gap-4">
-        {backLink}
+        <BackToChurchesButton />
         <p className="text-destructive" role="alert">
           We couldn't load this church.
         </p>
@@ -56,7 +51,7 @@ export function ChurchDetails({ churchID }: { churchID: string }): React.ReactEl
   if (!church) {
     return (
       <section className="flex flex-col items-start gap-4">
-        {backLink}
+        <BackToChurchesButton />
         <p className="text-muted-foreground">Church not found.</p>
       </section>
     )
@@ -64,11 +59,8 @@ export function ChurchDetails({ churchID }: { churchID: string }): React.ReactEl
 
   return (
     <section className="flex flex-col gap-6">
-      {backLink}
-      <header className="flex flex-col gap-2">
-        <h1 className="text-foreground text-2xl font-medium">{church.name}</h1>
-        <p className="text-muted-foreground text-sm">Church details</p>
-      </header>
+      <BackToChurchesButton />
+      <PageHeader description="Church details" title={church.name} />
       <dl className="bg-card grid gap-x-8 gap-y-6 rounded-xl border p-6 sm:grid-cols-2">
         <ChurchDetail label="Slug">{church.slug}</ChurchDetail>
         <ChurchDetail label="Active members">

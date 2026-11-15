@@ -9,8 +9,8 @@ export function useUpdateChurch() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ churchID, input }: { churchID: string; input: UpdateChurchInput }) =>
-      updateChurch(churchID, input),
+    mutationFn: ({ churchId, input }: { churchId: string; input: UpdateChurchInput }) =>
+      updateChurch(churchId, input),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["platform", "churches"] })
     },

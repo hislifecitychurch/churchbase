@@ -27,7 +27,7 @@ afterEach(() => {
 
 describe("updateChurch", () => {
   it("updates location with the authenticated session", async () => {
-    const churchID = "church-1"
+    const churchId = "church-1"
     const input = {
       name: "Example Church",
       timezone: "America/Chicago",
@@ -38,16 +38,16 @@ describe("updateChurch", () => {
       country_code: "US",
     }
     mockFetch(async (url, init) => {
-      expect(String(url)).toBe(`${apiBaseURL}/platform/churches/${churchID}`)
+      expect(String(url)).toBe(`${apiBaseURL}/platform/churches/${churchId}`)
       expect(init?.method).toBe("PUT")
       expect(init?.body).toBe(JSON.stringify(input))
       expect(init?.credentials).toBe("include")
-      return new Response(JSON.stringify({ success: true, data: { id: churchID } }), {
+      return new Response(JSON.stringify({ success: true, data: { id: churchId } }), {
         status: 200,
       })
     })
 
-    await expect(updateChurch(churchID, input)).resolves.toBeUndefined()
+    await expect(updateChurch(churchId, input)).resolves.toBeUndefined()
   })
 
   it("preserves API errors", async () => {

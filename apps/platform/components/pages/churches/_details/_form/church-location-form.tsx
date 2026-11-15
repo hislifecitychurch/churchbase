@@ -43,7 +43,7 @@ export function ChurchLocationForm({ church }: ChurchLocationFormProps): React.R
 
     try {
       await updateChurch.mutateAsync({
-        churchID: church.id,
+        churchId: church.id,
         input: {
           name: church.name,
           timezone: church.timezone,
