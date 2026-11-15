@@ -9,9 +9,9 @@ import type { Church } from "@/api/churches/list"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 
-import { ChurchCityField } from "@/components/pages/churches/_details/_form/_field/church-city-field"
-import { ChurchCountryCodeField } from "@/components/pages/churches/_details/_form/_field/church-country-code-field"
-import { ChurchStateOrProvinceField } from "@/components/pages/churches/_details/_form/_field/church-state-or-province-field"
+import { ChurchCityField } from "@/components/pages/churches/[churchId]/_form/_field/church-city-field"
+import { ChurchCountryCodeField } from "@/components/pages/churches/[churchId]/_form/_field/church-country-code-field"
+import { ChurchStateOrProvinceField } from "@/components/pages/churches/[churchId]/_form/_field/church-state-or-province-field"
 
 type ChurchLocationFormProps = {
   church: Church
