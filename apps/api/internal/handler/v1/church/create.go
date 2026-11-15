@@ -60,7 +60,7 @@ func (h *Handler) Create(c *fiber.Ctx) error {
 		ID: created.ID.String(), Name: created.Name, Slug: created.Slug,
 		Timezone: created.Timezone, Website: created.Website, Bio: created.Bio,
 		City: created.City, StateOrProvince: created.StateOrProvince, CountryCode: created.CountryCode,
-		ActiveMemberCount: created.ActiveMemberCount,
+		ActiveMemberCount: created.ActiveMemberCount, MinistryCount: created.MinistryCount,
 	}, "Church created", c, "church.created", "", "info"))
 }
 
@@ -86,6 +86,7 @@ type createResponse struct {
 	StateOrProvince   *string `json:"state_or_province"`
 	CountryCode       *string `json:"country_code"`
 	ActiveMemberCount int     `json:"active_member_count"`
+	MinistryCount     int     `json:"ministry_count"`
 }
 
 func invalidChurch(c *fiber.Ctx) error {

@@ -37,7 +37,7 @@ describe("createChurch", () => {
       state_or_province: "Illinois",
       country_code: "US",
     }
-    const church = { id: "church-1", ...input, active_member_count: 0 }
+    const church = { id: "church-1", ...input, active_member_count: 0, ministry_count: 0 }
     mockFetch(async (url, init) => {
       expect(String(url)).toBe(`${apiBaseURL}/platform/churches`)
       expect(init?.method).toBe("POST")

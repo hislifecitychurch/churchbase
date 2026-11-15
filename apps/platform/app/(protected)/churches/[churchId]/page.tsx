@@ -6,6 +6,7 @@ import type * as React from "react"
 import { useChurches } from "@/hooks/api/churches/use-churches"
 
 import { Button } from "@packages/ui-w/shared/button/button"
+import { Card } from "@packages/ui-w/shared/card/card"
 
 import { BackToChurchesButton } from "@/components/pages/churches/[churchId]/_button/back-to-churches-button"
 import { ChurchLocationForm } from "@/components/pages/churches/[churchId]/_form/church-location-form"
@@ -66,12 +67,24 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
   return (
     <section className="flex flex-col gap-6">
       <BackToChurchesButton />
+      <div className="grid gap-4 sm:grid-cols-3 sm:gap-6">
+        <Card className="gap-2 p-4">
+          <h2 className="text-muted-foreground text-sm">Active members</h2>
+          <p className="text-2xl font-medium">{church.active_member_count.toLocaleString()}</p>
+        </Card>
+        <Card className="gap-2 p-4">
+          <h2 className="text-muted-foreground text-sm">Ministries</h2>
+          <p className="text-2xl font-medium">{church.ministry_count.toLocaleString()}</p>
+        </Card>
+        <Card className="gap-2 p-4">
+          <h2 className="text-muted-foreground text-sm">Attendees</h2>
+          <p className="text-2xl font-medium">—</p>
+          <p className="text-muted-foreground text-sm">Attendance isn’t tracked yet.</p>
+        </Card>
+      </div>
       <PageHeader description="Church details" title={church.name} />
       <dl className="bg-card border-border grid gap-x-8 gap-y-6 rounded-xl border p-6 sm:grid-cols-2">
         <ChurchDetail label="Slug">{church.slug}</ChurchDetail>
-        <ChurchDetail label="Active members">
-          {church.active_member_count.toLocaleString()}
-        </ChurchDetail>
         <ChurchDetail label="City">{church.city || "Not provided"}</ChurchDetail>
         <ChurchDetail label="State or province">
           {church.state_or_province || "Not provided"}

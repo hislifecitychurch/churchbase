@@ -11,6 +11,7 @@ export type Church = {
   state_or_province: string | null
   country_code: string | null
   active_member_count: number
+  ministry_count: number
 }
 
 export function isChurch(value: unknown): value is Church {
@@ -35,7 +36,9 @@ export function isChurch(value: unknown): value is Church {
       church.country_code,
     ].every((field) => field === null || typeof field === "string") &&
     Number.isSafeInteger(church.active_member_count) &&
-    (church.active_member_count as number) >= 0
+    (church.active_member_count as number) >= 0 &&
+    Number.isSafeInteger(church.ministry_count) &&
+    (church.ministry_count as number) >= 0
   )
 }
 

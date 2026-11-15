@@ -14,6 +14,8 @@ type Church struct {
 	CountryCode     *string
 	// ActiveMemberCount is derived from active member memberships.
 	ActiveMemberCount int
+	// MinistryCount is derived from non-deleted church ministries.
+	MinistryCount int
 }
 
 type CreateInput struct {

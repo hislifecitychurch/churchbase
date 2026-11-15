@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "bun:test"
 
 import { ApiError } from "@/api/client"
-import { getChurches } from "@/api/churches/list"
+import { getChurches, isChurch } from "@/api/churches/list"
 
 const originalFetch = globalThis.fetch
 const apiBaseURL = (process.env.NEXT_PUBLIC_API_URL_V1 ?? "http://localhost:36080/api/v1").replace(
@@ -26,6 +26,24 @@ afterEach(() => {
 })
 
 describe("getChurches", () => {
+  it("rejects a negative ministry count", () => {
+    expect(
+      isChurch({
+        id: "church-1",
+        name: "Example Church",
+        slug: "example",
+        timezone: null,
+        website: null,
+        bio: null,
+        city: null,
+        state_or_province: null,
+        country_code: null,
+        active_member_count: 0,
+        ministry_count: -1,
+      }),
+    ).toBe(false)
+  })
+
   it("loads the authenticated church list", async () => {
     const churches = [
       {
@@ -39,6 +57,7 @@ describe("getChurches", () => {
         state_or_province: null,
         country_code: null,
         active_member_count: 0,
+        ministry_count: 0,
       },
     ]
     mockFetch(async (input, init) => {

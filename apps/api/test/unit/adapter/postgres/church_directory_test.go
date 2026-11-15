@@ -32,6 +32,16 @@ func TestChurchRepositoryListsActiveMemberCounts(t *testing.T) {
 	if _, err := repository.Create(ctx, churchdomain.CreateInput{Name: "Zulu Church", Slug: "zulu"}); err != nil {
 		t.Fatal(err)
 	}
+	if _, err := client.Ministry.Create().SetChurchID(alpha.ID).SetName("Kids").SetSlug("kids").Save(ctx); err != nil {
+		t.Fatal(err)
+	}
+	deletedMinistry, err := client.Ministry.Create().SetChurchID(alpha.ID).SetName("Deleted ministry").SetSlug("deleted").Save(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := client.Ministry.DeleteOneID(deletedMinistry.ID).Exec(ctx); err != nil {
+		t.Fatal(err)
+	}
 
 	newUser := func(authUserID string) *ent.User {
 		user, err := client.User.Create().SetAuthUserID(authUserID).Save(ctx)
@@ -81,6 +91,9 @@ func TestChurchRepositoryListsActiveMemberCounts(t *testing.T) {
 	}
 	if churches[0].ActiveMemberCount != 1 {
 		t.Fatalf("Alpha active member count = %d, want 1", churches[0].ActiveMemberCount)
+	}
+	if churches[0].MinistryCount != 1 || churches[1].MinistryCount != 0 {
+		t.Fatalf("ministry counts = %d, %d, want 1, 0", churches[0].MinistryCount, churches[1].MinistryCount)
 	}
 	if churches[1].ActiveMemberCount != 0 {
 		t.Fatalf("Zulu active member count = %d, want 0", churches[1].ActiveMemberCount)

@@ -69,6 +69,16 @@ func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.
 		if err != nil {
 			return err
 		}
+		if _, err := transaction.Client(txCtx, client).Ministry.Create().SetChurchID(alpha.ID).SetName(prefix + " Kids").SetSlug(prefix + "-kids").Save(txCtx); err != nil {
+			return err
+		}
+		deletedMinistry, err := transaction.Client(txCtx, client).Ministry.Create().SetChurchID(alpha.ID).SetName(prefix + " Deleted Ministry").SetSlug(prefix + "-deleted-ministry").Save(txCtx)
+		if err != nil {
+			return err
+		}
+		if err := transaction.Client(txCtx, client).Ministry.DeleteOneID(deletedMinistry.ID).Exec(txCtx); err != nil {
+			return err
+		}
 
 		churches, err := repository.GetAll(txCtx)
 		if err != nil {
@@ -82,8 +92,11 @@ func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.
 			if church.ID == alpha.ID || church.ID == zulu.ID {
 				positions[church.ID] = index
 			}
-			if church.ID == alpha.ID && (church.Timezone == nil || *church.Timezone != timezone || church.Website == nil || *church.Website != website || church.Bio == nil || *church.Bio != bio || church.City == nil || *church.City != city || church.StateOrProvince == nil || *church.StateOrProvince != state || church.CountryCode == nil || *church.CountryCode != countryCode) {
-				return fmt.Errorf("GetAll did not return alpha metadata: %+v", church)
+			if church.ID == alpha.ID && (church.Timezone == nil || *church.Timezone != timezone || church.Website == nil || *church.Website != website || church.Bio == nil || *church.Bio != bio || church.City == nil || *church.City != city || church.StateOrProvince == nil || *church.StateOrProvince != state || church.CountryCode == nil || *church.CountryCode != countryCode || church.MinistryCount != 1) {
+				return fmt.Errorf("GetAll did not return alpha metadata and ministry count: %+v", church)
+			}
+			if church.ID == zulu.ID && church.MinistryCount != 0 {
+				return fmt.Errorf("GetAll returned Zulu ministry count %d, want 0", church.MinistryCount)
 			}
 		}
 		if positions[alpha.ID] >= positions[zulu.ID] {

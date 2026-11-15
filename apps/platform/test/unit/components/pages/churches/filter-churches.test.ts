@@ -15,6 +15,7 @@ const churches: Church[] = [
     state_or_province: null,
     country_code: null,
     active_member_count: 0,
+    ministry_count: 0,
   },
   {
     id: "2",
@@ -27,6 +28,7 @@ const churches: Church[] = [
     state_or_province: null,
     country_code: null,
     active_member_count: 0,
+    ministry_count: 0,
   },
 ]
 
