@@ -22,7 +22,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps): Promi
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-10 flex items-center gap-2 px-4 py-4 sm:px-6">
+      <header className="fixed inset-x-0 top-0 z-10 flex items-center justify-center gap-2 px-4 py-4 sm:px-6">
         <Image
           src="/logo/churchbase-logo-light.webp"
           alt=""
