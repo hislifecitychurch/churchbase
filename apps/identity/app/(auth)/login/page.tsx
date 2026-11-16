@@ -1,3 +1,4 @@
+import { Lora } from "next/font/google"
 import Image from "next/image"
 import type { Metadata } from "next"
 import type { JSX } from "react"
@@ -9,6 +10,8 @@ import { LoginForm } from "@/components/pages/login/_form/login/login-form"
 export const metadata: Metadata = {
   title: "Log in",
 }
+
+const lora = Lora({ subsets: ["latin"] })
 
 type LoginPageProps = {
   searchParams: Promise<{ returnTo?: string | string[] }>
@@ -30,7 +33,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps): Promi
           height={48}
           className="size-6 shrink-0 rounded-md object-cover"
         />
-        <h1 className="text-foreground text-2xl font-normal">Churchbase</h1>
+        <h1 className={`${lora.className} text-foreground text-2xl font-normal tracking-normal`}>
+          Churchbase
+        </h1>
       </header>
       <div className="flex min-h-svh flex-col items-center justify-center px-6 py-16">
         <div className="flex w-full max-w-xs flex-col items-center">
