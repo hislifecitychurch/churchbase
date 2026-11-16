@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import type { JSX, ReactNode } from "react"
 
-import { BrandHeader } from "@/components/shared/brand-header"
+import { BrandHeader } from "@/components/shared/_header/brand-header"
 
 export const metadata: Metadata = {
   title: "Workspace",

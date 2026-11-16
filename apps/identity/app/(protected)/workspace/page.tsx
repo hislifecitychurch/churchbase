@@ -10,7 +10,7 @@ import { ApiError } from "@/api/client"
 import { getConfiguredReturnURL } from "@/lib/return-url"
 
 import { Button } from "@packages/ui-w/shared/button/button"
-import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-01"
+import { AccessSpinner } from "@/components/shared/_spinner/access-spinner"
 
 import { AppWorkspaceCard } from "@/components/pages/workspace/_card/app-workspace-card"
 import { PlatformWorkspaceCard } from "@/components/pages/workspace/_card/platform-workspace-card"
@@ -47,7 +47,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
   }, [isRegularUser, returnTo])
 
   if (currentUser.isPending || isUnauthenticated || isRegularUser) {
-    return <WorkspaceVerificationSpinner />
+    return <AccessSpinner />
   }
 
   if (currentUser.isError) {
@@ -85,14 +85,6 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
           <AppWorkspaceCard isLastUsed={lastUsedWorkspace === "app"} returnTo={returnTo} />
         </div>
       </div>
-    </main>
-  )
-}
-
-function WorkspaceVerificationSpinner(): JSX.Element {
-  return (
-    <main aria-busy="true" className="flex min-h-svh items-center justify-center">
-      <SpinnerFlicker01 aria-label="Verifying workspace access" className="size-6" />
     </main>
   )
 }

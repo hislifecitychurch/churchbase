@@ -3,7 +3,7 @@ import type { JSX } from "react"
 
 import { getConfiguredReturnURL } from "@/lib/return-url"
 
-import { BrandHeader } from "@/components/shared/brand-header"
+import { BrandHeader } from "@/components/shared/_header/brand-header"
 import { LoginForm } from "@/components/pages/login/_form/login/login-form"
 
 export const metadata: Metadata = {
