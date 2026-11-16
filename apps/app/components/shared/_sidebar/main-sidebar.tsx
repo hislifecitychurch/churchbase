@@ -59,18 +59,18 @@ export function MainSidebar(): React.ReactElement {
                   <SidebarMenuButton asChild size="lg" tooltip="Churchbase App">
                     <Link href="/" prefetch={false}>
                       <Image
-                        src="/logo/churchbase-light-rounded.webp"
+                        src="/logo/churchbase-light-transparent.webp"
                         alt=""
                         width={32}
                         height={32}
-                        className="size-8 shrink-0 rounded-xl object-cover dark:hidden"
+                        className="size-8 shrink-0 object-contain dark:hidden"
                       />
                       <Image
-                        src="/logo/churchbase-dark-rounded.webp"
+                        src="/logo/churchbase-dark-transparent.webp"
                         alt=""
                         width={32}
                         height={32}
-                        className="hidden size-8 shrink-0 rounded-xl object-cover dark:block"
+                        className="hidden size-8 shrink-0 object-contain dark:block"
                       />
                       <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                         <span className="truncate font-medium">Churchbase</span>
