@@ -24,9 +24,10 @@ export function LoginForm({ returnTo }: LoginFormProps): React.ReactElement {
   const [identifier, setIdentifier] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isRedirecting, setIsRedirecting] = useState<boolean>(false)
   const signInMutation = useSignIn()
   const currentUserQuery = useCurrentUser({ enabled: false })
-  const isPending = signInMutation.isPending || currentUserQuery.isFetching
+  const isPending = signInMutation.isPending || currentUserQuery.isFetching || isRedirecting
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault()
@@ -46,8 +47,10 @@ export function LoginForm({ returnTo }: LoginFormProps): React.ReactElement {
         throw new Error("The current user could not be loaded.")
       }
 
+      setIsRedirecting(true)
       window.location.assign(getPostLoginDestination(currentUser.global_roles, returnTo))
     } catch (error) {
+      setIsRedirecting(false)
       setErrorMessage(
         error instanceof ApiError && error.code === "user_not_provisioned"
           ? "Your sign-in isn't linked to a Churchbase account. Ask your administrator to provision access."

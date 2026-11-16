@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import type { JSX, ReactNode } from "react"
 
+import { BrandHeader } from "@/components/shared/brand-header"
+
 export const metadata: Metadata = {
   title: "Workspace",
 }
@@ -8,5 +10,10 @@ export const metadata: Metadata = {
 export default function WorkspaceLayout({
   children,
 }: Readonly<{ children: ReactNode }>): JSX.Element {
-  return <>{children}</>
+  return (
+    <>
+      <BrandHeader />
+      {children}
+    </>
+  )
 }
