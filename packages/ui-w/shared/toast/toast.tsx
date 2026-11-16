@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { IconX } from "@tabler/icons-react"
 import { Toast } from "@base-ui/react/toast"
 
 import { cn } from "@packages/ui-w/lib/utils"
@@ -95,11 +96,25 @@ export function Toasts({
                     />
                   </div>
                 </div>
-                {toast.actionProps && (
-                  <Toast.Action className={buttonVariants({ size: "xs" })} data-slot="toast-action">
-                    {toast.actionProps.children}
-                  </Toast.Action>
-                )}
+                <div className="flex items-center gap-1.5">
+                  {toast.actionProps && (
+                    <Toast.Action
+                      className={buttonVariants({ size: "xs" })}
+                      data-slot="toast-action"
+                    >
+                      {toast.actionProps.children}
+                    </Toast.Action>
+                  )}
+                  {toast.timeout === 0 && (
+                    <Toast.Close
+                      aria-label="Dismiss notification"
+                      className={buttonVariants({ size: "icon-xs", variant: "ghost" })}
+                      data-slot="toast-close"
+                    >
+                      <IconX aria-hidden="true" />
+                    </Toast.Close>
+                  )}
+                </div>
               </Toast.Content>
             </Toast.Root>
           )
