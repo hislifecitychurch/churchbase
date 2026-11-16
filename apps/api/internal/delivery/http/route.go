@@ -31,7 +31,9 @@ func New(
 	})
 	app.Use(recover.New())
 	app.Use(requestid.New())
-	app.Use(logger.New())
+	app.Use(logger.New(logger.Config{
+		Format: "${time} | ${status} | ${latency} | ${ip} | ${method} | ${path} | ${locals:requestid} | ${error}\n",
+	}))
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     strings.TrimSpace(allowedOrigins),
 		AllowMethods:     "GET,POST,PUT,PATCH,DELETE,OPTIONS",

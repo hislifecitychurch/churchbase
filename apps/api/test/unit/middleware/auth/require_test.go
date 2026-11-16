@@ -1,15 +1,19 @@
 package auth_test
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 	authmiddleware "github.com/hislifecitychurch/churchbase/apps/api/internal/middleware/auth"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/shared/actor"
 	apiresponse "github.com/hislifecitychurch/churchbase/apps/api/internal/shared/response"
@@ -72,6 +76,41 @@ func TestRequireRejectsMissingAndInvalidSessions(t *testing.T) {
 				t.Fatalf("error envelope = %+v, want code %q", body, test.wantCode)
 			}
 		})
+	}
+}
+
+func TestRequireLogsAuthValidationFailuresWithRequestID(t *testing.T) {
+	var output bytes.Buffer
+	previousOutput := log.Writer()
+	log.SetOutput(&output)
+	t.Cleanup(func() { log.SetOutput(previousOutput) })
+
+	app := fiber.New()
+	app.Use(requestid.New())
+	app.Get("/protected", authmiddleware.Require(&sessionValidator{err: errors.New("upstream timeout")}), func(c *fiber.Ctx) error {
+		return c.SendStatus(http.StatusNoContent)
+	})
+	request := httptest.NewRequest(http.MethodGet, "/protected", nil)
+	request.Header.Set(fiber.HeaderCookie, "session=credential-must-not-be-logged")
+	request.Header.Set(fiber.HeaderXRequestID, "request-1")
+
+	response, err := app.Test(request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer response.Body.Close()
+	if response.StatusCode != http.StatusServiceUnavailable {
+		t.Fatalf("status = %d, want %d", response.StatusCode, http.StatusServiceUnavailable)
+	}
+
+	logged := output.String()
+	for _, expected := range []string{"auth_session_validation_failed", `request_id="request-1"`, "error=upstream timeout"} {
+		if !strings.Contains(logged, expected) {
+			t.Errorf("log output %q does not contain %q", logged, expected)
+		}
+	}
+	if strings.Contains(logged, "credential-must-not-be-logged") {
+		t.Fatalf("log output contains the session cookie: %q", logged)
 	}
 }
 
