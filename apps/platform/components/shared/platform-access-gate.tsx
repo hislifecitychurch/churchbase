@@ -9,7 +9,7 @@ import { getSessionVerificationAction } from "@/lib/auth-recovery"
 
 import { toastManager } from "@packages/ui-w/providers/toast-provider"
 import { Button } from "@packages/ui-w/shared/button/button"
-import { Skeleton } from "@packages/ui-w/shared/skeleton/skeleton"
+import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-01"
 
 const AUTH_TOAST_ID = "platform-auth-verification"
 
@@ -83,7 +83,7 @@ export function PlatformAccessGate({ children }: Readonly<{ children: ReactNode 
     isUnauthenticated ||
     (!currentUser.data && (currentUser.isPending || currentUser.isFetching))
   ) {
-    return <PlatformAccessSkeleton />
+    return <PlatformAccessSpinner />
   }
 
   if (currentUser.isError && notProvisioned) {
@@ -102,7 +102,7 @@ export function PlatformAccessGate({ children }: Readonly<{ children: ReactNode 
   }
 
   if (isVerificationFailure && !currentUser.data) {
-    return <PlatformAccessSkeleton />
+    return <PlatformAccessSpinner />
   }
 
   if (!hasGlobalRole) {
@@ -119,20 +119,10 @@ export function PlatformAccessGate({ children }: Readonly<{ children: ReactNode 
   return children
 }
 
-function PlatformAccessSkeleton(): React.ReactElement {
+function PlatformAccessSpinner(): React.ReactElement {
   return (
-    <div
-      aria-busy="true"
-      aria-label="Verifying your access"
-      className="flex flex-1 flex-col gap-6"
-      role="status"
-    >
-      <div className="flex flex-col gap-2">
-        <Skeleton className="h-8 w-44" />
-        <Skeleton className="h-4 w-64" />
-      </div>
-      <Skeleton className="h-10 w-full" />
-      <Skeleton className="min-h-48 w-full flex-1" />
+    <div aria-busy="true" className="flex flex-1 items-center justify-center">
+      <SpinnerFlicker01 aria-label="Verifying your access" className="size-6" />
     </div>
   )
 }
