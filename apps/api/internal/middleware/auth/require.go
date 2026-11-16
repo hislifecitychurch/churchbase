@@ -2,7 +2,7 @@ package auth
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -24,13 +24,13 @@ func Require(validator Validator) fiber.Handler {
 			return unauthorized(c)
 		}
 		if validator == nil {
-			log.Printf("auth_session_validator_unavailable request_id=%q", c.GetRespHeader(fiber.HeaderXRequestID))
+			c.Locals("request_error", fmt.Sprintf("auth_session_validator_unavailable request_id=%q", c.GetRespHeader(fiber.HeaderXRequestID)))
 			return unavailable(c)
 		}
 
 		authUserID, valid, err := validator.Validate(c.UserContext(), cookie, authorization)
 		if err != nil {
-			log.Printf("auth_session_validation_failed request_id=%q error=%v", c.GetRespHeader(fiber.HeaderXRequestID), err)
+			c.Locals("request_error", fmt.Sprintf("auth_session_validation_failed request_id=%q error=%v", c.GetRespHeader(fiber.HeaderXRequestID), err))
 			return unavailable(c)
 		}
 		if !valid || strings.TrimSpace(authUserID) == "" {

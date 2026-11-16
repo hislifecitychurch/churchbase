@@ -1,15 +1,12 @@
 package auth_test
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"io"
-	"log"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
@@ -79,13 +76,14 @@ func TestRequireRejectsMissingAndInvalidSessions(t *testing.T) {
 	}
 }
 
-func TestRequireLogsAuthValidationFailuresWithRequestID(t *testing.T) {
-	var output bytes.Buffer
-	previousOutput := log.Writer()
-	log.SetOutput(&output)
-	t.Cleanup(func() { log.SetOutput(previousOutput) })
-
+func TestRequireAddsAuthFailureDetailsToRequestLocals(t *testing.T) {
+	var requestError string
 	app := fiber.New()
+	app.Use(func(c *fiber.Ctx) error {
+		err := c.Next()
+		requestError, _ = c.Locals("request_error").(string)
+		return err
+	})
 	app.Use(requestid.New())
 	app.Get("/protected", authmiddleware.Require(&sessionValidator{err: errors.New("upstream timeout")}), func(c *fiber.Ctx) error {
 		return c.SendStatus(http.StatusNoContent)
@@ -103,14 +101,9 @@ func TestRequireLogsAuthValidationFailuresWithRequestID(t *testing.T) {
 		t.Fatalf("status = %d, want %d", response.StatusCode, http.StatusServiceUnavailable)
 	}
 
-	logged := output.String()
-	for _, expected := range []string{"auth_session_validation_failed", `request_id="request-1"`, "error=upstream timeout"} {
-		if !strings.Contains(logged, expected) {
-			t.Errorf("log output %q does not contain %q", logged, expected)
-		}
-	}
-	if strings.Contains(logged, "credential-must-not-be-logged") {
-		t.Fatalf("log output contains the session cookie: %q", logged)
+	want := `auth_session_validation_failed request_id="request-1" error=upstream timeout`
+	if requestError != want {
+		t.Fatalf("request error = %q, want %q", requestError, want)
 	}
 }
 

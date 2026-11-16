@@ -1,6 +1,7 @@
 package http
 
 import (
+	"os"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -33,6 +34,18 @@ func New(
 	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
 		Format: "${time} | ${status} | ${latency} | ${ip} | ${method} | ${path} | ${locals:requestid} | ${error}\n",
+		Output: os.Stdout,
+		CustomTags: map[string]logger.LogFunc{
+			"error": func(output logger.Buffer, c *fiber.Ctx, data *logger.Data, _ string) (int, error) {
+				if requestError, ok := c.Locals("request_error").(string); ok {
+					return output.WriteString(requestError)
+				}
+				if data.ChainErr != nil {
+					return output.WriteString(data.ChainErr.Error())
+				}
+				return output.WriteString("-")
+			},
+		},
 	}))
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     strings.TrimSpace(allowedOrigins),
