@@ -31,14 +31,14 @@ export default async function LoginPage({ searchParams }: LoginPageProps): Promi
           alt=""
           width={48}
           height={48}
-          className="size-6 shrink-0 object-contain dark:hidden"
+          className="size-8 shrink-0 object-contain dark:hidden"
         />
         <Image
           src="/logo/churchbase-dark-transparent.webp"
           alt=""
           width={48}
           height={48}
-          className="hidden size-6 shrink-0 object-contain dark:block"
+          className="hidden size-8 shrink-0 object-contain dark:block"
         />
         <h1 className={`${lora.className} text-foreground text-2xl font-normal tracking-normal`}>
           Churchbase
