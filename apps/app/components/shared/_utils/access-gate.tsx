@@ -18,7 +18,7 @@ import { getWorkspaceEntryID } from "@/lib/workspace-entry-id"
 
 import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-01"
 
-export function WorkspaceAccessGate({ children }: Readonly<{ children: ReactNode }>): ReactNode {
+export function AccessGate({ children }: Readonly<{ children: ReactNode }>): ReactNode {
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()

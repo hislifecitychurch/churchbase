@@ -7,7 +7,7 @@ import { SidebarInset } from "@packages/ui-w/shared/sidebar/sidebar-inset"
 
 import { MobileNavTrigger } from "@/components/shared/_header/mobile-nav-trigger"
 import { MainSidebar } from "@/components/shared/_sidebar/main-sidebar"
-import { WorkspaceAccessGate } from "@/components/shared/workspace-access-gate"
+import { AccessGate } from "@/components/shared/_utils/access-gate"
 
 export default async function ProtectedLayout({
   children,
@@ -22,7 +22,7 @@ export default async function ProtectedLayout({
         <header className="flex items-center md:hidden">
           <MobileNavTrigger />
         </header>
-        <WorkspaceAccessGate>{children}</WorkspaceAccessGate>
+        <AccessGate>{children}</AccessGate>
       </SidebarInset>
     </SidebarProvider>
   )

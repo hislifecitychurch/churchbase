@@ -13,7 +13,7 @@ import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-
 
 const AUTH_TOAST_ID = "platform-auth-verification"
 
-export function PlatformAccessGate({ children }: Readonly<{ children: ReactNode }>): ReactNode {
+export function AccessGate({ children }: Readonly<{ children: ReactNode }>): ReactNode {
   const currentUser = useCurrentUser()
   const retryAttempts = useRef(0)
   const isUnauthenticated =
