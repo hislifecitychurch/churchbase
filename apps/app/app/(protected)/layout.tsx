@@ -16,16 +16,14 @@ export default async function ProtectedLayout({
   const sidebarOpen = cookieStore.get(SIDEBAR_COOKIE_NAME)?.value !== "false"
 
   return (
-    <WorkspaceAccessGate>
-      <SidebarProvider className="items-start" defaultOpen={sidebarOpen}>
-        <MainSidebar />
-        <SidebarInset className="min-h-0 gap-0 self-stretch p-4 sm:p-6">
-          <header className="flex items-center md:hidden">
-            <MobileNavTrigger />
-          </header>
-          {children}
-        </SidebarInset>
-      </SidebarProvider>
-    </WorkspaceAccessGate>
+    <SidebarProvider className="items-start" defaultOpen={sidebarOpen}>
+      <MainSidebar />
+      <SidebarInset className="min-h-0 gap-0 self-stretch p-4 sm:p-6">
+        <header className="flex items-center md:hidden">
+          <MobileNavTrigger />
+        </header>
+        <WorkspaceAccessGate>{children}</WorkspaceAccessGate>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

@@ -16,6 +16,8 @@ import {
 } from "@/lib/access-contexts"
 import { getWorkspaceEntryID } from "@/lib/workspace-entry-id"
 
+import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-01"
+
 export function WorkspaceAccessGate({ children }: Readonly<{ children: ReactNode }>): ReactNode {
   const pathname = usePathname()
   const router = useRouter()
@@ -92,12 +94,12 @@ export function WorkspaceAccessGate({ children }: Readonly<{ children: ReactNode
   }, [isEventUnauthenticated, isUnauthenticated, pathname, router, searchParams])
 
   if (isUnauthenticated || isEventUnauthenticated || accessContexts.isPending) {
-    return null
+    return <WorkspaceAccessSpinner />
   }
 
   if (isAccessContextForbidden || isEventForbidden) {
     return (
-      <main className="flex min-h-svh flex-col items-center justify-center gap-3 p-6 text-center">
+      <section className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
         <h1 className="text-foreground text-lg font-medium">
           {isNotProvisioned
             ? "Churchbase access isn't set up"
@@ -108,35 +110,43 @@ export function WorkspaceAccessGate({ children }: Readonly<{ children: ReactNode
             ? "Your sign-in isn't linked to a Churchbase account. Ask your administrator to provision access."
             : "Your account isn't permitted to enter this workspace."}
         </p>
-      </main>
+      </section>
     )
   }
 
   if (accessContexts.isError) {
     return (
-      <main className="flex min-h-svh flex-col items-center justify-center gap-3 p-6 text-center">
+      <section className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
         <h1 className="text-foreground text-lg font-medium">Access couldn't be verified</h1>
         <p className="text-muted-foreground max-w-sm text-sm" role="alert">
           Try again shortly. The workspace remains locked until access can be verified.
         </p>
-      </main>
+      </section>
     )
   }
 
   if (contexts.length === 0 && !globalRole && isConfiguredPath && pathname !== "/settings") {
     return (
-      <main className="flex min-h-svh flex-col items-center justify-center gap-3 p-6 text-center">
+      <section className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
         <h1 className="text-foreground text-lg font-medium">No workspace access</h1>
         <p className="text-muted-foreground max-w-sm text-sm" role="alert">
           Ask a church administrator to assign you to a Church-wide or ministry workspace.
         </p>
-      </main>
+      </section>
     )
   }
 
   if (isConfiguredPath && !isPathAllowed) {
-    return null
+    return <WorkspaceAccessSpinner />
   }
 
   return children
+}
+
+function WorkspaceAccessSpinner(): React.ReactElement {
+  return (
+    <div aria-busy="true" className="flex flex-1 items-center justify-center">
+      <SpinnerFlicker01 aria-label="Verifying workspace access" className="size-6" />
+    </div>
+  )
 }

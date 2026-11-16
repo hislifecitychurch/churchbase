@@ -43,7 +43,7 @@ export function MainSidebar(): React.ReactElement {
   return (
     <div className="flex h-svh shrink-0 self-start">
       <Sidebar collapsible="icon" variant="floating">
-        {contexts.length > 0 || globalRole ? (
+        {accessContexts.isPending || contexts.length > 0 || globalRole ? (
           <SidebarHeader>
             {contexts.length > 0 ? (
               <MinistrySwitcher
