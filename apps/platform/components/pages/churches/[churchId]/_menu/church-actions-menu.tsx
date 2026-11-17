@@ -1,22 +1,14 @@
 "use client"
 
-import { IconArchive, IconEditCircle, IconEye } from "@tabler/icons-react"
+import { IconArchive, IconEditCircle } from "@tabler/icons-react"
 
 import { MenuItem } from "@packages/ui-w/shared/menu/menu-item"
 import { MenuPopup } from "@packages/ui-w/shared/menu/menu-popup"
 import { MenuSeparator } from "@packages/ui-w/shared/menu/menu-separator"
 
-type ChurchActionsMenuProps = {
-  onViewProfile: () => void
-}
-
-export function ChurchActionsMenu({ onViewProfile }: ChurchActionsMenuProps): React.ReactElement {
+export function ChurchActionsMenu(): React.ReactElement {
   return (
     <MenuPopup align="end" className="w-44">
-      <MenuItem onClick={onViewProfile}>
-        <IconEye aria-hidden />
-        View profile
-      </MenuItem>
       <MenuItem disabled>
         <IconEditCircle aria-hidden />
         Update profile

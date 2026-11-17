@@ -7,8 +7,9 @@ import { useChurches } from "@/hooks/api/churches/use-churches"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 
-import { ChurchActionsButton } from "@/components/pages/churches/[churchId]/_button/church-actions-button"
 import { BackToChurchesButton } from "@/components/pages/churches/[churchId]/_button/back-to-churches-button"
+import { ChurchActionsButton } from "@/components/pages/churches/[churchId]/_button/church-actions-button"
+import { ViewProfileButton } from "@/components/pages/churches/[churchId]/_button/view-profile-button"
 import { ChurchSummaryCards } from "@/components/pages/churches/[churchId]/_card/church-summary-cards"
 import { PageHeader } from "@/components/shared/_header/page-header"
 import { LoadingSpinner } from "@/components/shared/_spinner/loading-spinner"
@@ -53,7 +54,12 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
     <section className="flex flex-col gap-6">
       <BackToChurchesButton />
       <PageHeader
-        actions={<ChurchActionsButton church={church} />}
+        actions={
+          <div className="flex shrink-0 items-center gap-2">
+            <ViewProfileButton church={church} />
+            <ChurchActionsButton />
+          </div>
+        }
         description={<code className="font-mono">{church.slug}</code>}
         title={church.name}
       />
