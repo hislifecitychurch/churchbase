@@ -1,7 +1,5 @@
 "use client"
 
-import { IconEye } from "@tabler/icons-react"
-
 import type { Church } from "@/api/churches/get-all"
 
 import { Button } from "@packages/ui-w/shared/button/button"
@@ -20,7 +18,6 @@ export function ViewProfileButton({ church }: ViewProfileButtonProps): React.Rea
       <DialogTrigger
         render={
           <Button size="lg" variant="outline">
-            <IconEye aria-hidden className="size-4" />
             View profile
           </Button>
         }
