@@ -53,7 +53,7 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
     <section className="flex flex-col gap-6">
       <BackToChurchesButton />
       <PageHeader
-        actions={<ChurchActionsButton />}
+        actions={<ChurchActionsButton church={church} />}
         description={<code className="font-mono">{church.slug}</code>}
         title={church.name}
       />

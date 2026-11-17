@@ -6,11 +6,14 @@ import { MenuItem } from "@packages/ui-w/shared/menu/menu-item"
 import { MenuPopup } from "@packages/ui-w/shared/menu/menu-popup"
 import { MenuSeparator } from "@packages/ui-w/shared/menu/menu-separator"
 
-export function ChurchActionsMenu(): React.ReactElement {
-  // shortcut: keep menu actions disabled until their workflows are implemented.
+type ChurchActionsMenuProps = {
+  onViewProfile: () => void
+}
+
+export function ChurchActionsMenu({ onViewProfile }: ChurchActionsMenuProps): React.ReactElement {
   return (
     <MenuPopup align="end" className="w-44">
-      <MenuItem disabled>
+      <MenuItem onClick={onViewProfile}>
         <IconEye aria-hidden />
         View profile
       </MenuItem>
