@@ -38,8 +38,28 @@ describe("getAllChurches", () => {
         city: null,
         state_or_province: null,
         country_code: null,
+        profile_complete: false,
         active_member_count: 0,
         ministry_count: -1,
+      }),
+    ).toBe(false)
+  })
+
+  it("rejects a non-boolean profile completion value", () => {
+    expect(
+      isChurch({
+        id: "church-1",
+        name: "Example Church",
+        slug: "example",
+        timezone: null,
+        website: null,
+        bio: null,
+        city: null,
+        state_or_province: null,
+        country_code: null,
+        profile_complete: "false",
+        active_member_count: 0,
+        ministry_count: 0,
       }),
     ).toBe(false)
   })
@@ -56,6 +76,7 @@ describe("getAllChurches", () => {
         city: null,
         state_or_province: null,
         country_code: null,
+        profile_complete: false,
         active_member_count: 0,
         ministry_count: 0,
       },

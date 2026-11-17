@@ -42,13 +42,14 @@ func TestGetAllReturnsChurchesForAuthenticatedGlobalUser(t *testing.T) {
 		City              *string `json:"city"`
 		StateOrProvince   *string `json:"state_or_province"`
 		CountryCode       *string `json:"country_code"`
+		ProfileComplete   bool    `json:"profile_complete"`
 		ActiveMemberCount int     `json:"active_member_count"`
 		MinistryCount     int     `json:"ministry_count"`
 	}]
 	if err := json.NewDecoder(gotAll.Body).Decode(&payload); err != nil {
 		t.Fatal(err)
 	}
-	if gotAll.StatusCode != http.StatusOK || !payload.Success || len(payload.Data) != 1 || payload.Data[0].ID != id.String() || payload.Data[0].Name != "Sample Church" || payload.Data[0].Slug != "sample-church" || payload.Data[0].Timezone == nil || *payload.Data[0].Timezone != timezone || payload.Data[0].Website == nil || *payload.Data[0].Website != website || payload.Data[0].Bio == nil || *payload.Data[0].Bio != bio || payload.Data[0].City == nil || *payload.Data[0].City != city || payload.Data[0].StateOrProvince == nil || *payload.Data[0].StateOrProvince != state || payload.Data[0].CountryCode == nil || *payload.Data[0].CountryCode != countryCode || payload.Data[0].ActiveMemberCount != 12 || payload.Data[0].MinistryCount != 4 || !service.getAllCalled || service.authUserID != "auth-admin" {
+	if gotAll.StatusCode != http.StatusOK || !payload.Success || len(payload.Data) != 1 || payload.Data[0].ID != id.String() || payload.Data[0].Name != "Sample Church" || payload.Data[0].Slug != "sample-church" || payload.Data[0].Timezone == nil || *payload.Data[0].Timezone != timezone || payload.Data[0].Website == nil || *payload.Data[0].Website != website || payload.Data[0].Bio == nil || *payload.Data[0].Bio != bio || payload.Data[0].City == nil || *payload.Data[0].City != city || payload.Data[0].StateOrProvince == nil || *payload.Data[0].StateOrProvince != state || payload.Data[0].CountryCode == nil || *payload.Data[0].CountryCode != countryCode || !payload.Data[0].ProfileComplete || payload.Data[0].ActiveMemberCount != 12 || payload.Data[0].MinistryCount != 4 || !service.getAllCalled || service.authUserID != "auth-admin" {
 		t.Fatalf("response = %d %+v, GetAll called = %t, Auth user ID = %q", gotAll.StatusCode, payload, service.getAllCalled, service.authUserID)
 	}
 }

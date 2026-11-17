@@ -60,6 +60,7 @@ func (h *Handler) Create(c *fiber.Ctx) error {
 		ID: created.ID.String(), Name: created.Name, Slug: created.Slug,
 		Timezone: created.Timezone, Website: created.Website, Bio: created.Bio,
 		City: created.City, StateOrProvince: created.StateOrProvince, CountryCode: created.CountryCode,
+		ProfileComplete:   created.IsProfileComplete(),
 		ActiveMemberCount: created.ActiveMemberCount, MinistryCount: created.MinistryCount,
 	}, "Church created", c, "church.created", "", "info"))
 }
@@ -85,6 +86,7 @@ type createResponse struct {
 	City              *string `json:"city"`
 	StateOrProvince   *string `json:"state_or_province"`
 	CountryCode       *string `json:"country_code"`
+	ProfileComplete   bool    `json:"profile_complete"`
 	ActiveMemberCount int     `json:"active_member_count"`
 	MinistryCount     int     `json:"ministry_count"`
 }

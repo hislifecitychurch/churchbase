@@ -44,6 +44,7 @@ func (h *Handler) GetAll(c *fiber.Ctx) error {
 			ID: item.ID.String(), Name: item.Name, Slug: item.Slug,
 			Timezone: item.Timezone, Website: item.Website, Bio: item.Bio,
 			City: item.City, StateOrProvince: item.StateOrProvince, CountryCode: item.CountryCode,
+			ProfileComplete:   item.IsProfileComplete(),
 			ActiveMemberCount: item.ActiveMemberCount, MinistryCount: item.MinistryCount,
 		})
 	}
@@ -60,6 +61,7 @@ type getAllResponse struct {
 	City              *string `json:"city"`
 	StateOrProvince   *string `json:"state_or_province"`
 	CountryCode       *string `json:"country_code"`
+	ProfileComplete   bool    `json:"profile_complete"`
 	ActiveMemberCount int     `json:"active_member_count"`
 	MinistryCount     int     `json:"ministry_count"`
 }

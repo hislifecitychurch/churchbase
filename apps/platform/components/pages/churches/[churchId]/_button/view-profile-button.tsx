@@ -17,8 +17,21 @@ export function ViewProfileButton({ church }: ViewProfileButtonProps): React.Rea
     <Dialog>
       <DialogTrigger
         render={
-          <Button size="lg" variant="outline">
+          <Button
+            size="lg"
+            title={church.profile_complete ? undefined : "Required profile information is missing"}
+            variant="outline"
+          >
             View profile
+            {!church.profile_complete && (
+              <>
+                <span className="sr-only">Church profile is incomplete</span>
+                <span aria-hidden="true" className="relative flex size-2">
+                  <span className="absolute inline-flex size-full rounded-full bg-amber-500 opacity-75 motion-safe:animate-ping" />
+                  <span className="relative inline-flex size-2 rounded-full bg-amber-600" />
+                </span>
+              </>
+            )}
           </Button>
         }
       />

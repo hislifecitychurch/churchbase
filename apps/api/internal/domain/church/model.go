@@ -1,6 +1,10 @@
 package church
 
-import "github.com/google/uuid"
+import (
+	"strings"
+
+	"github.com/google/uuid"
+)
 
 type Church struct {
 	ID              uuid.UUID
@@ -16,6 +20,16 @@ type Church struct {
 	ActiveMemberCount int
 	// MinistryCount is derived from non-deleted church ministries.
 	MinistryCount int
+}
+
+// IsProfileComplete reports whether a church has the required city, country, and time zone.
+// shortcut: state/province applicability is not country-aware, add country-specific rules before requiring it.
+func (c Church) IsProfileComplete() bool {
+	return hasValue(c.City) && hasValue(c.CountryCode) && hasValue(c.Timezone)
+}
+
+func hasValue(value *string) bool {
+	return value != nil && strings.TrimSpace(*value) != ""
 }
 
 type CreateInput struct {

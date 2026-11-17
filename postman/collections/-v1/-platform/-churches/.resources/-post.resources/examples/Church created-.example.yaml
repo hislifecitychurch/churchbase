@@ -42,6 +42,7 @@ response:
           "city": "Springfield",
           "state_or_province": "Illinois",
           "country_code": "US",
+          "profile_complete": true,
           "active_member_count": 0,
           "ministry_count": 0
         },
