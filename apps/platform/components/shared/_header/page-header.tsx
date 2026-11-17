@@ -2,7 +2,7 @@ import type * as React from "react"
 
 type PageHeaderProps = {
   title: string
-  description: string
+  description: React.ReactNode
 }
 
 export function PageHeader({ title, description }: PageHeaderProps): React.ReactElement {

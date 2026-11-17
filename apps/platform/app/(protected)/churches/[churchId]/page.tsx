@@ -9,21 +9,11 @@ import { Button } from "@packages/ui-w/shared/button/button"
 
 import { BackToChurchesButton } from "@/components/pages/churches/[churchId]/_button/back-to-churches-button"
 import { ChurchSummaryCards } from "@/components/pages/churches/[churchId]/_card/church-summary-cards"
-import { ChurchLocationForm } from "@/components/pages/churches/[churchId]/_form/church-location-form"
 import { PageHeader } from "@/components/shared/_header/page-header"
 import { LoadingSpinner } from "@/components/shared/_spinner/loading-spinner"
 
 type ChurchPageProps = {
   params: Promise<{ churchId: string }>
-}
-
-function ChurchDetail({ children, label }: { children: React.ReactNode; label: string }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <dt className="text-muted-foreground text-sm">{label}</dt>
-      <dd className="break-words">{children}</dd>
-    </div>
-  )
 }
 
 export default function ChurchPage({ params }: ChurchPageProps): React.ReactElement {
@@ -61,36 +51,14 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
   return (
     <section className="flex flex-col gap-6">
       <BackToChurchesButton />
-      <PageHeader description="Church details" title={church.name} />
+      <PageHeader
+        description={<code className="font-mono">{church.slug}</code>}
+        title={church.name}
+      />
       <ChurchSummaryCards
         activeMemberCount={church.active_member_count}
         ministryCount={church.ministry_count}
       />
-      <dl className="bg-card border-border grid gap-x-8 gap-y-6 rounded-xl border p-6 sm:grid-cols-2">
-        <ChurchDetail label="Slug">{church.slug}</ChurchDetail>
-        <ChurchDetail label="City">{church.city || "Not provided"}</ChurchDetail>
-        <ChurchDetail label="State or province">
-          {church.state_or_province || "Not provided"}
-        </ChurchDetail>
-        <ChurchDetail label="Country code">{church.country_code || "Not provided"}</ChurchDetail>
-        <ChurchDetail label="Time zone">{church.timezone || "Not provided"}</ChurchDetail>
-        <ChurchDetail label="Website">
-          {church.website ? (
-            <a
-              className="text-primary break-all hover:underline"
-              href={church.website}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              {church.website}
-            </a>
-          ) : (
-            "Not provided"
-          )}
-        </ChurchDetail>
-        <ChurchDetail label="About this church">{church.bio || "Not provided"}</ChurchDetail>
-      </dl>
-      <ChurchLocationForm church={church} />
     </section>
   )
 }
