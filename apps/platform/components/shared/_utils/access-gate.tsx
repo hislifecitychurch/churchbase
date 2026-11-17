@@ -6,7 +6,7 @@ import type { ReactNode } from "react"
 import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 import { ApiError } from "@/api/client"
 import { getSessionVerificationAction } from "@/lib/auth-recovery"
-import { AccessSpinner } from "@/components/shared/_spinner/access-spinner"
+import { LoadingSpinner } from "@/components/shared/_spinner/loading-spinner"
 
 import { toastManager } from "@packages/ui-w/providers/toast-provider"
 import { Button } from "@packages/ui-w/shared/button/button"
@@ -83,7 +83,7 @@ export function AccessGate({ children }: Readonly<{ children: ReactNode }>): Rea
     isUnauthenticated ||
     (!currentUser.data && (currentUser.isPending || currentUser.isFetching))
   ) {
-    return <AccessSpinner />
+    return <LoadingSpinner />
   }
 
   if (currentUser.isError && notProvisioned) {
@@ -102,7 +102,7 @@ export function AccessGate({ children }: Readonly<{ children: ReactNode }>): Rea
   }
 
   if (isVerificationFailure && !currentUser.data) {
-    return <AccessSpinner />
+    return <LoadingSpinner />
   }
 
   if (!hasGlobalRole) {

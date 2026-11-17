@@ -16,7 +16,7 @@ import {
 } from "@/lib/access-contexts"
 import { getWorkspaceEntryID } from "@/lib/workspace-entry-id"
 
-import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-01"
+import { LoadingSpinner } from "@/components/shared/_spinner/loading-spinner"
 
 export function AccessGate({ children }: Readonly<{ children: ReactNode }>): ReactNode {
   const pathname = usePathname()
@@ -94,7 +94,7 @@ export function AccessGate({ children }: Readonly<{ children: ReactNode }>): Rea
   }, [isEventUnauthenticated, isUnauthenticated, pathname, router, searchParams])
 
   if (isUnauthenticated || isEventUnauthenticated || accessContexts.isPending) {
-    return <WorkspaceAccessSpinner />
+    return <LoadingSpinner />
   }
 
   if (isAccessContextForbidden || isEventForbidden) {
@@ -137,16 +137,8 @@ export function AccessGate({ children }: Readonly<{ children: ReactNode }>): Rea
   }
 
   if (isConfiguredPath && !isPathAllowed) {
-    return <WorkspaceAccessSpinner />
+    return <LoadingSpinner />
   }
 
   return children
-}
-
-function WorkspaceAccessSpinner(): React.ReactElement {
-  return (
-    <div aria-busy="true" className="flex flex-1 items-center justify-center">
-      <SpinnerFlicker01 aria-label="Verifying workspace access" className="size-6" />
-    </div>
-  )
 }
