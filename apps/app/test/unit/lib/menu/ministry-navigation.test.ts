@@ -1,7 +1,7 @@
 import { describe, expect, it } from "bun:test"
 
 import { getMainMenuItems, mainMenuItemsByMinistry } from "@/data/menu"
-import { getMinistrySlugFromPath } from "@/lib/menu/get-ministry-slug-from-path"
+import { getMinistryTypeFromPath } from "@/lib/menu/get-ministry-type-from-path"
 
 const allCapabilities = Object.values(mainMenuItemsByMinistry).flatMap((items) =>
   items.map((item) => item.capability),
@@ -9,21 +9,21 @@ const allCapabilities = Object.values(mainMenuItemsByMinistry).flatMap((items) =
 
 describe("ministry navigation", () => {
   it("derives ministry context from ministry routes and defaults global routes to church-wide", () => {
-    expect(getMinistrySlugFromPath("/")).toBe("churchbase")
-    expect(getMinistrySlugFromPath("/people")).toBe("churchbase")
-    expect(getMinistrySlugFromPath("/ministries")).toBe("churchbase")
-    expect(getMinistrySlugFromPath("/ministries/broadcast/services")).toBe("broadcast")
-    expect(getMinistrySlugFromPath("/ministries/music/songs-and-setlists")).toBe("music")
-    expect(getMinistrySlugFromPath("/ministries/kids/check-in")).toBe("kids")
-    expect(getMinistrySlugFromPath("/ministries/unknown")).toBe("")
+    expect(getMinistryTypeFromPath("/")).toBe("churchbase")
+    expect(getMinistryTypeFromPath("/people")).toBe("churchbase")
+    expect(getMinistryTypeFromPath("/ministries")).toBe("churchbase")
+    expect(getMinistryTypeFromPath("/ministries/broadcast/services")).toBe("broadcast")
+    expect(getMinistryTypeFromPath("/ministries/music/songs-and-setlists")).toBe("music")
+    expect(getMinistryTypeFromPath("/ministries/kids/check-in")).toBe("kids")
+    expect(getMinistryTypeFromPath("/ministries/unknown")).toBe("")
   })
 
   it("keeps each ministry's configured menu scoped to its dynamic routes", () => {
-    for (const slug of ["broadcast", "music", "kids"]) {
-      const items = getMainMenuItems(slug, allCapabilities)
+    for (const type of ["broadcast", "music", "kids"] as const) {
+      const items = getMainMenuItems(type, allCapabilities)
 
-      expect(items[0]?.path).toBe(`/ministries/${slug}`)
-      expect(items.slice(1).every((item) => item.path.startsWith(`/ministries/${slug}/`))).toBe(
+      expect(items[0]?.path).toBe(`/ministries/${type}`)
+      expect(items.slice(1).every((item) => item.path.startsWith(`/ministries/${type}/`))).toBe(
         true,
       )
     }

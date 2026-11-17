@@ -6,6 +6,7 @@ import (
 
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/churchmembership"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
+	ministryent "github.com/hislifecitychurch/churchbase/apps/api/ent/ministry"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/ministrymembership"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/actions/soft_delete"
 	_ "github.com/mattn/go-sqlite3"
@@ -37,7 +38,7 @@ func TestChurchStaffAndMinistryLeadRoles(t *testing.T) {
 		t.Fatalf("church membership role = %q, want staff", churchMembership.Role)
 	}
 
-	ministry, err := client.Ministry.Create().SetChurch(church).SetName("Test Ministry").SetSlug("test-ministry").Save(ctx)
+	ministry, err := client.Ministry.Create().SetChurch(church).SetName("Test Ministry").SetType(ministryent.TypeKids).Save(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}

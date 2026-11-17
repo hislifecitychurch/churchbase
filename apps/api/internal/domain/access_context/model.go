@@ -39,7 +39,7 @@ type Context struct {
 	ID           uuid.UUID
 	ChurchID     uuid.UUID
 	Kind         Kind
-	Slug         string
+	Type         string
 	Name         string
 	ChurchName   string
 	Role         string
@@ -50,7 +50,7 @@ type MembershipContext struct {
 	ID         uuid.UUID
 	ChurchID   uuid.UUID
 	Kind       Kind
-	Slug       string
+	Type       string
 	Name       string
 	ChurchName string
 	Role       string

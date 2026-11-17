@@ -33,7 +33,7 @@ func TestCurrentAccessContextsReaderGetsAllContextsForGlobalRoles(t *testing.T) 
 	globalRole := userdomain.GlobalRoleAdmin
 	users := &accessContextUserReaderFake{user: userdomain.User{ID: uuid.New(), GlobalRoles: &globalRole}}
 	contexts := &accessContextReaderFake{allResult: []accesscontext.Context{{
-		ID: uuid.New(), ChurchID: uuid.New(), Kind: accesscontext.KindMinistry, Slug: "kids",
+		ID: uuid.New(), ChurchID: uuid.New(), Kind: accesscontext.KindMinistry, Type: "kids",
 		Capabilities: []string{accesscontext.CapabilityKidsOverviewRead},
 	}}}
 	reader := application.NewCurrentAccessContextsReader(users, contexts)

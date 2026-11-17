@@ -1,4 +1,5 @@
 import { ApiError, apiRequest } from "@/api/client"
+import { ministryTypes, type WorkspaceType } from "@/data/ministry-types"
 import { accessCapabilities, type AccessCapability } from "@/lib/access-capabilities"
 
 export type GlobalRole = "admin" | "staff"
@@ -9,7 +10,7 @@ export type AccessContext = {
   id: string
   church_id: string
   kind: "church" | "ministry"
-  slug: string
+  type: WorkspaceType
   name: string
   church_name: string
   role: AccessContextRole
@@ -23,7 +24,7 @@ export type CurrentAccessContexts = {
 
 const capabilitySet = new Set<string>(accessCapabilities)
 const uuidPattern = /^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i
-const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+const ministryTypeSet = new Set<string>(ministryTypes)
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null
@@ -37,7 +38,7 @@ function parseAccessContext(value: unknown): AccessContext | null {
     id,
     church_id: churchID,
     kind,
-    slug,
+    type,
     name,
     church_name: churchName,
     role,
@@ -49,10 +50,9 @@ function parseAccessContext(value: unknown): AccessContext | null {
     typeof churchID !== "string" ||
     !uuidPattern.test(churchID) ||
     (kind !== "church" && kind !== "ministry") ||
-    typeof slug !== "string" ||
-    !slugPattern.test(slug) ||
-    (kind === "church" && (slug !== "churchbase" || id !== churchID)) ||
-    (kind === "ministry" && slug === "churchbase") ||
+    typeof type !== "string" ||
+    (kind === "church" && (type !== "churchbase" || id !== churchID)) ||
+    (kind === "ministry" && !ministryTypeSet.has(type)) ||
     typeof name !== "string" ||
     !name.trim() ||
     typeof churchName !== "string" ||
@@ -78,7 +78,7 @@ function parseAccessContext(value: unknown): AccessContext | null {
     id,
     church_id: churchID,
     kind,
-    slug,
+    type: type as WorkspaceType,
     name,
     church_name: churchName,
     role: role as AccessContextRole,

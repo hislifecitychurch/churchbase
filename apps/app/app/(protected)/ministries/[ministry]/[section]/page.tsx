@@ -11,13 +11,16 @@ type MinistrySectionPageProps = {
 export default async function MinistrySectionPage({
   params,
 }: MinistrySectionPageProps): Promise<JSX.Element> {
-  const { ministry: slug, section } = await params
-  const ministry = ministries.find((item) => item.slug === slug)
-  const page = (mainMenuItemsByMinistry[slug] ?? []).find(
-    (item) => item.path === `/ministries/${slug}/${section}`,
-  )
+  const { ministry: type, section } = await params
+  const ministry = ministries.find((item) => item.type === type)
+  const page =
+    ministry && ministry.type !== "churchbase"
+      ? mainMenuItemsByMinistry[ministry.type].find(
+          (item) => item.path === `/ministries/${type}/${section}`,
+        )
+      : undefined
 
-  if (!ministry || slug === "churchbase" || !page) {
+  if (!ministry || ministry.type === "churchbase" || !page) {
     notFound()
   }
 

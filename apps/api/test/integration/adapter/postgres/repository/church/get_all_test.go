@@ -14,6 +14,7 @@ import (
 	"github.com/google/uuid"
 	entclient "github.com/hislifecitychurch/churchbase/apps/api/ent"
 	churchent "github.com/hislifecitychurch/churchbase/apps/api/ent/church"
+	ministryent "github.com/hislifecitychurch/churchbase/apps/api/ent/ministry"
 	_ "github.com/hislifecitychurch/churchbase/apps/api/ent/runtime"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/actions/soft_delete"
 	churchrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/church"
@@ -69,10 +70,10 @@ func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.
 		if err != nil {
 			return err
 		}
-		if _, err := transaction.Client(txCtx, client).Ministry.Create().SetChurchID(alpha.ID).SetName(prefix + " Kids").SetSlug(prefix + "-kids").Save(txCtx); err != nil {
+		if _, err := transaction.Client(txCtx, client).Ministry.Create().SetChurchID(alpha.ID).SetName(prefix + " Kids").SetType(ministryent.TypeKids).Save(txCtx); err != nil {
 			return err
 		}
-		deletedMinistry, err := transaction.Client(txCtx, client).Ministry.Create().SetChurchID(alpha.ID).SetName(prefix + " Deleted Ministry").SetSlug(prefix + "-deleted-ministry").Save(txCtx)
+		deletedMinistry, err := transaction.Client(txCtx, client).Ministry.Create().SetChurchID(alpha.ID).SetName(prefix + " Deleted Ministry").SetType(ministryent.TypeBroadcast).Save(txCtx)
 		if err != nil {
 			return err
 		}

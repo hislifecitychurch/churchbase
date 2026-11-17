@@ -8,6 +8,7 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/churchmembership"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
+	ministryent "github.com/hislifecitychurch/churchbase/apps/api/ent/ministry"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/actions/soft_delete"
 	churchrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/church"
 	churchdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/church"
@@ -32,10 +33,10 @@ func TestChurchRepositoryGetsAllWithMemberAndMinistryCounts(t *testing.T) {
 	if _, err := repository.Create(ctx, churchdomain.CreateInput{Name: "Zulu Church", Slug: "zulu"}); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := client.Ministry.Create().SetChurchID(alpha.ID).SetName("Kids").SetSlug("kids").Save(ctx); err != nil {
+	if _, err := client.Ministry.Create().SetChurchID(alpha.ID).SetName("Kids Ministry").SetType(ministryent.TypeKids).Save(ctx); err != nil {
 		t.Fatal(err)
 	}
-	deletedMinistry, err := client.Ministry.Create().SetChurchID(alpha.ID).SetName("Deleted ministry").SetSlug("deleted").Save(ctx)
+	deletedMinistry, err := client.Ministry.Create().SetChurchID(alpha.ID).SetName("Deleted ministry").SetType(ministryent.TypeBroadcast).Save(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}

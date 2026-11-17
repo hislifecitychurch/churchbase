@@ -16,10 +16,10 @@ func TestServiceGetsAllRoleCapabilities(t *testing.T) {
 	ministryID := uuid.New()
 	repository := &contextRepositoryFake{contexts: []accesscontext.MembershipContext{
 		{ID: churchID, ChurchID: churchID, Kind: accesscontext.KindChurch, Role: "staff", Name: "Church-wide"},
-		{ID: ministryID, ChurchID: churchID, Kind: accesscontext.KindMinistry, Slug: "broadcast", Role: "lead", Name: "Broadcast"},
-		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindMinistry, Slug: "kids", Role: "member", Name: "Kids"},
-		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindMinistry, Slug: "unknown", Role: "lead", Name: "Unknown"},
-		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindMinistry, Slug: "broadcast", Role: "invalid", Name: "Invalid role"},
+		{ID: ministryID, ChurchID: churchID, Kind: accesscontext.KindMinistry, Type: "broadcast", Role: "lead", Name: "Broadcast"},
+		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindMinistry, Type: "kids", Role: "member", Name: "Kids"},
+		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindMinistry, Type: "unknown", Role: "lead", Name: "Unknown"},
+		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindMinistry, Type: "broadcast", Role: "invalid", Name: "Invalid role"},
 		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindChurch, Role: "member", Name: "Church member"},
 	}}
 	contexts, err := service.NewService(repository).GetAllByUserID(context.Background(), uuid.New())
@@ -49,7 +49,7 @@ func TestServiceGetsAllContextsWithEveryCapability(t *testing.T) {
 	churchID := uuid.New()
 	repository := &contextRepositoryFake{allContexts: []accesscontext.MembershipContext{
 		{ID: churchID, ChurchID: churchID, Kind: accesscontext.KindChurch, Name: "Church-wide"},
-		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindMinistry, Slug: "kids", Name: "Kids"},
+		{ID: uuid.New(), ChurchID: churchID, Kind: accesscontext.KindMinistry, Type: "kids", Name: "Kids"},
 	}}
 	contexts, err := service.NewService(repository).GetAll(context.Background())
 	if err != nil {
@@ -77,7 +77,7 @@ func TestServiceGetsAllContextsWithEveryCapability(t *testing.T) {
 func TestServiceDoesNotGrantSensitiveCapabilitiesByRole(t *testing.T) {
 	repository := &contextRepositoryFake{contexts: []accesscontext.MembershipContext{
 		{ID: uuid.New(), ChurchID: uuid.New(), Kind: accesscontext.KindChurch, Role: "admin", Name: "Church-wide"},
-		{ID: uuid.New(), ChurchID: uuid.New(), Kind: accesscontext.KindMinistry, Slug: "kids", Role: "lead", Name: "Kids"},
+		{ID: uuid.New(), ChurchID: uuid.New(), Kind: accesscontext.KindMinistry, Type: "kids", Role: "lead", Name: "Kids"},
 	}}
 	contexts, err := service.NewService(repository).GetAllByUserID(context.Background(), uuid.New())
 	if err != nil {

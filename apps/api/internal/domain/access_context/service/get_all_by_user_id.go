@@ -20,7 +20,7 @@ func (s *Service) GetAll(ctx context.Context) ([]accesscontext.Context, error) {
 			ID:           membership.ID,
 			ChurchID:     membership.ChurchID,
 			Kind:         membership.Kind,
-			Slug:         membership.Slug,
+			Type:         membership.Type,
 			Name:         membership.Name,
 			ChurchName:   membership.ChurchName,
 			Capabilities: allCapabilities(),
@@ -46,7 +46,7 @@ func (s *Service) GetAllByUserID(ctx context.Context, userID uuid.UUID) ([]acces
 			ID:           membership.ID,
 			ChurchID:     membership.ChurchID,
 			Kind:         membership.Kind,
-			Slug:         membership.Slug,
+			Type:         membership.Type,
 			Name:         membership.Name,
 			ChurchName:   membership.ChurchName,
 			Role:         membership.Role,
@@ -118,7 +118,7 @@ func capabilitiesFor(membership accesscontext.MembershipContext) []string {
 		return nil
 	}
 
-	switch membership.Slug {
+	switch membership.Type {
 	case "broadcast":
 		capabilities := []string{
 			accesscontext.CapabilityBroadcastOverviewRead,

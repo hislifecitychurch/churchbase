@@ -11,13 +11,17 @@ type MinistryPageProps = {
 export default async function MinistryOverviewPage({
   params,
 }: MinistryPageProps): Promise<JSX.Element> {
-  const { ministry: slug } = await params
-  const ministry = ministries.find((item) => item.slug === slug)
-  const hasOverviewRoute = (mainMenuItemsByMinistry[slug] ?? []).some(
-    (item) => item.path === `/ministries/${slug}`,
-  )
+  const { ministry: type } = await params
+  const ministry = ministries.find((item) => item.type === type)
 
-  if (!ministry || slug === "churchbase" || !hasOverviewRoute) {
+  if (!ministry || ministry.type === "churchbase") {
+    notFound()
+  }
+
+  const hasOverviewRoute = mainMenuItemsByMinistry[ministry.type].some(
+    (item) => item.path === `/ministries/${type}`,
+  )
+  if (!hasOverviewRoute) {
     notFound()
   }
 

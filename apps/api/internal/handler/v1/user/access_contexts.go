@@ -39,7 +39,7 @@ func (h *Handler) GetAccessContexts(c *fiber.Ctx) error {
 			ID:           item.ID,
 			ChurchID:     item.ChurchID,
 			Kind:         item.Kind,
-			Slug:         item.Slug,
+			Type:         item.Type,
 			Name:         item.Name,
 			ChurchName:   item.ChurchName,
 			Role:         item.Role,
@@ -58,7 +58,7 @@ type accessContextResponse struct {
 	ID           uuid.UUID          `json:"id"`
 	ChurchID     uuid.UUID          `json:"church_id"`
 	Kind         accesscontext.Kind `json:"kind"`
-	Slug         string             `json:"slug"`
+	Type         string             `json:"type"`
 	Name         string             `json:"name"`
 	ChurchName   string             `json:"church_name"`
 	Role         string             `json:"role"`

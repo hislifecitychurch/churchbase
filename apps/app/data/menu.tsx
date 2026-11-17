@@ -15,6 +15,7 @@ import {
   type TablerIcon,
 } from "@tabler/icons-react"
 
+import type { WorkspaceType } from "@/data/ministry-types"
 import type { AccessCapability } from "@/lib/access-capabilities"
 
 export type MainMenuItem = {
@@ -29,7 +30,7 @@ export type FooterMenuItem =
   | { type: "link"; title: string; path: string; icon: TablerIcon; capability?: AccessCapability }
   | { type: "sidebar-trigger" }
 
-export const mainMenuItemsByMinistry: Record<string, MainMenuItem[]> = {
+export const mainMenuItemsByMinistry: Record<WorkspaceType, MainMenuItem[]> = {
   churchbase: [
     { title: "Overview", path: "/", icon: IconLayoutDashboard, capability: "church.overview.read" },
     { title: "People", path: "/people", icon: IconUsers, capability: "church.people.read" },
@@ -130,10 +131,10 @@ export const footerMenuItems: FooterMenuItem[] = [
 ]
 
 export function getMainMenuItems(
-  ministrySlug: string,
+  ministryType: string,
   capabilities: readonly AccessCapability[],
 ): MainMenuItem[] {
-  return (mainMenuItemsByMinistry[ministrySlug] ?? []).filter((item) =>
+  return (mainMenuItemsByMinistry[ministryType as WorkspaceType] ?? []).filter((item) =>
     capabilities.includes(item.capability),
   )
 }

@@ -6,30 +6,32 @@ import {
   type TablerIcon,
 } from "@tabler/icons-react"
 
+import type { WorkspaceType } from "@/data/ministry-types"
+
 export type Ministry = {
-  slug: string
+  type: WorkspaceType
   name: string
   icon: TablerIcon
 }
 
 export const ministries: [Ministry, ...Ministry[]] = [
   {
-    slug: "churchbase",
+    type: "churchbase",
     name: "Church-wide",
     icon: IconBuildingChurch,
   },
   {
-    slug: "broadcast",
+    type: "broadcast",
     name: "Broadcast",
     icon: IconBroadcast,
   },
   {
-    slug: "music",
+    type: "music",
     name: "Music",
     icon: IconMusic,
   },
   {
-    slug: "kids",
+    type: "kids",
     name: "Kids",
     icon: IconMoodKid,
   },

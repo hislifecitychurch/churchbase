@@ -20,7 +20,7 @@ import { FooterMenu } from "@/components/shared/_sidebar/_menu/footer-menu"
 import { MainMenu } from "@/components/shared/_sidebar/_menu/main-menu"
 import { MinistrySwitcher } from "@/components/shared/_sidebar/_switcher/ministry-switcher"
 import { getMainMenuItems } from "@/data/menu"
-import { getMinistrySlugFromPath } from "@/lib/menu/get-ministry-slug-from-path"
+import { getMinistryTypeFromPath } from "@/lib/menu/get-ministry-type-from-path"
 import { contextHomePath, getAccessContextForPath, pathWithContext } from "@/lib/access-contexts"
 
 export function MainSidebar(): React.ReactElement {
@@ -37,8 +37,8 @@ export function MainSidebar(): React.ReactElement {
     globalRole,
   )
   const capabilities = globalRole ? accessCapabilities : (activeContext?.capabilities ?? [])
-  const ministrySlug = activeContext?.slug ?? getMinistrySlugFromPath(pathname)
-  const menuItems = getMainMenuItems(ministrySlug, capabilities)
+  const ministryType = activeContext?.type ?? getMinistryTypeFromPath(pathname)
+  const menuItems = ministryType ? getMainMenuItems(ministryType, capabilities) : []
 
   return (
     <div className="flex h-svh shrink-0 self-start">

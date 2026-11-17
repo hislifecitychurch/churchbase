@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
+	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/enum"
 	commonmixin "github.com/hislifecitychurch/churchbase/apps/api/ent/schema/mixin"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/schema/utilities"
 )
@@ -28,7 +29,7 @@ func (Ministry) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Checks(map[string]string{
 			"ministries_name_check": "length(trim(name)) > 0",
-			"ministries_slug_check": "length(trim(slug)) > 0",
+			"ministries_type_check": "type IN ('broadcast', 'music', 'kids')",
 		}),
 	}
 }
@@ -38,8 +39,12 @@ func (Ministry) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).Default(utilities.NewUUIDv7).Immutable(),
 		field.UUID("church_id", uuid.UUID{}).Immutable(),
 
+		field.Enum("type").Values(
+			enum.MinistryTypeBroadcast,
+			enum.MinistryTypeMusic,
+			enum.MinistryTypeKids,
+		),
 		field.String("name").NotEmpty(),
-		field.String("slug").NotEmpty(),
 	}
 }
 
@@ -57,8 +62,9 @@ func (Ministry) Edges() []ent.Edge {
 
 func (Ministry) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("church_id", "slug").
+		index.Fields("church_id", "type").
 			Unique().
-			StorageKey("ministries_church_slug_key"),
+			Annotations(entsql.IndexWhere("deleted_at IS NULL")).
+			StorageKey("ministries_church_type_active_key"),
 	}
 }

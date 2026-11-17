@@ -40,7 +40,7 @@ function contextDetail(context: AccessContext, contexts: AccessContext[]): strin
     (candidate) =>
       candidate.id !== context.id &&
       candidate.kind === context.kind &&
-      candidate.slug === context.slug,
+      candidate.type === context.type,
   )
   return duplicate ? `${role} · ${context.church_name}` : role
 }
@@ -57,7 +57,7 @@ export function MinistrySwitcher({
   }
 
   const ActiveIcon =
-    ministries.find((ministry) => ministry.slug === activeContext.slug)?.icon ?? IconBuildingChurch
+    ministries.find((ministry) => ministry.type === activeContext.type)?.icon ?? IconBuildingChurch
 
   return (
     <SidebarMenu>
@@ -95,7 +95,7 @@ export function MinistrySwitcher({
             <div className="text-muted-foreground px-2 py-1.5 text-xs font-medium">Workspaces</div>
             {contexts.map((context) => {
               const ContextIcon =
-                ministries.find((ministry) => ministry.slug === context.slug)?.icon ??
+                ministries.find((ministry) => ministry.type === context.type)?.icon ??
                 IconBuildingChurch
 
               return (

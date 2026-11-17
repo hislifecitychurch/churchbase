@@ -23,7 +23,7 @@ import (
 func TestHandlerGetAccessContextsReturnsServerComputedContexts(t *testing.T) {
 	contextID, churchID := uuid.New(), uuid.New()
 	service := &accessContextsServiceFake{result: application.CurrentAccessContexts{Contexts: []accesscontext.Context{{
-		ID: contextID, ChurchID: churchID, Kind: accesscontext.KindChurch, Slug: "churchbase",
+		ID: contextID, ChurchID: churchID, Kind: accesscontext.KindChurch, Type: "churchbase",
 		Name: "Church-wide", ChurchName: "Sample Church", Role: "staff",
 		Capabilities: []string{accesscontext.CapabilityChurchOverviewRead, accesscontext.CapabilityChurchPeopleRead},
 	}}}}
@@ -40,7 +40,7 @@ func TestHandlerGetAccessContextsReturnsServerComputedContexts(t *testing.T) {
 			ID           string   `json:"id"`
 			ChurchID     string   `json:"church_id"`
 			Kind         string   `json:"kind"`
-			Slug         string   `json:"slug"`
+			Type         string   `json:"type"`
 			Name         string   `json:"name"`
 			ChurchName   string   `json:"church_name"`
 			Role         string   `json:"role"`
@@ -54,7 +54,7 @@ func TestHandlerGetAccessContextsReturnsServerComputedContexts(t *testing.T) {
 		t.Fatalf("response = %d %+v", response.StatusCode, body)
 	}
 	got := body.Data.Contexts[0]
-	if got.ID != contextID.String() || got.ChurchID != churchID.String() || got.Kind != "church" || got.Role != "staff" || len(got.Capabilities) != 2 {
+	if got.ID != contextID.String() || got.ChurchID != churchID.String() || got.Kind != "church" || got.Type != "churchbase" || got.Role != "staff" || len(got.Capabilities) != 2 {
 		t.Fatalf("context = %+v", got)
 	}
 	if service.authUserID != "opaque-auth-id" || strings.Contains(string(rawBody), "opaque-auth-id") {
