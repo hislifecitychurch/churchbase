@@ -35,10 +35,10 @@ export function ViewProfileButton({ church }: ViewProfileButtonProps): React.Rea
         {!church.profile_complete && (
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute top-1 right-1 z-10 flex size-2"
+            className="pointer-events-none absolute -top-0.5 -right-0.5 z-10 flex size-3"
           >
             <span className="absolute inline-flex size-full rounded-full bg-amber-500 opacity-75 motion-safe:animate-ping" />
-            <span className="ring-background relative inline-flex size-2 rounded-full bg-amber-600 ring-2" />
+            <span className="ring-background relative inline-flex size-3 rounded-full bg-amber-600 ring-2" />
           </span>
         )}
       </span>
