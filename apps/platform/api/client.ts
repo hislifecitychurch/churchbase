@@ -1,6 +1,5 @@
+import { REQUEST_TIMEOUT_MS } from "@/lib/constants"
 import { env } from "@/lib/env"
-
-const REQUEST_TIMEOUT_MS = 10_000
 
 type ApiEnvelope<T> = {
   data?: T
