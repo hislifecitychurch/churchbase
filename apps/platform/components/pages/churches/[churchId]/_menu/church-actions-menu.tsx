@@ -1,23 +1,17 @@
 "use client"
 
-import { IconArchive, IconEditCircle } from "@tabler/icons-react"
-
-import { MenuItem } from "@packages/ui-w/shared/menu/menu-item"
 import { MenuPopup } from "@packages/ui-w/shared/menu/menu-popup"
 import { MenuSeparator } from "@packages/ui-w/shared/menu/menu-separator"
+
+import { ArchiveChurchMenuItem } from "@/components/pages/churches/[churchId]/_menu/_menu-item/archive-church-menu-item"
+import { UpdateChurchProfileMenuItem } from "@/components/pages/churches/[churchId]/_menu/_menu-item/update-church-profile-menu-item"
 
 export function ChurchActionsMenu(): React.ReactElement {
   return (
     <MenuPopup align="end" className="w-44">
-      <MenuItem disabled>
-        <IconEditCircle aria-hidden />
-        Update profile
-      </MenuItem>
+      <UpdateChurchProfileMenuItem />
       <MenuSeparator />
-      <MenuItem disabled variant="destructive">
-        <IconArchive aria-hidden />
-        Archive church
-      </MenuItem>
+      <ArchiveChurchMenuItem />
     </MenuPopup>
   )
 }
