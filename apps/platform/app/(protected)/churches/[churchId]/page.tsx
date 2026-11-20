@@ -57,7 +57,7 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
         actions={
           <div className="flex shrink-0 items-center gap-2">
             <ViewProfileButton church={church} />
-            <ChurchActionsButton />
+            <ChurchActionsButton church={church} />
           </div>
         }
         description={<code className="font-mono">{church.slug}</code>}

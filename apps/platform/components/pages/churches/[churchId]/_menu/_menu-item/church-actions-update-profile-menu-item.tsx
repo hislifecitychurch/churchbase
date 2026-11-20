@@ -4,9 +4,15 @@ import { IconEditCircle } from "@tabler/icons-react"
 
 import { MenuItem } from "@packages/ui-w/shared/menu/menu-item"
 
-export function ChurchActionsUpdateProfileMenuItem(): React.ReactElement {
+type ChurchActionsUpdateProfileMenuItemProps = {
+  onSelect: () => void
+}
+
+export function ChurchActionsUpdateProfileMenuItem({
+  onSelect,
+}: ChurchActionsUpdateProfileMenuItemProps): React.ReactElement {
   return (
-    <MenuItem disabled>
+    <MenuItem onClick={onSelect}>
       <IconEditCircle aria-hidden />
       Update profile
     </MenuItem>
