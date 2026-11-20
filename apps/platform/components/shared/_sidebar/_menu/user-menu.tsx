@@ -14,7 +14,7 @@ import { SidebarMenuItem } from "@packages/ui-w/shared/sidebar/sidebar-menu-item
 import { Skeleton } from "@packages/ui-w/shared/skeleton/skeleton"
 import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-01"
 
-import { UserMenuSignOutMenuItem } from "@/components/shared/_sidebar/_menu/_menu-items/user-menu-sign-out-menu-item"
+import { UserMenuSignOutMenuItem } from "@/components/shared/_sidebar/_menu/_menu-item/user-menu-sign-out-menu-item"
 import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 import { formatUserName } from "@/lib/formatter/name/user"
 
