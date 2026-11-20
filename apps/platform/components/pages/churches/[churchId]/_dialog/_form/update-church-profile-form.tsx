@@ -9,11 +9,6 @@ import { useUpdateChurch } from "@/hooks/api/churches/use-update-church"
 import type { UpdateChurchInput } from "@/api/churches/update"
 
 import { ComboboxSearchInput } from "@packages/ui-w/shared/combobox-variant/combobox-search-input"
-import { Select } from "@packages/ui-w/shared/select/select"
-import { SelectItem } from "@packages/ui-w/shared/select/select-item"
-import { SelectPopup } from "@packages/ui-w/shared/select/select-popup"
-import { SelectTrigger } from "@packages/ui-w/shared/select/select-trigger"
-import { SelectValue } from "@packages/ui-w/shared/select/select-value"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 import { DialogClose } from "@packages/ui-w/shared/dialog/dialog-close"
@@ -143,6 +138,8 @@ export function UpdateChurchProfileForm({
   }
 
   const isPending = updateChurch.isPending
+  const countryValue =
+    COUNTRY_OPTIONS.find((option) => option.value === values.country_code) ?? null
   const timeZoneValue = TIME_ZONE_OPTIONS.find((option) => option.value === values.timezone) ?? null
 
   return (
@@ -176,25 +173,20 @@ export function UpdateChurchProfileForm({
           />
           <Field className="w-full">
             <FieldLabel htmlFor="church-country-code">Country</FieldLabel>
-            <Select
+            <ComboboxSearchInput
               disabled={isPending}
-              onValueChange={(value) =>
-                setField("country_code", value && value !== NO_SELECTION ? value : "")
+              id="church-country-code"
+              items={[{ label: "Not provided", value: NO_SELECTION }, ...COUNTRY_OPTIONS]}
+              onValueChange={(option) =>
+                setField(
+                  "country_code",
+                  option?.value && option.value !== NO_SELECTION ? option.value : "",
+                )
               }
-              value={values.country_code || null}
-            >
-              <SelectTrigger id="church-country-code" size="lg">
-                <SelectValue placeholder="Select a country" />
-              </SelectTrigger>
-              <SelectPopup>
-                <SelectItem value={NO_SELECTION}>Not provided</SelectItem>
-                {COUNTRY_OPTIONS.map((country) => (
-                  <SelectItem key={country.value} value={country.value}>
-                    {country.label}
-                  </SelectItem>
-                ))}
-              </SelectPopup>
-            </Select>
+              placeholder="Select a country"
+              searchPlaceholder="Search countries..."
+              value={countryValue}
+            />
           </Field>
           <Field className="w-full">
             <FieldLabel htmlFor="church-timezone">Time zone</FieldLabel>
