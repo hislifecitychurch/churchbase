@@ -8,6 +8,7 @@ import { SidebarMenuButton } from "@packages/ui-w/shared/sidebar/sidebar-menu-bu
 import { SidebarMenuItem } from "@packages/ui-w/shared/sidebar/sidebar-menu-item"
 import { SidebarTrigger } from "@packages/ui-w/shared/sidebar/sidebar-trigger"
 
+import { UserMenu } from "@/components/shared/_sidebar/_menu/user-menu"
 import { platformFooterMenuItems } from "@/data/menu"
 import { isPathActive } from "@/lib/menu/is-path-active"
 
@@ -39,6 +40,7 @@ export function FooterMenu(): React.ReactElement {
       <SidebarMenuItem>
         <SidebarTrigger className="w-full justify-start p-2! text-sm! font-normal!" />
       </SidebarMenuItem>
+      <UserMenu />
     </SidebarMenu>
   )
 }
