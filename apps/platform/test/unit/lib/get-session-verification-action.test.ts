@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 
-import { getSessionVerificationAction } from "@/lib/auth-recovery"
+import { getSessionVerificationAction } from "@/lib/get-session-verification-action"
 
 describe("getSessionVerificationAction", () => {
   it("offers retry until three user retries have failed", () => {

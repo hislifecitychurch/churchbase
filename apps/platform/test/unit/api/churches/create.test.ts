@@ -2,12 +2,10 @@ import { afterEach, describe, expect, it } from "bun:test"
 
 import { ApiError } from "@/api/client"
 import { createChurch } from "@/api/churches/create"
+import { env } from "@/lib/env"
 
 const originalFetch = globalThis.fetch
-const apiBaseURL = (process.env.NEXT_PUBLIC_API_URL_V1 ?? "http://localhost:36080/api/v1").replace(
-  /\/+$/,
-  "",
-)
+const apiBaseURL = env.NEXT_PUBLIC_API_URL_V1.replace(/\/+$/, "")
 
 type FetchFunction = (
   ...args: Parameters<typeof globalThis.fetch>
