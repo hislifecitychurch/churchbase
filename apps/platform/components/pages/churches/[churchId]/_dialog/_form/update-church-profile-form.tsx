@@ -2,11 +2,15 @@
 
 import { useState } from "react"
 import type * as React from "react"
-import countryData from "country-list/data.json"
+import { getAllCountries, getAllTimezones, getCountry } from "countries-and-timezones"
 
 import type { Church } from "@/api/churches/get-all"
 import { useUpdateChurch } from "@/hooks/api/churches/use-update-church"
 import type { UpdateChurchInput } from "@/api/churches/update"
+import {
+  getDefaultTimezoneForCountry,
+  getTimezoneAfterCountryChange,
+} from "@/lib/churches/get-default-timezone-for-country"
 
 import { ComboboxSearchInput } from "@packages/ui-w/shared/combobox-variant/combobox-search-input"
 
@@ -35,12 +39,13 @@ type PickerOption = {
 }
 
 const NO_SELECTION = "__none__"
-const COUNTRY_OPTIONS: PickerOption[] = countryData
-  .map(({ code, name }) => ({ label: name, value: code }))
+const COUNTRY_OPTIONS: PickerOption[] = Object.values(getAllCountries())
+  .map(({ id, name }) => ({ label: name, value: id }))
   .sort((a, b) => a.label.localeCompare(b.label))
-const TIME_ZONE_OPTIONS: PickerOption[] = ["UTC", ...(Intl.supportedValuesOf?.("timeZone") ?? [])]
-  .map((timeZone) => ({ label: timeZone, value: timeZone }))
-  .sort((a, b) => a.label.localeCompare(b.label))
+const TIME_ZONE_OPTIONS: PickerOption[] = [
+  { label: "UTC", value: "UTC" },
+  ...Object.values(getAllTimezones()).map(({ name }) => ({ label: name, value: name })),
+].sort((a, b) => a.label.localeCompare(b.label))
 
 type ChurchProfileInputProps = {
   autoComplete?: string
@@ -95,7 +100,7 @@ export function UpdateChurchProfileForm({
 }: UpdateChurchProfileFormProps): React.ReactElement {
   const [values, setValues] = useState<ChurchProfileFormValues>(() => ({
     name: church.name,
-    timezone: church.timezone ?? "",
+    timezone: church.timezone || getDefaultTimezoneForCountry(church.country_code ?? ""),
     website: church.website ?? "",
     bio: church.bio ?? "",
     city: church.city ?? "",
@@ -107,6 +112,15 @@ export function UpdateChurchProfileForm({
 
   function setField(field: keyof ChurchProfileFormValues, value: string): void {
     setValues((current) => ({ ...current, [field]: value }))
+    setErrorMessage(null)
+  }
+
+  function setCountry(countryCode: string): void {
+    setValues((current) => ({
+      ...current,
+      country_code: countryCode,
+      timezone: getTimezoneAfterCountryChange(countryCode, current.timezone),
+    }))
     setErrorMessage(null)
   }
 
@@ -140,7 +154,15 @@ export function UpdateChurchProfileForm({
   const isPending = updateChurch.isPending
   const countryValue =
     COUNTRY_OPTIONS.find((option) => option.value === values.country_code) ?? null
-  const timeZoneValue = TIME_ZONE_OPTIONS.find((option) => option.value === values.timezone) ?? null
+  const selectedCountry = values.country_code ? getCountry(values.country_code) : null
+  const availableTimeZones = selectedCountry
+    ? selectedCountry.timezones.map((timeZone) => ({ label: timeZone, value: timeZone }))
+    : TIME_ZONE_OPTIONS
+  const timeZoneOptions =
+    values.timezone && !availableTimeZones.some((option) => option.value === values.timezone)
+      ? [{ label: values.timezone, value: values.timezone }, ...availableTimeZones]
+      : availableTimeZones
+  const timeZoneValue = timeZoneOptions.find((option) => option.value === values.timezone) ?? null
 
   return (
     <form className="flex min-h-0 flex-1 flex-col" onSubmit={(event) => void handleSubmit(event)}>
@@ -155,6 +177,37 @@ export function UpdateChurchProfileForm({
             required
             value={values.name}
           />
+          <Field className="w-full">
+            <FieldLabel htmlFor="church-country-code">Country</FieldLabel>
+            <ComboboxSearchInput
+              disabled={isPending}
+              id="church-country-code"
+              items={[{ label: "Not provided", value: NO_SELECTION }, ...COUNTRY_OPTIONS]}
+              onValueChange={(option) =>
+                setCountry(option?.value && option.value !== NO_SELECTION ? option.value : "")
+              }
+              placeholder="Select a country"
+              searchPlaceholder="Search countries..."
+              value={countryValue}
+            />
+          </Field>
+          <Field className="w-full">
+            <FieldLabel htmlFor="church-timezone">Time zone</FieldLabel>
+            <ComboboxSearchInput
+              disabled={isPending}
+              id="church-timezone"
+              items={[{ label: "Not provided", value: NO_SELECTION }, ...timeZoneOptions]}
+              onValueChange={(option) =>
+                setField(
+                  "timezone",
+                  option?.value && option.value !== NO_SELECTION ? option.value : "",
+                )
+              }
+              placeholder="Select a time zone"
+              searchPlaceholder="Search time zones..."
+              value={timeZoneValue}
+            />
+          </Field>
           <ChurchProfileInput
             autoComplete="address-level2"
             disabled={isPending}
@@ -171,40 +224,6 @@ export function UpdateChurchProfileForm({
             onChange={(value) => setField("state_or_province", value)}
             value={values.state_or_province}
           />
-          <Field className="w-full">
-            <FieldLabel htmlFor="church-country-code">Country</FieldLabel>
-            <ComboboxSearchInput
-              disabled={isPending}
-              id="church-country-code"
-              items={[{ label: "Not provided", value: NO_SELECTION }, ...COUNTRY_OPTIONS]}
-              onValueChange={(option) =>
-                setField(
-                  "country_code",
-                  option?.value && option.value !== NO_SELECTION ? option.value : "",
-                )
-              }
-              placeholder="Select a country"
-              searchPlaceholder="Search countries..."
-              value={countryValue}
-            />
-          </Field>
-          <Field className="w-full">
-            <FieldLabel htmlFor="church-timezone">Time zone</FieldLabel>
-            <ComboboxSearchInput
-              disabled={isPending}
-              id="church-timezone"
-              items={[{ label: "Not provided", value: NO_SELECTION }, ...TIME_ZONE_OPTIONS]}
-              onValueChange={(option) =>
-                setField(
-                  "timezone",
-                  option?.value && option.value !== NO_SELECTION ? option.value : "",
-                )
-              }
-              placeholder="Select a time zone"
-              searchPlaceholder="Search time zones..."
-              value={timeZoneValue}
-            />
-          </Field>
           <ChurchProfileInput
             disabled={isPending}
             id="church-website"

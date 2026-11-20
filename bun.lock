@@ -105,7 +105,7 @@
         "@tanstack/react-query": "^5.105.3",
         "@tanstack/react-table": "^9.3.1",
         "@vinext/cloudflare": "latest",
-        "country-list": "^2.4.1",
+        "countries-and-timezones": "^3.11.0",
         "geist": "^1.9.0",
         "react": "latest",
         "react-dom": "latest",
@@ -1025,7 +1025,7 @@
 
     "cookie": ["cookie@1.1.1", "", {}, "sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ=="],
 
-    "country-list": ["country-list@2.4.1", "", {}, "sha512-KhVV/UfUV3dSNpsWIqHTQxLpYDKPKz1UwkRjadt+YbX2PRhyCEihEoS5XgB7J7AMXpkicvl+tRHvkNI5wbji/g=="],
+    "countries-and-timezones": ["countries-and-timezones@3.11.0", "", {}, "sha512-amqnHZJyuaFol6Z9gmyDb/D5cS6OSZUMfT6Ovj2HMmEBykHfwfA6dih59rulQ2kWynW7XeCAOzJr60hWL64Anw=="],
 
     "cross-spawn": ["cross-spawn@7.0.6", "", { "dependencies": { "path-key": "^3.1.0", "shebang-command": "^2.0.0", "which": "^2.0.1" } }, "sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA=="],
 
