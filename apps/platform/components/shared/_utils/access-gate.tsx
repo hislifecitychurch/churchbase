@@ -5,7 +5,7 @@ import type { ReactNode } from "react"
 
 import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 import { ApiError } from "@/api/client"
-import { getSessionVerificationAction } from "@/lib/get-session-verification-action"
+import { getSessionVerificationAction } from "@/lib/auth/get-session-verification-action"
 import { LoadingSpinner } from "@/components/shared/_spinner/loading-spinner"
 
 import { toastManager } from "@packages/ui-w/providers/toast-provider"

@@ -4,7 +4,7 @@ import { useState } from "react"
 import type * as React from "react"
 
 import { useCreateChurch } from "@/hooks/api/churches/use-create-church"
-import { slugifyChurchName } from "@/lib/churches/slugify"
+import { slugifyChurchName } from "@/lib/formatter/slugify"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 import { DialogClose } from "@packages/ui-w/shared/dialog/dialog-close"
