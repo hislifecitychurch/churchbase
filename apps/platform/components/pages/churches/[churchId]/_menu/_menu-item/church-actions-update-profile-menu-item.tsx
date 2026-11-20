@@ -4,7 +4,7 @@ import { IconEditCircle } from "@tabler/icons-react"
 
 import { MenuItem } from "@packages/ui-w/shared/menu/menu-item"
 
-export function UpdateChurchProfileMenuItem(): React.ReactElement {
+export function ChurchActionsUpdateProfileMenuItem(): React.ReactElement {
   return (
     <MenuItem disabled>
       <IconEditCircle aria-hidden />
