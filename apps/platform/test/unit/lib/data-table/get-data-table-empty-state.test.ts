@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 
-import { getDataTableEmptyState } from "@/lib/data-table/empty-state"
+import { getDataTableEmptyState } from "@/lib/data-table/get-data-table-empty-state"
 
 const settled = { isFetching: false, hasError: false }
 

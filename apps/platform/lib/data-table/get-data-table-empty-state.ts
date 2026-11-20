@@ -1,4 +1,4 @@
-export type DataTableEmptyState = "loading" | "error" | "not-found" | "empty"
+import type { DataTableEmptyState } from "./_types"
 
 export function getDataTableEmptyState(input: {
   isFetching: boolean

@@ -3,7 +3,7 @@
 import { useState } from "react"
 
 import { useChurches } from "@/hooks/api/churches/use-churches"
-import { getDataTableEmptyState } from "@/lib/data-table/empty-state"
+import { getDataTableEmptyState } from "@/lib/data-table/get-data-table-empty-state"
 
 import { DataTable } from "@packages/ui-w/shared/data-table/data-table"
 
