@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 
-import { slugifyChurchName } from "@/lib/churches/slugify"
+import { slugifyChurchName } from "@/lib/formatter/slugify"
 
 describe("slugifyChurchName", () => {
   it("lowercases names and turns spaces and punctuation into single dashes", () => {
