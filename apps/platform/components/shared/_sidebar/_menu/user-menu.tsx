@@ -16,11 +16,7 @@ import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-
 
 import { UserMenuSignOutMenuItem } from "@/components/shared/_sidebar/_menu/_menu-items/user-menu-sign-out-menu-item"
 import { useCurrentUser } from "@/hooks/api/users/use-current-user"
-
-function formatName(firstName?: string | null, lastName?: string | null): string {
-  const parts = [firstName, lastName].map((part) => part?.trim()).filter(Boolean)
-  return parts.length > 0 ? parts.join(" ") : "User"
-}
+import { getUserDisplayName } from "@/lib/formatter/name/user"
 
 function getInitial(name: string): string {
   const trimmed = name.trim()
@@ -32,7 +28,7 @@ export function UserMenu(): React.ReactElement {
   const currentUser = useCurrentUser()
 
   const isLoading = currentUser.isPending
-  const userName = formatName(
+  const userName = getUserDisplayName(
     currentUser.data?.profile?.first_name,
     currentUser.data?.profile?.last_name,
   )
