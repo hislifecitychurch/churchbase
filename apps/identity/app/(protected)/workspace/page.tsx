@@ -3,11 +3,9 @@
 import type { JSX } from "react"
 import { use, useEffect } from "react"
 
-import { useCurrentUser } from "@/hooks/api/users/use-current-user"
-
 import { ApiError } from "@/api/client"
-
 import { getConfiguredReturnURL } from "@/lib/return-url"
+import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 import { LoadingSpinner } from "@/components/shared/_spinner/loading-spinner"
