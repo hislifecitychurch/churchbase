@@ -17,6 +17,7 @@ export type ComboboxSearchInputItem = { label: string; value: string }
 export function ComboboxSearchInput({
   disabled = false,
   emptyLabel = "No options found.",
+  id,
   items,
   onValueChange,
   placeholder = "Select an option",
@@ -25,6 +26,7 @@ export function ComboboxSearchInput({
 }: {
   disabled?: boolean
   emptyLabel?: string
+  id?: string
   items: ComboboxSearchInputItem[]
   onValueChange: (value: ComboboxSearchInputItem | null) => void
   placeholder?: string
@@ -38,7 +40,7 @@ export function ComboboxSearchInput({
       onValueChange={(next) => onValueChange(next as ComboboxSearchInputItem | null)}
       value={value}
     >
-      <ComboboxTrigger render={<SelectButton disabled={disabled} />}>
+      <ComboboxTrigger render={<SelectButton disabled={disabled} id={id} />}>
         <ComboboxValue placeholder={placeholder} />
       </ComboboxTrigger>
       <ComboboxPopup>

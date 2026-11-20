@@ -2,10 +2,18 @@
 
 import { useState } from "react"
 import type * as React from "react"
+import countryData from "country-list/data.json"
 
 import type { Church } from "@/api/churches/get-all"
 import { useUpdateChurch } from "@/hooks/api/churches/use-update-church"
 import type { UpdateChurchInput } from "@/api/churches/update"
+
+import { ComboboxSearchInput } from "@packages/ui-w/shared/combobox-variant/combobox-search-input"
+import { Select } from "@packages/ui-w/shared/select/select"
+import { SelectItem } from "@packages/ui-w/shared/select/select-item"
+import { SelectPopup } from "@packages/ui-w/shared/select/select-popup"
+import { SelectTrigger } from "@packages/ui-w/shared/select/select-trigger"
+import { SelectValue } from "@packages/ui-w/shared/select/select-value"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 import { DialogClose } from "@packages/ui-w/shared/dialog/dialog-close"
@@ -26,13 +34,24 @@ type ChurchProfileFormValues = {
   country_code: string
 }
 
+type PickerOption = {
+  label: string
+  value: string
+}
+
+const NO_SELECTION = "__none__"
+const COUNTRY_OPTIONS: PickerOption[] = countryData
+  .map(({ code, name }) => ({ label: name, value: code }))
+  .sort((a, b) => a.label.localeCompare(b.label))
+const TIME_ZONE_OPTIONS: PickerOption[] = ["UTC", ...(Intl.supportedValuesOf?.("timeZone") ?? [])]
+  .map((timeZone) => ({ label: timeZone, value: timeZone }))
+  .sort((a, b) => a.label.localeCompare(b.label))
+
 type ChurchProfileInputProps = {
-  autoCapitalize?: React.HTMLAttributes<HTMLInputElement>["autoCapitalize"]
   autoComplete?: string
   disabled: boolean
   id: string
   label: string
-  maxLength?: number
   onChange: (value: string) => void
   placeholder?: string
   required?: boolean
@@ -41,12 +60,10 @@ type ChurchProfileInputProps = {
 }
 
 function ChurchProfileInput({
-  autoCapitalize,
   autoComplete,
   disabled,
   id,
   label,
-  maxLength,
   onChange,
   placeholder,
   required,
@@ -57,11 +74,9 @@ function ChurchProfileInput({
     <Field className="w-full">
       <FieldLabel htmlFor={id}>{label}</FieldLabel>
       <Input
-        autoCapitalize={autoCapitalize}
         autoComplete={autoComplete}
         disabled={disabled}
         id={id}
-        maxLength={maxLength}
         nativeInput
         onChange={(event) => onChange(event.currentTarget.value)}
         placeholder={placeholder}
@@ -128,6 +143,7 @@ export function UpdateChurchProfileForm({
   }
 
   const isPending = updateChurch.isPending
+  const timeZoneValue = TIME_ZONE_OPTIONS.find((option) => option.value === values.timezone) ?? null
 
   return (
     <form className="flex min-h-0 flex-1 flex-col" onSubmit={(event) => void handleSubmit(event)}>
@@ -158,24 +174,45 @@ export function UpdateChurchProfileForm({
             onChange={(value) => setField("state_or_province", value)}
             value={values.state_or_province}
           />
-          <ChurchProfileInput
-            autoCapitalize="characters"
-            disabled={isPending}
-            id="church-country-code"
-            label="Country code"
-            maxLength={2}
-            onChange={(value) => setField("country_code", value)}
-            placeholder="US"
-            value={values.country_code}
-          />
-          <ChurchProfileInput
-            disabled={isPending}
-            id="church-timezone"
-            label="Time zone"
-            onChange={(value) => setField("timezone", value)}
-            placeholder="America/Chicago"
-            value={values.timezone}
-          />
+          <Field className="w-full">
+            <FieldLabel htmlFor="church-country-code">Country</FieldLabel>
+            <Select
+              disabled={isPending}
+              onValueChange={(value) =>
+                setField("country_code", value && value !== NO_SELECTION ? value : "")
+              }
+              value={values.country_code || null}
+            >
+              <SelectTrigger id="church-country-code" size="lg">
+                <SelectValue placeholder="Select a country" />
+              </SelectTrigger>
+              <SelectPopup>
+                <SelectItem value={NO_SELECTION}>Not provided</SelectItem>
+                {COUNTRY_OPTIONS.map((country) => (
+                  <SelectItem key={country.value} value={country.value}>
+                    {country.label}
+                  </SelectItem>
+                ))}
+              </SelectPopup>
+            </Select>
+          </Field>
+          <Field className="w-full">
+            <FieldLabel htmlFor="church-timezone">Time zone</FieldLabel>
+            <ComboboxSearchInput
+              disabled={isPending}
+              id="church-timezone"
+              items={[{ label: "Not provided", value: NO_SELECTION }, ...TIME_ZONE_OPTIONS]}
+              onValueChange={(option) =>
+                setField(
+                  "timezone",
+                  option?.value && option.value !== NO_SELECTION ? option.value : "",
+                )
+              }
+              placeholder="Select a time zone"
+              searchPlaceholder="Search time zones..."
+              value={timeZoneValue}
+            />
+          </Field>
           <ChurchProfileInput
             disabled={isPending}
             id="church-website"
