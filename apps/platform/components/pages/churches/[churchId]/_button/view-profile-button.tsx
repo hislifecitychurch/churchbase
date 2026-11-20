@@ -6,7 +6,7 @@ import { Button } from "@packages/ui-w/shared/button/button"
 import { Dialog } from "@packages/ui-w/shared/dialog/dialog"
 import { DialogTrigger } from "@packages/ui-w/shared/dialog/dialog-trigger"
 
-import { ChurchProfileDialog } from "@/components/pages/churches/[churchId]/_dialog/church-profile-dialog"
+import { ViewChurchProfileDialog } from "@/components/pages/churches/[churchId]/_dialog/view-church-profile-dialog"
 
 type ViewProfileButtonProps = {
   church: Church
@@ -42,7 +42,7 @@ export function ViewProfileButton({ church }: ViewProfileButtonProps): React.Rea
           </span>
         )}
       </span>
-      <ChurchProfileDialog church={church} />
+      <ViewChurchProfileDialog church={church} />
     </Dialog>
   )
 }

@@ -10,7 +10,7 @@ import { DialogPanel } from "@packages/ui-w/shared/dialog/dialog-panel"
 import { DialogPopup } from "@packages/ui-w/shared/dialog/dialog-popup"
 import { DialogTitle } from "@packages/ui-w/shared/dialog/dialog-title"
 
-type ChurchProfileDialogProps = {
+type ViewChurchProfileDialogProps = {
   church: Church
 }
 
@@ -29,7 +29,9 @@ function ChurchProfileField({
   )
 }
 
-export function ChurchProfileDialog({ church }: ChurchProfileDialogProps): React.ReactElement {
+export function ViewChurchProfileDialog({
+  church,
+}: ViewChurchProfileDialogProps): React.ReactElement {
   return (
     <DialogPopup className="sm:max-w-2xl">
       <DialogHeader>
