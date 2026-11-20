@@ -6,11 +6,10 @@ node_modules
 .pnp.js
 
 # Local env files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env*
+!.env.example
+.dev.vars*
+!.dev.vars.example
 
 # Postman
 postman/environments/*.environment.yaml
@@ -20,13 +19,17 @@ coverage
 
 # Turbo
 .turbo
+
+# Cloudflare
 .cloudflare/
+.wrangler/
 
 # Vercel
 .vercel
 
 # Build Outputs
 .next/
+next-env.d.ts
 .vinext/
 out/
 build
