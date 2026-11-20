@@ -1,14 +1,14 @@
 import { describe, expect, it } from "bun:test"
 
-import { getUserDisplayName } from "@/lib/formatter/name/user"
+import { formatUserName } from "@/lib/formatter/name/user"
 
-describe("getUserDisplayName", () => {
+describe("formatUserName", () => {
   it("joins the available trimmed name parts", () => {
-    expect(getUserDisplayName(" Ada ", "Lovelace ")).toBe("Ada Lovelace")
-    expect(getUserDisplayName("Ada", null)).toBe("Ada")
+    expect(formatUserName(" Ada ", "Lovelace ")).toBe("Ada Lovelace")
+    expect(formatUserName("Ada", null)).toBe("Ada")
   })
 
   it("uses a fallback when no name parts are available", () => {
-    expect(getUserDisplayName("  ", null)).toBe("User")
+    expect(formatUserName("  ", null)).toBe("User")
   })
 })
