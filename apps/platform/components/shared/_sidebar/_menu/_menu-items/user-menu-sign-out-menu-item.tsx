@@ -6,7 +6,7 @@ import { MenuItem } from "@packages/ui-w/shared/menu/menu-item"
 
 import { env } from "@/lib/env"
 
-export function SignOutMenuItem(): React.ReactElement {
+export function UserMenuSignOutMenuItem(): React.ReactElement {
   const handleSignOut = () => {
     const identityURL = env.NEXT_PUBLIC_IDENTITY_URL
     window.location.assign(identityURL ? `${identityURL.replace(/\/+$/, "")}/sign-out` : "/login")
