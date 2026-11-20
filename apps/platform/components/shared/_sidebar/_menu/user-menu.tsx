@@ -14,7 +14,7 @@ import { SidebarMenuItem } from "@packages/ui-w/shared/sidebar/sidebar-menu-item
 import { Skeleton } from "@packages/ui-w/shared/skeleton/skeleton"
 import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-01"
 
-import { UserMenuItems } from "@/components/shared/_sidebar/_menu/_menu-items/user-menu-items"
+import { SignOutMenuItem } from "@/components/shared/_sidebar/_menu/_menu-items/sign-out-menu-item"
 import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 
 function formatName(firstName?: string | null, lastName?: string | null): string {
@@ -71,7 +71,7 @@ export function UserMenu(): React.ReactElement {
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}
           >
-            <UserMenuItems />
+            <SignOutMenuItem />
           </MenuPopup>
         </Menu>
       </SidebarMenuItem>
