@@ -6,9 +6,14 @@ import { Button } from "@packages/ui-w/shared/button/button"
 import { Menu } from "@packages/ui-w/shared/menu/menu"
 import { MenuTrigger } from "@packages/ui-w/shared/menu/menu-trigger"
 
+import type { Church } from "@/api/churches/get-all"
 import { ChurchActionsMenu } from "@/components/pages/churches/[churchId]/_menu/church-actions-menu"
 
-export function ChurchActionsButton(): React.ReactElement {
+type ChurchActionsButtonProps = {
+  church: Church
+}
+
+export function ChurchActionsButton({ church }: ChurchActionsButtonProps): React.ReactElement {
   return (
     <Menu>
       <MenuTrigger
@@ -23,7 +28,7 @@ export function ChurchActionsButton(): React.ReactElement {
           </Button>
         }
       />
-      <ChurchActionsMenu />
+      <ChurchActionsMenu church={church} />
     </Menu>
   )
 }
