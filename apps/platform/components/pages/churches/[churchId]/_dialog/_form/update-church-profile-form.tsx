@@ -426,7 +426,7 @@ export function UpdateChurchProfileForm({
   return (
     <form className="flex min-h-0 flex-1 flex-col" onSubmit={(event) => void handleSubmit(event)}>
       <DialogPanel className="min-h-0 flex-1 overflow-y-auto">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4">
           <ChurchProfileInput
             autoComplete="organization"
             disabled={isPending}
@@ -532,7 +532,7 @@ export function UpdateChurchProfileForm({
             type="url"
             value={values.website}
           />
-          <Field className="w-full sm:col-span-2">
+          <Field className="w-full">
             <FieldLabel htmlFor="church-bio">About this church</FieldLabel>
             <Textarea
               disabled={isPending}

@@ -19,7 +19,7 @@ export function UpdateChurchProfileDialog({
   onUpdated,
 }: UpdateChurchProfileDialogProps): React.ReactElement {
   return (
-    <DialogPopup className="sm:max-w-2xl">
+    <DialogPopup className="sm:max-w-sm">
       <DialogHeader>
         <DialogTitle>Update church profile</DialogTitle>
         <DialogDescription>Update the profile information for {church.name}.</DialogDescription>
