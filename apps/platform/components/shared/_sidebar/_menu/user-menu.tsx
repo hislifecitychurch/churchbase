@@ -3,6 +3,8 @@
 import { IconDotsVertical } from "@tabler/icons-react"
 
 import { useSidebar } from "@packages/ui-w/hooks/use-sidebar"
+import { useCurrentUser } from "@/hooks/api/users/use-current-user"
+
 import { Avatar } from "@packages/ui-w/shared/avatar/avatar"
 import { AvatarFallback } from "@packages/ui-w/shared/avatar/avatar-fallback"
 import { Menu } from "@packages/ui-w/shared/menu/menu"
@@ -15,7 +17,6 @@ import { Skeleton } from "@packages/ui-w/shared/skeleton/skeleton"
 import { SpinnerFlicker01 } from "@packages/ui-w/shared/spinner-variant/spinner-flicker-01"
 
 import { UserMenuSignOutMenuItem } from "@/components/shared/_sidebar/_menu/_menu-item/user-menu-sign-out-menu-item"
-import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 import { formatUserName } from "@/lib/formatter/name/user"
 
 function getInitial(name: string): string {
