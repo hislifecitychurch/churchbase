@@ -1,6 +1,6 @@
 import { ApiError, apiRequest } from "@/api/client"
-import { isChurch } from "@/api/churches/get-all"
-import type { Church } from "@/api/churches/get-all"
+import { isChurch } from "@/api/churches/types"
+import type { Church } from "@/api/churches/types"
 
 export type CreateChurchInput = {
   name: string

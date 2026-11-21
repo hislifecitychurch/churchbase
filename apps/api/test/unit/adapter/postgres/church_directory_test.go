@@ -8,7 +8,6 @@ import (
 	"github.com/hislifecitychurch/churchbase/apps/api/ent"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/churchmembership"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/enttest"
-	ministryent "github.com/hislifecitychurch/churchbase/apps/api/ent/ministry"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/actions/soft_delete"
 	churchrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/church"
 	churchdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/church"
@@ -16,7 +15,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func TestChurchRepositoryGetsAllWithMemberAndMinistryCounts(t *testing.T) {
+func TestChurchRepositoryGetsAllWithActiveMemberCounts(t *testing.T) {
 	client := enttest.Open(t, "sqlite3", "file:church-directory?mode=memory&cache=shared&_fk=1")
 	defer client.Close()
 	soft_delete.ConfigureClient(client)
@@ -33,17 +32,6 @@ func TestChurchRepositoryGetsAllWithMemberAndMinistryCounts(t *testing.T) {
 	if _, err := repository.Create(ctx, churchdomain.CreateInput{Name: "Zulu Church", Slug: "zulu"}); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := client.Ministry.Create().SetChurchID(alpha.ID).SetName("Kids Ministry").SetType(ministryent.TypeKids).Save(ctx); err != nil {
-		t.Fatal(err)
-	}
-	deletedMinistry, err := client.Ministry.Create().SetChurchID(alpha.ID).SetName("Deleted ministry").SetType(ministryent.TypeBroadcast).Save(ctx)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := client.Ministry.DeleteOneID(deletedMinistry.ID).Exec(ctx); err != nil {
-		t.Fatal(err)
-	}
-
 	newUser := func(authUserID string) *ent.User {
 		user, err := client.User.Create().SetAuthUserID(authUserID).Save(ctx)
 		if err != nil {
@@ -93,9 +81,6 @@ func TestChurchRepositoryGetsAllWithMemberAndMinistryCounts(t *testing.T) {
 	if churches[0].ActiveMemberCount != 1 {
 		t.Fatalf("Alpha active member count = %d, want 1", churches[0].ActiveMemberCount)
 	}
-	if churches[0].MinistryCount != 1 || churches[1].MinistryCount != 0 {
-		t.Fatalf("ministry counts = %d, %d, want 1, 0", churches[0].MinistryCount, churches[1].MinistryCount)
-	}
 	if churches[1].ActiveMemberCount != 0 {
 		t.Fatalf("Zulu active member count = %d, want 0", churches[1].ActiveMemberCount)
 	}
@@ -120,22 +105,22 @@ func TestChurchRepositoryUpdatesAndClearsChurchMetadata(t *testing.T) {
 	}); err != nil {
 		t.Fatal(err)
 	}
-	churches, err := repository.GetAll(ctx)
+	updatedChurch, err := repository.GetByID(ctx, church.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(churches) != 1 || churches[0].Name != "New Name" || churches[0].Timezone == nil || *churches[0].Timezone != timezone || churches[0].Website == nil || *churches[0].Website != website || churches[0].Bio == nil || *churches[0].Bio != bio || churches[0].City == nil || *churches[0].City != city || churches[0].StateOrProvince == nil || *churches[0].StateOrProvince != state || churches[0].CountryCode == nil || *churches[0].CountryCode != countryCode {
-		t.Fatalf("updated church = %+v", churches)
+	if updatedChurch.Name != "New Name" || updatedChurch.Timezone == nil || *updatedChurch.Timezone != timezone || updatedChurch.Website == nil || *updatedChurch.Website != website || updatedChurch.Bio == nil || *updatedChurch.Bio != bio || updatedChurch.City == nil || *updatedChurch.City != city || updatedChurch.StateOrProvince == nil || *updatedChurch.StateOrProvince != state || updatedChurch.CountryCode == nil || *updatedChurch.CountryCode != countryCode {
+		t.Fatalf("updated church = %+v", updatedChurch)
 	}
 	if err := repository.Update(ctx, church.ID, churchdomain.UpdateInput{Name: "New Name"}); err != nil {
 		t.Fatal(err)
 	}
-	churches, err = repository.GetAll(ctx)
+	updatedChurch, err = repository.GetByID(ctx, church.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if churches[0].Timezone != nil || churches[0].Website != nil || churches[0].Bio != nil || churches[0].City != nil || churches[0].StateOrProvince != nil || churches[0].CountryCode != nil {
-		t.Fatalf("cleared metadata = %+v", churches[0])
+	if updatedChurch.Timezone != nil || updatedChurch.Website != nil || updatedChurch.Bio != nil || updatedChurch.City != nil || updatedChurch.StateOrProvince != nil || updatedChurch.CountryCode != nil {
+		t.Fatalf("cleared metadata = %+v", updatedChurch)
 	}
 	if err := repository.Update(ctx, uuid.New(), churchdomain.UpdateInput{Name: "Missing"}); err != churchdomain.ErrChurchNotFound {
 		t.Fatalf("missing church update error = %v, want ErrChurchNotFound", err)

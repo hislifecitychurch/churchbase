@@ -118,6 +118,7 @@ func appWithActor(handler *churchhandler.Handler) *fiber.App {
 		return c.Next()
 	})
 	app.Get("/churches", handler.GetAll)
+	app.Get("/churches/:churchID", handler.GetByID)
 	app.Post("/churches", handler.Create)
 	app.Put("/churches/:churchID", handler.Update)
 	return app
@@ -126,15 +127,19 @@ func appWithActor(handler *churchhandler.Handler) *fiber.App {
 type churchCreationServiceFake struct {
 	called        bool
 	getAllCalled  bool
+	getByIDCalled bool
 	updateCalled  bool
 	authUserID    string
 	updatedChurch uuid.UUID
+	churchID      uuid.UUID
 	created       churchdomain.Church
+	church        churchdomain.Church
 	input         churchdomain.CreateInput
 	updateInput   churchdomain.UpdateInput
-	churches      []churchdomain.Church
+	churches      []churchdomain.ChurchSummary
 	err           error
 	getAllErr     error
+	getByIDErr    error
 	updateErr     error
 }
 
@@ -143,9 +148,14 @@ func (s *churchCreationServiceFake) CreateByAuthUserID(_ context.Context, authUs
 	return s.created, s.err
 }
 
-func (s *churchCreationServiceFake) GetAllByAuthUserID(_ context.Context, authUserID string) ([]churchdomain.Church, error) {
+func (s *churchCreationServiceFake) GetAllByAuthUserID(_ context.Context, authUserID string) ([]churchdomain.ChurchSummary, error) {
 	s.getAllCalled, s.authUserID = true, authUserID
 	return s.churches, s.getAllErr
+}
+
+func (s *churchCreationServiceFake) GetByIDByAuthUserID(_ context.Context, authUserID string, churchID uuid.UUID) (churchdomain.Church, error) {
+	s.getByIDCalled, s.authUserID, s.churchID = true, authUserID, churchID
+	return s.church, s.getByIDErr
 }
 
 func (s *churchCreationServiceFake) UpdateByAuthUserID(_ context.Context, authUserID string, churchID uuid.UUID, input churchdomain.UpdateInput) error {

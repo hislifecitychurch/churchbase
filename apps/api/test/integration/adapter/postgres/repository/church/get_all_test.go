@@ -14,7 +14,6 @@ import (
 	"github.com/google/uuid"
 	entclient "github.com/hislifecitychurch/churchbase/apps/api/ent"
 	churchent "github.com/hislifecitychurch/churchbase/apps/api/ent/church"
-	ministryent "github.com/hislifecitychurch/churchbase/apps/api/ent/ministry"
 	_ "github.com/hislifecitychurch/churchbase/apps/api/ent/runtime"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/actions/soft_delete"
 	churchrepository "github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/repository/church"
@@ -24,7 +23,7 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
-func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.T) {
+func TestChurchRepositoryPostgresGetsAllSummariesByNameAndExcludesSoftDeleted(t *testing.T) {
 	databaseURL := os.Getenv("RL_TEST_DB_URL")
 	if databaseURL == "" {
 		t.Skip("set RL_TEST_DB_URL to a disposable PostgreSQL test database")
@@ -70,17 +69,6 @@ func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.
 		if err != nil {
 			return err
 		}
-		if _, err := transaction.Client(txCtx, client).Ministry.Create().SetChurchID(alpha.ID).SetName(prefix + " Kids").SetType(ministryent.TypeKids).Save(txCtx); err != nil {
-			return err
-		}
-		deletedMinistry, err := transaction.Client(txCtx, client).Ministry.Create().SetChurchID(alpha.ID).SetName(prefix + " Deleted Ministry").SetType(ministryent.TypeBroadcast).Save(txCtx)
-		if err != nil {
-			return err
-		}
-		if err := transaction.Client(txCtx, client).Ministry.DeleteOneID(deletedMinistry.ID).Exec(txCtx); err != nil {
-			return err
-		}
-
 		churches, err := repository.GetAll(txCtx)
 		if err != nil {
 			return err
@@ -93,11 +81,8 @@ func TestChurchRepositoryPostgresGetsAllByNameAndExcludesSoftDeleted(t *testing.
 			if church.ID == alpha.ID || church.ID == zulu.ID {
 				positions[church.ID] = index
 			}
-			if church.ID == alpha.ID && (church.Timezone == nil || *church.Timezone != timezone || church.Website == nil || *church.Website != website || church.Bio == nil || *church.Bio != bio || church.City == nil || *church.City != city || church.StateOrProvince == nil || *church.StateOrProvince != state || church.CountryCode == nil || *church.CountryCode != countryCode || church.MinistryCount != 1) {
-				return fmt.Errorf("GetAll did not return alpha metadata and ministry count: %+v", church)
-			}
-			if church.ID == zulu.ID && church.MinistryCount != 0 {
-				return fmt.Errorf("GetAll returned Zulu ministry count %d, want 0", church.MinistryCount)
+			if church.ID == alpha.ID && (church.Timezone == nil || *church.Timezone != timezone || church.Bio == nil || *church.Bio != bio || church.City == nil || *church.City != city || church.StateOrProvince == nil || *church.StateOrProvince != state || church.CountryCode == nil || *church.CountryCode != countryCode) {
+				return fmt.Errorf("GetAll did not return alpha summary fields: %+v", church)
 			}
 		}
 		if positions[alpha.ID] >= positions[zulu.ID] {

@@ -1,0 +1,12 @@
+$kind: http-request
+name: GET /churches/:churchID
+description: Returns full profile details and member/ministry counts for one church. Replace the example UUID with the target church ID. profile_complete requires city, country code, and time zone. Requires a valid BetterAuth session linked to a provisioned Global Admin or Global Staff. Invalid IDs return 400; missing or soft-deleted churches return 404.
+url: "{{host-api}}/v1/platform/churches/018f47b8-8cb2-7d15-b28e-4a26843d81c2"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+auth:
+  type: noauth
+examples: ./.resources/-get-by-id.resources/examples
+order: 1500

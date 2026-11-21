@@ -42,10 +42,9 @@ func (h *Handler) GetAll(c *fiber.Ctx) error {
 	for _, item := range churches {
 		items = append(items, getAllResponse{
 			ID: item.ID.String(), Name: item.Name, Slug: item.Slug,
-			Timezone: item.Timezone, Website: item.Website, Bio: item.Bio,
+			Timezone: item.Timezone, Bio: item.Bio,
 			City: item.City, StateOrProvince: item.StateOrProvince, CountryCode: item.CountryCode,
-			ProfileComplete:   item.IsProfileComplete(),
-			ActiveMemberCount: item.ActiveMemberCount, MinistryCount: item.MinistryCount,
+			ActiveMemberCount: item.ActiveMemberCount,
 		})
 	}
 	return response.JSON(c, http.StatusOK, response.Success(items, "Churches retrieved", c, "churches.retrieved", "", "info"))
@@ -56,12 +55,9 @@ type getAllResponse struct {
 	Name              string  `json:"name"`
 	Slug              string  `json:"slug"`
 	Timezone          *string `json:"timezone"`
-	Website           *string `json:"website"`
 	Bio               *string `json:"bio"`
 	City              *string `json:"city"`
 	StateOrProvince   *string `json:"state_or_province"`
 	CountryCode       *string `json:"country_code"`
-	ProfileComplete   bool    `json:"profile_complete"`
 	ActiveMemberCount int     `json:"active_member_count"`
-	MinistryCount     int     `json:"ministry_count"`
 }

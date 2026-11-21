@@ -3,7 +3,8 @@
 import { use, useEffect, useState } from "react"
 import type * as React from "react"
 
-import { useChurches } from "@/hooks/api/churches/use-churches"
+import { ApiError } from "@/api/client"
+import { useChurch } from "@/hooks/api/churches/use-church"
 import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 import { getProfileCompletenessToastAction } from "@/lib/churches/get-profile-completeness-toast-action"
 
@@ -28,8 +29,8 @@ type ProfileDialog = { churchId: string; mode: "view" | "update" } | null
 
 export default function ChurchPage({ params }: ChurchPageProps): React.ReactElement {
   const { churchId } = use(params)
-  const churches = useChurches()
-  const church = churches.data?.find((item) => item.id === churchId)
+  const churchQuery = useChurch(churchId)
+  const church = churchQuery.data
   const currentUser = useCurrentUser()
   const canUpdateProfile = currentUser.data?.global_roles === "admin"
   const [openProfileDialog, setOpenProfileDialog] = useState<ProfileDialog>(null)
@@ -76,18 +77,27 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
     setOpenProfileDialog(open && church ? { churchId: church.id, mode: "view" } : null)
   }
 
-  if (churches.isPending && !churches.data) {
+  if (churchQuery.isPending && !churchQuery.data) {
     return <LoadingSpinner />
   }
 
-  if (churches.isError && !churches.data) {
+  if (
+    churchQuery.isError &&
+    !churchQuery.data &&
+    !(churchQuery.error instanceof ApiError && churchQuery.error.status === 404)
+  ) {
     return (
       <section className="flex flex-col items-start gap-4">
         <BackToChurchesButton />
         <p className="text-destructive" role="alert">
           We couldn't load this church.
         </p>
-        <Button onClick={() => void churches.refetch()} size="lg" type="button" variant="outline">
+        <Button
+          onClick={() => void churchQuery.refetch()}
+          size="lg"
+          type="button"
+          variant="outline"
+        >
           Try again
         </Button>
       </section>

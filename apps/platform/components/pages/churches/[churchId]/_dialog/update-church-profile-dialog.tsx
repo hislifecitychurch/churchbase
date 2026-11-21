@@ -1,6 +1,6 @@
 "use client"
 
-import type { Church } from "@/api/churches/get-all"
+import type { Church } from "@/api/churches/types"
 
 import { DialogDescription } from "@packages/ui-w/shared/dialog/dialog-description"
 import { DialogHeader } from "@packages/ui-w/shared/dialog/dialog-header"

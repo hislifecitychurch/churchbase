@@ -1,6 +1,6 @@
 $kind: http-request
 name: GET /churches
-description: Returns all churches ordered by name, including active member and non-deleted ministry counts, profile details, and a derived profile_complete status. profile_complete requires city, country code, and timezone; website and bio are optional. State or province is reported but is not included because its applicability varies by country. Active member count includes only non-deleted users with active member-role church memberships. Requires a valid BetterAuth session linked to a provisioned Global Admin or Global Staff. Soft-deleted churches are omitted.
+description: "Returns churches ordered by name with only the fields used by the Platform directory table: name, slug, bio, location, time zone, and active member count. Full profile details and ministry count are available from GET /churches/:churchID. Active member count includes only non-deleted users with active member-role church memberships. Requires a valid BetterAuth session linked to a provisioned Global Admin or Global Staff. Soft-deleted churches are omitted."
 url: "{{host-api}}/v1/platform/churches"
 method: GET
 headers:

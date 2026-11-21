@@ -10,8 +10,8 @@ import (
 	churchservice "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/church/service"
 )
 
-func TestGetAllReturnsRepositoryChurches(t *testing.T) {
-	want := []churchdomain.Church{
+func TestGetAllReturnsRepositorySummaries(t *testing.T) {
+	want := []churchdomain.ChurchSummary{
 		{ID: uuid.New(), Name: "Alpha Church", Slug: "alpha"},
 		{ID: uuid.New(), Name: "Beta Church", Slug: "beta"},
 	}

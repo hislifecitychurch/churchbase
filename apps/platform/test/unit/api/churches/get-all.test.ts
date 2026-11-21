@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it } from "bun:test"
 
 import { ApiError } from "@/api/client"
-import { getAllChurches, isChurch } from "@/api/churches/get-all"
+import { getAllChurches } from "@/api/churches/get-all"
+import { isChurchSummary } from "@/api/churches/types"
 import { env } from "@/lib/env"
 
 const originalFetch = globalThis.fetch
@@ -23,62 +24,29 @@ afterEach(() => {
   mockFetch(originalFetch)
 })
 
+const church = {
+  id: "church-1",
+  name: "Example Church",
+  slug: "example",
+  timezone: null,
+  bio: null,
+  city: null,
+  state_or_province: null,
+  country_code: null,
+  active_member_count: 0,
+}
+
 describe("getAllChurches", () => {
-  it("rejects a negative ministry count", () => {
-    expect(
-      isChurch({
-        id: "church-1",
-        name: "Example Church",
-        slug: "example",
-        timezone: null,
-        website: null,
-        bio: null,
-        city: null,
-        state_or_province: null,
-        country_code: null,
-        profile_complete: false,
-        active_member_count: 0,
-        ministry_count: -1,
-      }),
-    ).toBe(false)
+  it("rejects a negative active member count", () => {
+    expect(isChurchSummary({ ...church, active_member_count: -1 })).toBe(false)
   })
 
-  it("rejects a non-boolean profile completion value", () => {
-    expect(
-      isChurch({
-        id: "church-1",
-        name: "Example Church",
-        slug: "example",
-        timezone: null,
-        website: null,
-        bio: null,
-        city: null,
-        state_or_province: null,
-        country_code: null,
-        profile_complete: "false",
-        active_member_count: 0,
-        ministry_count: 0,
-      }),
-    ).toBe(false)
+  it("rejects missing summary fields", () => {
+    expect(isChurchSummary({ id: "church-1", name: "Example Church", slug: "example" })).toBe(false)
   })
 
-  it("gets all churches for the authenticated user", async () => {
-    const churches = [
-      {
-        id: "church-1",
-        name: "Example Church",
-        slug: "example",
-        timezone: null,
-        website: null,
-        bio: null,
-        city: null,
-        state_or_province: null,
-        country_code: null,
-        profile_complete: false,
-        active_member_count: 0,
-        ministry_count: 0,
-      },
-    ]
+  it("gets all church summaries for the authenticated user", async () => {
+    const churches = [church]
     mockFetch(async (input, init) => {
       expect(String(input)).toBe(`${apiBaseURL}/platform/churches`)
       expect(init?.method).toBeUndefined()
@@ -89,14 +57,12 @@ describe("getAllChurches", () => {
     await expect(getAllChurches()).resolves.toEqual(churches)
   })
 
-  it("rejects malformed church data", async () => {
+  it("rejects malformed church summary data", async () => {
     mockFetch(
       async () =>
         new Response(
           JSON.stringify({ success: true, data: [{ id: "church-1", name: "Invalid" }] }),
-          {
-            status: 200,
-          },
+          { status: 200 },
         ),
     )
 

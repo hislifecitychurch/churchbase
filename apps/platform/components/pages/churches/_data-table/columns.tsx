@@ -1,11 +1,11 @@
 import Link from "next/link"
 
-import type { Church } from "@/api/churches/get-all"
+import type { ChurchSummary } from "@/api/churches/types"
 
 import type { ColumnDef } from "@tanstack/react-table"
 import type { LegacyFeatures } from "@tanstack/react-table/legacy"
 
-export const churchesDataTableColumns: ColumnDef<LegacyFeatures, Church>[] = [
+export const churchesDataTableColumns: ColumnDef<LegacyFeatures, ChurchSummary>[] = [
   {
     accessorKey: "name",
     size: 260,

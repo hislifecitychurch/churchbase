@@ -8,15 +8,17 @@ import (
 	entclient "github.com/hislifecitychurch/churchbase/apps/api/ent"
 	entchurch "github.com/hislifecitychurch/churchbase/apps/api/ent/church"
 	"github.com/hislifecitychurch/churchbase/apps/api/ent/churchmembership"
-	entministry "github.com/hislifecitychurch/churchbase/apps/api/ent/ministry"
 	entuser "github.com/hislifecitychurch/churchbase/apps/api/ent/user"
 	"github.com/hislifecitychurch/churchbase/apps/api/internal/adapter/postgres/transaction"
 	churchdomain "github.com/hislifecitychurch/churchbase/apps/api/internal/domain/church"
 )
 
-func (r *ChurchRepository) GetAll(ctx context.Context) ([]churchdomain.Church, error) {
+func (r *ChurchRepository) GetAll(ctx context.Context) ([]churchdomain.ChurchSummary, error) {
 	client := transaction.Client(ctx, r.client)
-	records, err := client.Church.Query().Order(entchurch.ByName()).All(ctx)
+	records, err := client.Church.Query().Select(
+		entchurch.FieldID, entchurch.FieldName, entchurch.FieldSlug, entchurch.FieldTimezone,
+		entchurch.FieldBio, entchurch.FieldCity, entchurch.FieldStateOrProvince, entchurch.FieldCountryCode,
+	).Order(entchurch.ByName()).All(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("get all churches: %w", err)
 	}
@@ -42,30 +44,13 @@ func (r *ChurchRepository) GetAll(ctx context.Context) ([]churchdomain.Church, e
 		memberCounts[count.ChurchID] = count.Count
 	}
 
-	type ministryCount struct {
-		ChurchID uuid.UUID `json:"church_id"`
-		Count    int       `json:"count"`
-	}
-	var ministryCounts []ministryCount
-	if err := client.Ministry.Query().
-		Where(entministry.DeletedAtIsNil()).
-		GroupBy(entministry.FieldChurchID).
-		Aggregate(entclient.Count()).
-		Scan(ctx, &ministryCounts); err != nil {
-		return nil, fmt.Errorf("count church ministries: %w", err)
-	}
-	ministriesByChurch := make(map[uuid.UUID]int, len(ministryCounts))
-	for _, count := range ministryCounts {
-		ministriesByChurch[count.ChurchID] = count.Count
-	}
-
-	churches := make([]churchdomain.Church, 0, len(records))
+	churches := make([]churchdomain.ChurchSummary, 0, len(records))
 	for _, record := range records {
-		churches = append(churches, churchdomain.Church{
+		churches = append(churches, churchdomain.ChurchSummary{
 			ID: record.ID, Name: record.Name, Slug: record.Slug,
-			Timezone: record.Timezone, Website: record.Website, Bio: record.Bio,
+			Timezone: record.Timezone, Bio: record.Bio,
 			City: record.City, StateOrProvince: record.StateOrProvince, CountryCode: record.CountryCode,
-			ActiveMemberCount: memberCounts[record.ID], MinistryCount: ministriesByChurch[record.ID],
+			ActiveMemberCount: memberCounts[record.ID],
 		})
 	}
 	return churches, nil
