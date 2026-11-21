@@ -1,14 +1,10 @@
 "use client"
 
-import { use, useEffect, useState } from "react"
+import { use } from "react"
 import type * as React from "react"
 
 import { ApiError } from "@/api/client"
 import { useChurch } from "@/hooks/api/churches/use-church"
-import { useCurrentUser } from "@/hooks/api/users/use-current-user"
-import { getProfileCompletenessToastAction } from "@/lib/churches/get-profile-completeness-toast-action"
-
-import { toastManager } from "@packages/ui-w/providers/toast-provider"
 import { Button } from "@packages/ui-w/shared/button/button"
 import { Dialog } from "@packages/ui-w/shared/dialog/dialog"
 
@@ -25,50 +21,16 @@ type ChurchPageProps = {
   params: Promise<{ churchId: string }>
 }
 
-type ProfileDialog = { churchId: string; mode: "view" | "update" } | null
-
 export default function ChurchPage({ params }: ChurchPageProps): React.ReactElement {
   const { churchId } = use(params)
   const churchQuery = useChurch(churchId)
   const church = churchQuery.data
-  const currentUser = useCurrentUser()
-  const canUpdateProfile = currentUser.data?.global_roles === "admin"
-  const [openProfileDialog, setOpenProfileDialog] = useState<ProfileDialog>(null)
+  const openProfileDialog = churchQuery.profileDialogRequest
+  const setOpenProfileDialog = churchQuery.setProfileDialogRequest
   const isUpdateProfileOpen =
     openProfileDialog?.churchId === church?.id && openProfileDialog?.mode === "update"
   const isViewProfileOpen =
     openProfileDialog?.churchId === church?.id && openProfileDialog?.mode === "view"
-  const churchProfileId = church?.id
-  const isProfileComplete = church?.profile_complete
-
-  useEffect(() => {
-    if (!churchProfileId || isProfileComplete === undefined) return
-
-    const toastId = `church-profile-incomplete-${churchProfileId}`
-    const action = getProfileCompletenessToastAction(isProfileComplete, canUpdateProfile)
-    if (!action) {
-      toastManager.close(toastId)
-      return
-    }
-
-    toastManager.add({
-      id: toastId,
-      type: "warning",
-      timeout: 0,
-      title: "Church profile is incomplete",
-      description: "Review or add the missing profile information.",
-      actionProps: {
-        children: action.label,
-        onClick: () => {
-          toastManager.close(toastId)
-          setOpenProfileDialog({ churchId: churchProfileId, mode: action.mode })
-        },
-      },
-    })
-
-    return () => toastManager.close(toastId)
-  }, [canUpdateProfile, churchProfileId, isProfileComplete])
-
   function onUpdateProfileOpenChange(open: boolean): void {
     setOpenProfileDialog(open && church ? { churchId: church.id, mode: "update" } : null)
   }
