@@ -4,12 +4,16 @@ import { use } from "react"
 import type * as React from "react"
 
 import { useChurches } from "@/hooks/api/churches/use-churches"
+import { useChurchProfileCompletenessToast } from "@/hooks/api/churches/use-church-profile-completeness-toast"
 
 import { Button } from "@packages/ui-w/shared/button/button"
+import { Dialog } from "@packages/ui-w/shared/dialog/dialog"
 
 import { BackToChurchesButton } from "@/components/pages/churches/[churchId]/_button/back-to-churches-button"
 import { ChurchActionsButton } from "@/components/pages/churches/[churchId]/_button/church-actions-button"
 import { ViewProfileButton } from "@/components/pages/churches/[churchId]/_button/view-profile-button"
+import { UpdateChurchProfileDialog } from "@/components/pages/churches/[churchId]/_dialog/update-church-profile-dialog"
+import { ViewChurchProfileDialog } from "@/components/pages/churches/[churchId]/_dialog/view-church-profile-dialog"
 import { ChurchSummaryCards } from "@/components/pages/churches/[churchId]/_card/church-summary-cards"
 import { PageHeader } from "@/components/shared/_header/page-header"
 import { LoadingSpinner } from "@/components/shared/_spinner/loading-spinner"
@@ -22,6 +26,12 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
   const { churchId } = use(params)
   const churches = useChurches()
   const church = churches.data?.find((item) => item.id === churchId)
+  const {
+    isUpdateProfileOpen,
+    isViewProfileOpen,
+    onUpdateProfileOpenChange,
+    onViewProfileOpenChange,
+  } = useChurchProfileCompletenessToast(church)
 
   if (churches.isPending && !churches.data) {
     return <LoadingSpinner />
@@ -57,7 +67,7 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
         actions={
           <div className="flex shrink-0 items-center gap-2">
             <ViewProfileButton church={church} />
-            <ChurchActionsButton church={church} />
+            <ChurchActionsButton onUpdateProfile={() => onUpdateProfileOpenChange(true)} />
           </div>
         }
         description={<code className="font-mono">{church.slug}</code>}
@@ -67,6 +77,17 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
         activeMemberCount={church.active_member_count}
         ministryCount={church.ministry_count}
       />
+      <Dialog onOpenChange={onUpdateProfileOpenChange} open={isUpdateProfileOpen}>
+        {isUpdateProfileOpen ? (
+          <UpdateChurchProfileDialog
+            church={church}
+            onUpdated={() => onUpdateProfileOpenChange(false)}
+          />
+        ) : null}
+      </Dialog>
+      <Dialog onOpenChange={onViewProfileOpenChange} open={isViewProfileOpen}>
+        {isViewProfileOpen ? <ViewChurchProfileDialog church={church} /> : null}
+      </Dialog>
     </section>
   )
 }
