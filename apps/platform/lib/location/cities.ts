@@ -90,15 +90,6 @@ export function getCityOptions(cities: ICity[]): CityOption[] {
     }
   }
 
-  for (const option of options) {
-    const alternateNames = [...new Set(option.aliases)]
-      .filter((name) => normalizeName(name) !== normalizeName(option.city.name))
-      .sort((a, b) => a.localeCompare(b))
-    if (alternateNames.length) {
-      option.label = `${option.label} (also listed as ${alternateNames.join(", ")})`
-    }
-  }
-
   const labels = new Map<string, CityOption[]>()
   for (const option of options) {
     const sameLabel = labels.get(option.label) ?? []

@@ -30,7 +30,7 @@ describe("getCityOptions", () => {
 
     expect(options).toHaveLength(1)
     expect(options[0]).toMatchObject({
-      label: "Angeles (also listed as Angeles City)",
+      label: "Angeles",
       value: "145351",
       aliases: ["Angeles City", "Angeles"],
     })
