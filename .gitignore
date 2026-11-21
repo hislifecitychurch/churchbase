@@ -29,6 +29,7 @@ coverage
 
 # Build Outputs
 .next/
+/apps/platform/public/data/
 next-env.d.ts
 .vinext/
 out/
