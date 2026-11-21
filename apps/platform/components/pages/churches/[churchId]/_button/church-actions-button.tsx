@@ -6,14 +6,15 @@ import { Button } from "@packages/ui-w/shared/button/button"
 import { Menu } from "@packages/ui-w/shared/menu/menu"
 import { MenuTrigger } from "@packages/ui-w/shared/menu/menu-trigger"
 
-import type { Church } from "@/api/churches/get-all"
 import { ChurchActionsMenu } from "@/components/pages/churches/[churchId]/_menu/church-actions-menu"
 
 type ChurchActionsButtonProps = {
-  church: Church
+  onUpdateProfile: () => void
 }
 
-export function ChurchActionsButton({ church }: ChurchActionsButtonProps): React.ReactElement {
+export function ChurchActionsButton({
+  onUpdateProfile,
+}: ChurchActionsButtonProps): React.ReactElement {
   return (
     <Menu>
       <MenuTrigger
@@ -28,7 +29,7 @@ export function ChurchActionsButton({ church }: ChurchActionsButtonProps): React
           </Button>
         }
       />
-      <ChurchActionsMenu church={church} />
+      <ChurchActionsMenu onUpdateProfile={onUpdateProfile} />
     </Menu>
   )
 }
