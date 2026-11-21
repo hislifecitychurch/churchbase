@@ -8,6 +8,7 @@ import { useGetById } from "@/hooks/api/churches/use-get-by-id"
 import { Button } from "@packages/ui-w/shared/button/button"
 import { Dialog } from "@packages/ui-w/shared/dialog/dialog"
 
+import { AddMinistryButton } from "@/components/pages/churches/[churchId]/_button/add-ministry-button"
 import { BackToChurchesButton } from "@/components/pages/churches/[churchId]/_button/back-to-churches-button"
 import { ChurchActionsButton } from "@/components/pages/churches/[churchId]/_button/church-actions-button"
 import { UpdateChurchProfileDialog } from "@/components/pages/churches/[churchId]/_dialog/update-church-profile-dialog"
@@ -79,10 +80,13 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
       <BackToChurchesButton />
       <PageHeader
         actions={
-          <ChurchActionsButton
-            onUpdateProfile={() => onUpdateProfileOpenChange(true)}
-            onViewProfile={() => onViewProfileOpenChange(true)}
-          />
+          <div className="flex shrink-0 items-center gap-2">
+            <AddMinistryButton />
+            <ChurchActionsButton
+              onUpdateProfile={() => onUpdateProfileOpenChange(true)}
+              onViewProfile={() => onViewProfileOpenChange(true)}
+            />
+          </div>
         }
         description={<code className="font-mono">{church.slug}</code>}
         title={church.name}
