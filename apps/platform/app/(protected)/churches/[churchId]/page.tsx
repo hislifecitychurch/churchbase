@@ -4,7 +4,7 @@ import { use } from "react"
 import type * as React from "react"
 
 import { ApiError } from "@/api/client"
-import { useChurch } from "@/hooks/api/churches/use-church"
+import { useGetById } from "@/hooks/api/churches/use-get-by-id"
 import { Button } from "@packages/ui-w/shared/button/button"
 import { Dialog } from "@packages/ui-w/shared/dialog/dialog"
 
@@ -23,7 +23,7 @@ type ChurchPageProps = {
 
 export default function ChurchPage({ params }: ChurchPageProps): React.ReactElement {
   const { churchId } = use(params)
-  const churchQuery = useChurch(churchId)
+  const churchQuery = useGetById(churchId)
   const church = churchQuery.data
   const openProfileDialog = churchQuery.profileDialogRequest
   const setOpenProfileDialog = churchQuery.setProfileDialogRequest
