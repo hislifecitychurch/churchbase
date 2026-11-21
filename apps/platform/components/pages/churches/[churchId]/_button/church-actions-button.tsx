@@ -9,10 +9,12 @@ import { MenuTrigger } from "@packages/ui-w/shared/menu/menu-trigger"
 import { ChurchActionsMenu } from "@/components/pages/churches/[churchId]/_menu/church-actions-menu"
 
 type ChurchActionsButtonProps = {
+  onViewProfile: () => void
   onUpdateProfile: () => void
 }
 
 export function ChurchActionsButton({
+  onViewProfile,
   onUpdateProfile,
 }: ChurchActionsButtonProps): React.ReactElement {
   return (
@@ -29,7 +31,7 @@ export function ChurchActionsButton({
           </Button>
         }
       />
-      <ChurchActionsMenu onUpdateProfile={onUpdateProfile} />
+      <ChurchActionsMenu onViewProfile={onViewProfile} onUpdateProfile={onUpdateProfile} />
     </Menu>
   )
 }
