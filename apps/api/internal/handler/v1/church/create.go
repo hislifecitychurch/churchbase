@@ -56,13 +56,9 @@ func (h *Handler) Create(c *fiber.Ctx) error {
 		))
 	}
 
-	return response.JSON(c, http.StatusCreated, response.Success(createResponse{
-		ID: created.ID.String(), Name: created.Name, Slug: created.Slug,
-		Timezone: created.Timezone, Website: created.Website, Bio: created.Bio,
-		City: created.City, StateOrProvince: created.StateOrProvince, CountryCode: created.CountryCode,
-		ProfileComplete:   created.IsProfileComplete(),
-		ActiveMemberCount: created.ActiveMemberCount, MinistryCount: created.MinistryCount,
-	}, "Church created", c, "church.created", "", "info"))
+	return response.JSON(c, http.StatusCreated, response.Success(
+		toChurchResponse(created), "Church created", c, "church.created", "", "info",
+	))
 }
 
 type createRequest struct {
@@ -74,21 +70,6 @@ type createRequest struct {
 	City            *string `json:"city"`
 	StateOrProvince *string `json:"state_or_province"`
 	CountryCode     *string `json:"country_code"`
-}
-
-type createResponse struct {
-	ID                string  `json:"id"`
-	Name              string  `json:"name"`
-	Slug              string  `json:"slug"`
-	Timezone          *string `json:"timezone"`
-	Website           *string `json:"website"`
-	Bio               *string `json:"bio"`
-	City              *string `json:"city"`
-	StateOrProvince   *string `json:"state_or_province"`
-	CountryCode       *string `json:"country_code"`
-	ProfileComplete   bool    `json:"profile_complete"`
-	ActiveMemberCount int     `json:"active_member_count"`
-	MinistryCount     int     `json:"ministry_count"`
 }
 
 func invalidChurch(c *fiber.Ctx) error {

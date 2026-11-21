@@ -53,6 +53,7 @@ func TestUsersMeRouteRequiresValidatedSession(t *testing.T) {
 		{method: http.MethodGet, path: "/api/v1/users/me/access-contexts"},
 		{method: http.MethodPost, path: "/api/v1/users/me/workspace-access-events"},
 		{method: http.MethodGet, path: "/api/v1/platform/churches"},
+		{method: http.MethodGet, path: "/api/v1/platform/churches/00000000-0000-4000-8000-000000000001"},
 		{method: http.MethodPost, path: "/api/v1/platform/churches"},
 		{method: http.MethodPut, path: "/api/v1/platform/churches/00000000-0000-4000-8000-000000000001"},
 		{method: http.MethodGet, path: "/api/v1/platform/workspace-access-events"},
@@ -104,8 +105,12 @@ func (churchCreatorFake) CreateByAuthUserID(context.Context, string, churchdomai
 
 type churchGetterFake struct{}
 
-func (churchGetterFake) GetAllByAuthUserID(context.Context, string) ([]churchdomain.Church, error) {
+func (churchGetterFake) GetAllByAuthUserID(context.Context, string) ([]churchdomain.ChurchSummary, error) {
 	return nil, nil
+}
+
+func (churchGetterFake) GetByIDByAuthUserID(context.Context, string, uuid.UUID) (churchdomain.Church, error) {
+	return churchdomain.Church{}, nil
 }
 
 type churchUpdaterFake struct{}

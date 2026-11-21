@@ -12,7 +12,8 @@ type Creator interface {
 }
 
 type ChurchDirectoryReader interface {
-	GetAllByAuthUserID(context.Context, string) ([]churchdomain.Church, error)
+	GetAllByAuthUserID(context.Context, string) ([]churchdomain.ChurchSummary, error)
+	GetByIDByAuthUserID(context.Context, string, uuid.UUID) (churchdomain.Church, error)
 }
 
 type Updater interface {

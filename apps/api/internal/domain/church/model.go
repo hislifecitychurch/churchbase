@@ -6,6 +6,18 @@ import (
 	"github.com/google/uuid"
 )
 
+type ChurchSummary struct {
+	ID                uuid.UUID
+	Name              string
+	Slug              string
+	Timezone          *string
+	Bio               *string
+	City              *string
+	StateOrProvince   *string
+	CountryCode       *string
+	ActiveMemberCount int
+}
+
 type Church struct {
 	ID              uuid.UUID
 	Name            string

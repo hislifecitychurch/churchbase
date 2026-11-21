@@ -17,12 +17,12 @@ import (
 
 func TestGetAllReturnsChurchesForAuthenticatedGlobalUser(t *testing.T) {
 	id := uuid.New()
-	timezone, website, bio := "America/Chicago", "https://example.org", "A welcoming church."
+	timezone, bio := "America/Chicago", "A welcoming church."
 	city, state, countryCode := "Springfield", "Illinois", "US"
-	service := &churchCreationServiceFake{churches: []churchdomain.Church{{
+	service := &churchCreationServiceFake{churches: []churchdomain.ChurchSummary{{
 		ID: id, Name: "Sample Church", Slug: "sample-church",
-		Timezone: &timezone, Website: &website, Bio: &bio,
-		City: &city, StateOrProvince: &state, CountryCode: &countryCode, ActiveMemberCount: 12, MinistryCount: 4,
+		Timezone: &timezone, Bio: &bio,
+		City: &city, StateOrProvince: &state, CountryCode: &countryCode, ActiveMemberCount: 12,
 	}}}
 	app := appWithActor(churchhandler.NewHandler(service, service, service))
 	request := httptest.NewRequest(http.MethodGet, "/churches", nil)
@@ -32,25 +32,33 @@ func TestGetAllReturnsChurchesForAuthenticatedGlobalUser(t *testing.T) {
 	}
 	defer gotAll.Body.Close()
 
-	var payload response.Envelope[[]struct {
+	var payload response.Envelope[[]json.RawMessage]
+	if err := json.NewDecoder(gotAll.Body).Decode(&payload); err != nil {
+		t.Fatal(err)
+	}
+	if gotAll.StatusCode != http.StatusOK || !payload.Success || len(payload.Data) != 1 || !service.getAllCalled || service.authUserID != "auth-admin" {
+		t.Fatalf("response = %d %+v, GetAll called = %t, Auth user ID = %q", gotAll.StatusCode, payload, service.getAllCalled, service.authUserID)
+	}
+	var item struct {
 		ID                string  `json:"id"`
 		Name              string  `json:"name"`
 		Slug              string  `json:"slug"`
 		Timezone          *string `json:"timezone"`
-		Website           *string `json:"website"`
 		Bio               *string `json:"bio"`
 		City              *string `json:"city"`
 		StateOrProvince   *string `json:"state_or_province"`
 		CountryCode       *string `json:"country_code"`
-		ProfileComplete   bool    `json:"profile_complete"`
 		ActiveMemberCount int     `json:"active_member_count"`
-		MinistryCount     int     `json:"ministry_count"`
-	}]
-	if err := json.NewDecoder(gotAll.Body).Decode(&payload); err != nil {
+	}
+	if err := json.Unmarshal(payload.Data[0], &item); err != nil {
 		t.Fatal(err)
 	}
-	if gotAll.StatusCode != http.StatusOK || !payload.Success || len(payload.Data) != 1 || payload.Data[0].ID != id.String() || payload.Data[0].Name != "Sample Church" || payload.Data[0].Slug != "sample-church" || payload.Data[0].Timezone == nil || *payload.Data[0].Timezone != timezone || payload.Data[0].Website == nil || *payload.Data[0].Website != website || payload.Data[0].Bio == nil || *payload.Data[0].Bio != bio || payload.Data[0].City == nil || *payload.Data[0].City != city || payload.Data[0].StateOrProvince == nil || *payload.Data[0].StateOrProvince != state || payload.Data[0].CountryCode == nil || *payload.Data[0].CountryCode != countryCode || !payload.Data[0].ProfileComplete || payload.Data[0].ActiveMemberCount != 12 || payload.Data[0].MinistryCount != 4 || !service.getAllCalled || service.authUserID != "auth-admin" {
-		t.Fatalf("response = %d %+v, GetAll called = %t, Auth user ID = %q", gotAll.StatusCode, payload, service.getAllCalled, service.authUserID)
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(payload.Data[0], &fields); err != nil {
+		t.Fatal(err)
+	}
+	if len(fields) != 9 || item.ID != id.String() || item.Name != "Sample Church" || item.Slug != "sample-church" || item.Timezone == nil || *item.Timezone != timezone || item.Bio == nil || *item.Bio != bio || item.City == nil || *item.City != city || item.StateOrProvince == nil || *item.StateOrProvince != state || item.CountryCode == nil || *item.CountryCode != countryCode || item.ActiveMemberCount != 12 {
+		t.Fatalf("directory response = %+v, fields = %v", item, fields)
 	}
 }
 

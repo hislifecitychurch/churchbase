@@ -87,17 +87,19 @@ func stringPointer(value string) *string {
 }
 
 type churchRepositoryFake struct {
-	called       bool
-	getAllCalled bool
-	updateCalled bool
-	input        churchdomain.CreateInput
-	updateID     uuid.UUID
-	updateInput  churchdomain.UpdateInput
-	result       churchdomain.Church
-	getAllResult []churchdomain.Church
-	err          error
-	getAllErr    error
-	updateErr    error
+	called        bool
+	getAllCalled  bool
+	updateCalled  bool
+	input         churchdomain.CreateInput
+	updateID      uuid.UUID
+	updateInput   churchdomain.UpdateInput
+	result        churchdomain.Church
+	getAllResult  []churchdomain.ChurchSummary
+	getByIDResult churchdomain.Church
+	err           error
+	getAllErr     error
+	getByIDErr    error
+	updateErr     error
 }
 
 func (r *churchRepositoryFake) Create(_ context.Context, input churchdomain.CreateInput) (churchdomain.Church, error) {
@@ -110,7 +112,11 @@ func (r *churchRepositoryFake) Update(_ context.Context, id uuid.UUID, input chu
 	return r.updateErr
 }
 
-func (r *churchRepositoryFake) GetAll(context.Context) ([]churchdomain.Church, error) {
+func (r *churchRepositoryFake) GetAll(context.Context) ([]churchdomain.ChurchSummary, error) {
 	r.getAllCalled = true
 	return r.getAllResult, r.getAllErr
+}
+
+func (r *churchRepositoryFake) GetByID(context.Context, uuid.UUID) (churchdomain.Church, error) {
+	return r.getByIDResult, r.getByIDErr
 }
