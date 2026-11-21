@@ -20,19 +20,19 @@ import {
 } from "@/lib/location-data"
 import type { ICountry, IState } from "@/lib/location-data"
 
-import {
-  ComboboxSearchInput,
-  type ComboboxSearchInputItem,
-} from "@packages/ui-w/shared/combobox-variant/combobox-search-input"
+import type { ComboboxSearchInputItem } from "@packages/ui-w/shared/combobox-variant/combobox-search-input"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 import { DialogClose } from "@packages/ui-w/shared/dialog/dialog-close"
 import { DialogFooter } from "@packages/ui-w/shared/dialog/dialog-footer"
 import { DialogPanel } from "@packages/ui-w/shared/dialog/dialog-panel"
-import { Field } from "@packages/ui-w/shared/field/field"
-import { FieldLabel } from "@packages/ui-w/shared/field/field-label"
-import { Input } from "@packages/ui-w/shared/input/input"
-import { Textarea } from "@packages/ui-w/shared/textarea/textarea"
+import { UpdateChurchBioField } from "./_field/update-church-bio-field"
+import { UpdateChurchCityField } from "./_field/update-church-city-field"
+import { UpdateChurchCountryField } from "./_field/update-church-country-field"
+import { UpdateChurchNameField } from "./_field/update-church-name-field"
+import { UpdateChurchStateOrProvinceField } from "./_field/update-church-state-or-province-field"
+import { UpdateChurchTimezoneField } from "./_field/update-church-timezone-field"
+import { UpdateChurchWebsiteField } from "./_field/update-church-website-field"
 
 type ChurchProfileFormValues = {
   name: string
@@ -58,128 +58,6 @@ const TIME_ZONE_OPTIONS: PickerOption[] = [
     value: timeZone,
   })),
 ].sort((a, b) => a.label.localeCompare(b.label))
-
-type ChurchProfileInputProps = {
-  autoComplete?: string
-  disabled: boolean
-  id: string
-  label: string
-  onChange: (value: string) => void
-  placeholder?: string
-  required?: boolean
-  type?: "text" | "url"
-  value: string
-}
-
-function ChurchProfileInput({
-  autoComplete,
-  disabled,
-  id,
-  label,
-  onChange,
-  placeholder,
-  required,
-  type = "text",
-  value,
-}: ChurchProfileInputProps): React.ReactElement {
-  return (
-    <Field className="w-full">
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
-      <Input
-        autoComplete={autoComplete}
-        disabled={disabled}
-        id={id}
-        nativeInput
-        onChange={(event) => onChange(event.currentTarget.value)}
-        placeholder={placeholder}
-        required={required}
-        size="lg"
-        type={type}
-        value={value}
-      />
-    </Field>
-  )
-}
-
-type ChurchProfileLocationFieldProps = {
-  disabled: boolean
-  emptyLabel: string
-  id: string
-  items: ComboboxSearchInputItem[]
-  label: string
-  manual: boolean
-  manualPlaceholder: string
-  manualValue: string
-  onManualChange: (value: string) => void
-  onToggleManual: () => void
-  onValueChange: (value: ComboboxSearchInputItem | null) => void
-  pickerDisabled: boolean
-  placeholder: string
-  searchPlaceholder: string
-  value: ComboboxSearchInputItem | null
-}
-
-function ChurchProfileLocationField({
-  disabled,
-  emptyLabel,
-  id,
-  items,
-  label,
-  manual,
-  manualPlaceholder,
-  manualValue,
-  onManualChange,
-  onToggleManual,
-  onValueChange,
-  pickerDisabled,
-  placeholder,
-  searchPlaceholder,
-  value,
-}: ChurchProfileLocationFieldProps): React.ReactElement {
-  return (
-    <Field className="w-full">
-      <div className="flex items-center justify-between gap-2">
-        <FieldLabel htmlFor={id}>{label}</FieldLabel>
-        <Button
-          aria-label={
-            manual
-              ? `Choose ${label.toLowerCase()} from the list`
-              : `Enter ${label.toLowerCase()} manually`
-          }
-          disabled={disabled}
-          onClick={onToggleManual}
-          size="xs"
-          type="button"
-          variant="link"
-        >
-          {manual ? "Use list" : "Enter manually"}
-        </Button>
-      </div>
-      {manual ? (
-        <Input
-          disabled={disabled}
-          id={id}
-          nativeInput
-          onChange={(event) => onManualChange(event.currentTarget.value)}
-          placeholder={manualPlaceholder}
-          size="lg"
-          value={manualValue}
-        />
-      ) : (
-        <ComboboxSearchInput
-          disabled={disabled || pickerDisabled}
-          emptyLabel={emptyLabel}
-          id={id}
-          items={items}
-          onValueChange={onValueChange}
-          placeholder={placeholder}
-          searchPlaceholder={searchPlaceholder}
-          value={value}
-        />
-      )}
-    </Field>
-  )
-}
 
 type UpdateChurchProfileFormProps = {
   church: Church
@@ -438,64 +316,43 @@ export function UpdateChurchProfileForm({
     <form className="flex min-h-0 flex-1 flex-col" onSubmit={(event) => void handleSubmit(event)}>
       <DialogPanel className="min-h-0 flex-1 overflow-y-auto">
         <div className="grid gap-4">
-          <ChurchProfileInput
-            autoComplete="organization"
+          <UpdateChurchNameField
             disabled={isPending}
-            id="church-name"
-            label="Church name"
-            onChange={(value) => setField("name", value)}
-            required
+            onChange={(event) => setField("name", event.currentTarget.value)}
             value={values.name}
           />
-          <Field className="w-full">
-            <FieldLabel htmlFor="church-country-code">Country</FieldLabel>
-            <ComboboxSearchInput
-              disabled={isPending || countriesQuery.isLoading}
-              emptyLabel={
-                countriesQuery.isError ? "Countries could not be loaded." : "No countries found."
-              }
-              id="church-country-code"
-              items={countryItems}
-              onValueChange={(option) =>
-                setCountry(option?.value && option.value !== NO_SELECTION ? option.value : "")
-              }
-              placeholder="Select a country"
-              searchPlaceholder="Search countries..."
-              value={countryValue}
-            />
-          </Field>
-          <Field className="w-full">
-            <FieldLabel htmlFor="church-timezone">Time zone</FieldLabel>
-            <ComboboxSearchInput
-              disabled={isPending || !values.country_code || timezonesQuery.isLoading}
-              emptyLabel={
-                timezonesQuery.isLoading ? "Loading time zones..." : "No time zones found."
-              }
-              id="church-timezone"
-              items={[{ label: "Not provided", value: NO_SELECTION }, ...timeZoneOptions]}
-              onValueChange={(option) =>
-                setField(
-                  "timezone",
-                  option?.value && option.value !== NO_SELECTION ? option.value : "",
-                )
-              }
-              placeholder="Select a time zone"
-              searchPlaceholder="Search time zones..."
-              value={timeZoneValue}
-            />
-          </Field>
-          <ChurchProfileLocationField
+          <UpdateChurchCountryField
+            disabled={isPending || countriesQuery.isLoading}
+            emptyLabel={
+              countriesQuery.isError ? "Countries could not be loaded." : "No countries found."
+            }
+            items={countryItems}
+            onValueChange={(option) =>
+              setCountry(option?.value && option.value !== NO_SELECTION ? option.value : "")
+            }
+            value={countryValue}
+          />
+          <UpdateChurchTimezoneField
+            disabled={isPending || !values.country_code || timezonesQuery.isLoading}
+            emptyLabel={timezonesQuery.isLoading ? "Loading time zones..." : "No time zones found."}
+            items={[{ label: "Not provided", value: NO_SELECTION }, ...timeZoneOptions]}
+            onValueChange={(option) =>
+              setField(
+                "timezone",
+                option?.value && option.value !== NO_SELECTION ? option.value : "",
+              )
+            }
+            value={timeZoneValue}
+          />
+          <UpdateChurchStateOrProvinceField
             disabled={isPending || !values.country_code}
             emptyLabel={
               statesQuery.isLoading
                 ? "Loading states or provinces..."
                 : "No matching states or provinces."
             }
-            id="church-state-or-province"
             items={stateItems}
-            label="State or province"
             manual={stateManual}
-            manualPlaceholder="Enter a state or province"
             manualValue={values.state_or_province}
             onManualChange={(value) => setField("state_or_province", value)}
             onToggleManual={() => setStateManual((current) => !current)}
@@ -504,17 +361,13 @@ export function UpdateChurchProfileForm({
             placeholder={
               values.country_code ? "Select a state or province" : "Select a country first"
             }
-            searchPlaceholder="Search states or provinces..."
             value={stateValue}
           />
-          <ChurchProfileLocationField
+          <UpdateChurchCityField
             disabled={isPending || !citySelectionReady}
             emptyLabel={citiesQuery.isLoading ? "Loading cities..." : "No matching cities."}
-            id="church-city"
             items={cityItems}
-            label="City"
             manual={cityManual}
-            manualPlaceholder="Enter a city"
             manualValue={values.city}
             onManualChange={(value) => setField("city", value)}
             onToggleManual={() => setCityManual((current) => !current)}
@@ -527,29 +380,18 @@ export function UpdateChurchProfileForm({
                   ? "Select a state first"
                   : "Select a city"
             }
-            searchPlaceholder="Search cities..."
             value={cityValue}
           />
-          <ChurchProfileInput
+          <UpdateChurchWebsiteField
             disabled={isPending}
-            id="church-website"
-            label="Website"
-            onChange={(value) => setField("website", value)}
-            placeholder="https://example.org"
-            type="url"
+            onChange={(event) => setField("website", event.currentTarget.value)}
             value={values.website}
           />
-          <Field className="w-full">
-            <FieldLabel htmlFor="church-bio">About this church</FieldLabel>
-            <Textarea
-              disabled={isPending}
-              id="church-bio"
-              name="bio"
-              onChange={(event) => setField("bio", event.currentTarget.value)}
-              rows={4}
-              value={values.bio}
-            />
-          </Field>
+          <UpdateChurchBioField
+            disabled={isPending}
+            onChange={(event) => setField("bio", event.currentTarget.value)}
+            value={values.bio}
+          />
         </div>
         {errorMessage ? (
           <p aria-live="polite" className="text-destructive mt-4 text-sm" role="alert">
