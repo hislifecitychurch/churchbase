@@ -1,8 +1,8 @@
 import { ApiError, apiRequest } from "@/api/client"
-import { isChurchSummary } from "@/api/churches/types"
-import type { ChurchSummary } from "@/api/churches/types"
+import { isChurchSummary } from "@/api/churches/_types"
+import type { ChurchSummary } from "@/api/churches/_types"
 
-export type { ChurchSummary } from "@/api/churches/types"
+export type { ChurchSummary } from "@/api/churches/_types"
 
 export async function getAllChurches(): Promise<ChurchSummary[]> {
   const churches = await apiRequest<unknown>("/platform/churches")

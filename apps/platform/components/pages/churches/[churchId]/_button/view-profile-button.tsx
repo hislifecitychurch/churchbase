@@ -1,6 +1,6 @@
 "use client"
 
-import type { Church } from "@/api/churches/types"
+import type { Church } from "@/api/churches/_types"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 import { Dialog } from "@packages/ui-w/shared/dialog/dialog"
