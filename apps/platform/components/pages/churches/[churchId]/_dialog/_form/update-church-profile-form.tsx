@@ -321,7 +321,7 @@ export function UpdateChurchProfileForm({
     if (!option || option.value === NO_SELECTION) {
       setValues((current) => ({ ...current, state_or_province: "", city: "" }))
       setStateManual(false)
-      setCityManual(states.length > 0)
+      setCityManual(false)
     } else if (option.value === MANUAL_VALUE) {
       setStateManual(true)
       setCityManual(states.length > 0)
@@ -426,6 +426,13 @@ export function UpdateChurchProfileForm({
   }
 
   const isPending = updateChurch.isPending
+  const citySelectionReady =
+    Boolean(values.country_code) &&
+    (statesQuery.isSuccess
+      ? states.length === 0 ||
+        Boolean(selectedStateCode) ||
+        Boolean(values.state_or_province.trim())
+      : Boolean(values.state_or_province.trim()))
 
   return (
     <form className="flex min-h-0 flex-1 flex-col" onSubmit={(event) => void handleSubmit(event)}>
@@ -460,7 +467,7 @@ export function UpdateChurchProfileForm({
           <Field className="w-full">
             <FieldLabel htmlFor="church-timezone">Time zone</FieldLabel>
             <ComboboxSearchInput
-              disabled={isPending || Boolean(values.country_code && timezonesQuery.isLoading)}
+              disabled={isPending || !values.country_code || timezonesQuery.isLoading}
               emptyLabel={
                 timezonesQuery.isLoading ? "Loading time zones..." : "No time zones found."
               }
@@ -478,7 +485,7 @@ export function UpdateChurchProfileForm({
             />
           </Field>
           <ChurchProfileLocationField
-            disabled={isPending}
+            disabled={isPending || !values.country_code}
             emptyLabel={
               statesQuery.isLoading
                 ? "Loading states or provinces..."
@@ -493,7 +500,7 @@ export function UpdateChurchProfileForm({
             onManualChange={(value) => setField("state_or_province", value)}
             onToggleManual={() => setStateManual((current) => !current)}
             onValueChange={setStateFromOption}
-            pickerDisabled={!values.country_code || statesQuery.isLoading}
+            pickerDisabled={statesQuery.isLoading}
             placeholder={
               values.country_code ? "Select a state or province" : "Select a country first"
             }
@@ -501,7 +508,7 @@ export function UpdateChurchProfileForm({
             value={stateValue}
           />
           <ChurchProfileLocationField
-            disabled={isPending}
+            disabled={isPending || !citySelectionReady}
             emptyLabel={citiesQuery.isLoading ? "Loading cities..." : "No matching cities."}
             id="church-city"
             items={cityItems}
@@ -512,11 +519,7 @@ export function UpdateChurchProfileForm({
             onManualChange={(value) => setField("city", value)}
             onToggleManual={() => setCityManual((current) => !current)}
             onValueChange={setCityFromOption}
-            pickerDisabled={
-              !values.country_code ||
-              !citiesQuery.isSuccess ||
-              (states.length > 0 && !selectedStateCode)
-            }
+            pickerDisabled={!citiesQuery.isSuccess || (states.length > 0 && !selectedStateCode)}
             placeholder={
               !values.country_code
                 ? "Select a country first"
@@ -548,12 +551,6 @@ export function UpdateChurchProfileForm({
             />
           </Field>
         </div>
-        <p className="text-muted-foreground mt-3 text-xs">
-          Location data sources:{" "}
-          <a className="underline underline-offset-4" href="/location-data-attribution.html">
-            view notices
-          </a>
-        </p>
         {errorMessage ? (
           <p aria-live="polite" className="text-destructive mt-4 text-sm" role="alert">
             {errorMessage}
