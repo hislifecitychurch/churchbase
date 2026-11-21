@@ -10,7 +10,6 @@ import { Dialog } from "@packages/ui-w/shared/dialog/dialog"
 
 import { BackToChurchesButton } from "@/components/pages/churches/[churchId]/_button/back-to-churches-button"
 import { ChurchActionsButton } from "@/components/pages/churches/[churchId]/_button/church-actions-button"
-import { ViewProfileButton } from "@/components/pages/churches/[churchId]/_button/view-profile-button"
 import { UpdateChurchProfileDialog } from "@/components/pages/churches/[churchId]/_dialog/update-church-profile-dialog"
 import { ViewChurchProfileDialog } from "@/components/pages/churches/[churchId]/_dialog/view-church-profile-dialog"
 import { ChurchSummaryCards } from "@/components/pages/churches/[churchId]/_card/church-summary-cards"
@@ -80,10 +79,10 @@ export default function ChurchPage({ params }: ChurchPageProps): React.ReactElem
       <BackToChurchesButton />
       <PageHeader
         actions={
-          <div className="flex shrink-0 items-center gap-2">
-            <ViewProfileButton church={church} />
-            <ChurchActionsButton onUpdateProfile={() => onUpdateProfileOpenChange(true)} />
-          </div>
+          <ChurchActionsButton
+            onUpdateProfile={() => onUpdateProfileOpenChange(true)}
+            onViewProfile={() => onViewProfileOpenChange(true)}
+          />
         }
         description={<code className="font-mono">{church.slug}</code>}
         title={church.name}
