@@ -7,18 +7,22 @@ import {
 
 describe("getDefaultTimezoneForCountry", () => {
   it("returns the timezone when the country has exactly one", () => {
-    expect(getDefaultTimezoneForCountry("PH")).toBe("Asia/Manila")
+    expect(getDefaultTimezoneForCountry(["Asia/Manila"])).toBe("Asia/Manila")
   })
 
-  it("does not guess for countries with multiple timezones or unknown codes", () => {
-    expect(getDefaultTimezoneForCountry("US")).toBe("")
-    expect(getDefaultTimezoneForCountry("XX")).toBe("")
+  it("does not guess when the country has multiple or no timezones", () => {
+    expect(getDefaultTimezoneForCountry(["America/Chicago", "America/New_York"])).toBe("")
+    expect(getDefaultTimezoneForCountry([])).toBe("")
   })
 
-  it("keeps a valid timezone, auto-selects an unambiguous one, and preserves it when country is cleared", () => {
-    expect(getTimezoneAfterCountryChange("PH", "")).toBe("Asia/Manila")
-    expect(getTimezoneAfterCountryChange("US", "America/Chicago")).toBe("America/Chicago")
-    expect(getTimezoneAfterCountryChange("US", "Europe/London")).toBe("")
-    expect(getTimezoneAfterCountryChange("", "Europe/London")).toBe("Europe/London")
+  it("keeps valid timezones and preserves the current value when no country timezones are available", () => {
+    expect(getTimezoneAfterCountryChange(["Asia/Manila"], "")).toBe("Asia/Manila")
+    expect(
+      getTimezoneAfterCountryChange(["America/Chicago", "America/New_York"], "America/Chicago"),
+    ).toBe("America/Chicago")
+    expect(
+      getTimezoneAfterCountryChange(["America/Chicago", "America/New_York"], "Europe/London"),
+    ).toBe("")
+    expect(getTimezoneAfterCountryChange([], "Europe/London")).toBe("Europe/London")
   })
 })

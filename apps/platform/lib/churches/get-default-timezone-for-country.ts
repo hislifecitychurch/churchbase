@@ -1,18 +1,13 @@
-import { getCountry } from "countries-and-timezones"
-
-export function getDefaultTimezoneForCountry(countryCode: string): string {
-  const timezones = getCountry(countryCode)?.timezones ?? []
+export function getDefaultTimezoneForCountry(timezones: string[]): string {
   return timezones.length === 1 ? (timezones[0] ?? "") : ""
 }
 
 export function getTimezoneAfterCountryChange(
-  countryCode: string,
+  timezones: string[],
   currentTimezone: string,
 ): string {
-  if (!countryCode) return currentTimezone
-
-  const timezones = getCountry(countryCode)?.timezones ?? []
+  if (timezones.length === 0) return currentTimezone
   return timezones.some((timezone) => timezone === currentTimezone)
     ? currentTimezone
-    : getDefaultTimezoneForCountry(countryCode)
+    : getDefaultTimezoneForCountry(timezones)
 }

@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type * as React from "react"
-import { getAllCountries, getAllTimezones, getCountry } from "countries-and-timezones"
+import { useQuery } from "@tanstack/react-query"
 
 import type { Church } from "@/api/churches/get-all"
 import { useUpdateChurch } from "@/hooks/api/churches/use-update-church"
@@ -11,8 +11,18 @@ import {
   getDefaultTimezoneForCountry,
   getTimezoneAfterCountryChange,
 } from "@/lib/churches/get-default-timezone-for-country"
+import {
+  getCitiesOfState,
+  getCountries,
+  getCountryTimezones,
+  getStatesOfCountry,
+} from "@/lib/location-data"
+import type { ICity, ICountry, IState } from "@/lib/location-data"
 
-import { ComboboxSearchInput } from "@packages/ui-w/shared/combobox-variant/combobox-search-input"
+import {
+  ComboboxSearchInput,
+  type ComboboxSearchInputItem,
+} from "@packages/ui-w/shared/combobox-variant/combobox-search-input"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 import { DialogClose } from "@packages/ui-w/shared/dialog/dialog-close"
@@ -39,12 +49,13 @@ type PickerOption = {
 }
 
 const NO_SELECTION = "__none__"
-const COUNTRY_OPTIONS: PickerOption[] = Object.values(getAllCountries())
-  .map(({ id, name }) => ({ label: name, value: id }))
-  .sort((a, b) => a.label.localeCompare(b.label))
+const MANUAL_VALUE = "__manual__"
 const TIME_ZONE_OPTIONS: PickerOption[] = [
   { label: "UTC", value: "UTC" },
-  ...Object.values(getAllTimezones()).map(({ name }) => ({ label: name, value: name })),
+  ...(Intl.supportedValuesOf?.("timeZone") ?? []).map((timeZone) => ({
+    label: timeZone,
+    value: timeZone,
+  })),
 ].sort((a, b) => a.label.localeCompare(b.label))
 
 type ChurchProfileInputProps = {
@@ -89,6 +100,86 @@ function ChurchProfileInput({
   )
 }
 
+type ChurchProfileLocationFieldProps = {
+  disabled: boolean
+  emptyLabel: string
+  id: string
+  items: ComboboxSearchInputItem[]
+  label: string
+  manual: boolean
+  manualPlaceholder: string
+  manualValue: string
+  onManualChange: (value: string) => void
+  onToggleManual: () => void
+  onValueChange: (value: ComboboxSearchInputItem | null) => void
+  pickerDisabled: boolean
+  placeholder: string
+  searchPlaceholder: string
+  value: ComboboxSearchInputItem | null
+}
+
+function ChurchProfileLocationField({
+  disabled,
+  emptyLabel,
+  id,
+  items,
+  label,
+  manual,
+  manualPlaceholder,
+  manualValue,
+  onManualChange,
+  onToggleManual,
+  onValueChange,
+  pickerDisabled,
+  placeholder,
+  searchPlaceholder,
+  value,
+}: ChurchProfileLocationFieldProps): React.ReactElement {
+  return (
+    <Field className="w-full">
+      <div className="flex items-center justify-between gap-2">
+        <FieldLabel htmlFor={id}>{label}</FieldLabel>
+        <Button
+          aria-label={
+            manual
+              ? `Choose ${label.toLowerCase()} from the list`
+              : `Enter ${label.toLowerCase()} manually`
+          }
+          disabled={disabled}
+          onClick={onToggleManual}
+          size="xs"
+          type="button"
+          variant="link"
+        >
+          {manual ? "Use list" : "Enter manually"}
+        </Button>
+      </div>
+      {manual ? (
+        <Input
+          disabled={disabled}
+          id={id}
+          nativeInput
+          onChange={(event) => onManualChange(event.currentTarget.value)}
+          placeholder={manualPlaceholder}
+          size="lg"
+          value={manualValue}
+        />
+      ) : (
+        <ComboboxSearchInput
+          disabled={disabled || pickerDisabled}
+          emptyLabel={emptyLabel}
+          id={id}
+          items={items}
+          onValueChange={onValueChange}
+          placeholder={placeholder}
+          searchPlaceholder={searchPlaceholder}
+          value={value}
+        />
+      )}
+    </Field>
+  )
+}
+
 type UpdateChurchProfileFormProps = {
   church: Church
   onUpdated: () => void
@@ -100,7 +191,7 @@ export function UpdateChurchProfileForm({
 }: UpdateChurchProfileFormProps): React.ReactElement {
   const [values, setValues] = useState<ChurchProfileFormValues>(() => ({
     name: church.name,
-    timezone: church.timezone || getDefaultTimezoneForCountry(church.country_code ?? ""),
+    timezone: church.timezone ?? "",
     website: church.website ?? "",
     bio: church.bio ?? "",
     city: church.city ?? "",
@@ -108,7 +199,100 @@ export function UpdateChurchProfileForm({
     country_code: church.country_code ?? "",
   }))
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [stateManual, setStateManual] = useState(false)
+  const [cityManual, setCityManual] = useState(false)
+  const pendingTimezoneUpdate = useRef(false)
+  const timezoneInitializationComplete = useRef(false)
   const updateChurch = useUpdateChurch()
+
+  const countriesQuery = useQuery({
+    queryKey: ["location-data", "countries"],
+    queryFn: getCountries,
+    staleTime: Infinity,
+  })
+  const statesQuery = useQuery({
+    queryKey: ["location-data", "states", values.country_code],
+    queryFn: () => getStatesOfCountry(values.country_code),
+    enabled: Boolean(values.country_code),
+    staleTime: Infinity,
+  })
+  const timezonesQuery = useQuery({
+    queryKey: ["location-data", "timezones", values.country_code],
+    queryFn: () => getCountryTimezones(values.country_code),
+    enabled: Boolean(values.country_code),
+    staleTime: Infinity,
+  })
+
+  const countries: ICountry[] = countriesQuery.data ?? []
+  const states: IState[] = statesQuery.data ?? []
+  const selectedState = states.find((state) => {
+    const current = values.state_or_province.trim().toLowerCase()
+    return state.name.trim().toLowerCase() === current || state.iso2.toLowerCase() === current
+  })
+  const selectedStateCode = selectedState?.iso2 ?? null
+  const citiesQuery = useQuery({
+    queryKey: ["location-data", "cities", values.country_code, selectedStateCode],
+    queryFn: () => getCitiesOfState(values.country_code, states.length ? selectedStateCode : null),
+    enabled:
+      Boolean(values.country_code) &&
+      statesQuery.isSuccess &&
+      (!states.length || Boolean(selectedStateCode)),
+    staleTime: Infinity,
+  })
+  const cities: ICity[] = citiesQuery.data ?? []
+  const selectedCity = cities.find(
+    (city) => city.name.trim().toLowerCase() === values.city.trim().toLowerCase(),
+  )
+  const countryOptions: PickerOption[] = countries
+    .map(({ iso2, name }) => ({ label: name, value: iso2 }))
+    .sort((a, b) => a.label.localeCompare(b.label))
+  const stateOptions: PickerOption[] = states.map((state) => ({
+    label: state.name,
+    value: state.iso2,
+  }))
+  const cityOptions: PickerOption[] = cities.map((city) => ({
+    label: city.name,
+    value: String(city.id),
+  }))
+  const countryValue =
+    countryOptions.find((option) => option.value === values.country_code) ??
+    (values.country_code ? { label: values.country_code, value: values.country_code } : null)
+  const countryItems = [
+    { label: "Not provided", value: NO_SELECTION },
+    ...(countryValue && !countryOptions.some((option) => option.value === countryValue.value)
+      ? [countryValue]
+      : []),
+    ...countryOptions,
+  ]
+  const stateValue = selectedState
+    ? { label: selectedState.name, value: selectedState.iso2 }
+    : values.state_or_province
+      ? { label: values.state_or_province, value: MANUAL_VALUE }
+      : null
+  const stateItems = [
+    { label: "Not provided", value: NO_SELECTION },
+    ...(!selectedState && stateValue ? [stateValue] : []),
+    ...stateOptions,
+  ]
+  const cityValue = selectedCity
+    ? { label: selectedCity.name, value: String(selectedCity.id) }
+    : values.city
+      ? { label: values.city, value: MANUAL_VALUE }
+      : null
+  const cityItems = [
+    { label: "Not provided", value: NO_SELECTION },
+    ...(!selectedCity && cityValue ? [cityValue] : []),
+    ...cityOptions,
+  ]
+  const availableTimeZones =
+    timezonesQuery.isSuccess && timezonesQuery.data?.length
+      ? timezonesQuery.data.map((timeZone) => ({ label: timeZone, value: timeZone }))
+      : TIME_ZONE_OPTIONS
+  const timeZoneOptions =
+    values.timezone && !availableTimeZones.some((option) => option.value === values.timezone)
+      ? [{ label: values.timezone, value: values.timezone }, ...availableTimeZones]
+      : availableTimeZones
+  const timeZoneValue = timeZoneOptions.find((option) => option.value === values.timezone) ?? null
 
   function setField(field: keyof ChurchProfileFormValues, value: string): void {
     setValues((current) => ({ ...current, [field]: value }))
@@ -116,13 +300,99 @@ export function UpdateChurchProfileForm({
   }
 
   function setCountry(countryCode: string): void {
+    if (countryCode === values.country_code) return
+
+    pendingTimezoneUpdate.current = true
     setValues((current) => ({
       ...current,
       country_code: countryCode,
-      timezone: getTimezoneAfterCountryChange(countryCode, current.timezone),
+      state_or_province: "",
+      city: "",
     }))
+    setStateManual(false)
+    setCityManual(false)
     setErrorMessage(null)
   }
+
+  function setStateFromOption(option: ComboboxSearchInputItem | null): void {
+    if (!option || option.value === NO_SELECTION) {
+      setValues((current) => ({ ...current, state_or_province: "", city: "" }))
+      setStateManual(false)
+      setCityManual(states.length > 0)
+    } else if (option.value === MANUAL_VALUE) {
+      setStateManual(true)
+      setCityManual(states.length > 0)
+    } else {
+      const state = states.find((candidate) => candidate.iso2 === option.value)
+      if (!state) return
+
+      setValues((current) => ({ ...current, state_or_province: state.name, city: "" }))
+      setStateManual(false)
+      setCityManual(false)
+    }
+    setErrorMessage(null)
+  }
+
+  function setCityFromOption(option: ComboboxSearchInputItem | null): void {
+    if (!option || option.value === NO_SELECTION) {
+      setField("city", "")
+      setCityManual(false)
+      return
+    }
+    if (option.value === MANUAL_VALUE) {
+      setCityManual(true)
+      return
+    }
+
+    const city = cities.find((candidate) => String(candidate.id) === option.value)
+    if (!city) return
+
+    setValues((current) => ({
+      ...current,
+      city: city.name,
+      timezone: city.timezone || current.timezone,
+    }))
+    setCityManual(false)
+    setErrorMessage(null)
+  }
+
+  useEffect(() => {
+    if (!values.country_code) {
+      pendingTimezoneUpdate.current = false
+      timezoneInitializationComplete.current = true
+      return
+    }
+    if (!timezonesQuery.isSuccess) return
+
+    if (pendingTimezoneUpdate.current) {
+      pendingTimezoneUpdate.current = false
+      setValues((current) => {
+        if (current.country_code !== values.country_code) return current
+        const timezone = getTimezoneAfterCountryChange(timezonesQuery.data ?? [], current.timezone)
+        return timezone === current.timezone ? current : { ...current, timezone }
+      })
+      return
+    }
+
+    if (!timezoneInitializationComplete.current) {
+      timezoneInitializationComplete.current = true
+      setValues((current) => {
+        if (current.country_code !== values.country_code || current.timezone) return current
+        const timezone = getDefaultTimezoneForCountry(timezonesQuery.data ?? [])
+        return timezone ? { ...current, timezone } : current
+      })
+    }
+  }, [values.country_code, timezonesQuery.data, timezonesQuery.isSuccess])
+
+  useEffect(() => {
+    if (!selectedCity?.timezone) return
+
+    setValues((current) =>
+      current.city === selectedCity.name && !current.timezone
+        ? { ...current, timezone: selectedCity.timezone ?? "" }
+        : current,
+    )
+  }, [selectedCity?.id])
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault()
@@ -152,17 +422,6 @@ export function UpdateChurchProfileForm({
   }
 
   const isPending = updateChurch.isPending
-  const countryValue =
-    COUNTRY_OPTIONS.find((option) => option.value === values.country_code) ?? null
-  const selectedCountry = values.country_code ? getCountry(values.country_code) : null
-  const availableTimeZones = selectedCountry
-    ? selectedCountry.timezones.map((timeZone) => ({ label: timeZone, value: timeZone }))
-    : TIME_ZONE_OPTIONS
-  const timeZoneOptions =
-    values.timezone && !availableTimeZones.some((option) => option.value === values.timezone)
-      ? [{ label: values.timezone, value: values.timezone }, ...availableTimeZones]
-      : availableTimeZones
-  const timeZoneValue = timeZoneOptions.find((option) => option.value === values.timezone) ?? null
 
   return (
     <form className="flex min-h-0 flex-1 flex-col" onSubmit={(event) => void handleSubmit(event)}>
@@ -180,9 +439,12 @@ export function UpdateChurchProfileForm({
           <Field className="w-full">
             <FieldLabel htmlFor="church-country-code">Country</FieldLabel>
             <ComboboxSearchInput
-              disabled={isPending}
+              disabled={isPending || countriesQuery.isLoading}
+              emptyLabel={
+                countriesQuery.isError ? "Countries could not be loaded." : "No countries found."
+              }
               id="church-country-code"
-              items={[{ label: "Not provided", value: NO_SELECTION }, ...COUNTRY_OPTIONS]}
+              items={countryItems}
               onValueChange={(option) =>
                 setCountry(option?.value && option.value !== NO_SELECTION ? option.value : "")
               }
@@ -194,7 +456,10 @@ export function UpdateChurchProfileForm({
           <Field className="w-full">
             <FieldLabel htmlFor="church-timezone">Time zone</FieldLabel>
             <ComboboxSearchInput
-              disabled={isPending}
+              disabled={isPending || Boolean(values.country_code && timezonesQuery.isLoading)}
+              emptyLabel={
+                timezonesQuery.isLoading ? "Loading time zones..." : "No time zones found."
+              }
               id="church-timezone"
               items={[{ label: "Not provided", value: NO_SELECTION }, ...timeZoneOptions]}
               onValueChange={(option) =>
@@ -208,21 +473,55 @@ export function UpdateChurchProfileForm({
               value={timeZoneValue}
             />
           </Field>
-          <ChurchProfileInput
-            autoComplete="address-level2"
+          <ChurchProfileLocationField
             disabled={isPending}
-            id="church-city"
-            label="City"
-            onChange={(value) => setField("city", value)}
-            value={values.city}
-          />
-          <ChurchProfileInput
-            autoComplete="address-level1"
-            disabled={isPending}
+            emptyLabel={
+              statesQuery.isLoading
+                ? "Loading states or provinces..."
+                : "No matching states or provinces."
+            }
             id="church-state-or-province"
+            items={stateItems}
             label="State or province"
-            onChange={(value) => setField("state_or_province", value)}
-            value={values.state_or_province}
+            manual={stateManual}
+            manualPlaceholder="Enter a state or province"
+            manualValue={values.state_or_province}
+            onManualChange={(value) => setField("state_or_province", value)}
+            onToggleManual={() => setStateManual((current) => !current)}
+            onValueChange={setStateFromOption}
+            pickerDisabled={!values.country_code || statesQuery.isLoading}
+            placeholder={
+              values.country_code ? "Select a state or province" : "Select a country first"
+            }
+            searchPlaceholder="Search states or provinces..."
+            value={stateValue}
+          />
+          <ChurchProfileLocationField
+            disabled={isPending}
+            emptyLabel={citiesQuery.isLoading ? "Loading cities..." : "No matching cities."}
+            id="church-city"
+            items={cityItems}
+            label="City"
+            manual={cityManual}
+            manualPlaceholder="Enter a city"
+            manualValue={values.city}
+            onManualChange={(value) => setField("city", value)}
+            onToggleManual={() => setCityManual((current) => !current)}
+            onValueChange={setCityFromOption}
+            pickerDisabled={
+              !values.country_code ||
+              !citiesQuery.isSuccess ||
+              (states.length > 0 && !selectedStateCode)
+            }
+            placeholder={
+              !values.country_code
+                ? "Select a country first"
+                : states.length > 0 && !selectedStateCode
+                  ? "Select a state first"
+                  : "Select a city"
+            }
+            searchPlaceholder="Search cities..."
+            value={cityValue}
           />
           <ChurchProfileInput
             disabled={isPending}
@@ -245,6 +544,12 @@ export function UpdateChurchProfileForm({
             />
           </Field>
         </div>
+        <p className="text-muted-foreground mt-3 text-xs">
+          Location data sources:{" "}
+          <a className="underline underline-offset-4" href="/location-data-attribution.html">
+            view notices
+          </a>
+        </p>
         {errorMessage ? (
           <p aria-live="polite" className="text-destructive mt-4 text-sm" role="alert">
             {errorMessage}
