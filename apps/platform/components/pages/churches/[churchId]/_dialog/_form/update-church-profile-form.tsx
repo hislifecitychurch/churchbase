@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import type * as React from "react"
 import { useQuery } from "@tanstack/react-query"
 
-import type { Church } from "@/api/churches/types"
+import type { Church } from "@/api/churches/_types"
 import { useUpdateChurch } from "@/hooks/api/churches/use-update-church"
 import type { UpdateChurchInput } from "@/api/churches/update"
 import {

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from "bun:test"
 
 import { ApiError } from "@/api/client"
 import { getAllChurches } from "@/api/churches/get-all"
-import { isChurchSummary } from "@/api/churches/types"
+import { isChurchSummary } from "@/api/churches/_types"
 import { env } from "@/lib/env"
 
 const originalFetch = globalThis.fetch
