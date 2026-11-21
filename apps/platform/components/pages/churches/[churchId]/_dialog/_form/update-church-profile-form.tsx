@@ -5,7 +5,7 @@ import type * as React from "react"
 import { useQuery } from "@tanstack/react-query"
 
 import type { Church } from "@/api/churches/_types"
-import { useUpdateChurch } from "@/hooks/api/churches/use-update-church"
+import { useUpdate } from "@/hooks/api/churches/use-update"
 import type { UpdateChurchInput } from "@/api/churches/update"
 import {
   getDefaultTimezoneForCountry,
@@ -82,7 +82,7 @@ export function UpdateChurchProfileForm({
   const [cityManual, setCityManual] = useState(false)
   const pendingTimezoneUpdate = useRef(false)
   const timezoneInitializationComplete = useRef(false)
-  const updateChurch = useUpdateChurch()
+  const updateChurch = useUpdate()
 
   const countriesQuery = useQuery({
     queryKey: ["location-data", "countries"],

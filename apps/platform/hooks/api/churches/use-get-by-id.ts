@@ -11,7 +11,7 @@ import { toastManager } from "@packages/ui-w/providers/toast-provider"
 
 type ProfileDialogRequest = { churchId: string; mode: "view" | "update" } | null
 
-export function useChurch(churchId: string) {
+export function useGetById(churchId: string) {
   const churchQuery = useQuery({
     queryKey: ["platform", "churches", churchId],
     queryFn: () => getChurchById(churchId),

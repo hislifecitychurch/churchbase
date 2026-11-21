@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { createChurch } from "@/api/churches/create"
 
-export function useCreateChurch() {
+export function useCreate() {
   const queryClient = useQueryClient()
 
   return useMutation({

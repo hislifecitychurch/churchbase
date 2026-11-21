@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-import { useChurches } from "@/hooks/api/churches/use-churches"
+import { useGetAll } from "@/hooks/api/churches/use-get-all"
 import { getDataTableEmptyState } from "@/lib/data-table/get-data-table-empty-state"
 
 import { DataTable } from "@packages/ui-w/shared/data-table/data-table"
@@ -19,7 +19,7 @@ export function ChurchesDataTable(): React.ReactElement {
   const [search, setSearch] = useState("")
   const [pageIndex, setPageIndex] = useState(0)
   const [isManualRefreshing, setIsManualRefreshing] = useState(false)
-  const churches = useChurches()
+  const churches = useGetAll()
   const hasCachedRows = (churches.data?.length ?? 0) > 0
   const filteredChurches = filterChurchesByName(
     isManualRefreshing ? [] : (churches.data ?? []),

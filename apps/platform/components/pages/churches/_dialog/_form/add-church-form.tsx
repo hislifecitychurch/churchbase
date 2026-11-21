@@ -3,7 +3,7 @@
 import { useState } from "react"
 import type * as React from "react"
 
-import { useCreateChurch } from "@/hooks/api/churches/use-create-church"
+import { useCreate } from "@/hooks/api/churches/use-create"
 import { slugifyChurchName } from "@/lib/formatter/slug/church-name"
 
 import { Button } from "@packages/ui-w/shared/button/button"
@@ -21,7 +21,7 @@ type AddChurchFormProps = {
 export function AddChurchForm({ onCreated }: AddChurchFormProps): React.ReactElement {
   const [name, setName] = useState("")
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const createChurch = useCreateChurch()
+  const createChurch = useCreate()
   const slug = slugifyChurchName(name)
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
