@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type * as React from "react"
 import { useQuery } from "@tanstack/react-query"
 
@@ -11,13 +11,14 @@ import {
   getDefaultTimezoneForCountry,
   getTimezoneAfterCountryChange,
 } from "@/lib/churches/get-default-timezone-for-country"
+import { findCityOptionByName, getCityOptions } from "@/lib/location/cities"
 import {
   getCitiesOfState,
   getCountries,
   getCountryTimezones,
   getStatesOfCountry,
 } from "@/lib/location-data"
-import type { ICity, ICountry, IState } from "@/lib/location-data"
+import type { ICountry, IState } from "@/lib/location-data"
 
 import {
   ComboboxSearchInput,
@@ -239,10 +240,12 @@ export function UpdateChurchProfileForm({
       (!states.length || Boolean(selectedStateCode)),
     staleTime: Infinity,
   })
-  const cities: ICity[] = citiesQuery.data ?? []
-  const selectedCity = cities.find(
-    (city) => city.name.trim().toLowerCase() === values.city.trim().toLowerCase(),
+  const cityOptions = useMemo(() => getCityOptions(citiesQuery.data ?? []), [citiesQuery.data])
+  const selectedCityOption = useMemo(
+    () => findCityOptionByName(cityOptions, values.city),
+    [cityOptions, values.city],
   )
+  const selectedCity = selectedCityOption?.city
   const countryOptions: PickerOption[] = countries
     .map(({ iso2, name }) => ({ label: name, value: iso2 }))
     .sort((a, b) => a.label.localeCompare(b.label))
@@ -250,9 +253,9 @@ export function UpdateChurchProfileForm({
     label: state.name,
     value: state.iso2,
   }))
-  const cityOptions: PickerOption[] = cities.map((city) => ({
-    label: city.name,
-    value: String(city.id),
+  const cityPickerOptions: PickerOption[] = cityOptions.map(({ label, value }) => ({
+    label,
+    value,
   }))
   const countryValue =
     countryOptions.find((option) => option.value === values.country_code) ??
@@ -274,15 +277,15 @@ export function UpdateChurchProfileForm({
     ...(!selectedState && stateValue ? [stateValue] : []),
     ...stateOptions,
   ]
-  const cityValue = selectedCity
-    ? { label: selectedCity.name, value: String(selectedCity.id) }
+  const cityValue = selectedCityOption
+    ? { label: selectedCityOption.label, value: selectedCityOption.value }
     : values.city
       ? { label: values.city, value: MANUAL_VALUE }
       : null
   const cityItems = [
     { label: "Not provided", value: NO_SELECTION },
     ...(!selectedCity && cityValue ? [cityValue] : []),
-    ...cityOptions,
+    ...cityPickerOptions,
   ]
   const availableTimeZones =
     timezonesQuery.isSuccess && timezonesQuery.data?.length
@@ -344,7 +347,7 @@ export function UpdateChurchProfileForm({
       return
     }
 
-    const city = cities.find((candidate) => String(candidate.id) === option.value)
+    const city = cityOptions.find((candidate) => candidate.value === option.value)?.city
     if (!city) return
 
     setValues((current) => ({
@@ -385,14 +388,15 @@ export function UpdateChurchProfileForm({
   }, [values.country_code, timezonesQuery.data, timezonesQuery.isSuccess])
 
   useEffect(() => {
-    if (!selectedCity?.timezone) return
+    if (!selectedCityOption?.city.timezone) return
 
     setValues((current) =>
-      current.city === selectedCity.name && !current.timezone
-        ? { ...current, timezone: selectedCity.timezone ?? "" }
+      !current.timezone &&
+      findCityOptionByName(cityOptions, current.city)?.value === selectedCityOption.value
+        ? { ...current, timezone: selectedCityOption.city.timezone ?? "" }
         : current,
     )
-  }, [selectedCity?.id])
+  }, [selectedCityOption?.value])
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault()
