@@ -47,7 +47,7 @@ describe("getChurchById", () => {
 
   it("gets and validates one church", async () => {
     mockFetch(async (input, init) => {
-      expect(String(input)).toBe(`${apiBaseURL}/platform/churches/church-1`)
+      expect(String(input)).toBe(`${apiBaseURL}/churches/church-1`)
       expect(init?.method).toBeUndefined()
       expect(init?.credentials).toBe("include")
       return new Response(JSON.stringify({ success: true, data: church }), { status: 200 })
@@ -58,7 +58,7 @@ describe("getChurchById", () => {
 
   it("encodes the church ID as a path segment", async () => {
     mockFetch(async (input) => {
-      expect(String(input)).toBe(`${apiBaseURL}/platform/churches/id%2Fpart`)
+      expect(String(input)).toBe(`${apiBaseURL}/churches/id%2Fpart`)
       return new Response(JSON.stringify({ success: true, data: church }), { status: 200 })
     })
 

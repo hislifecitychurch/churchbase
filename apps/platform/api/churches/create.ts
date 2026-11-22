@@ -14,7 +14,7 @@ export type CreateChurchInput = {
 }
 
 export async function createChurch(input: CreateChurchInput): Promise<Church> {
-  const church = await apiRequest<unknown>("/platform/churches", {
+  const church = await apiRequest<unknown>("/churches", {
     method: "POST",
     body: JSON.stringify(input),
   })

@@ -43,7 +43,7 @@ describe("createChurch", () => {
       ministry_count: 0,
     }
     mockFetch(async (url, init) => {
-      expect(String(url)).toBe(`${apiBaseURL}/platform/churches`)
+      expect(String(url)).toBe(`${apiBaseURL}/churches`)
       expect(init?.method).toBe("POST")
       expect(init?.body).toBe(JSON.stringify(input))
       expect(init?.credentials).toBe("include")

@@ -11,7 +11,7 @@ export type UpdateChurchInput = {
 }
 
 export async function updateChurch(churchId: string, input: UpdateChurchInput): Promise<void> {
-  const result = await apiRequest<unknown>(`/platform/churches/${encodeURIComponent(churchId)}`, {
+  const result = await apiRequest<unknown>(`/churches/${encodeURIComponent(churchId)}`, {
     method: "PUT",
     body: JSON.stringify(input),
   })
