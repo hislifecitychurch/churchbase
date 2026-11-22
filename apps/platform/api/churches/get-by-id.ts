@@ -3,7 +3,7 @@ import { isChurch } from "@/api/churches/_types"
 import type { Church } from "@/api/churches/_types"
 
 export async function getChurchById(churchId: string): Promise<Church> {
-  const church = await apiRequest<unknown>(`/platform/churches/${encodeURIComponent(churchId)}`)
+  const church = await apiRequest<unknown>(`/churches/${encodeURIComponent(churchId)}`)
 
   if (!isChurch(church)) {
     throw new ApiError(502, "invalid_api_response", "The API returned an invalid church response.")

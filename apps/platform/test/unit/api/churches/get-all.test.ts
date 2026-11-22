@@ -48,7 +48,7 @@ describe("getAllChurches", () => {
   it("gets all church summaries for the authenticated user", async () => {
     const churches = [church]
     mockFetch(async (input, init) => {
-      expect(String(input)).toBe(`${apiBaseURL}/platform/churches`)
+      expect(String(input)).toBe(`${apiBaseURL}/churches`)
       expect(init?.method).toBeUndefined()
       expect(init?.credentials).toBe("include")
       return new Response(JSON.stringify({ success: true, data: churches }), { status: 200 })

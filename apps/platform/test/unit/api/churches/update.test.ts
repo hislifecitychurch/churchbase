@@ -31,7 +31,7 @@ describe("updateChurch", () => {
     Object.defineProperty(globalThis, "fetch", {
       configurable: true,
       value: async (url: RequestInfo | URL, init?: RequestInit) => {
-        expect(String(url)).toBe(`${apiBaseURL}/platform/churches/${churchId}`)
+        expect(String(url)).toBe(`${apiBaseURL}/churches/${churchId}`)
         expect(init?.method).toBe("PUT")
         expect(init?.body).toBe(JSON.stringify(input))
         expect(init?.credentials).toBe("include")

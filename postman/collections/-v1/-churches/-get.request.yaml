@@ -1,0 +1,12 @@
+$kind: http-request
+name: GET /churches
+description: "Returns churches ordered by name with only the fields used by the Platform directory table: name, slug, bio, location, time zone, and active member count. Full profile details and ministry count are available from GET /churches/:churchID. Active member count includes only non-deleted users with active member-role church memberships. Requires a valid BetterAuth session linked to a provisioned Global Admin or Global Staff. Soft-deleted churches are omitted."
+url: "{{host-api}}/v1/churches"
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+auth:
+  type: noauth
+examples: ./.resources/-get.resources/examples
+order: 1000

@@ -5,7 +5,7 @@ import type { ChurchSummary } from "@/api/churches/_types"
 export type { ChurchSummary } from "@/api/churches/_types"
 
 export async function getAllChurches(): Promise<ChurchSummary[]> {
-  const churches = await apiRequest<unknown>("/platform/churches")
+  const churches = await apiRequest<unknown>("/churches")
 
   if (!Array.isArray(churches) || !churches.every(isChurchSummary)) {
     throw new ApiError(

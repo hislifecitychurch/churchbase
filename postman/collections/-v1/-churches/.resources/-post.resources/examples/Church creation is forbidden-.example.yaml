@@ -1,0 +1,48 @@
+$kind: http-example
+name: Church creation is forbidden
+request:
+  url: "{{host-api}}/v1/churches"
+  method: POST
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Content-Type
+      value: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "name": "Example Church",
+        "slug": "example-church"
+      }
+response:
+  statusCode: 403
+  statusText: Forbidden
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": false,
+        "message": "Global administrator access is required",
+        "data": null,
+        "filters": null,
+        "errors": [
+          {
+            "code": "forbidden",
+            "message": "Global administrator access is required"
+          }
+        ],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000024",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "church.create.forbidden",
+          "user_id": null,
+          "status": "warning"
+        }
+      }
+order: 4000

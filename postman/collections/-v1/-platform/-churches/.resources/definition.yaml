@@ -1,4 +1,0 @@
-$kind: collection
-name: /churches
-description: Lists church directory summaries, retrieves individual church profiles, and creates or updates churches for the Platform workspace. Listing and retrieval require a provisioned Global Admin or Global Staff; create and update are restricted to Global Admins.
-order: 2000
