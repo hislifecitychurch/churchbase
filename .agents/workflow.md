@@ -12,7 +12,7 @@
 
 ### Commit message convention
 
-Use `<type>(<scope>): <imperative summary>`, for example `feat(cards): export shareable visuals`. Omit an unnecessary scope. Use a concise subject, followed by a blank line and `-` bullets describing what changed and why. Allowed types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, and `revert`. For breaking changes, append `!` and include a `BREAKING CHANGE:` footer. Pull-request titles use the same Conventional Commit format. For reviewed PR merges, preserve individual commits with a merge commit rather than squashing them.
+Use `<type>(<scope>): <imperative summary>`, for example `feat(cards): export shareable visuals`. Omit an unnecessary scope. Use a concise subject, followed by a blank line and `-` bullets describing what changed and why. Allowed types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, and `revert`. For breaking changes, append `!` and include a `BREAKING CHANGE:` footer. Pull-request titles use the same Conventional Commit format. Preserve individual commits with a merge commit rather than squashing them.
 
 ### Local loop (default)
 
@@ -31,19 +31,19 @@ Preserve unrelated working-tree changes throughout.
 
 1. Sync `development` with its remote using fast-forward-only updates, then create an intent-specific feature branch.
 2. Implement and verify the requested change; commit only intended files.
-3. Push the feature branch and open a reviewed PR targeting `development`. Never push directly to `development`, `staging`, or `main`.
-4. Wait for required CI and review; do not merge with failing checks.
-5. Merge only after approval, preserving individual commits with a merge commit.
+3. Push the feature branch and open a PR targeting `development`. Never push directly to `development`, `staging`, or `main`.
+4. Wait for required CI and any repository-required approvals; do not merge with failing checks. In a solo-maintainer repository with no independent reviewer, the PR author may merge after required checks pass if repository rules allow it. GitHub does not accept self-approval.
+5. Merge only after required checks pass and any required approvals are satisfied, preserving individual commits with a merge commit.
 6. Delete the remote and local feature branch, fetch/prune, and fast-forward local branches where possible. Leave the working tree on `development`.
 
-If a review, CI check, merge, or sync is blocked, report it instead of treating delivery as complete. Local-only commits are not backed up remotely.
+If a required CI check, merge, or sync is blocked, report it instead of treating delivery as complete. Local-only commits are not backed up remotely.
 
 ### Promotions
 
 Promotions are deliberate; do not promote automatically after feature work.
 
-1. **Development to staging** — only when staging validation is requested and `development` is verified. For local delivery, fast-forward `staging` from `development`; for remote delivery, use a reviewed PR. Run the relevant validation on `staging` and report the result.
-2. **Staging to main** — only when a release is requested and staging has passed validation. For local delivery, fast-forward `main` from `staging`; for remote delivery, use a reviewed PR.
+1. **Development to staging** — only when staging validation is requested and `development` is verified. For local delivery, fast-forward `staging` from `development`; for remote delivery, use a PR. Run the relevant validation on `staging` and report the result.
+2. **Staging to main** — only when a release is requested and staging has passed validation. For local delivery, fast-forward `main` from `staging`; for remote delivery, use a PR.
 3. Do not push promoted branches unless remote delivery was explicitly requested. Leave the working tree on `development` after a local promotion.
 
 If a promotion cannot fast-forward, stop and report the divergence; do not reset or rewrite branch history to force it.
