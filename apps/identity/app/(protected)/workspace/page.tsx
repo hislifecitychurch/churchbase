@@ -76,9 +76,6 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
       <div className="flex w-full max-w-2xl flex-col gap-6">
         <div className="flex flex-col gap-2 text-center">
           <h1 className="text-foreground text-2xl font-normal">Choose your workspace</h1>
-          <p className="text-muted-foreground text-sm text-balance">
-            Choose where you want to work today.
-          </p>
           <WorkspaceSignOutButton />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
