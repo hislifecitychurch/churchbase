@@ -10,6 +10,7 @@ import { useCurrentUser } from "@/hooks/api/users/use-current-user"
 import { Button } from "@packages/ui-w/shared/button/button"
 import { LoadingSpinner } from "@/components/shared/_spinner/loading-spinner"
 
+import { WorkspaceSignOutButton } from "@/components/pages/workspace/_button/workspace-sign-out-button"
 import { AppWorkspaceCard } from "@/components/pages/workspace/_card/app-workspace-card"
 import { PlatformWorkspaceCard } from "@/components/pages/workspace/_card/platform-workspace-card"
 
@@ -54,6 +55,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
 
     return (
       <main className="flex min-h-svh flex-col items-center justify-center gap-4 p-6 text-center">
+        <WorkspaceSignOutButton />
         <h1 className="text-foreground text-xl font-normal">
           {notProvisioned ? "Churchbase access isn't set up" : "We couldn't verify your session"}
         </h1>
@@ -77,6 +79,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
           <p className="text-muted-foreground text-sm text-balance">
             Choose where you want to work today.
           </p>
+          <WorkspaceSignOutButton />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <PlatformWorkspaceCard isLastUsed={lastUsedWorkspace === "platform"} />
