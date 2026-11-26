@@ -47,7 +47,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
       <div className="flex flex-wrap items-center justify-center gap-x-1.5 text-center">
         {email ? (
           <p className="text-muted-foreground text-sm">
-            Signed in as <span className="text-foreground break-all">{email}</span>.
+            You&apos;re signed in as <span className="text-foreground break-all">{email}</span>.
           </p>
         ) : null}
         <WorkspaceSignOutButton isPending={signOutMutation.isPending} onSignOut={handleSignOut} />
