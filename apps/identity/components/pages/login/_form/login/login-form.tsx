@@ -61,7 +61,7 @@ export function LoginForm({ returnTo }: LoginFormProps): React.ReactElement {
 
   return (
     <div className="mt-8 flex w-full flex-col items-center">
-      <form className="flex w-full flex-col gap-5" onSubmit={handleSubmit}>
+      <form autoComplete="off" className="flex w-full flex-col gap-5" onSubmit={handleSubmit}>
         <IdentifierField
           disabled={isPending}
           onChange={(event) => setIdentifier(event.target.value)}
