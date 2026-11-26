@@ -1,0 +1,47 @@
+$kind: http-example
+name: Get church by ID
+request:
+  url: "{{host-api}}/v1/churches/018f47b8-8cb2-7d15-b28e-4a26843d81c2"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": true,
+        "message": "Church retrieved",
+        "data": {
+          "id": "018f47b8-8cb2-7d15-b28e-4a26843d81c2",
+          "name": "Example Church",
+          "slug": "example-church",
+          "timezone": "America/Chicago",
+          "website": "https://example.test",
+          "bio": "A welcoming church in Springfield.",
+          "city": "Springfield",
+          "state_or_province": "Illinois",
+          "country_code": "US",
+          "profile_complete": true,
+          "active_member_count": 42,
+          "ministry_count": 6
+        },
+        "filters": null,
+        "errors": [],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000041",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "church.retrieved",
+          "user_id": null,
+          "status": "info"
+        }
+      }
+order: 1000

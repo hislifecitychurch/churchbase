@@ -1,0 +1,38 @@
+name: Feature request
+description: A request, idea, or new functionality.
+type: Feature
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Title:** State the requested action and outcome, without a type prefix. Example: “Allow Global Admins to create churches.”
+
+        Do not include real member or church personal data, credentials, or session tokens; sanitize examples.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What problem or user need does this address, and what outcome should it produce?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What belongs in this change? Note important exclusions or constraints.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: List observable conditions that demonstrate the feature works.
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and open questions
+      description: Note prerequisites, risks, or decisions that still need an answer.

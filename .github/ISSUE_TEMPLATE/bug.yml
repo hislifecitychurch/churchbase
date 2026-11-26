@@ -1,0 +1,47 @@
+name: Bug report
+description: An unexpected problem or behavior.
+type: Bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Title:** Describe the observed failure, without a type prefix. Example: “Selected church is lost after sign-in.”
+
+        Do not include real member or church personal data, credentials, or session tokens; sanitize examples.
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Provide the smallest reliable sequence of steps.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: impact-context
+    attributes:
+      label: Impact and context
+      description: Who is affected, how often, and in what environment?
+  - type: textarea
+    id: verification
+    attributes:
+      label: Fix verification
+      description: What observable result will confirm the bug is fixed?
+    validations:
+      required: true

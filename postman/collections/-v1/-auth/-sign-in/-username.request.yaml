@@ -1,0 +1,20 @@
+$kind: http-request
+name: /username
+description: Signs in an existing BetterAuth identity with username and password. The JSON body requires username and password; rememberMe (default true) and callbackURL are optional. Usernames are normalized to lowercase and must be 3–30 letters, digits, underscores, or periods. The response sets a session cookie that Postman stores in its cookie jar. Keep credentials in a local Postman environment only.
+url: "{{host-auth}}/v1/auth/sign-in/username"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+auth:
+  type: noauth
+body:
+  type: json
+  content: |-
+    {
+      "username": "{{username}}",
+      "password": "{{password}}",
+      "rememberMe": true
+    }
+examples: ./.resources/-username.resources/examples
+order: 2000

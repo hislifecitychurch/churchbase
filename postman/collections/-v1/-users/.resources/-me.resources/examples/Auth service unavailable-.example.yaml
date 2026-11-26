@@ -1,0 +1,35 @@
+$kind: http-example
+name: Auth service unavailable
+request:
+  url: "{{host-api}}/v1/users/me"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 503
+  statusText: Service Unavailable
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": false,
+        "message": "Authentication service temporarily unavailable",
+        "data": null,
+        "filters": null,
+        "errors": [
+          { "code": "auth_unavailable", "message": "Authentication service temporarily unavailable" }
+        ],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000007",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": { "event": "auth.service.unavailable", "user_id": null, "status": "error" }
+      }
+order: 4000

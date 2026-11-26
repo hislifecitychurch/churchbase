@@ -1,0 +1,39 @@
+$kind: http-example
+name: Workspace access history filters invalid
+request:
+  url: "{{host-api}}/v1/platform/workspace-access-events?page=0&limit=25"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": false,
+        "message": "Invalid workspace entry filters",
+        "data": null,
+        "filters": null,
+        "errors": [
+          {
+            "code": "invalid_query_parameters",
+            "message": "Invalid workspace entry filters"
+          }
+        ],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000010",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "workspace_access_event.filters.invalid",
+          "user_id": null,
+          "status": "warning"
+        }
+      }
+order: 2000

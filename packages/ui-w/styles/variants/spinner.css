@@ -1,0 +1,219 @@
+:root {
+  --spinner-flicker-background: transparent;
+  --spinner-flicker-foreground: currentColor;
+  --spinner-flicker-duration: 0.9s;
+}
+
+.spinner-flicker {
+  background: var(--spinner-flicker-background);
+}
+
+.spinner-flicker circle {
+  fill: var(--spinner-flicker-background);
+}
+
+.spinner-flicker .spinner-flicker__on {
+  fill: var(--spinner-flicker-foreground);
+}
+
+.spinner-flicker__100011 {
+  animation: spinner-flicker-100011 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__100001 {
+  animation: spinner-flicker-100001 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__110001 {
+  animation: spinner-flicker-110001 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__000011 {
+  animation: spinner-flicker-000011 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__110000 {
+  animation: spinner-flicker-110000 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__000111 {
+  animation: spinner-flicker-000111 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__111000 {
+  animation: spinner-flicker-111000 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__000110 {
+  animation: spinner-flicker-000110 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__011000 {
+  animation: spinner-flicker-011000 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__001110 {
+  animation: spinner-flicker-001110 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__001100 {
+  animation: spinner-flicker-001100 var(--spinner-flicker-duration) linear infinite;
+}
+
+.spinner-flicker__011100 {
+  animation: spinner-flicker-011100 var(--spinner-flicker-duration) linear infinite;
+}
+
+@keyframes spinner-flicker-100011 {
+  0%,
+  16.66%,
+  66.67%,
+  100% {
+    opacity: 1;
+  }
+  16.67%,
+  66.66% {
+    opacity: 0;
+  }
+}
+
+@keyframes spinner-flicker-100001 {
+  0%,
+  16.66%,
+  83.33%,
+  100% {
+    opacity: 1;
+  }
+  16.67%,
+  83.32% {
+    opacity: 0;
+  }
+}
+
+@keyframes spinner-flicker-110001 {
+  0%,
+  33.32%,
+  83.33%,
+  100% {
+    opacity: 1;
+  }
+  33.33%,
+  83.32% {
+    opacity: 0;
+  }
+}
+
+@keyframes spinner-flicker-000011 {
+  0%,
+  66.66% {
+    opacity: 0;
+  }
+  66.67%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes spinner-flicker-110000 {
+  0%,
+  33.32% {
+    opacity: 1;
+  }
+  33.33%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes spinner-flicker-000111 {
+  0%,
+  49.99% {
+    opacity: 0;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes spinner-flicker-111000 {
+  0%,
+  49.99% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes spinner-flicker-000110 {
+  0%,
+  49.99%,
+  83.33%,
+  100% {
+    opacity: 0;
+  }
+  50%,
+  83.32% {
+    opacity: 1;
+  }
+}
+
+@keyframes spinner-flicker-011000 {
+  0%,
+  16.66%,
+  50%,
+  100% {
+    opacity: 0;
+  }
+  16.67%,
+  49.99% {
+    opacity: 1;
+  }
+}
+
+@keyframes spinner-flicker-001110 {
+  0%,
+  33.32%,
+  83.33%,
+  100% {
+    opacity: 0;
+  }
+  33.33%,
+  83.32% {
+    opacity: 1;
+  }
+}
+
+@keyframes spinner-flicker-001100 {
+  0%,
+  33.32%,
+  66.67%,
+  100% {
+    opacity: 0;
+  }
+  33.33%,
+  66.66% {
+    opacity: 1;
+  }
+}
+
+@keyframes spinner-flicker-011100 {
+  0%,
+  16.66%,
+  66.67%,
+  100% {
+    opacity: 0;
+  }
+  16.67%,
+  66.66% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner-flicker__on {
+    animation: none;
+  }
+}

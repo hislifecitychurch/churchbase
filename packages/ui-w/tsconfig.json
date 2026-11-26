@@ -1,0 +1,23 @@
+{
+  "extends": "@packages/typescript/library.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "strictNullChecks": true,
+    "paths": {
+      "@packages/ui-w/*": ["./*"]
+    }
+  },
+  "include": [
+    "shared",
+    "lib",
+    "styles",
+    "hooks",
+    "providers",
+    "contexts",
+    "constants",
+    "helpers",
+    "types"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

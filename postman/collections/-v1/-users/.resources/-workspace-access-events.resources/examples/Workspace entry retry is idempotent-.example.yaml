@@ -1,0 +1,47 @@
+$kind: http-example
+name: Workspace entry retry is idempotent
+request:
+  url: "{{host-api}}/v1/users/me/workspace-access-events"
+  method: POST
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Content-Type
+      value: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "workspace": "app",
+        "entry_id": "018f47b8-8cb2-7d15-b28e-4a26843d81c1"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": true,
+        "message": "Workspace entry already recorded",
+        "data": {
+          "id": "018f47b8-8cb2-7d15-b28e-4a26843d81c2",
+          "workspace": "app",
+          "occurred_at": "2026-01-01T00:00:00Z"
+        },
+        "filters": null,
+        "errors": [],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000005",
+          "timestamp": "2026-01-01T00:00:01Z"
+        },
+        "log": {
+          "event": "workspace_access_event.duplicate",
+          "user_id": "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
+          "status": "info"
+        }
+      }
+order: 2000

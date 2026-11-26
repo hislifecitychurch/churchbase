@@ -1,0 +1,48 @@
+$kind: http-example
+name: Workspace entry body invalid
+request:
+  url: "{{host-api}}/v1/users/me/workspace-access-events"
+  method: POST
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Content-Type
+      value: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "workspace": "unknown",
+        "entry_id": "not-a-uuid"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": false,
+        "message": "Invalid workspace entry",
+        "data": null,
+        "filters": null,
+        "errors": [
+          {
+            "code": "invalid_workspace_access_event",
+            "message": "Invalid workspace entry"
+          }
+        ],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000006",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "workspace_access_event.invalid",
+          "user_id": null,
+          "status": "warning"
+        }
+      }
+order: 3000

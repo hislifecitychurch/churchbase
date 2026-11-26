@@ -1,0 +1,11 @@
+$kind: http-request
+name: /live
+description: Checks that the Churchbase API process is running. This liveness probe is unauthenticated and does not check database or Redis availability.
+url: "{{host-api}}/v1/health/live"
+method: GET
+headers:
+  Accept: application/json
+auth:
+  type: noauth
+examples: ./.resources/-live.resources/examples
+order: 1000
