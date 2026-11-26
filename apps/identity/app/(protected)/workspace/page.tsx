@@ -1,7 +1,7 @@
 "use client"
 
 import type { JSX } from "react"
-import { use, useEffect } from "react"
+import { use, useEffect, useState } from "react"
 
 import { useAuthSession } from "@/hooks/api/auth/use-auth-session"
 import { useSignOut } from "@/hooks/api/auth/use-sign-out"
@@ -29,6 +29,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
   )
   const authSession = useAuthSession()
   const signOutMutation = useSignOut()
+  const [isSigningOut, setIsSigningOut] = useState(false)
   const currentUser = useCurrentUser()
   const email = authSession.data?.user.email
   const isUnauthenticated =
@@ -37,7 +38,9 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
   const lastUsedWorkspace = currentUser.data?.last_workspace_access?.workspace
 
   function handleSignOut(): void {
+    setIsSigningOut(true)
     signOutMutation.mutate(undefined, {
+      onError: () => setIsSigningOut(false),
       onSuccess: () => window.location.replace("/login"),
     })
   }
@@ -50,7 +53,10 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
             You&apos;re signed in as <span className="text-foreground break-all">{email}</span>.
           </p>
         ) : null}
-        <NotYouSignOutButton isPending={signOutMutation.isPending} onSignOut={handleSignOut} />
+        <NotYouSignOutButton
+          isPending={isSigningOut || signOutMutation.isPending}
+          onSignOut={handleSignOut}
+        />
       </div>
       {signOutMutation.isError ? (
         <p className="text-destructive text-center text-sm" role="alert">
