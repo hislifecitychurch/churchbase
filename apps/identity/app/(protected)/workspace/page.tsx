@@ -16,7 +16,7 @@ import { LoadingSpinner } from "@/components/shared/_spinner/loading-spinner"
 
 import { AppWorkspaceCard } from "@/components/pages/workspace/_card/app-workspace-card"
 import { PlatformWorkspaceCard } from "@/components/pages/workspace/_card/platform-workspace-card"
-import { WorkspaceSwitchAccountButton } from "@/components/pages/workspace/_button/workspace-switch-account-button"
+import { NotYouSignOutButton } from "@/components/pages/workspace/_button/not-you-sign-out-button"
 
 type WorkspacePageProps = {
   searchParams: Promise<{ returnTo?: string | string[] }>
@@ -36,7 +36,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
   const isRegularUser = currentUser.data?.global_roles === null
   const lastUsedWorkspace = currentUser.data?.last_workspace_access?.workspace
 
-  function handleSwitchAccount(): void {
+  function handleSignOut(): void {
     signOutMutation.mutate(undefined, {
       onSuccess: () => window.location.replace("/login"),
     })
@@ -50,10 +50,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
             You&apos;re signed in as <span className="text-foreground break-all">{email}</span>.
           </p>
         ) : null}
-        <WorkspaceSwitchAccountButton
-          isPending={signOutMutation.isPending}
-          onSwitchAccount={handleSwitchAccount}
-        />
+        <NotYouSignOutButton isPending={signOutMutation.isPending} onSignOut={handleSignOut} />
       </div>
       {signOutMutation.isError ? (
         <p className="text-destructive text-center text-sm" role="alert">
