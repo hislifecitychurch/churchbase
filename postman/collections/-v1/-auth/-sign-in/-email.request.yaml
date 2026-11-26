@@ -1,0 +1,20 @@
+$kind: http-request
+name: /email
+description: Signs in an existing BetterAuth identity with email and password. The JSON body requires email and password; rememberMe (default true) and callbackURL are optional. The response sets a session cookie that Postman stores in its cookie jar. To call GET {{host-api}}/v1/users/me successfully, the Auth identity must also be provisioned as a Churchbase API user. Keep credentials in a local Postman environment only.
+url: "{{host-auth}}/v1/auth/sign-in/email"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+auth:
+  type: noauth
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{email}}",
+      "password": "{{password}}",
+      "rememberMe": true
+    }
+examples: ./.resources/-email.resources/examples
+order: 1000

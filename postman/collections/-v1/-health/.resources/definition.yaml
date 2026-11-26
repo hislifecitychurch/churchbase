@@ -1,0 +1,4 @@
+$kind: collection
+name: /health
+description: Unauthenticated liveness and readiness probes for the Churchbase API.
+order: 963

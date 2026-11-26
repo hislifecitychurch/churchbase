@@ -1,0 +1,42 @@
+$kind: http-example
+name: Access contexts require a session
+request:
+  url: "{{host-api}}/v1/users/me/access-contexts"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 401
+  statusText: Unauthorized
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": false,
+        "message": "Unauthorized",
+        "data": null,
+        "filters": null,
+        "errors": [
+          {
+            "code": "unauthorized",
+            "message": "Authentication is required"
+          }
+        ],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000004",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "me.access_contexts.unauthorized",
+          "user_id": null,
+          "status": "warning"
+        }
+      }
+order: 3000

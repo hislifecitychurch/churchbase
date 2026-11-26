@@ -1,0 +1,39 @@
+$kind: http-example
+name: Get church by ID is forbidden
+request:
+  url: "{{host-api}}/v1/churches/018f47b8-8cb2-7d15-b28e-4a26843d81c2"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+response:
+  statusCode: 403
+  statusText: Forbidden
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": false,
+        "message": "Global administrator or staff access is required",
+        "data": null,
+        "filters": null,
+        "errors": [
+          {
+            "code": "forbidden",
+            "message": "Global administrator or staff access is required"
+          }
+        ],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000045",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "church.get_by_id.forbidden",
+          "user_id": null,
+          "status": "warning"
+        }
+      }
+order: 5000

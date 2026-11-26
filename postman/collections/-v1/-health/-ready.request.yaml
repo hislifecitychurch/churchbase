@@ -1,0 +1,11 @@
+$kind: http-request
+name: /ready
+description: Checks whether the Churchbase API and its required PostgreSQL and Redis dependencies are ready. This probe is unauthenticated; it returns 503 when a dependency is unavailable.
+url: "{{host-api}}/v1/health/ready"
+method: GET
+headers:
+  Accept: application/json
+auth:
+  type: noauth
+examples: ./.resources/-ready.resources/examples
+order: 2000

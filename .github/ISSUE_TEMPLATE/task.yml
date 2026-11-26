@@ -1,0 +1,38 @@
+name: Task
+description: A specific piece of work.
+type: Task
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Title:** State the deliverable as an action and outcome, without a type prefix. Example: “Document account provisioning policies.”
+
+        Do not include real member or church personal data, credentials, or session tokens; sanitize examples.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What result should this work produce, and why is it needed?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What concrete work is included? Note important exclusions or constraints when useful.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: List observable conditions that demonstrate the task is complete.
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and open questions
+      description: Note prerequisites, risks, or decisions that still need an answer.

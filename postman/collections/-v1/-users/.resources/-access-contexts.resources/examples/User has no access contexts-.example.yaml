@@ -1,0 +1,40 @@
+$kind: http-example
+name: User has no membership contexts
+request:
+  url: "{{host-api}}/v1/users/me/access-contexts"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": true,
+        "message": "Access contexts retrieved",
+        "data": {
+          "global_roles": null,
+          "contexts": []
+        },
+        "filters": null,
+        "errors": [],
+        "pagination": null,
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000004",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "me.access_contexts.retrieved",
+          "user_id": null,
+          "status": "info"
+        }
+      }
+order: 2000

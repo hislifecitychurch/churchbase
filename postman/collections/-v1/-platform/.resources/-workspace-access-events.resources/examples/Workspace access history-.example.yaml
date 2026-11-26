@@ -1,0 +1,55 @@
+$kind: http-example
+name: Workspace access history
+request:
+  url: "{{host-api}}/v1/platform/workspace-access-events?page=1&limit=25&workspace=app"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": true,
+        "message": "Workspace access history retrieved",
+        "data": [
+          {
+            "id": "018f47b8-8cb2-7d15-b28e-4a26843d81c2",
+            "user_id": "018f47b8-8cb2-7d15-b28e-4a26843d81c1",
+            "first_name": "Sample",
+            "last_name": "Member",
+            "workspace": "app",
+            "occurred_at": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "filters": {
+          "workspace": "app",
+          "since": null,
+          "until": null
+        },
+        "errors": [],
+        "pagination": {
+          "page": 1,
+          "items": 1,
+          "total": 1,
+          "pages": 1,
+          "limit": 25,
+          "has_next": false,
+          "has_prev": false
+        },
+        "metadata": {
+          "request_id": "00000000-0000-4000-8000-000000000009",
+          "timestamp": "2026-01-01T00:00:00Z"
+        },
+        "log": {
+          "event": "workspace_access_event.retrieved",
+          "user_id": null,
+          "status": "info"
+        }
+      }
+order: 1000

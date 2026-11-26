@@ -1,0 +1,62 @@
+# Churchbase API
+
+Go/Fiber business API. BetterAuth owns identity and sessions; this service owns church and ministry data in PostgreSQL through Ent. Readiness checks PostgreSQL and Redis; Redis is reserved for shared ephemeral data. The API does not run migrations on startup.
+
+## Local development
+
+The example sets the local Auth origin and App/Identity CORS origins. Set `ENVIRONMENT=development`, `RL_DB_URL`, and `KV_DB_URL` before starting the API. For local Auth, keep `AUTH_BASE_URL=http://localhost:36081`. PostgreSQL and Redis must already be available at the configured URLs; this repository does not provide a Docker bootstrap.
+
+```sh
+cp .env.example .env
+make atlas/validate
+make atlas/apply
+make dev
+```
+
+The API listens on `:36080`. Liveness is `GET /api/v1/health/live`; readiness is `GET /api/v1/health/ready` and returns `503` until PostgreSQL and Redis respond. `GET /api/v1/users/me` requires a valid BetterAuth session and returns the Churchbase user ID, `global_roles`, profile names, and latest successful workspace entry. `GET /api/v1/users/me/access-contexts` returns active membership contexts and API-computed navigation capabilities. Global Admin and Global Staff receive contexts for all churches and ministries, and can access every configured App section without memberships. Global Admin alone can review paginated history at `GET /api/v1/platform/workspace-access-events`. Church-wide staff do not receive Ministries or Care by default; Care and Kids check-in/safety are withheld from membership roles until explicit grants exist. Navigation capabilities are not authorization tokens; every future data operation must authorize independently. Authenticated workspace-entry events are recorded at `POST /api/v1/users/me/workspace-access-events` after the App verifies the requested route context, and a history-write failure does not block workspace use. The API role column rename requires its pending Atlas migration before this code is deployed. No automated history-retention policy is configured yet.
+
+## API documentation
+
+The native Postman resources in [`postman/collections/-v1/`](../../postman/collections/-v1/) are the versioned HTTP contract and include request bodies and response examples for the API and BetterAuth sign-in flow. See the [local Postman guide](../../postman/README.md) and follow the repository's [Postman authoring instructions](../../.agents/postman-api-documentation.md) when changing an endpoint.
+
+## API response format
+
+JSON responses use the API-local `internal/shared/response` envelope. `data` contains the endpoint payload; errors include stable codes, and metadata carries the request ID and UTC timestamp. `log.user_id`, when present, is the Churchbase user ID—not the BetterAuth ID.
+
+```json
+{
+  "success": true,
+  "message": "Current user retrieved",
+  "data": {
+    "id": "...",
+    "global_roles": "admin",
+    "profile": {},
+    "last_workspace_access": { "workspace": "app", "occurred_at": "2026-01-01T00:00:00Z" }
+  },
+  "filters": null,
+  "errors": [],
+  "pagination": null,
+  "metadata": { "request_id": "...", "timestamp": "..." },
+  "log": { "event": "me.retrieved", "user_id": "...", "status": "info" }
+}
+```
+
+Run `make generate` after changing an Ent schema. Use `make build` and `make lint` before delivery. Atlas migrations are explicit commands and must be reviewed before applying them to a shared database.
+
+`make atlas/apply` reads the PostgreSQL connection string from `RL_DB_URL` in `.env`.
+
+## Global admin bootstrap
+
+The CLI creates an API user linked to a BetterAuth identity, its empty user profile, and `global_roles=admin` atomically in the API database; it does not create church memberships. Use an existing Auth identity, or let the CLI create one through Auth's protected provisioning operation. For new identities, configure `AUTH_BASE_URL` and the same 32+ character `AUTH_SERVICE_TOKEN` in both services, then run `bun run --cwd apps/auth db:migrate` to add the BetterAuth admin-plugin fields.
+
+From the repository root, run `bun run --cwd apps/api cli:admin:global` to launch the interactive prompts. From `apps/api/`, you can also run `make cli/user/global`. Passwords are masked, the confirmation must match, and the final action defaults to no. For automation, flags require `--yes`; `--password-stdin` reads the password and confirmation from two lines of a protected input file, never from command arguments.
+
+```sh
+# Link an existing Auth identity.
+make cli/user/global ARGS='--auth-user-id=existing-auth-id --yes'
+
+# Or create a new identity; the secure file contains the password twice, one per line.
+make cli/user/global ARGS='--email=admin@example.org --first-name=Ada --last-name=Lovelace --password-stdin --yes' < /path/to/secure-password-file
+```
+
+If the API write fails after Auth creates the identity, the error includes its Auth user ID so you can retry with `--auth-user-id`. Session validation uses `AUTH_BASE_URL`; the API does not require the internal service token for this. The CLI provisioning operation requires `AUTH_SERVICE_TOKEN`. HTTP Auth URLs are accepted only when `ENVIRONMENT=development`; use HTTPS otherwise.
