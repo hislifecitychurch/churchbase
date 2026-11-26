@@ -3,16 +3,20 @@
 import type { JSX } from "react"
 import { use, useEffect } from "react"
 
-import { ApiError } from "@/api/client"
-import { getConfiguredReturnURL } from "@/lib/return-url"
+import { useAuthSession } from "@/hooks/api/auth/use-auth-session"
+import { useSignOut } from "@/hooks/api/auth/use-sign-out"
 import { useCurrentUser } from "@/hooks/api/users/use-current-user"
+
+import { ApiError } from "@/api/client"
+
+import { getConfiguredReturnURL } from "@/lib/return-url"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 import { LoadingSpinner } from "@/components/shared/_spinner/loading-spinner"
 
-import { WorkspaceSignOutButton } from "@/components/pages/workspace/_button/workspace-sign-out-button"
 import { AppWorkspaceCard } from "@/components/pages/workspace/_card/app-workspace-card"
 import { PlatformWorkspaceCard } from "@/components/pages/workspace/_card/platform-workspace-card"
+import { WorkspaceSignOutButton } from "@/components/pages/workspace/_button/workspace-sign-out-button"
 
 type WorkspacePageProps = {
   searchParams: Promise<{ returnTo?: string | string[] }>
@@ -23,11 +27,38 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
   const returnTo = getConfiguredReturnURL(
     typeof params.returnTo === "string" ? params.returnTo : undefined,
   )
+  const authSession = useAuthSession()
+  const signOutMutation = useSignOut()
   const currentUser = useCurrentUser()
+  const email = authSession.data?.user.email
   const isUnauthenticated =
     currentUser.error instanceof ApiError && currentUser.error.status === 401
   const isRegularUser = currentUser.data?.global_roles === null
   const lastUsedWorkspace = currentUser.data?.last_workspace_access?.workspace
+
+  function handleSignOut(): void {
+    signOutMutation.mutate(undefined, {
+      onSuccess: () => window.location.replace("/login"),
+    })
+  }
+
+  const accountStatus = (
+    <>
+      <div className="flex flex-wrap items-center justify-center gap-x-1.5 text-center">
+        {email ? (
+          <p className="text-muted-foreground text-sm">
+            Signed in as <span className="text-foreground break-all">{email}</span>.
+          </p>
+        ) : null}
+        <WorkspaceSignOutButton isPending={signOutMutation.isPending} onSignOut={handleSignOut} />
+      </div>
+      {signOutMutation.isError ? (
+        <p className="text-destructive text-center text-sm" role="alert">
+          We couldn&apos;t sign you out. Please try again.
+        </p>
+      ) : null}
+    </>
+  )
 
   useEffect(() => {
     if (!isUnauthenticated) {
@@ -55,7 +86,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
 
     return (
       <main className="flex min-h-svh flex-col items-center justify-center gap-4 p-6 text-center">
-        <WorkspaceSignOutButton />
+        {accountStatus}
         <h1 className="text-foreground text-xl font-normal">
           {notProvisioned ? "Churchbase access isn't set up" : "We couldn't verify your session"}
         </h1>
@@ -76,7 +107,7 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
       <div className="flex w-full max-w-2xl flex-col gap-6">
         <div className="flex flex-col gap-2 text-center">
           <h1 className="text-foreground text-2xl font-normal">Choose your workspace</h1>
-          <WorkspaceSignOutButton />
+          {accountStatus}
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <PlatformWorkspaceCard isLastUsed={lastUsedWorkspace === "platform"} />
