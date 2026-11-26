@@ -3,7 +3,7 @@ import { createAuthClient } from "better-auth/react"
 
 import { env } from "@/lib/env"
 
-const authClient = createAuthClient({
+export const authClient = createAuthClient({
   baseURL: env.NEXT_PUBLIC_AUTH_URL,
   basePath: "/api/v1/auth",
   fetchOptions: { credentials: "include" },
@@ -22,4 +22,12 @@ export async function signIn({ identifier, password }: SignInInput): Promise<boo
     : await authClient.signIn.username({ username: value, password })
 
   return !result.error
+}
+
+export async function signOut(): Promise<void> {
+  const result = await authClient.signOut()
+
+  if (result.error) {
+    throw new Error("We couldn't sign you out.")
+  }
 }
