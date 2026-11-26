@@ -4,21 +4,21 @@ import type * as React from "react"
 
 import { Button } from "@packages/ui-w/shared/button/button"
 
-type WorkspaceSignOutButtonProps = {
+type WorkspaceSwitchAccountButtonProps = {
   isPending: boolean
-  onSignOut: () => void
+  onSwitchAccount: () => void
 }
 
-export function WorkspaceSignOutButton({
+export function WorkspaceSwitchAccountButton({
   isPending,
-  onSignOut,
-}: WorkspaceSignOutButtonProps): React.ReactElement {
+  onSwitchAccount,
+}: WorkspaceSwitchAccountButtonProps): React.ReactElement {
   return (
     <Button
       aria-busy={isPending}
       className="h-auto p-0 font-normal"
       disabled={isPending}
-      onClick={onSignOut}
+      onClick={onSwitchAccount}
       size="sm"
       type="button"
       variant="link"
