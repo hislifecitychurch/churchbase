@@ -30,14 +30,19 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
   const authSession = useAuthSession()
   const signOutMutation = useSignOut()
   const [isSigningOut, setIsSigningOut] = useState(false)
+  const [emailAtSignOut, setEmailAtSignOut] = useState<string>()
   const currentUser = useCurrentUser()
-  const email = authSession.data?.user.email
+  const authEmail = authSession.data?.user.email
+  const email = authEmail ?? emailAtSignOut
   const isUnauthenticated =
     currentUser.error instanceof ApiError && currentUser.error.status === 401
   const isRegularUser = currentUser.data?.global_roles === null
   const lastUsedWorkspace = currentUser.data?.last_workspace_access?.workspace
 
   function handleSignOut(): void {
+    if (authEmail) {
+      setEmailAtSignOut(authEmail)
+    }
     setIsSigningOut(true)
     signOutMutation.mutate(undefined, {
       onError: () => setIsSigningOut(false),
