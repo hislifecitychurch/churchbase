@@ -23,7 +23,7 @@ export function WorkspaceSignOutButton({
       type="button"
       variant="link"
     >
-      {isPending ? "Signing out…" : "Switch account"}
+      {isPending ? "Signing out…" : "Not you? Sign out"}
     </Button>
   )
 }
