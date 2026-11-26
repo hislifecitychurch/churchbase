@@ -41,7 +41,6 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
     setIsSigningOut(true)
     signOutMutation.mutate(undefined, {
       onError: () => setIsSigningOut(false),
-      onSuccess: () => window.location.replace("/login"),
     })
   }
 
@@ -67,20 +66,36 @@ export default function WorkspacePage({ searchParams }: WorkspacePageProps): JSX
   )
 
   useEffect(() => {
-    if (!isUnauthenticated) {
+    if (!isUnauthenticated || isSigningOut) {
       return
     }
 
     const loginURL = new URL("/login", window.location.origin)
     loginURL.searchParams.set("returnTo", returnTo)
     window.location.replace(loginURL.toString())
-  }, [isUnauthenticated, returnTo])
+  }, [isSigningOut, isUnauthenticated, returnTo])
 
   useEffect(() => {
-    if (isRegularUser) {
+    if (isSigningOut && signOutMutation.isSuccess) {
+      window.location.replace("/login")
+    }
+  }, [isSigningOut, signOutMutation.isSuccess])
+
+  useEffect(() => {
+    if (isRegularUser && !isSigningOut) {
       window.location.replace(returnTo)
     }
-  }, [isRegularUser, returnTo])
+  }, [isRegularUser, isSigningOut, returnTo])
+
+  if (isSigningOut) {
+    return (
+      <main aria-busy="true" className="flex min-h-svh items-center justify-center p-6">
+        <p className="text-muted-foreground text-sm" role="status">
+          Signing out…
+        </p>
+      </main>
+    )
+  }
 
   if (currentUser.isPending || isUnauthenticated || isRegularUser) {
     return <LoadingSpinner />
