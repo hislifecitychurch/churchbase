@@ -23,7 +23,7 @@ export function IdentifierField({
         Email or username
       </FieldLabel>
       <Input
-        autoComplete="username"
+        autoComplete="off"
         disabled={disabled}
         id="identifier"
         name="identifier"
